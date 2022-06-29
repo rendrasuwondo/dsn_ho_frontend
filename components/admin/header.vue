@@ -8,17 +8,10 @@
           data-widget="pushmenu"
           href="#"
           role="button"
-          ><i class="fas fa-bars"></i
+          ><i class="fas fa-bars icon-bars"></i
         ></a>
       </li>
       <li class="nav-item">
-        <nuxt-link
-          style="display: none"
-          class="nav-link btn btn-sm btn-primary text-white"
-          to="/"
-          target="_blank"
-          >LIHAT WEBSITE <i class="fa fa-external-link-alt"></i
-        ></nuxt-link>
         <b-row>
           <b-col class="vertical-center">
             <img
@@ -31,7 +24,7 @@
           <b-col class="vertical-center">
             <b-row>
               <b-col>
-                <b class="navbar-title-1">DSN - ERP WHU</b>
+                <b class="navbar-title-1">DSN - ERP HO</b>
               </b-col></b-row
             ><b-row
               ><b-col>
@@ -63,14 +56,15 @@
           class="nav-link dropdown-toggle name-user w-100"
         >
           <img
-            :src="`https://ui-avatars.com/api/?name=${user.user.name}&amp;background=4e73df&amp;color=ffffff&amp;size=100`"
+            :src="`https://ui-avatars.com/api/?name=${user.user.name}&amp;background=3f3568&amp;color=ffffff&amp;size=100`"
             class="img-circle"
             style="opacity: 0.8"
             width="35"
             height="35"
           />
-          {{ user.employee.nik }}-{{ user.employee.name }}
+          {{ user.employee.nik }} - {{ user.employee.name }}
         </a>
+
         <ul
           aria-labelledby="dropdownSubMenu1"
           class="dropdown-menu"
@@ -120,7 +114,7 @@ export default {
 
       //redirect route login
       this.$router.push({
-        name: 'login',
+        name: 'erp_ho-login',
       })
     },
   },
@@ -132,15 +126,25 @@ export default {
   margin: 0;
   position: absolute;
   top: 50%;
+  margin-right: 5px;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
+
+.vertical-center .icon-bars {
+  font-size: 18px;
+  color: #a098bd;
+}
+.vertical-center .icon-bars:hover {
+  font-size: 18px;
+  color: #7569a6;
+}
 .navbar-title-1 {
   font-size: 18px;
-  /* margin-top: 4px; */
   margin-left: 55px;
   font-weight: bold;
   width: 220px;
+  color: #3f3568;
 }
 .navbar-title-2 {
   font-size: 13px;
@@ -148,18 +152,33 @@ export default {
   margin-top: -3px;
   margin-left: 55px;
   font-weight: bold;
-  color: #c7cacd;
+  color: #b1a9c3cd;
   width: 315px;
 }
 .name-user {
-  font-size: 14px;
-  color: #2f3542;
+  font-size: 13px;
   font-weight: bold;
+  font-family: 'League Gothic', sans-serif;
+  /* pointer-events: none; */
 }
 
 .main-header {
   border-bottom: 1px solid #dcdde1;
-  box-shadow: 0px 0px 6px 0px gray;
+  box-shadow: 0px 0px 6px 0px #675fb0;
   padding-bottom: 10px;
+}
+
+.dropdown .dropdown-toggle {
+  padding: 0px;
+  height: 40px;
+  margin-top: 5px;
+}
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link {
+  color: #aba4cd;
+}
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link:hover {
+  color: #8076a5;
 }
 </style>

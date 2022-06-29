@@ -4,7 +4,7 @@
 export default {
   // name: 'IndexPage',
   created() {
-    this.$router.push('/login')
+    this.$router.push('/erp_ho/login')
   },
 }
 </script>

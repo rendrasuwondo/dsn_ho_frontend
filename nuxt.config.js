@@ -119,10 +119,10 @@ export default {
             },
         },
         redirect: {
-            login: '/login',
-            logout: '/login',
-            callback: '/login',
-            home: '/admin/dashboard',
+            login: '/erp_ho/login',
+            logout: '/erp_ho/login',
+            callback: '/erp_ho/login',
+            home: '/erp_ho/admin/dashboard',
         },
     },
 

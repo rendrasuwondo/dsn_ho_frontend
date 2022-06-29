@@ -1,7 +1,7 @@
 <template>
   <nav class="mt-2">
     <ul
-      class="nav nav-pills nav-sidebar flex-column"
+      class="nav nav-pills nav-sidebar flex-column list-menu"
       data-widget="treeview"
       role="menu"
       data-accordion="false"
@@ -9,66 +9,6 @@
       <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
       <div v-html="menu"></div>
-
-      <!-- <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                eLHM
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <nuxt-link :to="{ name: 'admin-activity_plan' }" class="nav-link">
-                  <i class="nav-icon fas fa-book-open"></i>
-                  <p>RKH</p>
-                </nuxt-link>
-              </li>
-            </ul>
-          </li>
-           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Master
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-               <li class="nav-item">
-        <nuxt-link :to="{ name: 'admin-company' }" class="nav-link">
-          <i class="nav-icon fas fa-industry"></i>
-          <p>PT</p>
-        </nuxt-link>
-      </li>
-
-      <li class="nav-item">
-        <nuxt-link :to="{ name: 'admin-site' }" class="nav-link">
-          <i class="nav-icon fas fa-map-marker-alt"></i>
-          <p>Site</p>
-        </nuxt-link>
-      </li>
-            </ul>
-          </li>
-           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                System
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <nuxt-link :to="{ name: 'system-role' }" class="nav-link">
-                  <i class="nav-icon fas fa-book-open"></i>
-                  <p>Role</p>
-                </nuxt-link>
-              </li>
-            </ul>
-          </li>
-         -->
     </ul>
   </nav>
   <!-- /.sidebar-menu -->
@@ -110,7 +50,7 @@ export default {
       )
       .then((response) => {
         if (response.data.data == 'Tidak') {
-          this.$router.push('/admin/dashboard')
+          this.$router.push('/erp_ho/admin/dashboard')
         }
       })
   },
@@ -118,6 +58,6 @@ export default {
 </script>
 <style scoped>
 a.nuxt-link-active {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(54, 17, 80, 0.395);
 }
 </style>

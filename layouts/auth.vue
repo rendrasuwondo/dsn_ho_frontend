@@ -1,32 +1,8 @@
 <template>
   <div class="hold-transition login-page">
-    <div>
-      <b-img class="img-logoo" src="\img/dsn_logo.png" alt="logo"></b-img>
-    </div>
     <div class="login-box">
       <!-- /.login-logo -->
       <Nuxt />
-      <!-- /.card -->
-    </div>
-
-    <div>
-      <b-button
-        class="download-apk"
-        href="https://drive.google.com/drive/folders/1ym4KwIPbztn6RA4-osKv6O4FPhv_CcKU"
-        target="_blank"
-      >
-        <b-img class="img-download" src="img/drive_logo.png" alt="logo"></b-img>
-        Download Aplikasi <b>eLHM</b>
-      </b-button>
-
-      <b-button
-        class="download-pdf"
-        href="https://drive.google.com/drive/u/0/folders/1nZ1ncA1DbqyArap7paiiID-V4iajCM-p"
-        target="_blank"
-      >
-        <b-img class="img-download" src="img/pdf_logo.png" alt="logo"></b-img>
-        Tutorial Penggunaan Aplikasi
-      </b-button>
     </div>
   </div>
 </template>
@@ -44,13 +20,7 @@ body {
 }
 
 .login-page {
-  background: linear-gradient(
-    to right,
-    #ffdde1,
-    #f08997,
-    #dcdde1,
-    #266cee
-  ) !important;
+  background: linear-gradient(90deg, #c7c5f4, #776bcc);
 }
 
 .card-info.card-outline {
@@ -118,5 +88,10 @@ body {
   width: 25px;
   height: 25px;
   margin-right: 3px;
+}
+
+.login-box {
+  width: 60%;
+  height: 355px;
 }
 </style>
