@@ -175,10 +175,10 @@ export default {
 }
 .navbar-light .navbar-nav .nav-link:focus,
 .navbar-light .navbar-nav .nav-link {
-  color: #aba4cd;
+  color: #9b92c4;
 }
 .navbar-light .navbar-nav .nav-link:focus,
 .navbar-light .navbar-nav .nav-link:hover {
-  color: #8076a5;
+  color: #7c739e;
 }
 </style>
