@@ -8,7 +8,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-book-open"></i> Role
+            <i class="nav-icon fas fa-book-open"></i> <b>Role</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -271,6 +271,5 @@ export default {
 }
 .card-title {
   color: #504d8d;
-  font-weight: bold;
 }
 </style>

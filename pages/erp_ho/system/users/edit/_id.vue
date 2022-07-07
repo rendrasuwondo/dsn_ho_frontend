@@ -200,7 +200,7 @@ export default {
 
     //get data field by ID
     this.$axios
-      .get(`/api/admin/sql_sers/${this.$route.params.id}`)
+      .get(`/api/admin/sql_users/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
         this.field.user_name = response.data.data.user_name

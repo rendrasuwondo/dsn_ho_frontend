@@ -60,7 +60,7 @@
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-test-menu-edit-id',
+                  name: 'erp_ho-system-users-edit-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"
@@ -266,27 +266,29 @@ export default {
           if (result.isConfirmed) {
             //delete tag from server
 
-            this.$axios.delete(`/api/admin/sql_menu/${id}`).then((response) => {
-              //feresh data
-              this.$nuxt.refresh()
+            this.$axios
+              .delete(`/api/admin/sql_users/${id}`)
+              .then((response) => {
+                //feresh data
+                this.$nuxt.refresh()
 
-              if (response.data.success == true) {
-                this.sweet_alert.title = 'BERHASIL!'
-                this.sweet_alert.icon = 'success'
-              } else {
-                this.sweet_alert.title = 'GAGAL!'
-                this.sweet_alert.icon = 'error'
-              }
+                if (response.data.success == true) {
+                  this.sweet_alert.title = 'BERHASIL!'
+                  this.sweet_alert.icon = 'success'
+                } else {
+                  this.sweet_alert.title = 'GAGAL!'
+                  this.sweet_alert.icon = 'error'
+                }
 
-              //alert
-              this.$swal.fire({
-                title: this.sweet_alert.title,
-                text: response.data.message,
-                icon: this.sweet_alert.icon,
-                showConfirmButton: false,
-                timer: 2000,
+                //alert
+                this.$swal.fire({
+                  title: this.sweet_alert.title,
+                  text: response.data.message,
+                  icon: this.sweet_alert.icon,
+                  showConfirmButton: false,
+                  timer: 2000,
+                })
               })
-            })
           }
         })
     },
