@@ -57,7 +57,7 @@
         >
           <img
             :src="`https://ui-avatars.com/api/?name=${user.user.name}&amp;background=3f3568&amp;color=ffffff&amp;size=100`"
-            class="img-circle"
+            class="img-circle mt-2"
             style="opacity: 0.8"
             width="35"
             height="35"

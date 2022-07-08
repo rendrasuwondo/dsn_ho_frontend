@@ -77,10 +77,10 @@
                 ><i class="fa fa-trash"></i
               ></b-button>
             </template>
-            <!-- <template v-slot:cell(users)="row">
+            <template v-slot:cell(users)="row">
               <b-button
                 :to="{
-                  name: 'system-user_has_role-id',
+                  name: 'erp_ho-system-user_has_role-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"
@@ -89,7 +89,7 @@
               >
                 <i class="fa fa-file-alt"></i>
               </b-button>
-            </template> -->
+            </template>
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -130,11 +130,11 @@ export default {
           key: 'actions',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
-        // {
-        //   label: 'Users',
-        //   key: 'users',
-        //   tdClass: 'align-middle text-center',
-        // },
+        {
+          label: 'Users',
+          key: 'users',
+          tdClass: 'align-middle text-center',
+        },
         {
           label: 'Kode',
           key: 'code',

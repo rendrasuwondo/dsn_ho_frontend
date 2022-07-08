@@ -8,7 +8,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-id-badge"></i> <b>EDIT KARYAWAN</b>
+            <i class="nav-icon fas fa-address-card"></i> <b>EDIT KARYAWAN</b>
           </h3>
           <div class="card-tools"></div>
         </div>

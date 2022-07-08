@@ -8,65 +8,45 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-user"></i> <b>TAMBAH USER</b>
+            <i class="nav-icon fas fa-book-open"></i> <b>EDIT ROLE</b>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <form @submit.prevent="storePost">
+          <form @submit.prevent="updateData">
             <div class="form-group">
-              <label>User Name</label>
-              <input
-                type="text"
-                v-model="field.user_name"
-                placeholder="Masukkan User Name"
-                class="form-control"
-                ref="user_name"
-              />
-              <div v-if="validation.user_name" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.user_name[0]
-                }}</b-alert>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>Nama Karyawan</label>
+              <label>Nama role</label>
               <multiselect
-                v-model="field.employee_id"
-                :options="employee"
-                label="employee_description"
+                v-model="field.role_id"
+                :options="role"
+                label="code"
                 track-by="id"
                 :searchable="true"
               ></multiselect>
-            </div>
-
-            <div class="form-group">
-              <label>Email</label>
-              <input
-                type="emial"
-                v-model="field.email"
-                placeholder="Masukkan Alamat Email "
-                class="form-control"
-              />
-              <div v-if="validation.email" class="mt-2">
+              <div v-if="validation.role_id" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.email[0]
+                  validation.role_id[0]
                 }}</b-alert>
               </div>
             </div>
+            <div class="form-group">
+              <label>Aktif?</label>
+              <b-form-select v-model="field.is_active" :options="options">
+              </b-form-select>
+            </div>
 
             <div class="form-group">
-              <label>Password</label>
-              <input
-                type="password"
-                v-model="field.user_password"
-                placeholder="Masukkan Password"
+              <label>Keterangan</label>
+
+              <textarea
+                v-model="field.description"
                 class="form-control"
-              />
-              <div v-if="validation.user_password" class="mt-2">
+                rows="3"
+                placeholder="Masukkan Deskripsi Singkat"
+              ></textarea>
+              <div v-if="validation.description" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.user_password[0]
+                  validation.description[0]
                 }}</b-alert>
               </div>
             </div>
@@ -124,6 +104,7 @@
                 </b-col>
               </b-row>
             </div>
+
             <div class="form-group"></div>
 
             <button class="btn btn-info mr-1 btn-submit" type="submit">
@@ -151,60 +132,97 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah User',
+      title: 'Edit Role',
     }
+  },
+
+  components: {
+    'ckeditor-nuxt': () => {
+      if (process.client) {
+        return import('@blowstack/ckeditor-nuxt')
+      }
+    },
   },
 
   data() {
     return {
+      options: [
+        { value: 'Y', text: 'Ya' },
+        { value: 'N', text: 'Tidak' },
+      ],
+
+      user_id: { id: '', name: '' },
+
       state: 'disabled',
+      value: undefined,
 
       field: {
-        user_name: '',
-        name: '',
-        email: '',
-        user_password: '',
+        role_id: '',
+        menu_id: '',
+        is_active: '',
+        description: '',
         created_at: '',
         updated_at: '',
         created_by: '',
         updated_by: '',
-        employee_id: '',
       },
 
-      employee: [],
+      menu_id: '',
+
+      role: [],
 
       //state validation
       validation: [],
+
+      //config CKEDITOR
+      editorConfig: {
+        removePlugins: ['Title'],
+        simpleUpload: {
+          uploadUrl: 'http://localhost:8000/api/web/posts/storeImage',
+        },
+      },
     }
   },
 
   mounted() {
-    this.field.created_at = this.currentDate()
-    this.field.updated_at = this.currentDate()
-    this.field.created_by =
-      this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
-    this.field.updated_by =
-      this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
-
-    this.$refs.user_name.focus()
-
-    //Data Employee
     this.$axios
-      .get('/api/admin/lov_sql_employee')
+      .get(`/api/admin/master/sql_menu/${this.$route.params.id}`)
 
       .then((response) => {
-        this.employee = response.data.data
+        //  console.log(response.data.data.afdeling_id)
+        this.menu_id = response.data.data.id
+
+        this.$nuxt.$loading.start()
+      })
+
+    this.$axios
+      .get(`/api/admin/sql_menu_has_role/${this.$route.params.id}`)
+      .then((response) => {
+        console.log('rdr')
+        console.log(response.data.data)
+        //data yang diambil
+        this.field.role_id = response.data.data.role
+        this.field.menu_id = response.data.data.menu_id
+        this.field.is_active = response.data.data.is_active
+        this.field.description = response.data.data.description
+        this.field.created_at = response.data.data.created_at
+        this.field.created_by = response.data.data.created_by
+        this.field.updated_at = response.data.data.updated_at
+        this.field.updated_by = response.data.data.updated_by
+
+        this.$nuxt.$loading.start()
+      })
+
+    //Data Users
+    this.$axios
+      .get('/api/admin/lov_sql_role')
+
+      .then((response) => {
+        this.role = response.data.data
       })
   },
 
   methods: {
-    back() {
-      this.$router.push({
-        name: 'erp_ho-system-users',
-        params: { id: this.$route.params.id, r: 1 },
-      })
-    },
-
     currentDate() {
       const current = new Date()
       const date = `${current.getFullYear()}-${
@@ -214,41 +232,54 @@ export default {
       return date
     },
 
-    async storePost() {
-      //define formData
-      let formData = new FormData()
-      formData.append(
-        'employee_id',
-        this.field.employee_id ? this.field.employee_id.id : ''
-      )
-      formData.append('user_name', this.field.user_name)
-      formData.append('name', this.field.name)
-      formData.append('email', this.field.email)
-      formData.append('user_password', this.field.user_password)
-      formData.append('created_at', this.field.created_at)
-      formData.append('updated_at', this.field.updated_at)
-      formData.append('created_by', this.field.created_by)
-      formData.append('updated_by', this.field.updated_by)
-      //sending data to server
+    back() {
+      this.$router.push({
+        name: 'erp_ho-system-menu_has_role-id',
+        params: { id: this.field.menu_id, r: 1 },
+      })
+    },
+
+    // update method
+    async updateData(e) {
+      e.preventDefault()
+
+      //send data ke Rest API untuk update
       await this.$axios
-        .post('/api/admin/sql_users', formData)
+        .put(`api/admin/sql_menu_has_role/${this.$route.params.id}`, {
+          //data yang dikirim
+          menu_id: this.field.menu_id,
+          role_id: this.field.role_id ? this.field.role_id.id : '',
+          is_active: this.field.is_active,
+          description: this.field.description,
+          created_at: this.field.created_at,
+          created_by: this.field.description,
+          updated_at: this.field.updated_at,
+          updated_by: this.field.updated_by,
+        })
         .then(() => {
           //sweet alert
           this.$swal.fire({
             title: 'BERHASIL!',
-            text: 'Data Berhasil Disimpan!',
+            text: 'Data Berhasil Diupdate!',
             icon: 'success',
             showConfirmButton: false,
             timer: 2000,
           })
-
-          //redirect, if success store data
-          this.$router.push({
-            name: 'erp_ho-system-users',
-          })
+          //redirect ke route menu
+          this.back()
         })
         .catch((error) => {
           //assign error to state "validation"
+          // alert(error)
+          // console.log(error.response.data.message)
+
+          this.$swal.fire({
+            title: 'ERROR!',
+            text: error.response.data.message,
+            icon: 'error',
+            showConfirmButton: true,
+          })
+
           this.validation = error.response.data
         })
     },

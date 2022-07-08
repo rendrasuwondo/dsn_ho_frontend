@@ -8,65 +8,80 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-user"></i> <b>TAMBAH USER</b>
+            <i class="nav-icon fas fa-list-alt"></i> <b>TAMBAH SUB MENU</b>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
           <form @submit.prevent="storePost">
             <div class="form-group">
-              <label>User Name</label>
+              <label>Kode</label>
               <input
                 type="text"
-                v-model="field.user_name"
-                placeholder="Masukkan User Name"
+                v-model="field.code"
+                placeholder="Masukkan Kode Menu"
                 class="form-control"
-                ref="user_name"
+                ref="code"
               />
-              <div v-if="validation.user_name" class="mt-2">
+              <div v-if="validation.code" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.user_name[0]
+                  validation.code[0]
                 }}</b-alert>
               </div>
             </div>
 
             <div class="form-group">
-              <label>Nama Karyawan</label>
-              <multiselect
-                v-model="field.employee_id"
-                :options="employee"
-                label="employee_description"
-                track-by="id"
-                :searchable="true"
-              ></multiselect>
-            </div>
-
-            <div class="form-group">
-              <label>Email</label>
+              <label>Nama</label>
               <input
-                type="emial"
-                v-model="field.email"
-                placeholder="Masukkan Alamat Email "
+                type="text"
+                v-model="field.title"
+                placeholder="Masukkan Nama Menu"
                 class="form-control"
               />
-              <div v-if="validation.email" class="mt-2">
+              <!-- <div v-if="validation.title" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.email[0]
+                  validation.title[0]
                 }}</b-alert>
-              </div>
+              </div> -->
             </div>
 
             <div class="form-group">
-              <label>Password</label>
+              <label>Icon</label>
               <input
-                type="password"
-                v-model="field.user_password"
-                placeholder="Masukkan Password"
+                v-model="field.class"
                 class="form-control"
+                rows="3"
+                placeholder="Masukkan Kode Icon"
               />
-              <div v-if="validation.user_password" class="mt-2">
+            </div>
+
+            <div class="form-group">
+              <label>Link Menu</label>
+              <input
+                v-model="field.path_file_name"
+                class="form-control"
+                rows="3"
+                placeholder="Masukkan Link Menu"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Aktif?</label>
+              <b-form-select v-model="field.is_active" :options="options">
+              </b-form-select>
+            </div>
+
+            <div class="form-group">
+              <label>Keterangan</label>
+              <textarea
+                v-model="field.description"
+                class="form-control"
+                rows="3"
+                placeholder="Masukkan Deskripsi Singkat"
+              ></textarea>
+              <div v-if="validation.description" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.user_password[0]
+                  validation.description[0]
                 }}</b-alert>
               </div>
             </div>
@@ -124,6 +139,7 @@
                 </b-col>
               </b-row>
             </div>
+
             <div class="form-group"></div>
 
             <button class="btn btn-info mr-1 btn-submit" type="submit">
@@ -151,30 +167,56 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah User',
+      title: 'Tambah Sub Menu',
     }
+  },
+
+  components: {
+    'ckeditor-nuxt': () => {
+      if (process.client) {
+        return import('@blowstack/ckeditor-nuxt')
+      }
+    },
   },
 
   data() {
     return {
+      options: [
+        { value: 'Y', text: 'Ya' },
+        { value: 'N', text: 'Tidak' },
+      ],
+
       state: 'disabled',
+      value: undefined,
 
       field: {
-        user_name: '',
-        name: '',
-        email: '',
-        user_password: '',
+        code: '',
+        title: '',
+        class: '',
+        link: '',
+        is_parent: 'N',
+        parent_id: '',
+        path_file_name: '',
+        description: '',
+        is_active: 'Y',
         created_at: '',
-        updated_at: '',
         created_by: '',
+        updated_at: '',
         updated_by: '',
-        employee_id: '',
       },
 
-      employee: [],
+      parent_id: '',
 
       //state validation
       validation: [],
+
+      //config CKEDITOR
+      editorConfig: {
+        removePlugins: ['Title'],
+        simpleUpload: {
+          uploadUrl: 'http://localhost:8000/api/web/posts/storeImage',
+        },
+      },
     }
   },
 
@@ -185,26 +227,19 @@ export default {
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
     this.field.updated_by =
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
+    this.$refs.code.focus()
 
-    this.$refs.user_name.focus()
-
-    //Data Employee
     this.$axios
-      .get('/api/admin/lov_sql_employee')
+      .get(`/api/admin/master/sql_menu/${this.$route.params.id}`)
 
       .then((response) => {
-        this.employee = response.data.data
+        this.parent_id = response.data.data.id
+
+        this.$nuxt.$loading.start()
       })
   },
 
   methods: {
-    back() {
-      this.$router.push({
-        name: 'erp_ho-system-users',
-        params: { id: this.$route.params.id, r: 1 },
-      })
-    },
-
     currentDate() {
       const current = new Date()
       const date = `${current.getFullYear()}-${
@@ -214,24 +249,33 @@ export default {
       return date
     },
 
+    back() {
+      this.$router.push({
+        name: 'erp_ho-system-sub_menu-id',
+        params: { id: this.$route.params.id, r: 1 },
+      })
+    },
+
     async storePost() {
       //define formData
       let formData = new FormData()
-      formData.append(
-        'employee_id',
-        this.field.employee_id ? this.field.employee_id.id : ''
-      )
-      formData.append('user_name', this.field.user_name)
-      formData.append('name', this.field.name)
-      formData.append('email', this.field.email)
-      formData.append('user_password', this.field.user_password)
+
+      formData.append('code', this.field.code)
+      formData.append('title', this.field.title)
+      formData.append('class', this.field.class)
+      formData.append('link', this.field.link)
+      formData.append('is_parent', this.field.is_parent)
+      formData.append('parent_id', this.$route.params.id)
+      formData.append('path_file_name', this.field.path_file_name)
+      formData.append('is_active', this.field.is_active)
+      formData.append('description', this.field.description)
       formData.append('created_at', this.field.created_at)
-      formData.append('updated_at', this.field.updated_at)
       formData.append('created_by', this.field.created_by)
-      formData.append('updated_by', this.field.updated_by)
-      //sending data to server
+      formData.append('update_at', this.field.update_at)
+      formData.append('udpate_by', this.field.udpate_by)
+
       await this.$axios
-        .post('/api/admin/sql_users', formData)
+        .post('/api/admin/sql_sub_menu', formData)
         .then(() => {
           //sweet alert
           this.$swal.fire({
@@ -241,16 +285,15 @@ export default {
             showConfirmButton: false,
             timer: 2000,
           })
-
-          //redirect, if success store data
-          this.$router.push({
-            name: 'erp_ho-system-users',
-          })
+          this.back()
         })
         .catch((error) => {
           //assign error to state "validation"
           this.validation = error.response.data
+          // this.validation= "sdgs"
         })
+
+      //   this.back()
     },
   },
 
