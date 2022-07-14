@@ -28,7 +28,7 @@
               </b-col></b-row
             ><b-row
               ><b-col>
-                <p class="navbar-title-2">
+                <!-- <p class="navbar-title-2">
                   {{ user.employee.company_code }} ({{
                     user.employee.company_code_sap
                   }}) - {{ user.employee.department_code }} ({{
@@ -36,7 +36,7 @@
                   }}) - {{ user.employee.afdeling_code }} ({{
                     user.employee.afdeling_id
                   }})
-                </p>
+                </p> -->
               </b-col></b-row
             ></b-col
           >
@@ -55,14 +55,14 @@
           aria-expanded="false"
           class="nav-link dropdown-toggle name-user w-100"
         >
-          <img
+          <!-- <img
             :src="`https://ui-avatars.com/api/?name=${user.user.name}&amp;background=3f3568&amp;color=ffffff&amp;size=100`"
             class="img-circle mt-2"
             style="opacity: 0.8"
             width="35"
             height="35"
-          />
-          {{ user.employee.nik }} - {{ user.employee.name }}
+          /> -->
+          <!-- {{ user.employee.nik }} - {{ user.employee.name }} -->
         </a>
 
         <ul

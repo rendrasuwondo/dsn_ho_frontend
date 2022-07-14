@@ -8,7 +8,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-book-open"></i> <b>Role</b>
+            <i class="nav-icon fas fa-map-marked-alt"></i>
+            <b>MAPPING LABORATORY</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -17,7 +18,9 @@
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <nuxt-link
-                  :to="{ name: 'erp_ho-system-role-create' }"
+                  :to="{
+                    name: 'erp_ho-admin-fertilizer_vendors_laboratory-create',
+                  }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
                   title="Tambah"
@@ -60,7 +63,7 @@
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-system-role-edit-id',
+                  name: 'erp_ho-admin-fertilizer_vendors_laboratory-edit-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"
@@ -76,19 +79,6 @@
                 title="Hapus"
                 ><i class="fa fa-trash"></i
               ></b-button>
-            </template>
-            <template v-slot:cell(users)="row">
-              <b-button
-                :to="{
-                  name: 'erp_ho-system-user_has_role-id',
-                  params: { id: row.item.id },
-                }"
-                variant="link"
-                size=""
-                title="Users"
-              >
-                <i class="fa fa-file-alt"></i>
-              </b-button>
             </template>
           </b-table>
           <!-- pagination -->
@@ -119,7 +109,7 @@ export default {
 
   head() {
     return {
-      title: 'Role',
+      title: 'Mapping Vendors',
     }
   },
   data() {
@@ -129,11 +119,6 @@ export default {
           label: 'Actions',
           key: 'actions',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Users',
-          key: 'users',
-          tdClass: 'align-middle text-center',
         },
         {
           label: 'Kode',
@@ -168,7 +153,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/sql_role?q=${search}&page=${page}`
+      `/api/admin/fertilizer_vendor_laboratory?q=${search}&page=${page}`
     )
 
     return {
@@ -216,26 +201,28 @@ export default {
           if (result.isConfirmed) {
             //delete tag from server
 
-            this.$axios.delete(`/api/admin/sql_role/${id}`).then((response) => {
-              //feresh data
-              this.$nuxt.refresh()
-              if (response.data.success == true) {
-                this.sweet_alert.title = 'BERHASIL!'
-                this.sweet_alert.icon = 'success'
-              } else {
-                this.sweet_alert.title = 'GAGAL!'
-                this.sweet_alert.icon = 'error'
-              }
+            this.$axios
+              .delete(`/api/admin/fertilizer_vendor_laboratory/${id}`)
+              .then((response) => {
+                //feresh data
+                this.$nuxt.refresh()
+                if (response.data.success == true) {
+                  this.sweet_alert.title = 'BERHASIL!'
+                  this.sweet_alert.icon = 'success'
+                } else {
+                  this.sweet_alert.title = 'GAGAL!'
+                  this.sweet_alert.icon = 'error'
+                }
 
-              //alert
-              this.$swal.fire({
-                title: this.sweet_alert.title,
-                text: response.data.message,
-                icon: this.sweet_alert.icon,
-                showConfirmButton: false,
-                timer: 2000,
+                //alert
+                this.$swal.fire({
+                  title: this.sweet_alert.title,
+                  text: response.data.message,
+                  icon: this.sweet_alert.icon,
+                  showConfirmButton: false,
+                  timer: 2000,
+                })
               })
-            })
           }
         })
     },
@@ -246,7 +233,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/sql_role/export`,
+        url: `/api/admin/fertilizer_vendor_laboratory/export`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -255,7 +242,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Role.xlsx'
+        var fileName = 'Mapping Vendors.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()

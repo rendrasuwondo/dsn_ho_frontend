@@ -11,7 +11,7 @@
           <div class="row mb-2">
             <div class="col-sm-8 col-pos">
               <p class="m-0 text-1">
-                <b> Hello, {{ this.$auth.user.employee.name }} </b>
+                <!-- <b> Hello, {{ this.$auth.user.employee.name }} </b> -->
                 <br />
                 <span class="text-2">
                   selamat datang di halaman dashboard website eLHM
@@ -60,16 +60,22 @@ export default {
     }
   },
 
-  async asyncData({ $axios }) {
+  async asyncData({ $axios, $auth }) {
     //fetching dashboard
     const dashboard = await $axios.$get('/api/admin/dashboard')
-
+    console.log('cek data')
+    console.log($auth.user.employee.name)
     return {
       users: dashboard.data.users,
       posts: dashboard.data.posts,
       categories: dashboard.data.categories,
       comments: dashboard.data.comments,
     }
+  },
+
+  mounted() {
+    console.log('cek data')
+    console.log($auth.user.employee.name)
   },
 }
 </script>

@@ -8,7 +8,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-book-open"></i> <b>TAMBAH ROLE</b>
+            <i class="nav-icon fas fa-luggage-cart"></i>
+            <b>TAMBAH VENDOR PUPUK</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -152,7 +153,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah Role',
+      title: 'Tambah Vendor Pupuk',
     }
   },
 
@@ -191,16 +192,12 @@ export default {
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
 
     this.$refs.code.focus()
-
-    console.log('cek data')
-    console.log(this.field.created_at)
-    console.log(this.field.updated_at)
   },
 
   methods: {
     back() {
       this.$router.push({
-        name: 'erp_ho-system-role',
+        name: 'erp_ho-admin-fertilizer_vendors',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -229,7 +226,7 @@ export default {
 
       //sending data to server
       await this.$axios
-        .post('/api/admin/sql_role', formData)
+        .post('/api/admin/fertilizer_vendors', formData)
         .then(() => {
           //sweet alert
           this.$swal.fire({
@@ -242,7 +239,7 @@ export default {
 
           //redirect, if success store data
           this.$router.push({
-            name: 'erp_ho-system-role',
+            name: 'erp_ho-admin-fertilizer_vendors',
           })
         })
         .catch((error) => {

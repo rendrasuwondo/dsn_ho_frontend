@@ -161,14 +161,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 87vh;
+  padding-bottom: 0px;
 }
 
 .screen {
   background: linear-gradient(90deg, #6758db, #a5a0f0);
   position: relative;
-  height: 600px;
-  width: 430px;
+  height: 550px;
+  width: 400px;
   margin-top: -20%;
   padding-bottom: 0px;
   box-shadow: 0px 0px 24px #463c9c;
@@ -201,7 +202,7 @@ body {
   height: 560px;
   width: 520px;
   background: #fff;
-  top: -40px;
+  top: -60px;
   right: 170px;
   border-radius: 0 72px 0 0;
 }
@@ -216,8 +217,8 @@ body {
 }
 
 .screen__background__shape3 {
-  height: 540px;
-  width: 185px;
+  height: 520px;
+  width: 175px;
   background: linear-gradient(270deg, #5d54a4, #6a679e);
   top: -30px;
   right: 0;
@@ -228,14 +229,14 @@ body {
   height: 415px;
   width: 215px;
   background: #635fbd;
-  top: 420px;
-  right: 40px;
+  top: 370px;
+  right: 10px;
   border-radius: 60px;
 }
 
 .dsn-logo {
-  height: 70px;
-  margin-left: 20px;
+  height: 65px;
+  margin-left: 0px;
 }
 
 .login {
@@ -265,7 +266,7 @@ body {
   width: 75%;
   transition: 0.2s;
   color: #6a679e;
-  font-size: 16px;
+  font-size: 15px;
   margin-top: -4px;
   font-family: 'Barlow Condensed', sans-serif;
 }
@@ -279,17 +280,17 @@ body {
 
 .login__submit {
   background: #fff;
-  font-size: 14px;
+  font-size: 13px;
   margin-top: 25px;
   margin-left: 20px;
-  padding: 16px 20px;
+  padding: 13px 20px;
   border-radius: 30px;
   border: 1px solid #d4d3e8;
   text-transform: uppercase;
   font-weight: 700;
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 90%;
   color: #5d59b0;
   box-shadow: 0px 2px 2px #5c5696;
   cursor: pointer;
@@ -316,7 +317,6 @@ body {
   text-align: center;
   bottom: 0px;
   right: 0px;
-
   color: #fff;
 }
 
@@ -324,7 +324,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 13px;
   color: #d4d3e8;
 }
 
@@ -337,5 +337,8 @@ body {
 
 .social-login__icon:hover {
   transform: scale(1.5);
+}
+h4 {
+  margin-top: 20px;
 }
 </style>
