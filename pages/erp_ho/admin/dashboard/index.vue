@@ -11,7 +11,7 @@
           <div class="row mb-2">
             <div class="col-sm-8 col-pos">
               <p class="m-0 text-1">
-                <!-- <b> Hello, {{ this.$auth.user.employee.name }} </b> -->
+                <b> Hello, {{ this.$auth.user.employee.name }} </b>
                 <br />
                 <span class="text-2">
                   selamat datang di halaman dashboard website eLHM
@@ -71,11 +71,6 @@ export default {
       categories: dashboard.data.categories,
       comments: dashboard.data.comments,
     }
-  },
-
-  mounted() {
-    console.log('cek data')
-    console.log($auth.user.employee.name)
   },
 }
 </script>

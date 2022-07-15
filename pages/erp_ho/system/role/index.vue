@@ -167,9 +167,7 @@ export default {
     let search = query.q ? query.q : ''
 
     //fetching posts
-    const posts = await $axios.$get(
-      `/api/admin/sql_role?q=${search}&page=${page}`
-    )
+    const posts = await $axios.$get(`/api/admin/role?q=${search}&page=${page}`)
 
     return {
       posts: posts.data.data,
@@ -216,7 +214,7 @@ export default {
           if (result.isConfirmed) {
             //delete tag from server
 
-            this.$axios.delete(`/api/admin/sql_role/${id}`).then((response) => {
+            this.$axios.delete(`/api/admin/role/${id}`).then((response) => {
               //feresh data
               this.$nuxt.refresh()
               if (response.data.success == true) {
@@ -246,7 +244,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/sql_role/export`,
+        url: `/api/admin/role/export`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

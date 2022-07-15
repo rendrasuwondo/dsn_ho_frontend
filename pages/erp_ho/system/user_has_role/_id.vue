@@ -238,13 +238,13 @@ export default {
 
     const { id } = route.params
     //role
-    const role = await $axios.get(`/api/admin/master/sql_role/${id}`)
+    const role = await $axios.get(`/api/admin/master/role/${id}`)
 
     const header = [role.data.data]
 
     //user_has_role
     const posts = await $axios.$get(
-      `/api/admin/detail/sql_user_has_role/${id}?q=${search}&page=${page}`
+      `/api/admin/detail/user_has_role/${id}?q=${search}&page=${page}`
     )
 
     return {
@@ -296,7 +296,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/sql_user_has_role/${id}`)
+              .delete(`/api/admin/user_has_role/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()
@@ -327,7 +327,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/sql_user_has_role/export?role_id=${this.role_id}`,
+        url: `/api/admin/user_has_role/export?role_id=${this.role_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

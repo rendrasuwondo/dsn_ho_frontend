@@ -200,7 +200,7 @@ export default {
 
     //get data field by ID
     this.$axios
-      .get(`/api/admin/sql_users/${this.$route.params.id}`)
+      .get(`/api/admin/users/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
         this.field.user_name = response.data.data.user_name
@@ -238,7 +238,7 @@ export default {
 
       //send data ke Rest API untuk update
       await this.$axios
-        .put(`/api/admin/sql_users/${this.$route.params.id}`, {
+        .put(`/api/admin/users/${this.$route.params.id}`, {
           //data yang dikirim
           user_name: this.field.user_name,
           name: this.field.name,

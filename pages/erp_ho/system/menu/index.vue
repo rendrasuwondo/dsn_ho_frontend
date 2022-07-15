@@ -191,9 +191,7 @@ export default {
     let search = query.q ? query.q : ''
 
     //fetching posts
-    const posts = await $axios.$get(
-      `/api/admin/sql_menu?q=${search}&page=${page}`
-    )
+    const posts = await $axios.$get(`/api/admin/menu?q=${search}&page=${page}`)
 
     return {
       posts: posts.data.data,
@@ -262,7 +260,7 @@ export default {
           if (result.isConfirmed) {
             //delete tag from server
 
-            this.$axios.delete(`/api/admin/sql_menu/${id}`).then((response) => {
+            this.$axios.delete(`/api/admin/menu/${id}`).then((response) => {
               //feresh data
               this.$nuxt.refresh()
 

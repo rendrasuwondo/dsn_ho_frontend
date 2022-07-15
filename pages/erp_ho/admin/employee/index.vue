@@ -8,7 +8,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-id-badge"></i> KARYAWAN
+            <i class="nav-icon fas fa-id-badge"></i> <b>KARYAWAN</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -17,7 +17,7 @@
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <nuxt-link
-                  :to="{ name: 'admin-employee-create' }"
+                  :to="{ name: 'erp_ho-admin-employee-create' }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
                   title="Tambah"
@@ -60,9 +60,8 @@
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'admin-employee-edit-id',
+                  name: 'erp_ho-admin-employee-edit-id',
                   params: { id: row.item.id },
-                  query: { q: param_q },
                 }"
                 variant="link"
                 size="sm"
@@ -77,32 +76,6 @@
                 title="Hapus"
                 ><i class="fa fa-trash"></i
               ></b-button>
-            </template>
-            <template v-slot:cell(employee_afdeling)="row">
-              <b-button
-                :to="{
-                  name: 'admin-employee_afdeling-id',
-                  params: { id: row.item.id },
-                }"
-                variant="link"
-                size=""
-                title="Employee Afdeling"
-              >
-                {{ row.item.afdeling_code }}
-              </b-button>
-            </template>
-            <template v-slot:cell(employee_activity_group)="row">
-              <b-button
-                :to="{
-                  name: 'admin-employee_activity_group-id',
-                  params: { id: row.item.id },
-                }"
-                variant="link"
-                size=""
-                title="Employee Activity Group"
-              >
-                <i class="fa fa-file-alt"></i>
-              </b-button>
             </template>
           </b-table>
           <b-tooltip
@@ -150,9 +123,9 @@ export default {
       title: 'KARYAWAN',
     }
   },
+
   data() {
     return {
-      param_q: this.$route.query.q,
       fields: [
         {
           label: 'Actions',
@@ -194,9 +167,6 @@ export default {
           label: 'Dept.',
           key: 'department_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-          thAttr: {
-            id: 'myDepartment',
-          },
         },
         {
           label: 'Lokasi',
@@ -205,17 +175,9 @@ export default {
         },
         {
           label: 'Afd',
-          key: 'employee_afdeling',
-          tdClass: 'align-middle text-center ',
+          key: 'afdeling_code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
-        // {
-        //   label: 'Afd',
-        //   key: 'afdeling_code',
-        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        //   thAttr: {
-        //     id: 'myAfdeling',
-        //   },
-        // },
         {
           label: 'Jabatan',
           key: 'position_code',
@@ -264,7 +226,6 @@ export default {
       rowcount: posts.data.total,
     }
   },
-
   methods: {
     changePage(page) {
       this.$router.push({
@@ -282,6 +243,28 @@ export default {
         query: {
           q: this.search,
         },
+      })
+    },
+
+    exportData() {
+      const headers = {
+        'Content-Type': 'application/json',
+      }
+
+      this.$axios({
+        url: `/api/admin/employee/export`,
+        method: 'GET',
+        responseType: 'blob',
+        headers: headers, // important
+      }).then((response) => {
+        this.isLoading = false
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        var fileName = 'Employee.xlsx'
+        link.setAttribute('download', fileName) //or any other extension
+        document.body.appendChild(link)
+        link.click()
       })
     },
 
@@ -305,6 +288,7 @@ export default {
             this.$axios.delete(`/api/admin/employee/${id}`).then((response) => {
               //feresh data
               this.$nuxt.refresh()
+
               if (response.data.success == true) {
                 this.sweet_alert.title = 'BERHASIL!'
                 this.sweet_alert.icon = 'success'
@@ -325,30 +309,15 @@ export default {
           }
         })
     },
-
-    exportData() {
-      const headers = {
-        'Content-Type': 'application/json',
-      }
-
-      this.$axios({
-        url: `/api/admin/employee/export?q=${this.search}`,
-        method: 'GET',
-        responseType: 'blob',
-        headers: headers, // important
-      }).then((response) => {
-        this.isLoading = false
-        const url = window.URL.createObjectURL(new Blob([response.data]))
-        const link = document.createElement('a')
-        link.href = url
-        var fileName = 'Employee.xlsx'
-        link.setAttribute('download', fileName) //or any other extension
-        document.body.appendChild(link)
-        link.click()
-      })
-    },
   },
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.card-info.card-outline {
+  border-top: 5px solid #504d8d;
+}
+.card-title {
+  color: #504d8d;
+}
+</style>

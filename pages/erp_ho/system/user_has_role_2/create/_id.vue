@@ -139,7 +139,7 @@ export default {
       value: undefined,
 
       field: {
-        user_id: '',
+        users_id: '',
         role_id: '',
         is_active: 'Y',
         description: '',
@@ -149,7 +149,7 @@ export default {
         updated_by: '',
       },
 
-      user_id: '',
+      users_id: '',
 
       role: [],
 
@@ -176,18 +176,18 @@ export default {
     // this.$refs.user_name.focus()
 
     this.$axios
-      .get(`/api/admin/master/sql_users/${this.$route.params.id}`)
+      .get(`/api/admin/master/users/${this.$route.params.id}`)
 
       .then((response) => {
         //  console.log(response.data.data.afdeling_id)
-        this.user_id = response.data.data.id
+        this.users_id = response.data.data.id
 
         this.$nuxt.$loading.start()
       })
 
     //Data Users
     this.$axios
-      .get('/api/admin/lov_sql_role')
+      .get('/api/admin/lov_role')
 
       .then((response) => {
         this.role = response.data.data
@@ -219,8 +219,8 @@ export default {
         'role_id',
         this.field.role_id ? this.field.role_id.id : ''
       )
-      formData.append('user_id', this.$route.params.id)
-      // formData.append('user_id', this.$route.params.id)
+      formData.append('users_id', this.$route.params.id)
+      // formData.append('users_id', this.$route.params.id)
       formData.append('is_active', this.field.is_active)
       formData.append('description', this.field.description)
       formData.append('created_at', this.field.created_at)
@@ -229,7 +229,7 @@ export default {
       formData.append('udpate_by', this.field.udpate_by)
 
       await this.$axios
-        .post('/api/admin/sql_user_has_role', formData)
+        .post('/api/admin/user_has_role', formData)
         .then(() => {
           //sweet alert
           this.$swal.fire({

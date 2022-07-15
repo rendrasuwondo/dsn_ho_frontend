@@ -242,13 +242,13 @@ export default {
     const { id } = route.params
 
     //menu
-    const menu = await $axios.get(`/api/admin/master/sql_menu/${id}`)
+    const menu = await $axios.get(`/api/admin/master/menu/${id}`)
 
     const header = [menu.data.data]
 
     //menu_has_role
     const posts = await $axios.$get(
-      `/api/admin/detail/sql_menu_has_role/${id}?q=${search}&page=${page}`
+      `/api/admin/detail/menu_has_role/${id}?q=${search}&page=${page}`
     )
 
     return {
@@ -300,7 +300,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/sql_menu_has_role/${id}`)
+              .delete(`/api/admin/menu_has_role/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()
@@ -331,7 +331,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/sql_menu_has_role_2/export?menu_id=${this.menu_id}`,
+        url: `/api/admin/menu_has_role_2/export?menu_id=${this.menu_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

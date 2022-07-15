@@ -226,7 +226,7 @@ export default {
 
   mounted() {
     this.$axios
-      .get(`/api/admin/master/sql_menu/${this.$route.params.id}`)
+      .get(`/api/admin/master/menu/${this.$route.params.id}`)
 
       .then((response) => {
         //  console.log(response.data.data.afdeling_id)
@@ -236,7 +236,7 @@ export default {
       })
 
     this.$axios
-      .get(`/api/admin/sql_sub_menu/${this.$route.params.id}`)
+      .get(`/api/admin/sub_menu/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
         this.field.code = response.data.data.code
@@ -280,7 +280,7 @@ export default {
 
       //send data ke Rest API untuk update
       await this.$axios
-        .put(`api/admin/sql_sub_menu/${this.$route.params.id}`, {
+        .put(`api/admin/sub_menu/${this.$route.params.id}`, {
           //data yang dikirim
           code: this.field.code,
           title: this.field.title,

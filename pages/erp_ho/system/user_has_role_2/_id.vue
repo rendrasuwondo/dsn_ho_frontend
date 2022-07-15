@@ -12,7 +12,7 @@
               <tr>
                 <td>
                   <nuxt-link
-                    :to="{ name: 'erp_ho-system-user' }"
+                    :to="{ name: 'erp_ho-system-users' }"
                     class="nav-link"
                   >
                     <i class="nav-icon fas fa-users"></i>
@@ -42,7 +42,7 @@
                 <nuxt-link
                   :to="{
                     name: 'erp_ho-system-user_has_role_2-create-id',
-                    params: { id: user_id, r: 1 },
+                    params: { id: users_id, r: 1 },
                   }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
@@ -186,7 +186,7 @@ export default {
 
       // header: [],
 
-      user_id: this.$route.params.id,
+      users_id: this.$route.params.id,
 
       fields_header: [
         {
@@ -223,7 +223,7 @@ export default {
     //search
     let search = query.q ? query.q : ''
 
-    // let { user_id } = route.params.id
+    // let { users_id } = route.params.id
     //fetching posts
     // const posts = await $axios.$get(
     //   `/api/admin/site?q=${search}&page=${page}`
@@ -232,13 +232,13 @@ export default {
     const { id } = route.params
 
     //user
-    const user = await $axios.get(`/api/admin/master/sql_users/${id}`)
+    const user = await $axios.get(`/api/admin/master/users/${id}`)
 
     const header = [user.data.data]
 
     //user_has_role
     const posts = await $axios.$get(
-      `/api/admin/detail/sql_user_has_role_2/${id}?q=${search}&page=${page}`
+      `/api/admin/detail/user_has_role_2/${id}?q=${search}&page=${page}`
     )
 
     return {
@@ -290,7 +290,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/sql_user_has_role/${id}`)
+              .delete(`/api/admin/user_has_role/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()
@@ -321,7 +321,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/sql_user_has_role_2/export?user_id=${this.user_id}`,
+        url: `/api/admin/user_has_role_2/export?users_id=${this.users_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

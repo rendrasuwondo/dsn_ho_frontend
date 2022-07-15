@@ -177,7 +177,7 @@ export default {
     // this.$refs.user_name.focus()
 
     this.$axios
-      .get(`/api/admin/master/sql_menu/${this.$route.params.id}`)
+      .get(`/api/admin/master/menu/${this.$route.params.id}`)
 
       .then((response) => {
         //  console.log(response.data.data.afdeling_id)
@@ -188,7 +188,7 @@ export default {
 
     //Data Users
     this.$axios
-      .get('/api/admin/lov_sql_role')
+      .get('/api/admin/lov_role')
 
       .then((response) => {
         this.role = response.data.data
@@ -230,7 +230,7 @@ export default {
       formData.append('udpate_by', this.field.udpate_by)
 
       await this.$axios
-        .post('/api/admin/sql_menu_has_role', formData)
+        .post('/api/admin/menu_has_role', formData)
         .then(() => {
           //sweet alert
           this.$swal.fire({

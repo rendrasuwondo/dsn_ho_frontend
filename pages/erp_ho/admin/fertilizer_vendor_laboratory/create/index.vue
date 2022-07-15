@@ -8,24 +8,40 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-user"></i> TAMBAH USER
+            <i class="nav-icon fas fa-project-diagram"></i>
+            <b>TAMBAH MAPPING LABORATORY</b>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
           <form @submit.prevent="storePost">
             <div class="form-group">
-              <label>Nama User</label>
+              <label>Nama Vendor</label>
               <multiselect
-                v-model="field.user_id"
-                :options="users"
-                label="users_description"
+                v-model="field.fertilizer_vendors_id"
+                :options="fertilizer_vendors"
+                label="code"
                 track-by="id"
                 :searchable="true"
               ></multiselect>
-              <div v-if="validation.user_id" class="mt-2">
+              <div v-if="validation.fertilizer_vendors_id" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.user_id[0]
+                  validation.fertilizer_vendors_id[0]
+                }}</b-alert>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Nama Laboratory</label>
+              <multiselect
+                v-model="field.laboratory_id"
+                :options="laboratory"
+                label="code"
+                track-by="id"
+                :searchable="true"
+              ></multiselect>
+              <div v-if="validation.laboratory_id" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.laboratory_id[0]
                 }}</b-alert>
               </div>
             </div>
@@ -116,7 +132,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah User',
+      title: 'Tambah Mapping Laboratory',
     }
   },
 
@@ -139,8 +155,8 @@ export default {
       value: undefined,
 
       field: {
-        user_id: '',
-        role_id: '',
+        fertilizer_vendors_id: '',
+        laboratory_id: '',
         is_active: 'Y',
         description: '',
         created_at: '',
@@ -149,9 +165,9 @@ export default {
         updated_by: '',
       },
 
-      role_id: '',
+      laboratory: [],
 
-      users: [],
+      fertilizer_vendors: [],
 
       //state validation
       validation: [],
@@ -175,22 +191,20 @@ export default {
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
     // this.$refs.user_name.focus()
 
+    //Data fertilizer_vendors
     this.$axios
-      .get(`/api/admin/master/role/${this.$route.params.id}`)
+      .get('/api/admin/lov_fertilizer_vendors')
 
       .then((response) => {
-        //  console.log(response.data.data.afdeling_id)
-        this.role_id = response.data.data.id
-
-        this.$nuxt.$loading.start()
+        this.fertilizer_vendors = response.data.data
       })
 
-    //Data Users
+    //data laboratory
     this.$axios
-      .get('/api/admin/lov_users')
+      .get('/api/admin/lov_laboratory')
 
       .then((response) => {
-        this.users = response.data.data
+        this.laboratory = response.data.data
       })
   },
 
@@ -206,7 +220,7 @@ export default {
 
     back() {
       this.$router.push({
-        name: 'system-user_has_role-id',
+        name: 'erp_ho-admin-fertilizer_vendor_laboratory',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -216,11 +230,15 @@ export default {
       let formData = new FormData()
 
       formData.append(
-        'user_id',
-        this.field.user_id ? this.field.user_id.id : ''
+        'fertilizer_vendors_id',
+        this.field.fertilizer_vendors_id
+          ? this.field.fertilizer_vendors_id.id
+          : ''
       )
-      formData.append('role_id', this.$route.params.id)
-      // formData.append('user_id', this.$route.params.id)
+      formData.append(
+        'laboratory_id',
+        this.field.laboratory_id ? this.field.laboratory_id.id : ''
+      )
       formData.append('is_active', this.field.is_active)
       formData.append('description', this.field.description)
       formData.append('created_at', this.field.created_at)
@@ -229,7 +247,7 @@ export default {
       formData.append('udpate_by', this.field.udpate_by)
 
       await this.$axios
-        .post('/api/admin/user_has_role', formData)
+        .post('/api/admin/fertilizer_vendor_laboratory', formData)
         .then(() => {
           //sweet alert
           this.$swal.fire({
@@ -272,5 +290,11 @@ export default {
 <style>
 .ck-editor__editable {
   min-height: 200px;
+}
+.card-info.card-outline {
+  border-top: 5px solid #504d8d;
+}
+.card-title {
+  color: #504d8d;
 }
 </style>

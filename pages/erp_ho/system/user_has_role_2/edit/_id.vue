@@ -151,14 +151,14 @@ export default {
         { value: 'N', text: 'Tidak' },
       ],
 
-      user_id: { id: '', name: '' },
+      users_id: { id: '', name: '' },
 
       state: 'disabled',
       value: undefined,
 
       field: {
         role_id: '',
-        user_id: '',
+        users_id: '',
         is_active: '',
         description: '',
         created_at: '',
@@ -186,7 +186,7 @@ export default {
 
   mounted() {
     this.$axios
-      .get(`/api/admin/master/sql_users/${this.$route.params.id}`)
+      .get(`/api/admin/master/users/${this.$route.params.id}`)
 
       .then((response) => {
         //  console.log(response.data.data.afdeling_id)
@@ -196,13 +196,13 @@ export default {
       })
 
     this.$axios
-      .get(`/api/admin/sql_user_has_role/${this.$route.params.id}`)
+      .get(`/api/admin/user_has_role/${this.$route.params.id}`)
       .then((response) => {
         console.log('rdr')
         console.log(response.data.data)
         //data yang diambil
         this.field.role_id = response.data.data.role
-        this.field.user_id = response.data.data.user_id
+        this.field.users_id = response.data.data.users_id
         this.field.is_active = response.data.data.is_active
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
@@ -215,7 +215,7 @@ export default {
 
     //Data Users
     this.$axios
-      .get('/api/admin/lov_sql_role')
+      .get('/api/admin/lov_role')
 
       .then((response) => {
         this.role = response.data.data
@@ -235,7 +235,7 @@ export default {
     back() {
       this.$router.push({
         name: 'erp_ho-system-user_has_role_2-id',
-        params: { id: this.field.user_id, r: 1 },
+        params: { id: this.field.users_id, r: 1 },
       })
     },
 
@@ -245,9 +245,10 @@ export default {
 
       //send data ke Rest API untuk update
       await this.$axios
-        .put(`api/admin/sql_user_has_role/${this.$route.params.id}`, {
+        .put(`api/admin/user_has_role/${this.$route.params.id}`, {
           //data yang dikirim
-          user_id: this.field.user_id,
+          id: this.$route.params.id,
+          users_id: this.field.users_id,
           role_id: this.field.role_id ? this.field.role_id.id : '',
           is_active: this.field.is_active,
           description: this.field.description,

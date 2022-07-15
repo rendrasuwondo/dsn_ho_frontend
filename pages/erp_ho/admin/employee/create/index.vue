@@ -8,7 +8,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-id-badge"></i> TAMBAH KARYAWAN
+            <i class="nav-icon fas fa-address-card"></i> <b>TAMBAH KARYAWAN</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -21,7 +21,7 @@
                 v-model="field.nik"
                 placeholder="Masukkan NIK"
                 class="form-control"
-                refs="nik"
+                ref="nik"
               />
               <div v-if="validation.nik" class="mt-2">
                 <b-alert show variant="danger">{{ validation.nik[0] }}</b-alert>
@@ -53,11 +53,11 @@
                 track-by="id"
                 :searchable="true"
               ></multiselect>
-              <div v-if="validation.company_id" class="mt-2">
+              <!-- <div v-if="validation.company_id" class="mt-2">
                 <b-alert show variant="danger">{{
                   validation.company_id[0]
                 }}</b-alert>
-              </div>
+              </div> -->
             </div>
 
             <div class="form-group">
@@ -70,11 +70,11 @@
                 track-by="id"
                 :searchable="true"
               ></multiselect>
-              <div v-if="validation.department_id" class="mt-2">
+              <!-- <div v-if="validation.department_id" class="mt-2">
                 <b-alert show variant="danger">{{
                   validation.department_id[0]
                 }}</b-alert>
-              </div>
+              </div> -->
             </div>
 
             <div class="form-group">
@@ -87,11 +87,11 @@
                 track-by="id"
                 :searchable="true"
               ></multiselect>
-              <div v-if="validation.location_id" class="mt-2">
+              <!-- <div v-if="validation.location_id" class="mt-2">
                 <b-alert show variant="danger">{{
                   validation.location_id[0]
                 }}</b-alert>
-              </div>
+              </div> -->
             </div>
 
             <div class="form-group">
@@ -104,11 +104,11 @@
                 track-by="id"
                 :searchable="true"
               ></multiselect>
-              <div v-if="validation.location_id" class="mt-2">
+              <!-- <div v-if="validation.location_id" class="mt-2">
                 <b-alert show variant="danger">{{
                   validation.location_id[0]
                 }}</b-alert>
-              </div>
+              </div> -->
             </div>
 
             <div class="form-group">
@@ -323,7 +323,11 @@ export default {
     this.field.updated_by =
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
 
-    // this.$refs.nik.focus()
+    this.$refs.nik.focus()
+
+    console.log('cek data')
+    console.log(this.field.created_at)
+    console.log(this.field.updated_at)
 
     //Data company
     this.$axios
@@ -378,7 +382,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: 'admin-employee',
+        name: 'erp_ho-admin-employee',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -434,13 +438,8 @@ export default {
       formData.append('description', this.field.description)
       formData.append('created_at', this.field.created_at)
       formData.append('created_by', this.field.created_by)
-      formData.append('update_at', this.field.update_at)
-      formData.append('udpate_by', this.field.udpate_by)
-
-      console.log('rdr')
-      console.log(
-        this.field.activity_group_id ? this.field.activity_group_id.id : ''
-      )
+      formData.append('updated_at', this.field.update_at)
+      formData.append('udpated_by', this.field.udpate_by)
 
       //sending data to server
       await this.$axios
@@ -457,7 +456,7 @@ export default {
 
           //redirect, if success store data
           this.$router.push({
-            name: 'admin-employee',
+            name: 'erp_ho-admin-employee',
           })
         })
         .catch((error) => {
@@ -481,5 +480,11 @@ export default {
 <style>
 .ck-editor__editable {
   min-height: 200px;
+}
+.card-info.card-outline {
+  border-top: 5px solid #504d8d;
+}
+.card-title {
+  color: #504d8d;
 }
 </style>

@@ -176,7 +176,7 @@ export default {
   mounted() {
     //get data field by ID
     this.$axios
-      .get(`/api/admin/sql_role/${this.$route.params.id}`)
+      .get(`/api/admin/role/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
         this.field.code = response.data.data.code
@@ -205,7 +205,7 @@ export default {
 
       //send data ke Rest API untuk update
       await this.$axios
-        .put(`/api/admin/sql_role/${this.$route.params.id}`, {
+        .put(`/api/admin/role/${this.$route.params.id}`, {
           //data yang dikirim
           code: this.field.code,
           name: this.field.name,

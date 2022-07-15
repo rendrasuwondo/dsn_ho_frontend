@@ -60,13 +60,13 @@
               <label>Password</label>
               <input
                 type="password"
-                v-model="field.user_password"
+                v-model="field.password"
                 placeholder="Masukkan Password"
                 class="form-control"
               />
-              <div v-if="validation.user_password" class="mt-2">
+              <div v-if="validation.password" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.user_password[0]
+                  validation.password[0]
                 }}</b-alert>
               </div>
             </div>
@@ -163,7 +163,7 @@ export default {
         user_name: '',
         name: '',
         email: '',
-        user_password: '',
+        password: '',
         created_at: '',
         updated_at: '',
         created_by: '',
@@ -190,7 +190,7 @@ export default {
 
     //Data Employee
     this.$axios
-      .get('/api/admin/lov_sql_employee')
+      .get('/api/admin/lov_employee')
 
       .then((response) => {
         this.employee = response.data.data
@@ -224,14 +224,14 @@ export default {
       formData.append('user_name', this.field.user_name)
       formData.append('name', this.field.name)
       formData.append('email', this.field.email)
-      formData.append('user_password', this.field.user_password)
+      formData.append('password', this.field.password)
       formData.append('created_at', this.field.created_at)
       formData.append('updated_at', this.field.updated_at)
       formData.append('created_by', this.field.created_by)
       formData.append('updated_by', this.field.updated_by)
       //sending data to server
       await this.$axios
-        .post('/api/admin/sql_users', formData)
+        .post('/api/admin/users', formData)
         .then(() => {
           //sweet alert
           this.$swal.fire({

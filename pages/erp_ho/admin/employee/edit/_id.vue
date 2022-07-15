@@ -8,7 +8,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-id-badge"></i> EDIT KARYAWAN
+            <i class="nav-icon fas fa-address-card"></i> <b>EDIT KARYAWAN</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -116,7 +116,7 @@
               <multiselect
                 v-model="field.afdeling_id"
                 :options="afdeling"
-                :custom-label="customLabel"
+                :custom-label="afdeling_option"
                 track-by="id"
                 :searchable="true"
               ></multiselect>
@@ -288,6 +288,8 @@ export default {
         updated_at: '',
         updated_by: '',
         activity_group_id: '',
+        employee_id: '',
+        q_afdeling_id: '',
       },
 
       company: [],
@@ -320,7 +322,7 @@ export default {
         this.field.department_id = response.data.data.department
         this.field.company_id = response.data.data.company
         this.field.position_id = response.data.data.position
-        this.field.afdeling_id = response.data.data.afdeling
+        this.field.afdeling_id = response.data.data.afdeling_id
         this.field.activity_group_id = response.data.data.activity_group
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by
@@ -390,12 +392,12 @@ export default {
   },
 
   methods: {
-    customLabel(option) {
-      return `${option.code} ${option.id}`
+    customLabel(afdeling_option) {
+      return `${afdeling_option.code} ${afdeling_option.id}`
     },
     back() {
       this.$router.push({
-        name: 'admin-employee',
+        name: 'erp_ho-admin-employee',
         params: { id: this.$route.params.id, r: 1 },
         query: {
           q: this.$route.query.q,
@@ -432,6 +434,8 @@ export default {
           updated_by: this.field.updated_by,
           description: this.field.description,
           employee_status: this.field.employee_status,
+          employee_id: this.$route.params.id,
+          q_afdeling_id: this.$route.query.afdeling_id,
         })
         .then(() => {
           //sweet alert
@@ -444,7 +448,7 @@ export default {
           })
           //redirect ke route "post"
           this.$router.push({
-            name: 'admin-employee',
+            name: 'erp_ho-admin-employee',
             query: {
               q: this.$route.query.q,
             },
@@ -466,4 +470,11 @@ export default {
   },
 }
 </script>
-<style></style>
+<style>
+.card-info.card-outline {
+  border-top: 5px solid #504d8d;
+}
+.card-title {
+  color: #504d8d;
+}
+</style>

@@ -270,7 +270,7 @@ export default {
 
       //sending data to server
       await this.$axios
-        .post('/api/admin/sql_menu', formData)
+        .post('/api/admin/menu', formData)
         .then(() => {
           //sweet alert
           this.$swal.fire({

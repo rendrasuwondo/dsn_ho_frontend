@@ -229,7 +229,7 @@ export default {
 
       //sending data to server
       await this.$axios
-        .post('/api/admin/sql_role', formData)
+        .post('/api/admin/role', formData)
         .then(() => {
           //sweet alert
           this.$swal.fire({

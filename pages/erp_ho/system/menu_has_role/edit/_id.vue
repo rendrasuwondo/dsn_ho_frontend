@@ -186,7 +186,7 @@ export default {
 
   mounted() {
     this.$axios
-      .get(`/api/admin/master/sql_menu/${this.$route.params.id}`)
+      .get(`/api/admin/master/menu/${this.$route.params.id}`)
 
       .then((response) => {
         //  console.log(response.data.data.afdeling_id)
@@ -196,7 +196,7 @@ export default {
       })
 
     this.$axios
-      .get(`/api/admin/sql_menu_has_role/${this.$route.params.id}`)
+      .get(`/api/admin/menu_has_role/${this.$route.params.id}`)
       .then((response) => {
         console.log('rdr')
         console.log(response.data.data)
@@ -215,7 +215,7 @@ export default {
 
     //Data Users
     this.$axios
-      .get('/api/admin/lov_sql_role')
+      .get('/api/admin/lov_role')
 
       .then((response) => {
         this.role = response.data.data
@@ -245,7 +245,7 @@ export default {
 
       //send data ke Rest API untuk update
       await this.$axios
-        .put(`api/admin/sql_menu_has_role/${this.$route.params.id}`, {
+        .put(`api/admin/menu_has_role/${this.$route.params.id}`, {
           //data yang dikirim
           menu_id: this.field.menu_id,
           role_id: this.field.role_id ? this.field.role_id.id : '',

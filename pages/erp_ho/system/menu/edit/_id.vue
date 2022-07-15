@@ -7,7 +7,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-map-marker-alt"></i> <b>EDIT MENU</b>
+            <i class="nav-icon fas fa-th"></i> <b>EDIT MENU</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -199,7 +199,7 @@ export default {
   mounted() {
     //get data field by ID
     this.$axios
-      .get(`/api/admin/sql_menu/${this.$route.params.id}`)
+      .get(`/api/admin/menu/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
         this.field.code = response.data.data.code
@@ -233,7 +233,7 @@ export default {
 
       //send data ke Rest API untuk update
       await this.$axios
-        .put(`/api/admin/sql_menu/${this.$route.params.id}`, {
+        .put(`/api/admin/menu/${this.$route.params.id}`, {
           //data yang dikirim
           id: this.$route.params.id,
           code: this.field.code,

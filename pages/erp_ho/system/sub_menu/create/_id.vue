@@ -230,7 +230,7 @@ export default {
     this.$refs.code.focus()
 
     this.$axios
-      .get(`/api/admin/master/sql_menu/${this.$route.params.id}`)
+      .get(`/api/admin/master/menu/${this.$route.params.id}`)
 
       .then((response) => {
         this.parent_id = response.data.data.id
@@ -275,7 +275,7 @@ export default {
       formData.append('udpate_by', this.field.udpate_by)
 
       await this.$axios
-        .post('/api/admin/sql_sub_menu', formData)
+        .post('/api/admin/sub_menu', formData)
         .then(() => {
           //sweet alert
           this.$swal.fire({

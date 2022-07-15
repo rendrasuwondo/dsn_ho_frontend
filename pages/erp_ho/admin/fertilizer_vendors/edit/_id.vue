@@ -8,7 +8,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-luggage-cart"></i>
+            <i class="nav-icon fas fa-dolly-flatbed"></i>
             <b>EDIT VENDOR PUPUK</b>
           </h3>
           <div class="card-tools"></div>
