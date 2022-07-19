@@ -124,6 +124,7 @@ export default {
             callback: '/erp_ho/login',
             home: '/erp_ho/admin/dashboard',
         },
+        
     },
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios

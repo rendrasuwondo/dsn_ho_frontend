@@ -64,13 +64,18 @@ export default {
     //fetching dashboard
     const dashboard = await $axios.$get('/api/admin/dashboard')
     console.log('cek data')
-    console.log($auth.user.employee.name)
+    console.log($auth)
     return {
       users: dashboard.data.users,
       posts: dashboard.data.posts,
       categories: dashboard.data.categories,
       comments: dashboard.data.comments,
     }
+  },
+
+  mounted() {
+    console.log('cek data')
+    console.log(this.$auth.user.employee.name)
   },
 }
 </script>
