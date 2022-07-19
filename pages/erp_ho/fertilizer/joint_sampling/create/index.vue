@@ -274,6 +274,12 @@ export default {
   methods: {
     //searchData
     searchDataPO(e) {
+     
+      // this.$axios
+      //   .get(`http://127.0.0.1:8000/api/PoFertilizer?PO_NO=${this.field.po}`)
+      //   .then((response) => {
+      //   this.po = response.data.data
+      // }).prepend(
       const data_po = this.$axios
         .$get(`http://127.0.0.1:8000/api/PoFertilizer?PO_NO=${this.field.po}`)
         // return po
@@ -283,7 +289,11 @@ export default {
           // console.log(this.field.po)
           // console.log(this.response.data)
         })
-      e.preventDefault()
+
+         e.preventDefault();
+      // console.log(
+      //   `http://127.0.0.1:8000/api/PoFertilizer?PO_NO=${this.field.po}`
+      // )
     },
 
     back() {
