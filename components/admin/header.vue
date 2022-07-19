@@ -61,7 +61,7 @@
             style="opacity: 0.8"
             width="35"
             height="35"
-          />
+          /> 
           {{ user.employee.nik }} - {{ user.employee.name }}
         </a>
 
