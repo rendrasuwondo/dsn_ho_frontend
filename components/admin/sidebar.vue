@@ -50,7 +50,7 @@ export default {
       )
       .then((response) => {
         if (response.data.data == 'Tidak') {
-          this.$router.push('/erp_ho/admin/dashboard')
+          this.$router.push('/erp_ho/main/dashboard')
         }
       })
   },

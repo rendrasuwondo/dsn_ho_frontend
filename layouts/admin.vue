@@ -8,7 +8,7 @@
 
       <aside class="main-sidebar sidebar-color elevation-4">
         <div class="title-brand">
-          <a to="/erp_ho/admin/dashboard" class="brand-link text-center mt-2">
+          <a to="/erp_ho/main/dashboard" class="brand-link text-center mt-2">
             <span class="brand-text font-weight-bold">ERP - HO</span>
           </a>
         </div>

@@ -122,7 +122,7 @@ export default {
             login: '/erp_ho/login',
             logout: '/erp_ho/login',
             callback: '/erp_ho/login',
-            home: '/erp_ho/admin/dashboard',
+            home: '/erp_ho/main/dashboard',
         },
     },
 

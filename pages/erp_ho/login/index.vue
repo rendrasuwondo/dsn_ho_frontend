@@ -129,7 +129,7 @@ export default {
 
           //redirect
           this.$router.push({
-            name: 'erp_ho-admin-dashboard',
+            name: 'erp_ho-main-dashboard',
           })
         })
 
