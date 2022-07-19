@@ -18,15 +18,15 @@
             <div class="form-group">
               <label>Nama Vendor</label>
               <multiselect
-                v-model="field.fertilizer_vendors_id"
-                :options="fertilizer_vendors"
+                v-model="field.vendors_id"
+                :options="vendors"
                 label="code"
                 track-by="id"
                 :searchable="true"
               ></multiselect>
-              <div v-if="validation.fertilizer_vendors_id" class="mt-2">
+              <div v-if="validation.vendors_id" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.fertilizer_vendors_id[0]
+                  validation.vendors_id[0]
                 }}</b-alert>
               </div>
             </div>
@@ -155,7 +155,7 @@ export default {
       value: undefined,
 
       field: {
-        fertilizer_vendors_id: '',
+        vendors_id: '',
         laboratory_id: '',
         is_active: 'Y',
         description: '',
@@ -167,7 +167,7 @@ export default {
 
       laboratory: [],
 
-      fertilizer_vendors: [],
+      vendors: [],
 
       //state validation
       validation: [],
@@ -191,12 +191,12 @@ export default {
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
     // this.$refs.user_name.focus()
 
-    //Data fertilizer_vendors
+    //Data vendors
     this.$axios
-      .get('/api/admin/lov_fertilizer_vendors')
+      .get('/api/admin/lov_vendors')
 
       .then((response) => {
-        this.fertilizer_vendors = response.data.data
+        this.vendors = response.data.data
       })
 
     //data laboratory
@@ -230,10 +230,8 @@ export default {
       let formData = new FormData()
 
       formData.append(
-        'fertilizer_vendors_id',
-        this.field.fertilizer_vendors_id
-          ? this.field.fertilizer_vendors_id.id
-          : ''
+        'vendors_id',
+        this.field.vendors_id ? this.field.vendors_id.id : ''
       )
       formData.append(
         'laboratory_id',

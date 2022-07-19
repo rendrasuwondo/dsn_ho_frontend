@@ -18,15 +18,15 @@
             <div class="form-group">
               <label>Nama Vendor</label>
               <multiselect
-                v-model="field.fertilizer_vendors_id"
-                :options="fertilizer_vendors"
+                v-model="field.vendors_id"
+                :options="vendors"
                 label="code"
                 track-by="id"
                 :searchable="true"
               ></multiselect>
-              <div v-if="validation.fertilizer_vendors_id" class="mt-2">
+              <div v-if="validation.vendors_id" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.fertilizer_vendors_id[0]
+                  validation.vendors_id[0]
                 }}</b-alert>
               </div>
             </div>
@@ -159,7 +159,7 @@ export default {
 
       state: 'disabled',
       field: {
-        fertilizer_vendors_id: '',
+        vendors_id: '',
         laboratory_id: '',
         is_active: '',
         description: '',
@@ -171,7 +171,7 @@ export default {
 
       laboratory: [],
 
-      fertilizer_vendors: [],
+      vendors: [],
 
       //state validation
       validation: [],
@@ -184,7 +184,7 @@ export default {
       .get(`/api/admin/fertilizer_vendor_laboratory/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
-        this.field.fertilizer_vendors_id = response.data.data.fertilizer_vendors
+        this.field.vendors_id = response.data.data.vendors
         this.field.laboratory_id = response.data.data.laboratory
         this.field.is_active = response.data.data.is_active
         this.field.description = response.data.data.description
@@ -197,10 +197,10 @@ export default {
 
     //Data fertilizer_vendors
     this.$axios
-      .get('/api/admin/lov_fertilizer_vendors')
+      .get('/api/admin/lov_vendors')
 
       .then((response) => {
-        this.fertilizer_vendors = response.data.data
+        this.vendors = response.data.data
       })
 
     //data laboratory
@@ -233,9 +233,7 @@ export default {
             laboratory_id: this.field.laboratory_id
               ? this.field.laboratory_id.id
               : '',
-            fertilizer_vendors_id: this.field.fertilizer_vendors_id
-              ? this.field.fertilizer_vendors_id.id
-              : '',
+            vendors_id: this.field.vendors_id ? this.field.vendors_id.id : '',
 
             is_active: this.field.is_active,
             description: this.field.description,

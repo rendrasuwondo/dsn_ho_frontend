@@ -8,7 +8,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-sitemap"></i> <b> JENIS PUPUK</b>
+            <i class="nav-icon fas fa-object-ungroup"></i>
+            <b>JOINT SAMPLING</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -17,7 +18,7 @@
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <nuxt-link
-                  :to="{ name: 'erp_ho-admin-fertilizer_type-create' }"
+                  :to="{ name: 'erp_ho-admin-t_fertilizer_sample-create' }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
                   title="Tambah"
@@ -60,7 +61,7 @@
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-admin-fertilizer_type-edit-id',
+                  name: 'erp_ho-admin-t_fertilizer_sample-edit-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"
@@ -72,26 +73,12 @@
               <b-button
                 variant="link"
                 size="sm"
-                @click="deletePost(row.item.id)"
+                @click="deleteRole(row.item.id)"
                 title="Hapus"
                 ><i class="fa fa-trash"></i
               ></b-button>
             </template>
           </b-table>
-          <b-tooltip
-            target="myAfdeling"
-            triggers="hover"
-            container="myAfdeling"
-          >
-            Afdeling
-          </b-tooltip>
-          <b-tooltip
-            target="myDepartment"
-            triggers="hover"
-            container="myDepartment"
-          >
-            Departemen
-          </b-tooltip>
           <!-- pagination -->
           <b-row>
             <b-col
@@ -120,10 +107,9 @@ export default {
 
   head() {
     return {
-      title: 'JENIS PUPUK',
+      title: 'Joint Sampling',
     }
   },
-
   data() {
     return {
       fields: [
@@ -133,18 +119,63 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Kode',
-          key: 'code',
+          label: 'PO',
+          key: 'po',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Nama',
-          key: 'name',
+          label: 'Supplier',
+          key: 'supplier',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Aktif?',
-          key: 'is_active_code',
+          label: 'Jenis Pupuk',
+          key: 'fertilizer_type_code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'PT',
+          key: 'company_code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Dept.',
+          key: 'department_code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'QTY',
+          key: 'qty',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tanggal Kedatangan',
+          key: 'tgl_kedatangan',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Joint Sampling',
+          key: 'joint_sampling',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tanggal Terima',
+          key: 'tgl_terima',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Kode Sample',
+          key: 'kode_sampel',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Kirim Ke Lab',
+          key: 'kirim_lab',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Terima Lab',
+          key: 'terima_lab',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -165,7 +196,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/fertilizer_type?q=${search}&page=${page}`
+      `/api/admin/t_fertilizer_sample?q=${search}&page=${page}`
     )
 
     return {
@@ -175,6 +206,7 @@ export default {
       rowcount: posts.data.total,
     }
   },
+
   methods: {
     changePage(page) {
       this.$router.push({
@@ -195,30 +227,8 @@ export default {
       })
     },
 
-    exportData() {
-      const headers = {
-        'Content-Type': 'application/json',
-      }
-
-      this.$axios({
-        url: `/api/admin/fertilizer_type/export`,
-        method: 'GET',
-        responseType: 'blob',
-        headers: headers, // important
-      }).then((response) => {
-        this.isLoading = false
-        const url = window.URL.createObjectURL(new Blob([response.data]))
-        const link = document.createElement('a')
-        link.href = url
-        var fileName = 'Employee.xlsx'
-        link.setAttribute('download', fileName) //or any other extension
-        document.body.appendChild(link)
-        link.click()
-      })
-    },
-
     //deletePost method
-    deletePost(id) {
+    deleteRole(id) {
       this.$swal
         .fire({
           title: 'APAKAH ANDA YAKIN ?',
@@ -235,11 +245,10 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/fertilizer_type/${id}`)
+              .delete(`/api/admin/t_fertilizer_sample/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()
-
                 if (response.data.success == true) {
                   this.sweet_alert.title = 'BERHASIL!'
                   this.sweet_alert.icon = 'success'
@@ -259,6 +268,28 @@ export default {
               })
           }
         })
+    },
+
+    exportData() {
+      const headers = {
+        'Content-Type': 'application/json',
+      }
+
+      this.$axios({
+        url: `/api/admin/t_fertilizer_sample/export`,
+        method: 'GET',
+        responseType: 'blob',
+        headers: headers, // important
+      }).then((response) => {
+        this.isLoading = false
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        var fileName = 'Fertilizer Vendors.xlsx'
+        link.setAttribute('download', fileName) //or any other extension
+        document.body.appendChild(link)
+        link.click()
+      })
     },
   },
 }
