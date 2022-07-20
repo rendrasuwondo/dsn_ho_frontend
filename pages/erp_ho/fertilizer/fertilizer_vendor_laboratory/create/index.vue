@@ -20,7 +20,7 @@
               <multiselect
                 v-model="field.vendors_id"
                 :options="vendors"
-                label="code"
+                label="name"
                 track-by="id"
                 :searchable="true"
               ></multiselect>

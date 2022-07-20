@@ -8,30 +8,41 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-project-diagram"></i>
-            <b>EDIT MAPPING LABORATORY</b>
+            <i class="nav-icon fas fa-file-signature"></i>
+            <b>EDIT INPUT SAMPEL</b>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
           <form @submit.prevent="update">
             <div class="form-group">
-              <label>Nama Vendor</label>
-              <multiselect
-                v-model="field.vendors_id"
-                :options="vendors"
-                label="name"
-                track-by="id"
-                :searchable="true"
-              ></multiselect>
-              <div v-if="validation.vendors_id" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.vendors_id[0]
-                }}</b-alert>
-              </div>
+              <label>PO</label>
+
+              <input
+                type="text"
+                v-model="field.po"
+                placeholder="Masukkan Kode PO"
+                class="form-control"
+                readonly
+              />
             </div>
+
             <div class="form-group">
-              <label>Nama Laboratory</label>
+              <label>Tanggal Terima</label>
+              <b-form-datepicker
+                placeholder="Choose a date"
+                v-model="field.tgl_terima"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                  weekday: 'short',
+                }"
+              ></b-form-datepicker>
+            </div>
+
+            <div class="form-group">
+              <label>Lab Analisa</label>
               <multiselect
                 v-model="field.laboratory_id"
                 :options="laboratory"
@@ -39,6 +50,7 @@
                 track-by="id"
                 :searchable="true"
               ></multiselect>
+
               <div v-if="validation.laboratory_id" class="mt-2">
                 <b-alert show variant="danger">{{
                   validation.laboratory_id[0]
@@ -47,11 +59,31 @@
             </div>
 
             <div class="form-group">
-              <label>Aktif?</label>
-              <b-form-select v-model="field.is_active">
-                <b-form-select-option value="Y">Ya</b-form-select-option>
-                <b-form-select-option value="N">Tidak</b-form-select-option>
-              </b-form-select>
+              <label>Kirim Ke Lab</label>
+              <b-form-datepicker
+                placeholder="Choose a date"
+                v-model="field.kirim_lab"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                  weekday: 'short',
+                }"
+              ></b-form-datepicker>
+            </div>
+
+            <div class="form-group">
+              <label>Terima Lab</label>
+              <b-form-datepicker
+                placeholder="Choose a date"
+                v-model="field.terima_lab"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                  weekday: 'short',
+                }"
+              ></b-form-datepicker>
             </div>
 
             <div class="form-group">
@@ -61,7 +93,7 @@
                 v-model="field.description"
                 class="form-control"
                 rows="3"
-                placeholder=""
+                placeholder="Masukkan Deskripsi Singkat"
               ></textarea>
               <div v-if="validation.description" class="mt-2">
                 <b-alert show variant="danger">{{
@@ -69,6 +101,7 @@
                 }}</b-alert>
               </div>
             </div>
+
             <div class="form-group">
               <b-row>
                 <b-col>
@@ -122,6 +155,7 @@
                 </b-col>
               </b-row>
             </div>
+
             <button class="btn btn-info mr-1 btn-submit" type="submit">
               <i class="fa fa-paper-plane"></i> SIMPAN
             </button>
@@ -146,32 +180,35 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit Mapping Laboratory',
+      title: 'Edit Input Sampel',
     }
   },
 
   data() {
     return {
-      options: [
-        { value: 'Y', text: 'Ya' },
-        { value: 'N', text: 'Tidak' },
-      ],
-
       state: 'disabled',
       field: {
+        po: '',
         vendors_id: '',
+        fertilizer_type_id: '',
+        company_id: '',
+        department_id: '',
+        unit_id: '',
+        qty: '',
+        tgl_kedatangan: '',
+        joint_sampling: '',
         laboratory_id: '',
-        is_active: '',
+        tgl_terima: '',
+        kirim_lab: '',
+        terima_lab: '',
         description: '',
         created_at: '',
-        updated_at: '',
         created_by: '',
+        updated_at: '',
         updated_by: '',
       },
 
       laboratory: [],
-
-      vendors: [],
 
       //state validation
       validation: [],
@@ -181,12 +218,22 @@ export default {
   mounted() {
     //get data field by ID
     this.$axios
-      .get(`/api/admin/fertilizer_vendor_laboratory/${this.$route.params.id}`)
+      .get(`/api/admin/input_sampel/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
-        this.field.vendors_id = response.data.data.vendors
+        this.field.po = response.data.data.po
+        this.field.vendors_id = response.data.data.vendors_id
+        this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
+        this.field.company_id = response.data.data.company_id
+        this.field.department_id = response.data.data.department_id
+        this.field.unit_id = response.data.data.unit_id
+        this.field.qty = response.data.data.qty
+        this.field.tgl_kedatangan = response.data.data.tgl_kedatangan
+        this.field.joint_sampling = response.data.data.joint_sampling
         this.field.laboratory_id = response.data.data.laboratory
-        this.field.is_active = response.data.data.is_active
+        this.field.tgl_terima = response.data.data.tgl_terima
+        this.field.kirim_lab = response.data.data.kirim_lab
+        this.field.terima_lab = response.data.data.terima_lab
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by
@@ -195,15 +242,6 @@ export default {
       })
     // this.$refs.code.focus()
 
-    //Data fertilizer_vendors
-    this.$axios
-      .get('/api/admin/lov_vendors')
-
-      .then((response) => {
-        this.vendors = response.data.data
-      })
-
-    //data laboratory
     this.$axios
       .get('/api/admin/lov_laboratory')
 
@@ -215,7 +253,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: 'erp_ho-fertilizer-fertilizer_vendor_laboratory',
+        name: 'erp_ho-fertilizer-input_sampel',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -226,23 +264,28 @@ export default {
 
       //send data ke Rest API untuk update
       await this.$axios
-        .put(
-          `/api/admin/fertilizer_vendor_laboratory/${this.$route.params.id}`,
-          {
-            //data yang dikirim
-            laboratory_id: this.field.laboratory_id
-              ? this.field.laboratory_id.id
-              : '',
-            vendors_id: this.field.vendors_id ? this.field.vendors_id.id : '',
-
-            is_active: this.field.is_active,
-            description: this.field.description,
-            created_at: this.field.created_at,
-            updated_at: this.field.updated_at,
-            created_by: this.field.created_by,
-            updated_by: this.field.updated_by,
-          }
-        )
+        .put(`/api/admin/input_sampel/${this.$route.params.id}`, {
+          po: this.field.po,
+          company_id: this.field.company_id,
+          department_id: this.field.department_id,
+          fertilizer_type_id: this.field.fertilizer_type_id,
+          vendors_id: this.field.vendors_id,
+          unit_id: this.field.unit_id,
+          qty: this.field.qty,
+          tgl_kedatangan: this.field.tgl_kedatangan,
+          joint_sampling: this.field.joint_sampling,
+          laboratory_id: this.field.laboratory_id
+            ? this.field.laboratory_id.id
+            : '',
+          tgl_terima: this.field.tgl_terima,
+          kirim_lab: this.field.kirim_lab,
+          terima_lab: this.field.terima_lab,
+          description: this.field.description,
+          created_at: this.field.created_at,
+          updated_at: this.field.updated_at,
+          created_by: this.field.created_by,
+          updated_by: this.field.updated_by,
+        })
         .then(() => {
           //sweet alert
           this.$swal.fire({
@@ -254,7 +297,7 @@ export default {
           })
           //redirect ke route "post"
           this.$router.push({
-            name: 'erp_ho-fertilizer-fertilizer_vendor_laboratory',
+            name: 'erp_ho-fertilizer-input_sampel',
           })
         })
         .catch((error) => {

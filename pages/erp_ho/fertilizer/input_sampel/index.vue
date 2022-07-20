@@ -8,8 +8,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-object-ungroup"></i>
-            <b>JOINT SAMPLING</b>
+            <i class="nav-icon fas fa-file-signature"></i>
+            <b>INPUT SAMPEL</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -17,13 +17,13 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <nuxt-link
+                <!-- <nuxt-link
                   :to="{ name: 'erp_ho-fertilizer-joint_sampling-create' }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
                   title="Tambah"
                   ><i class="fa fa-plus-circle"></i>
-                </nuxt-link>
+                </nuxt-link> -->
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -58,25 +58,10 @@
             :fields="fields"
             show-empty
           >
-            <!-- <template v-slot:head(selected)="data">
-              <span
-                ><b-form-checkbox
-                  @click.native.stop
-                  @change="select"
-                  v-model="allSelected"
-                >
-                </b-form-checkbox
-              ></span>
-            </template>
-            <template v-slot:cell(selected)="row">
-              <b-form-group>
-                <input type="checkbox" v-model="row.item.selected" />
-              </b-form-group>
-            </template> -->
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-fertilizer-joint_sampling-edit-id',
+                  name: 'erp_ho-fertilizer-input_sampel-edit-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"
@@ -85,28 +70,27 @@
               >
                 <i class="fa fa-pencil-alt"></i>
               </b-button>
-              <b-button
+              <!-- <b-button
                 variant="link"
                 size="sm"
                 @click="deleteRole(row.item.id)"
                 title="Hapus"
                 ><i class="fa fa-trash"></i
-              ></b-button>
+              ></b-button> -->
             </template>
-            <!-- <template v-slot:custom-foot="data">
-              <b-tr>
-                <b-td colspan="12">
-                  <b-button
-                    class="btn-info"
-                    size="sm"
-                    @click="Submit"
-                    v-if="rowcount > 0"
-                  >
-                    Verifikasi
-                  </b-button>
-                </b-td>
-              </b-tr>
-            </template> -->
+            <template v-slot:cell(parameter)="row">
+              <b-button
+                :to="{
+                  name: 'erp_ho-fertilizer-parameter_input_sampel-id',
+                  params: { id: row.item.id },
+                }"
+                variant="link"
+                size=""
+                title="Paramenter"
+              >
+                <i class="fa fa-file-alt"></i>
+              </b-button>
+            </template>
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -136,7 +120,7 @@ export default {
 
   head() {
     return {
-      title: 'Joint Sampling',
+      title: 'Input Sampel',
     }
   },
   data() {
@@ -145,22 +129,11 @@ export default {
       show_submit: true,
 
       fields: [
-        // {
-        //   label: 'Approve',
-        //   key: 'selected',
-        //   tdClass: 'align-middle text-center text-nowrap nameOfTheClass ',
-        //   sortable: false,
-        // },
         {
           label: 'Actions',
           key: 'actions',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
-        // {
-        //   label: 'Status',
-        //   key: 'verification_status',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
         {
           label: 'PO',
           key: 'po',
@@ -172,55 +145,36 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Jenis Pupuk',
-          key: 'fertilizer_type_code',
+          label: 'Kode Sampel',
+          key: 'kode_sampel',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'PT',
-          key: 'company_code',
+          label: 'Tanggal Terima',
+          key: 'f_tgl_terima',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Estate',
-          key: 'department_code',
+          label: 'Lab Analisa',
+          key: 'laboratory_code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+
+        {
+          label: 'Parameter',
+          key: 'parameter',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Kirim Ke Lab',
+          key: 'f_kirim_lab',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'QTY',
-          key: 'qty',
+          label: 'Terima Lab',
+          key: 'f_terima_lab',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
-        {
-          label: 'Tanggal Kedatangan',
-          key: 'f_tgl_kedatangan',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Joint Sampling',
-          key: 'f_joint_sampling',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        // {
-        //   label: 'Tanggal Terima',
-        //   key: 'tgl_terima',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
-        // {
-        //   label: 'Kode Sample',
-        //   key: 'kode_sampel',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
-        // {
-        //   label: 'Kirim Ke Lab',
-        //   key: 'kirim_lab',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
-        // {
-        //   label: 'Terima Lab',
-        //   key: 'terima_lab',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
       ],
       sweet_alert: {
         title: '',
@@ -239,7 +193,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/t_fertilizer_sample?q=${search}&page=${page}`
+      `/api/admin/input_sampel?q=${search}&page=${page}`
     )
 
     return {
@@ -288,7 +242,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/t_fertilizer_sample/${id}`)
+              .delete(`/api/admin/input_sampel/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()
@@ -319,7 +273,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/t_fertilizer_sample/export`,
+        url: `/api/admin/input_sampel/export`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

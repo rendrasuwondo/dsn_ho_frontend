@@ -9,7 +9,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-file-contract"></i>
-            <b>CREATE JOINT SAMPLING</b>
+            <b>EDIT JOINT SAMPLING</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -249,16 +249,11 @@ export default {
         company_code: '',
         department_id: '',
         department_code: '',
-        department_code_sap: '',
         unit_id: '',
         unit_code: '',
         qty: '',
         tgl_kedatangan: '',
         joint_sampling: '',
-        tgl_terima: '',
-        kode_sampel: '',
-        kirim_lab: '',
-        terima_lab: '',
         description: '',
         created_at: '',
         created_by: '',
@@ -278,6 +273,8 @@ export default {
     this.$axios
       .get(`/api/admin/t_fertilizer_sample/${this.$route.params.id}`)
       .then((response) => {
+        console.log('aida')
+        console.log(response)
         //data yang diambil
         this.field.id = response.data.data.id
         this.field.po = response.data.data.po
@@ -333,8 +330,8 @@ export default {
           this.field.fertilizer_type_code = this.data_po.FERTILIZER_TYPE
         })
 
-      //   console.log('data')
-      //   console.log(this.data_po.VENDOR == undefined ? 1 : 0)
+      console.log('data')
+      console.log(this.data_po.VENDOR)
 
       e.preventDefault()
     },
@@ -347,14 +344,14 @@ export default {
       await this.$axios
         .put(`/api/admin/t_fertilizer_sample/${this.$route.params.id}`, {
           //data yang dikirim
-          kode_sampel:
-            this.$route.params.id +
-            '-' +
-            this.field.company_id +
-            '-' +
-            this.field.department_code_sap +
-            '-' +
-            this.field.fertilizer_type_id,
+          // kode_sampel:
+          //   this.$route.params.id +
+          //   '-' +
+          //   this.field.company_id +
+          //   '-' +
+          //   this.field.department_code_sap +
+          //   '-' +
+          //   this.field.fertilizer_type_id,
 
           po: this.field.po,
           company_id: this.field.company_id,
