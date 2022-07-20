@@ -77,6 +77,22 @@
                 ><i class="fa fa-trash"></i
               ></b-button>
             </template>
+            <template v-slot:cell(vendors)="row">
+              <b-button
+                :to="{
+                  name: 'erp_ho-fertilizer-laboratory_vendor-id',
+                  params: { id: row.item.id },
+                  query: {
+                    laboratory_id: row.item.id,
+                  },
+                }"
+                variant="link"
+                size=""
+                title="Role"
+              >
+                <i class="fa fa-file-alt"></i>
+              </b-button>
+            </template>
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -116,6 +132,11 @@ export default {
           label: 'Actions',
           key: 'actions',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Vendors',
+          key: 'vendors',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           label: 'Kode',

@@ -8,18 +8,41 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-project-diagram"></i>
-            <b>MAPPING LABORATORY</b>
+            <table>
+              <tr>
+                <td>
+                  <nuxt-link
+                    :to="{ name: 'erp_ho-fertilizer-laboratory' }"
+                    class="nav-link"
+                  >
+                    <i class="nav-icon fas fas fa-vial"></i>
+                    <b>LABORATORY</b>
+                  </nuxt-link>
+                </td>
+                <td>/ VENDORS</td>
+              </tr>
+            </table>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
           <div class="form-group">
+            <b-table
+              striped
+              bordered
+              hover
+              :items="header"
+              :fields="fields_header"
+              show-empty
+            ></b-table>
+          </div>
+          <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <nuxt-link
                   :to="{
-                    name: 'erp_ho-fertilizer-fertilizer_vendor_laboratory-create',
+                    name: 'erp_ho-fertilizer-laboratory_vendor-create-id',
+                    params: { id: laboratory_id, r: 1 },
                   }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
@@ -39,7 +62,7 @@
                 class="form-control"
                 v-model="search"
                 @keypress.enter="searchData"
-                placeholder=""
+                placeholder="cari berdasarkan nama tag"
               />
               <div class="input-group-append">
                 <button @click="searchData" class="btn btn-info">
@@ -49,7 +72,9 @@
               </div>
             </div>
           </div>
+
           <!-- table -->
+
           <b-table
             small
             responsive
@@ -60,27 +85,35 @@
             :fields="fields"
             show-empty
           >
+            <template v-slot:cell(comments)="row">
+              <i class="fa fa-comments"></i> {{ row.item.comments.length }}
+            </template>
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-fertilizer-fertilizer_vendor_laboratory-edit-id',
-                  params: { id: row.item.id },
+                  name: 'erp_ho-fertilizer-laboratory_vendor-edit-id',
+                  params: { id: row.item.id, r: 1 },
+                  query: {
+                    vendors_id: row.item.id.vendors_id,
+                  },
                 }"
                 variant="link"
-                size="sm"
+                size=""
                 title="Edit"
               >
                 <i class="fa fa-pencil-alt"></i>
               </b-button>
+
               <b-button
                 variant="link"
-                size="sm"
-                @click="deleteRole(row.item.id)"
+                size=""
                 title="Hapus"
+                @click="deletePost(row.item.id)"
                 ><i class="fa fa-trash"></i
               ></b-button>
             </template>
           </b-table>
+
           <!-- pagination -->
           <b-row>
             <b-col
@@ -105,29 +138,56 @@
 
 <script>
 export default {
+  //layout
   layout: 'admin',
 
+  //meta
   head() {
     return {
-      title: 'Mapping Vendors',
+      title: 'Vendors',
     }
   },
+
+  //data function
   data() {
     return {
+      //table header
       fields: [
         {
           label: 'Actions',
           key: 'actions',
+          tdClass: '',
+        },
+        {
+          label: 'Kode',
+          key: 'vendor_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Nama Vendor',
+          label: 'Nama',
           key: 'vendor_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Laboratory',
-          key: 'laboratory_code',
+          label: 'Aktif',
+          key: 'is_active_code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+      ],
+
+      // header: [],
+
+      laboratory_id: this.$route.params.id,
+
+      fields_header: [
+        {
+          label: 'Kode',
+          key: 'code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Nama',
+          key: 'name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -140,11 +200,16 @@ export default {
         title: '',
         icon: '',
       },
+
+      //state search
+      search: '',
     }
   },
+
+  //watch query URL
   watchQuery: ['q', 'page'],
 
-  async asyncData({ $axios, query }) {
+  async asyncData({ $axios, query, route }) {
     //page
     let page = query.page ? parseInt(query.page) : ''
 
@@ -152,19 +217,32 @@ export default {
     let search = query.q ? query.q : ''
 
     //fetching posts
+    // const posts = await $axios.$get(
+    //   `/api/admin/site?q=${search}&page=${page}`
+    // )
+
+    const { id } = route.params
+    //role
+    const laboratory = await $axios.get(`/api/admin/master/laboratory/${id}`)
+
+    const header = [role.data.data]
+
+    //user_has_role
     const posts = await $axios.$get(
-      `/api/admin/fertilizer_vendor_laboratory?q=${search}&page=${page}`
+      `/api/admin/detail/laboratory_vendor/${id}?q=${search}&page=${page}`
     )
 
     return {
       posts: posts.data.data,
       pagination: posts.data,
-      search: search,
       rowcount: posts.data.total,
+      search: search,
+      header: header,
     }
   },
 
   methods: {
+    //change page pagination
     changePage(page) {
       this.$router.push({
         path: this.$route.path,
@@ -174,6 +252,7 @@ export default {
         },
       })
     },
+
     //searchData
     searchData() {
       this.$router.push({
@@ -185,7 +264,7 @@ export default {
     },
 
     //deletePost method
-    deleteRole(id) {
+    deletePost(id) {
       this.$swal
         .fire({
           title: 'APAKAH ANDA YAKIN ?',
@@ -233,7 +312,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/fertilizer_vendor_laboratory/export`,
+        url: `/api/admin/fertilizer_vendor_laboratory/export?role_id=${this.role_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -242,21 +321,35 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Mapping Vendors.xlsx'
+        var fileName = 'Role - users.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
       })
     },
   },
+
+  mounted() {
+    // this.$axios
+    //   .get(`/api/admin/master/role/${this.$route.params.id}`)
+    //   // .get(`/api/admin/site/site_loc/${this.$route.params.id}`)
+    //   .then((response) => {
+    //     //console.log(JSON.stringify(response.data.data))
+    //     // console.log('rdr')
+    //     console.log(response.data.data.role_id)
+    //     this.header.push(response.data.data)
+    //     // this.detail(response.data)
+    //     // console.log(this.detail)
+    //   })
+  },
 }
 </script>
 
-<style scoped>
+<style>
 .card-info.card-outline {
   border-top: 5px solid #504d8d;
 }
-.card-title {
+.card-title .nav-link {
   color: #504d8d;
 }
 </style>

@@ -8,24 +8,25 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-user"></i> <b>EDIT User</b>
+            <i class="nav-icon fas fa-dolly-flatbed"></i>
+            <b>TAMBAH VENDOR</b>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <form @submit.prevent="updateData">
+          <form @submit.prevent="storePost">
             <div class="form-group">
-              <label>Nama User</label>
+              <label>Nama Vendor</label>
               <multiselect
-                v-model="field.users_id"
-                :options="users"
-                label="user_description"
+                v-model="field.vendors_id"
+                :options="vendors"
+                label="name"
                 track-by="id"
                 :searchable="true"
               ></multiselect>
-              <div v-if="validation.users_id" class="mt-2">
+              <div v-if="validation.vendors_id" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.users_id[0]
+                  validation.vendors_id[0]
                 }}</b-alert>
               </div>
             </div>
@@ -33,22 +34,6 @@
               <label>Aktif?</label>
               <b-form-select v-model="field.is_active" :options="options">
               </b-form-select>
-            </div>
-
-            <div class="form-group">
-              <label>Keterangan</label>
-
-              <textarea
-                v-model="field.description"
-                class="form-control"
-                rows="3"
-                placeholder="Masukkan Deskripsi Singkat"
-              ></textarea>
-              <div v-if="validation.description" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.description[0]
-                }}</b-alert>
-              </div>
             </div>
 
             <div class="form-group">
@@ -132,7 +117,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit User',
+      title: 'Tambah Vendor',
     }
   },
 
@@ -155,9 +140,9 @@ export default {
       value: undefined,
 
       field: {
-        role_id: '',
-        users_id: '',
-        is_active: '',
+        vendors_id: '',
+        laboratory_id: '',
+        is_active: 'Y',
         description: '',
         created_at: '',
         updated_at: '',
@@ -165,9 +150,9 @@ export default {
         updated_by: '',
       },
 
-      role_id: '',
+      laboratory_id: '',
 
-      users: [],
+      vendors: [],
 
       //state validation
       validation: [],
@@ -183,40 +168,30 @@ export default {
   },
 
   mounted() {
+    this.field.created_at = this.currentDate()
+    this.field.updated_at = this.currentDate()
+    this.field.created_by =
+      this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
+    this.field.updated_by =
+      this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
+    // this.$refs.user_name.focus()
+
     this.$axios
-      .get(`/api/admin/master/role/${this.$route.params.id}`)
+      .get(`/api/admin/master/laboratory/${this.$route.params.id}`)
 
       .then((response) => {
         //  console.log(response.data.data.afdeling_id)
-        this.role_id = response.data.data.id
-
-        this.$nuxt.$loading.start()
-      })
-
-    this.$axios
-      .get(`/api/admin/user_has_role/${this.$route.params.id}`)
-      .then((response) => {
-        console.log('rdr')
-        console.log(response.data.data)
-        //data yang diambil
-        this.field.role_id = response.data.data.role
-        this.field.users_id = response.data.data.users_id
-        this.field.is_active = response.data.data.is_active
-        this.field.description = response.data.data.description
-        this.field.created_at = response.data.data.created_at
-        this.field.created_by = response.data.data.created_by
-        this.field.updated_at = response.data.data.updated_at
-        this.field.updated_by = response.data.data.updated_by
+        this.laboratory_id = response.data.data.id
 
         this.$nuxt.$loading.start()
       })
 
     //Data Users
     this.$axios
-      .get('/api/admin/lov_users')
+      .get('/api/admin/lov_vendors')
 
       .then((response) => {
-        this.users = response.data.data
+        this.vendors = response.data.data
       })
   },
 
@@ -232,39 +207,39 @@ export default {
 
     back() {
       this.$router.push({
-        name: 'erp_ho-system-user_has_role-id',
-        params: { id: this.field.role_id, r: 1 },
+        name: 'erp_ho-fertilizer-laboratory_vendor-id',
+        params: { id: this.$route.params.id, r: 1 },
       })
     },
 
-    // update method
-    async updateData(e) {
-      e.preventDefault()
+    async storePost() {
+      //define formData
+      let formData = new FormData()
 
-      //send data ke Rest API untuk update
+      formData.append(
+        'vendors_id',
+        this.field.vendors_id ? this.field.vendors_id.id : ''
+      )
+      formData.append('laboratory_id', this.$route.params.id)
+      // formData.append('user_id', this.$route.params.id)
+      formData.append('is_active', this.field.is_active)
+      formData.append('description', this.field.description)
+      formData.append('created_at', this.field.created_at)
+      formData.append('created_by', this.field.created_by)
+      formData.append('update_at', this.field.update_at)
+      formData.append('udpate_by', this.field.udpate_by)
+
       await this.$axios
-        .put(`api/admin/user_has_role/${this.$route.params.id}`, {
-          //data yang dikirim
-          id: this.$route.params.id,
-          users_id: this.field.users_id ? this.field.users_id.id : '',
-          role_id: this.field.role_id,
-          is_active: this.field.is_active,
-          description: this.field.description,
-          created_at: this.field.created_at,
-          created_by: this.field.description,
-          updated_at: this.field.updated_at,
-          updated_by: this.field.updated_by,
-        })
+        .post('/api/admin/fertilizer_vendor_laboratory', formData)
         .then(() => {
           //sweet alert
           this.$swal.fire({
             title: 'BERHASIL!',
-            text: 'Data Berhasil Diupdate!',
+            text: 'Data Berhasil Disimpan!',
             icon: 'success',
             showConfirmButton: false,
             timer: 2000,
           })
-          //redirect ke route "location"
           this.back()
         })
         .catch((error) => {
