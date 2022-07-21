@@ -29,6 +29,17 @@
                 }}</b-alert>
               </div>
             </div>
+
+            <div class="form-group">
+              <label>SNI</label>
+              <number
+                class="form-control"
+                placeholder="Masukkan Nilai Standar"
+                v-model="field.sni"
+                prefix=""
+              ></number>
+            </div>
+
             <div class="form-group">
               <label>Aktif?</label>
               <b-form-select v-model="field.is_active" :options="options">
@@ -143,6 +154,7 @@ export default {
       field: {
         parameter_id: '',
         fertilizer_type_id: '',
+        sni: '',
         is_active: 'Y',
         description: '',
         created_at: '',
@@ -168,6 +180,7 @@ export default {
         //data yang diambil
         this.field.parameter_id = response.data.data.parameter
         this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
+        this.field.sni = response.data.data.sni
         this.field.is_active = response.data.data.is_active
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
@@ -206,6 +219,7 @@ export default {
           parameter_id: this.field.parameter_id
             ? this.field.parameter_id.id
             : '',
+          sni: this.field.sni,
           is_active: this.field.is_active,
           description: this.field.description,
           created_at: this.field.created_at,

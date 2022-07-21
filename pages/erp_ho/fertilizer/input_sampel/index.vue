@@ -100,11 +100,29 @@
 
             <template #row-details="row">
               <b-card>
-                <ul>
-                  <li v-for="(value, key) in row.item" :key="key">
-                    {{ key }}: {{ value }}
-                  </li>
-                </ul>
+                <b-container class="bv-example-row">
+                  <b-row>
+                    <b-col>Supplier : {{ row.item.supplier }}</b-col>
+                    <b-col>PT : {{ row.item.company_name }}</b-col>
+                    <b-col>Department : {{ row.item.department_name }}</b-col>
+                  </b-row>
+                  <b-row></b-row>
+                  <b-row>
+                    <b-col
+                      >Joint Sampling : {{ row.item.f_joint_sampling }}</b-col
+                    >
+                    <b-col>
+                      Jenis Pupuk : {{ row.item.fertilizer_type_code }}
+                    </b-col>
+                    <b-col>Parameter : {{ row.item.parameter }}</b-col>
+                  </b-row>
+                  <b-row></b-row>
+                  <b-row>
+                    <b-col>Unit : {{ row.item.unit_code }}</b-col>
+                    <b-col>QTY : {{ row.item.qty }}</b-col>
+                    <b-col></b-col>
+                  </b-row>
+                </b-container>
               </b-card>
             </template>
           </b-table>
@@ -167,32 +185,32 @@ export default {
         },
         {
           label: 'PO',
-          key: 'PO',
+          key: 'po',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Kode Sampel',
-          key: 'Kode_Sampel',
+          key: 'kode_sampel',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Tanggal Terima',
-          key: 'Tanggal_Terima',
+          key: 'f_tgl_terima',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Lab Analisa',
-          key: 'Lab_Analisa',
+          key: 'laboratory_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Kirim Ke Lab',
-          key: 'Kirim_Ke_Lab',
+          key: 'f_kirim_lab',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Terima Lab',
-          key: 'Terima_Lab',
+          key: 'terima_lab',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],

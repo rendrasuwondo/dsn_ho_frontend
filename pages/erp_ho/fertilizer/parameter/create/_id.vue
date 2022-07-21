@@ -30,6 +30,17 @@
                 }}</b-alert>
               </div>
             </div>
+
+            <div class="form-group">
+              <label>SNI</label>
+              <number
+                class="form-control"
+                placeholder="Masukkan Nilai Standar"
+                v-model="field.sni"
+                prefix=""
+              ></number>
+            </div>
+
             <div class="form-group">
               <label>Aktif?</label>
               <b-form-select v-model="field.is_active" :options="options">
@@ -142,6 +153,7 @@ export default {
       field: {
         parameter_id: '',
         fertilizer_type_id: '',
+        sni: '',
         is_active: 'Y',
         description: '',
         created_at: '',
@@ -221,6 +233,7 @@ export default {
         this.field.parameter_id ? this.field.parameter_id.id : ''
       )
       formData.append('fertilizer_type_id', this.$route.params.id)
+      formData.append('sni', this.field.sni)
       formData.append('is_active', this.field.is_active)
       formData.append('description', this.field.description)
       formData.append('created_at', this.field.created_at)
