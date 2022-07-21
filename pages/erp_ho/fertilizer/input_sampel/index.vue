@@ -78,18 +78,34 @@
                 ><i class="fa fa-trash"></i
               ></b-button> -->
             </template>
-            <template v-slot:cell(parameter)="row">
+            <template v-slot:cell(input_hasil)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-fertilizer-parameter_input_sampel-id',
+                  name: 'erp_ho-fertilizer-input_hasil_analisa-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"
                 size=""
-                title="Paramenter"
+                title="Hasil"
               >
                 <i class="fa fa-file-alt"></i>
               </b-button>
+            </template>
+
+            <template #cell(detail)="row">
+              <b-button class="btn-info" size="sm" @click="row.toggleDetails">
+                {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
+              </b-button>
+            </template>
+
+            <template #row-details="row">
+              <b-card>
+                <ul>
+                  <li v-for="(value, key) in row.item" :key="key">
+                    {{ key }}: {{ value }}
+                  </li>
+                </ul>
+              </b-card>
             </template>
           </b-table>
           <!-- pagination -->
@@ -128,6 +144,11 @@ export default {
       allSelected: false,
       show_submit: true,
 
+      // items: [
+      //   {
+      //     supplier: '',
+      //   },
+      // ],
       fields: [
         {
           label: 'Actions',
@@ -135,44 +156,43 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'PO',
-          key: 'po',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          label: 'Hasil Analisa',
+          key: 'input_hasil',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
-          label: 'Supplier',
-          key: 'supplier',
+          label: 'Detail Data',
+          key: 'detail',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'PO',
+          key: 'PO',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Kode Sampel',
-          key: 'kode_sampel',
+          key: 'Kode_Sampel',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Tanggal Terima',
-          key: 'f_tgl_terima',
+          key: 'Tanggal_Terima',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Lab Analisa',
-          key: 'laboratory_code',
+          key: 'Lab_Analisa',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-
-        {
-          label: 'Parameter',
-          key: 'parameter',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           label: 'Kirim Ke Lab',
-          key: 'f_kirim_lab',
+          key: 'Kirim_Ke_Lab',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Terima Lab',
-          key: 'f_terima_lab',
+          key: 'Terima_Lab',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],

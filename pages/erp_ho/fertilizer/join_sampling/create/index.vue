@@ -270,7 +270,6 @@ export default {
   methods: {
     //searchData
     searchDataPO(e) {
-     
       // this.$axios
       //   .get(`http://127.0.0.1:8000/api/PoFertilizer?PO_NO=${this.field.po}`)
       //   .then((response) => {
@@ -286,7 +285,7 @@ export default {
           // console.log(this.response.data)
         })
 
-         e.preventDefault();
+      e.preventDefault()
       // console.log(
       //   `http://127.0.0.1:8000/api/PoFertilizer?PO_NO=${this.field.po}`
       // )
@@ -294,7 +293,7 @@ export default {
 
     back() {
       this.$router.push({
-        name: 'erp_ho-fertilizer-joint_sampling',
+        name: 'erp_ho-fertilizer-join_sampling',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -351,7 +350,7 @@ export default {
 
           //redirect, if success store data
           this.$router.push({
-            name: 'erp_ho-fertilizer-joint_sampling',
+            name: 'erp_ho-fertilizer-join_sampling',
           })
         })
         .catch((error) => {

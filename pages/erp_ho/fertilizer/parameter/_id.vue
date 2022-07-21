@@ -12,14 +12,14 @@
               <tr>
                 <td>
                   <nuxt-link
-                    :to="{ name: 'erp_ho-fertilizer-laboratory' }"
+                    :to="{ name: 'erp_ho-fertilizer-fertilizer_type' }"
                     class="nav-link"
                   >
                     <i class="nav-icon fas fas fa-vial"></i>
-                    <b>LABORATORY</b>
+                    <b>JENIS PUPUK</b>
                   </nuxt-link>
                 </td>
-                <td>/ VENDORS</td>
+                <td>/ PARAMETER</td>
               </tr>
             </table>
           </h3>
@@ -41,8 +41,8 @@
               <div class="input-group-prepend">
                 <nuxt-link
                   :to="{
-                    name: 'erp_ho-fertilizer-laboratory_vendor-create-id',
-                    params: { id: laboratory_id, r: 1 },
+                    name: 'erp_ho-fertilizer-parameter-create-id',
+                    params: { id: fertilizer_type_id, r: 1 },
                   }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
@@ -91,10 +91,10 @@
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-fertilizer-laboratory_vendor-edit-id',
+                  name: 'erp_ho-fertilizer-parameter-edit-id',
                   params: { id: row.item.id, r: 1 },
                   query: {
-                    vendors_id: row.item.id.vendors_id,
+                    fertilizer_type_id: row.item.id.fertilizer_type_id,
                   },
                 }"
                 variant="link"
@@ -144,7 +144,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Vendors',
+      title: 'Parameter',
     }
   },
 
@@ -160,12 +160,12 @@ export default {
         },
         {
           label: 'Kode',
-          key: 'vendor_code',
+          key: 'parameter_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Nama',
-          key: 'vendor_name',
+          key: 'parameter_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -177,7 +177,7 @@ export default {
 
       // header: [],
 
-      laboratory_id: this.$route.params.id,
+      fertilizer_type_id: this.$route.params.id,
 
       fields_header: [
         {
@@ -223,13 +223,15 @@ export default {
 
     const { id } = route.params
     //role
-    const laboratory = await $axios.get(`/api/admin/master/laboratory/${id}`)
+    const fertilizer_type = await $axios.get(
+      `/api/admin/master/fertilizer_type/${id}`
+    )
 
-    const header = [laboratory.data.data]
+    const header = [fertilizer_type.data.data]
 
     //user_has_role
     const posts = await $axios.$get(
-      `/api/admin/detail/laboratory_vendor/${id}?q=${search}&page=${page}`
+      `/api/admin/detail/parameter/${id}?q=${search}&page=${page}`
     )
 
     return {
@@ -281,7 +283,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/fertilizer_vendor_laboratory/${id}`)
+              .delete(`/api/admin/fertilizer_type_parameter/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()
@@ -312,7 +314,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/fertilizer_vendor_laboratory/export?role_id=${this.role_id}`,
+        url: `/api/admin/fertilizer_type_parameter/export?fertilizer_type_id=${this.fertilizer_type_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

@@ -77,6 +77,22 @@
                 ><i class="fa fa-trash"></i
               ></b-button>
             </template>
+            <template v-slot:cell(parameter)="row">
+              <b-button
+                :to="{
+                  name: 'erp_ho-fertilizer-parameter-id',
+                  params: { id: row.item.id },
+                  query: {
+                    fertilizer_type_id: row.item.id,
+                  },
+                }"
+                variant="link"
+                size=""
+                title="Role"
+              >
+                <i class="fa fa-file-alt"></i>
+              </b-button>
+            </template>
           </b-table>
           <b-tooltip
             target="myAfdeling"
@@ -131,6 +147,11 @@ export default {
           label: 'Actions',
           key: 'actions',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Parameter',
+          key: 'parameter',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           label: 'Kode',
