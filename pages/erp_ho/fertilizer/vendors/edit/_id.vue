@@ -177,7 +177,7 @@ export default {
   mounted() {
     //get data field by ID
     this.$axios
-      .get(`/api/admin/fertilizer_vendors/${this.$route.params.id}`)
+      .get(`/api/admin/vendors/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
         this.field.code = response.data.data.code
@@ -195,7 +195,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: 'erp_ho-admin-fertilizer_vendors',
+        name: 'erp_ho-fertilizer-vendors',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -206,7 +206,7 @@ export default {
 
       //send data ke Rest API untuk update
       await this.$axios
-        .put(`/api/admin/fertilizer_vendors/${this.$route.params.id}`, {
+        .put(`/api/admin/vendors/${this.$route.params.id}`, {
           //data yang dikirim
           code: this.field.code,
           name: this.field.name,
@@ -228,7 +228,7 @@ export default {
           })
           //redirect ke route "post"
           this.$router.push({
-            name: 'erp_ho-admin-fertilizer_vendors',
+            name: 'erp_ho-fertilizer-vendors',
           })
         })
         .catch((error) => {

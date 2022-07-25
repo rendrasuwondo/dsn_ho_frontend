@@ -171,7 +171,7 @@ export default {
         {
           label: 'SNI',
           key: 'sni',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           label: 'Aktif',

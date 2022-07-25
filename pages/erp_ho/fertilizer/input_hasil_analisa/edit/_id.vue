@@ -1,74 +1,45 @@
 <template>
-  <div class="content-wrapper mb-5">
+  <div class="content-wrapper">
     <section class="content-header">
       <div class="container-fluid"></div>
     </section>
-
     <section class="content">
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-dolly-flatbed"></i>
-            <b>TAMBAH VENDOR</b>
+            <i class="nav-icon fas fa-pencil-alt"></i>
+            <b>Edit HASIL ANALISA</b>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <form @submit.prevent="storePost">
+          <form @submit.prevent="update">
             <div class="form-group">
-              <label>Kode</label>
-              <input
-                type="text"
-                v-model="field.code"
-                placeholder="Masukkan kode Role"
-                class="form-control"
-                ref="code"
-              />
-              <div v-if="validation.code" class="mt-2">
+              <label>Nama Parameter</label>
+              <multiselect
+                v-model="field.fertilizer_type_parameter_id"
+                :options="parameter"
+                label="id"
+                track-by="id"
+                :searchable="true"
+              ></multiselect>
+              <div v-if="validation.fertilizer_type_parameter_id" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.code[0]
+                  validation.fertilizer_type_parameter_id[0]
                 }}</b-alert>
               </div>
             </div>
 
             <div class="form-group">
-              <label>Nama</label>
-              <input
-                type="text"
-                v-model="field.name"
-                placeholder="Masukkan Nama Role"
+              <label>Hasil Analisa</label>
+              <number
                 class="form-control"
-              />
-              <div v-if="validation.name" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.name[0]
-                }}</b-alert>
-              </div>
+                placeholder="Masukkan Hasil Analisa"
+                v-model="field.value"
+                prefix=""
+              ></number>
             </div>
 
-            <div class="form-group">
-              <label>Aktif?</label>
-              <b-form-select v-model="field.is_active">
-                <b-form-select-option value="Y">Ya</b-form-select-option>
-                <b-form-select-option value="N">Tidak</b-form-select-option>
-              </b-form-select>
-            </div>
-
-            <div class="form-group">
-              <label>Keterangan</label>
-
-              <textarea
-                v-model="field.description"
-                class="form-control"
-                rows="3"
-                placeholder="Masukkan Deskripsi Singkat"
-              ></textarea>
-              <div v-if="validation.description" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.description[0]
-                }}</b-alert>
-              </div>
-            </div>
             <div class="form-group">
               <b-row>
                 <b-col>
@@ -122,9 +93,6 @@
                 </b-col>
               </b-row>
             </div>
-
-            <div class="form-group"></div>
-
             <button class="btn btn-info mr-1 btn-submit" type="submit">
               <i class="fa fa-paper-plane"></i> SIMPAN
             </button>
@@ -141,11 +109,7 @@
     </section>
   </div>
 </template>
-
 <script>
-/* import { VNumber  } from '@coders-tm/vue-number-format' */
-/* import { number } from '@coders-tm/vue-number-format' */
-
 export default {
   //layout
   layout: 'admin',
@@ -153,24 +117,18 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah Vendor',
+      title: 'Edit Parameter',
     }
   },
 
   data() {
     return {
-      is_active: { value: 'Y', text: 'Ya' },
-      options: [
-        { value: 'Y', text: 'Ya' },
-        { value: 'N', text: 'Tidak' },
-      ],
-
       state: 'disabled',
 
       field: {
-        code: '',
-        name: '',
-        is_active: 'Y',
+        fertilizer_type_parameter_id: '',
+        t_fertilizer_sampel_id: '',
+        value: '',
         description: '',
         created_at: '',
         updated_at: '',
@@ -178,77 +136,97 @@ export default {
         updated_by: '',
       },
 
+      fertilizer_type_id: '',
+
+      fertilizer_type_parameter_id: this.$route.query.input_sampel_id,
+      fertilizer_type_id: this.$route.query.fertilizer_type_id,
+
+      parameter: [],
+
       //state validation
       validation: [],
     }
   },
 
   mounted() {
-    this.field.created_at = this.currentDate()
-    this.field.updated_at = this.currentDate()
-    this.field.created_by =
-      this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
-    this.field.updated_by =
-      this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
+    //get data field by ID
+    this.$axios
+      .get(`/api/admin/input_hasil/${this.$route.params.id}`)
+      .then((response) => {
+        console.log(response.data.data)
+        //data yang diambil
+        this.field.fertilizer_type_parameter_id =
+          response.data.data.fertilizer_type_parameter
+        this.field.t_fertilizer_sampel_id =
+          response.data.data.t_fertilizer_sampel_id
+        this.field.value = response.data.data.value
+        this.field.description = response.data.data.description
+        this.field.created_at = response.data.data.created_at
+        this.field.created_by = response.data.data.created_by
+        this.field.updated_at = response.data.data.updated_at
+        this.field.updated_by = response.data.data.updated_by
+        x
+      })
+    // this.$refs.code.focus()
 
-    this.$refs.code.focus()
+    this.$axios
+      .get(
+        `/api/admin/lov_parameter_hasil?fertilizer_type_id=${this.$route.query.fertilizer_type_id}`
+      )
+
+      .then((response) => {
+        this.parameter = response.data.data
+      })
   },
 
   methods: {
     back() {
       this.$router.push({
-        name: 'erp_ho-fertilizer-vendors',
+        name: 'erp_ho-fertilizer-input_hasil_analisa-id',
         params: { id: this.$route.params.id, r: 1 },
+        query: {
+          input_sampel_id: this.$route.query.input_sampel_id,
+          fertilizer_type_id: this.$route.query.fertilizer_type_id,
+        },
       })
     },
 
-    currentDate() {
-      const current = new Date()
-      const date = `${current.getFullYear()}-${
-        current.getMonth() + 1
-      }-${current.getDate()}`
+    // update method
+    async update(e) {
+      e.preventDefault()
 
-      return date
-    },
-
-    async storePost() {
-      //define formData
-      let formData = new FormData()
-
-      formData.append('code', this.field.code)
-      formData.append('name', this.field.name)
-      formData.append('is_active', this.field.is_active)
-      formData.append('description', this.field.description)
-      formData.append('created_at', this.field.created_at)
-      formData.append('created_by', this.field.created_by)
-      formData.append('updated_at', this.field.update_at)
-      formData.append('udpated_by', this.field.udpate_by)
-
-      //sending data to server
+      //send data ke Rest API untuk update
       await this.$axios
-        .post('/api/admin/vendors', formData)
+        .put(`api/admin/input_hasil/${this.$route.params.id}`, {
+          //data yang dikirim
+          t_fertilizer_sampel_id: this.field.t_fertilizer_sampel_id,
+          fertilizer_type_parameter_id: this.field.fertilizer_type_parameter_id
+            ? this.field.fertilizer_type_parameter_id.id
+            : '',
+          value: this.field.value,
+          description: this.field.description,
+          created_at: this.field.created_at,
+          created_by: this.field.description,
+          updated_at: this.field.updated_at,
+          updated_by: this.field.updated_by,
+        })
         .then(() => {
           //sweet alert
           this.$swal.fire({
             title: 'BERHASIL!',
-            text: 'Data Berhasil Disimpan!',
+            text: 'Data Berhasil Diupdate!',
             icon: 'success',
             showConfirmButton: false,
             timer: 2000,
           })
-
-          //redirect, if success store data
-          this.$router.push({
-            name: 'erp_ho-fertilizer-vendors',
-          })
+          this.back()
         })
         .catch((error) => {
-          //assign error to state "validation"
+          //assign error validasi
           this.validation = error.response.data
         })
     },
   },
-
   computed: {
     disabled() {
       return this.state === 'disabled'
@@ -259,11 +237,7 @@ export default {
   },
 }
 </script>
-
 <style>
-.ck-editor__editable {
-  min-height: 200px;
-}
 .card-info.card-outline {
   border-top: 5px solid #504d8d;
 }

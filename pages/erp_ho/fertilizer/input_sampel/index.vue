@@ -83,6 +83,10 @@
                 :to="{
                   name: 'erp_ho-fertilizer-input_hasil_analisa-id',
                   params: { id: row.item.id },
+                  query: {
+                    input_sampel_id: row.item.id,
+                    fertilizer_type_id: row.item.fertilizer_type_id,
+                  },
                 }"
                 variant="link"
                 size=""
