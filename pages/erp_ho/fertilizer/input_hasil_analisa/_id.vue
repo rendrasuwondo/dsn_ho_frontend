@@ -109,10 +109,10 @@
                 <i class="fa fa-pencil-alt"></i>
               </b-button>
             </template>
-            <template v-slot:custom-foot="fields">
+            <template v-slot:custom-foot="data">
               <b-tr>
                 <b-td colspan="4" align="right"><b>Kesimpulan</b></b-td>
-                <b-td align="center">{{ totalStatus }}</b-td>
+                <b-td align="center">{{ summary }}</b-td>
               </b-tr>
             </template>
           </b-table>
@@ -216,6 +216,7 @@ export default {
 
       //state search
       search: '',
+      summary: ''
     }
   },
 
@@ -346,30 +347,41 @@ export default {
     },
   },
 
-  mounted() {},
+  mounted() {
+    let newData = [];
+    this.posts.forEach((value,index ) => {
+       newData.push(value.status);
+        // console.log("newData", newData);
+      });
+
+      if (newData.includes('OUTSPEK')==true) {
+        this.summary = 'OUTSPEK'
+      } else {
+        this.summary = 'INSPEK'
+      }
+
+      console.log(newData.includes('OUTSPEK'))
+  },
 
   computed: {
     totalStatus() {
-      var kesimpulan = ''
-      var int_outspek = 0
-
-      this.posts.forEach((e) => {
-        console.log('da')
-        console.log(this.item)
-        if ((e.status = 'OUTSPEK')) {
-          int_outspek = 1
-        }
-
-        // return kesimpulan
-      })
-
-      if ((int_outspek = 1)) {
-        kesimpulan = 'OUTSPEK'
-      } else {
-        kesimpulan = 'INSPEK'
-      }
-
-      return kesimpulan
+      // var kesimpulan = ''
+      // var int_outspek = 0
+      // console.log(this.visibleRows)
+      // this.fields.forEach((e) => {
+      //   console.log('da')
+      //   console.log(this.item)
+      //   if ((e.status = 'OUTSPEK')) {
+      //     int_outspek = 1
+      //   }
+      //   // return kesimpulan
+      // })
+      // if ((int_outspek = 1)) {
+      //   kesimpulan = 'OUTSPEK'
+      // } else {
+      //   kesimpulan = 'INSPEK'
+      // }
+      // return kesimpulan
     },
     KESIMPULAN() {
       return 'data'
