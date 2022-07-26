@@ -60,7 +60,7 @@
             </div>
 
             <div class="form-group">
-              <label>QTY</label>
+              <label>QTY PO</label>
 
               <input
                 class="form-control"
@@ -71,7 +71,7 @@
             </div>
 
             <div class="form-group">
-              <label>Unit</label>
+              <label>Satuan</label>
 
               <input
                 class="form-control"

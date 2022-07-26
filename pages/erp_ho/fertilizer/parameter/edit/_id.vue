@@ -32,12 +32,12 @@
 
             <div class="form-group">
               <label>SNI</label>
-              <number
-                class="form-control"
-                placeholder="Masukkan Nilai Standar"
+              <money
                 v-model="field.sni"
-                prefix=""
-              ></number>
+                v-bind="money"
+                precision="1"
+                class="form-control"
+              ></money>
             </div>
 
             <div class="form-group">

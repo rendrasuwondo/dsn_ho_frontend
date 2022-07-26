@@ -46,7 +46,7 @@
               <multiselect
                 v-model="field.laboratory_id"
                 :options="laboratory"
-                label="laboratory_code"
+                label="code"
                 track-by="laboratory_id"
                 :searchable="true"
               ></multiselect>
@@ -262,6 +262,10 @@ export default {
   },
 
   methods: {
+    customLabel(laboratory) {
+      return `${laboratory.laboratory_code}`
+    },
+
     back() {
       this.$router.push({
         name: 'erp_ho-fertilizer-input_sampel',

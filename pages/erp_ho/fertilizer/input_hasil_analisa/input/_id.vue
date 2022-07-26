@@ -215,8 +215,8 @@ export default {
 
     async storePost() {
       //define formData
-      console.log('aida')
-      console.log(this.$route.query.input_sampel_id)
+      // console.log('aida')
+      // console.log(this.$route.query.input_sampel_id)
       let formData = new FormData()
 
       formData.append(

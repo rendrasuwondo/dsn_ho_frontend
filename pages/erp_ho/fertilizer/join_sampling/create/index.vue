@@ -60,12 +60,23 @@
             </div>
 
             <div class="form-group">
-              <label>QTY</label>
+              <label>QTY PO</label>
 
               <input
                 class="form-control"
                 placeholder="Jumlah Volume"
                 v-model="data_po.QTY"
+                readonly
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Satuan</label>
+
+              <input
+                class="form-control"
+                placeholder="Jumlah Volume"
+                v-model="data_po.UNIT"
                 readonly
               />
             </div>

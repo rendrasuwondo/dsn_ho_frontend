@@ -39,7 +39,7 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <nuxt-link
+                <!-- <nuxt-link
                   :to="{
                     name: 'erp_ho-fertilizer-input_hasil_analisa-input-id',
                     params: { id: input_sampel_id, r: 1 },
@@ -52,7 +52,7 @@
                   style="padding-top: 8px"
                   title="Input Hasil Analisa"
                   ><i class="fa fa fa-pencil-alt"> Input Hasil</i>
-                </nuxt-link>
+                </nuxt-link> -->
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -108,14 +108,12 @@
               >
                 <i class="fa fa-pencil-alt"></i>
               </b-button>
-
-              <b-button
-                variant="link"
-                size=""
-                title="Hapus"
-                @click="deletePost(row.item.id)"
-                ><i class="fa fa-trash"></i
-              ></b-button>
+            </template>
+            <template v-slot:custom-foot="fields">
+              <b-tr>
+                <b-td colspan="4" align="right"><b>Kesimpulan</b></b-td>
+                <b-td align="center">{{ totalStatus }}</b-td>
+              </b-tr>
             </template>
           </b-table>
 
@@ -149,7 +147,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Parameter',
+      title: 'Input Hasil Analisa',
     }
   },
 
@@ -175,8 +173,13 @@ export default {
         },
         {
           label: 'Hasil Analisa',
-          key: 'hasil_analisa',
+          key: 'value',
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Status',
+          key: 'status',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
       ],
 
@@ -239,15 +242,17 @@ export default {
 
     const header = [input_sampel.data.data]
 
+    const i_fertilizer_type_id = route.query.fertilizer_type_id
+
     //user_has_role
     const posts = await $axios.$get(
-      `/api/admin/detail/input_hasil/${id}?q=${search}&page=${page}`
+      `/api/admin/detail/table_hasil/${id}?q=${search}&page=${page}&fertilizer_type_id=${i_fertilizer_type_id}`
     )
 
     return {
-      posts: posts.data.data,
+      posts: posts.data,
       pagination: posts.data,
-      rowcount: posts.data.total,
+      rowcount: posts.data.length,
       search: search,
       header: header,
     }
@@ -341,18 +346,34 @@ export default {
     },
   },
 
-  mounted() {
-    // this.$axios
-    //   .get(`/api/admin/master/role/${this.$route.params.id}`)
-    //   // .get(`/api/admin/site/site_loc/${this.$route.params.id}`)
-    //   .then((response) => {
-    //     //console.log(JSON.stringify(response.data.data))
-    //     // console.log('rdr')
-    //     console.log(response.data.data.role_id)
-    //     this.header.push(response.data.data)
-    //     // this.detail(response.data)
-    //     // console.log(this.detail)
-    //   })
+  mounted() {},
+
+  computed: {
+    totalStatus() {
+      var kesimpulan = ''
+      var int_outspek = 0
+
+      this.posts.forEach((e) => {
+        console.log('da')
+        console.log(this.item)
+        if ((e.status = 'OUTSPEK')) {
+          int_outspek = 1
+        }
+
+        // return kesimpulan
+      })
+
+      if ((int_outspek = 1)) {
+        kesimpulan = 'OUTSPEK'
+      } else {
+        kesimpulan = 'INSPEK'
+      }
+
+      return kesimpulan
+    },
+    KESIMPULAN() {
+      return 'data'
+    },
   },
 }
 </script>

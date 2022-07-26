@@ -7,8 +7,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-pencil-alt"></i>
-            <b>Edit HASIL ANALISA</b>
+            <i class="nav-icon fas fa-th"></i> <b>EDIT MENU</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -16,28 +15,30 @@
           <form @submit.prevent="update">
             <div class="form-group">
               <label>Nama Parameter</label>
-              <multiselect
+              <input
+                type="text"
+                v-model="field.parameter_code"
+                placeholder=""
+                class="form-control"
+                readonly
+              />
+              <!-- <multiselect
                 v-model="field.fertilizer_type_parameter_id"
                 :options="parameter"
-                label="id"
+                label="parameter_code"
                 track-by="id"
                 :searchable="true"
-              ></multiselect>
-              <div v-if="validation.fertilizer_type_parameter_id" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.fertilizer_type_parameter_id[0]
-                }}</b-alert>
-              </div>
+              ></multiselect> -->
             </div>
 
             <div class="form-group">
               <label>Hasil Analisa</label>
-              <number
-                class="form-control"
-                placeholder="Masukkan Hasil Analisa"
+              <money
                 v-model="field.value"
-                prefix=""
-              ></number>
+                v-bind="money"
+                precision="1"
+                class="form-control"
+              ></money>
             </div>
 
             <div class="form-group">
@@ -117,26 +118,30 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit Parameter',
+      title: 'Edit Menu',
     }
   },
 
   data() {
     return {
+      options: [
+        { value: 'Y', text: 'Ya' },
+        { value: 'N', text: 'Tidak' },
+      ],
       state: 'disabled',
 
       field: {
         fertilizer_type_parameter_id: '',
         t_fertilizer_sampel_id: '',
+        parameter_code: '',
         value: '',
         description: '',
+        is_active: '',
         created_at: '',
         updated_at: '',
         created_by: '',
         updated_by: '',
       },
-
-      fertilizer_type_id: '',
 
       fertilizer_type_parameter_id: this.$route.query.input_sampel_id,
       fertilizer_type_id: this.$route.query.fertilizer_type_id,
@@ -153,10 +158,10 @@ export default {
     this.$axios
       .get(`/api/admin/input_hasil/${this.$route.params.id}`)
       .then((response) => {
-        console.log(response.data.data)
         //data yang diambil
+        this.field.parameter_code = response.data.data.parameter_code
         this.field.fertilizer_type_parameter_id =
-          response.data.data.fertilizer_type_parameter
+          response.data.data.fertilizer_type_parameter_id
         this.field.t_fertilizer_sampel_id =
           response.data.data.t_fertilizer_sampel_id
         this.field.value = response.data.data.value
@@ -165,25 +170,18 @@ export default {
         this.field.created_by = response.data.data.created_by
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
-        x
       })
+
+    console.log('cek data')
+    console.log(this.field.fertilizer_type_id)
     // this.$refs.code.focus()
-
-    this.$axios
-      .get(
-        `/api/admin/lov_parameter_hasil?fertilizer_type_id=${this.$route.query.fertilizer_type_id}`
-      )
-
-      .then((response) => {
-        this.parameter = response.data.data
-      })
   },
 
   methods: {
     back() {
       this.$router.push({
         name: 'erp_ho-fertilizer-input_hasil_analisa-id',
-        params: { id: this.$route.params.id, r: 1 },
+        params: { id: this.$route.query.input_sampel_id, r: 1 },
         query: {
           input_sampel_id: this.$route.query.input_sampel_id,
           fertilizer_type_id: this.$route.query.fertilizer_type_id,
@@ -194,20 +192,20 @@ export default {
     // update method
     async update(e) {
       e.preventDefault()
-
+      console.log('da')
+      console.log(this.field.fertilizer_type_parameter_id.id)
       //send data ke Rest API untuk update
       await this.$axios
-        .put(`api/admin/input_hasil/${this.$route.params.id}`, {
+        .put(`/api/admin/input_hasil/${this.$route.params.id}`, {
           //data yang dikirim
+
+          fertilizer_type_parameter_id: this.field.fertilizer_type_parameter_id,
           t_fertilizer_sampel_id: this.field.t_fertilizer_sampel_id,
-          fertilizer_type_parameter_id: this.field.fertilizer_type_parameter_id
-            ? this.field.fertilizer_type_parameter_id.id
-            : '',
           value: this.field.value,
           description: this.field.description,
           created_at: this.field.created_at,
-          created_by: this.field.description,
           updated_at: this.field.updated_at,
+          created_by: this.field.created_by,
           updated_by: this.field.updated_by,
         })
         .then(() => {

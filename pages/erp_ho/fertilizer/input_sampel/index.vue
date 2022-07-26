@@ -112,9 +112,9 @@
                   </b-row>
                   <b-row></b-row>
                   <b-row>
-                    <b-col
-                      >Joint Sampling : {{ row.item.f_joint_sampling }}</b-col
-                    >
+                    <b-col>
+                      Joint Sampling : {{ row.item.f_joint_sampling }}
+                    </b-col>
                     <b-col>
                       Jenis Pupuk : {{ row.item.fertilizer_type_code }}
                     </b-col>
@@ -122,8 +122,8 @@
                   </b-row>
                   <b-row></b-row>
                   <b-row>
-                    <b-col>Unit : {{ row.item.unit_code }}</b-col>
-                    <b-col>QTY : {{ row.item.qty }}</b-col>
+                    <b-col>Satuan : {{ row.item.unit_code }}</b-col>
+                    <b-col>QTY PO : {{ row.item.qty }}</b-col>
                     <b-col></b-col>
                   </b-row>
                 </b-container>
@@ -242,7 +242,7 @@ export default {
       posts: posts.data.data,
       pagination: posts.data,
       search: search,
-      rowcount: posts.data.total,
+      rowcount: posts.data.data.total,
     }
   },
 

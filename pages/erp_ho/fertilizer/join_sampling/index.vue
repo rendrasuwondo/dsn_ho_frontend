@@ -187,8 +187,13 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'QTY',
+          label: 'QTY PO',
           key: 'qty',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Satuan',
+          key: 'unit_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
