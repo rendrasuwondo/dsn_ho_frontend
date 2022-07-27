@@ -32,12 +32,23 @@
 
             <div class="form-group">
               <label>SNI</label>
-              <money
+              <!-- <money
                 v-model="field.sni"
-                v-bind="money"
                 precision="1"
                 class="form-control"
-              ></money>
+              ></money> -->
+              <input
+                v-model.number="field.sni"
+                class="form-control"
+                v-on:keypress="NumbersOnly"
+                placeholder="Masukkan Nilai Standar"
+              />
+              <!-- <number
+                class="form-control"
+                placeholder="Masukkan Nilai Standar"
+                v-model="field.sni"
+                prefix=""
+              ></number> -->
             </div>
 
             <div class="form-group">
@@ -151,6 +162,12 @@ export default {
       ],
       state: 'disabled',
 
+      props: {
+        value: {
+          type: Number,
+        },
+      },
+
       field: {
         parameter_id: '',
         fertilizer_type_id: '',
@@ -181,14 +198,17 @@ export default {
         this.field.parameter_id = response.data.data.parameter
         this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
         this.field.sni = response.data.data.sni
+        console.log('da')
+        console.log(this.field.sni)
+        console.log(response.data.data.sni)
         this.field.is_active = response.data.data.is_active
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
+        // this.$refs.code.focus()
       })
-    // this.$refs.code.focus()
 
     //Data Users
     this.$axios
@@ -242,6 +262,20 @@ export default {
           //assign error validasi
           this.validation = error.response.data
         })
+    },
+
+    NumbersOnly(evt) {
+      evt = evt ? evt : window.event
+      var charCode = evt.which ? evt.which : evt.keyCode
+      if (
+        charCode > 31 &&
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 46
+      ) {
+        evt.preventDefault()
+      } else {
+        return true
+      }
     },
   },
   computed: {

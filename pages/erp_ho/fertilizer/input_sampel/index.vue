@@ -242,7 +242,7 @@ export default {
       posts: posts.data.data,
       pagination: posts.data,
       search: search,
-      rowcount: posts.data.data.total,
+      rowcount: posts.data.total,
     }
   },
 
