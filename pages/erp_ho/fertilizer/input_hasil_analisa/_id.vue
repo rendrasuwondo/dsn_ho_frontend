@@ -216,7 +216,7 @@ export default {
 
       //state search
       search: '',
-      summary: ''
+      summary: '',
     }
   },
 
@@ -348,19 +348,19 @@ export default {
   },
 
   mounted() {
-    let newData = [];
-    this.posts.forEach((value,index ) => {
-       newData.push(value.status);
-        // console.log("newData", newData);
-      });
+    let newData = []
+    this.posts.forEach((value, index) => {
+      newData.push(value.status)
+      // console.log("newData", newData);
+    })
 
-      if (newData.includes('OUTSPEK')==true) {
-        this.summary = 'OUTSPEK'
-      } else {
-        this.summary = 'INSPEK'
-      }
+    if (newData.includes('OUTSPEK') == true) {
+      this.summary = 'OUTSPEK'
+    } else {
+      this.summary = 'INSPEK'
+    }
 
-      console.log(newData.includes('OUTSPEK'))
+    console.log(newData.includes('OUTSPEK'))
   },
 
   computed: {

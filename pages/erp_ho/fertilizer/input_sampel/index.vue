@@ -217,6 +217,11 @@ export default {
           key: 'terima_lab',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
+        {
+          label: 'Status',
+          key: 'status',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
       ],
       sweet_alert: {
         title: '',
