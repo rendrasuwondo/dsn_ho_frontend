@@ -214,7 +214,7 @@ export default {
         },
         {
           label: 'Terima Lab',
-          key: 'terima_lab',
+          key: 'f_terima_lab',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {

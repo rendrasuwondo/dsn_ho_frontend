@@ -197,6 +197,7 @@ export default {
       ],
 
       // header: [],
+      menu_id: this.$route.query.menu_id,
 
       parent_id: this.$route.params.id,
 
@@ -245,10 +246,12 @@ export default {
 
     const header = [menu.data.data]
 
+    const i_menu_id = this.$route.query.menu_id
+
     //sub menu
     const posts = await $axios.$get(
       // `/api/admin/location/site_detail/${id}?q=${search}&page=${page}`
-      `/api/admin/detail/sub_menu/${id}?q=${search}&page=${page}`
+      `/api/admin/detail/sub_menu/${id}?q=${search}&page=${page}&menu_id=${i_menu_id}`
     )
 
     return {
@@ -300,6 +303,7 @@ export default {
         path: this.$route.path,
         query: {
           q: this.search,
+          menu_id: this.$route.query.menu_id,
         },
       })
     },

@@ -206,26 +206,6 @@ export default {
           key: 'f_joint_sampling',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
-        // {
-        //   label: 'Tanggal Terima',
-        //   key: 'tgl_terima',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
-        // {
-        //   label: 'Kode Sample',
-        //   key: 'kode_sampel',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
-        // {
-        //   label: 'Kirim Ke Lab',
-        //   key: 'kirim_lab',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
-        // {
-        //   label: 'Terima Lab',
-        //   key: 'terima_lab',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
       ],
       sweet_alert: {
         title: '',

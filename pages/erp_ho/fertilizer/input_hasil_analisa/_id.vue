@@ -118,7 +118,7 @@
           </b-table>
 
           <!-- pagination -->
-          <b-row>
+          <!-- <b-row>
             <b-col
               ><b-pagination
                 v-model="pagination.current_page"
@@ -132,7 +132,7 @@
             <b-col class="text-right" align-self="center"
               >{{ rowcount }} data</b-col
             >
-          </b-row>
+          </b-row> -->
         </div>
       </div>
     </section>
@@ -277,6 +277,8 @@ export default {
         path: this.$route.path,
         query: {
           q: this.search,
+          fertilizer_type_id: this.$route.query.fertilizer_type_id,
+          input_sampel_id: this.$route.params.id,
         },
       })
     },
