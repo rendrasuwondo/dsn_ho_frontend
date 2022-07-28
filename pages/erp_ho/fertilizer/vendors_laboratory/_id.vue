@@ -43,6 +43,9 @@
                   :to="{
                     name: 'erp_ho-fertilizer-vendors_laboratory-create-id',
                     params: { id: vendors_id, r: 1 },
+                    query: {
+                      vendors_id: vendors_id,
+                    },
                   }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
@@ -227,9 +230,11 @@ export default {
 
     const header = [role.data.data]
 
+    const vendor = route.query.vendors_id
+
     //user_has_role
     const posts = await $axios.$get(
-      `/api/admin/detail/vendors_laboratory/${id}?q=${search}&page=${page}`
+      `/api/admin/detail/vendors_laboratory/${id}?q=${search}&page=${page}&vendors_id=${vendor}`
     )
 
     return {
@@ -259,6 +264,7 @@ export default {
         path: this.$route.path,
         query: {
           q: this.search,
+          vendors_id: this.$route.query.vendors_id,
         },
       })
     },
@@ -312,7 +318,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/fertilizer_vendor_laboratory/export?role_id=${this.role_id}`,
+        url: `/api/admin/vendor_laboratory/export?q=${this.search}&vendors_id=${this.vendors_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -321,7 +327,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Role - users.xlsx'
+        var fileName = 'Vendors - Laboratory.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()

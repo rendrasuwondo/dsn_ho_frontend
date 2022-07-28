@@ -321,7 +321,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/user_has_role_2/export?users_id=${this.users_id}`,
+        url: `/api/admin/user_has_role_2/export?q=${this.search}&users_id=${this.users_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

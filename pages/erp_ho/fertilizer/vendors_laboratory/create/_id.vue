@@ -208,6 +208,7 @@ export default {
       this.$router.push({
         name: 'erp_ho-fertilizer-vendors_laboratory-id',
         params: { id: this.$route.params.id, r: 1 },
+        query: { vendors_id: this.$route.query.vendors_id },
       })
     },
 

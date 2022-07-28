@@ -19,7 +19,7 @@
               <multiselect
                 v-model="field.users_id"
                 :options="users"
-                label="user_description"
+                :custom-label="customLabel"
                 track-by="id"
                 :searchable="true"
               ></multiselect>
@@ -197,10 +197,10 @@ export default {
       .get(`/api/admin/user_has_role/${this.$route.params.id}`)
       .then((response) => {
         console.log('rdr')
-        console.log(response.data.data)
+        console.log(response.data.data.users)
         //data yang diambil
-        this.field.role_id = response.data.data.role
-        this.field.users_id = response.data.data.users_id
+        this.field.role_id = response.data.data.role_id
+        this.field.users_id = response.data.data.users
         this.field.is_active = response.data.data.is_active
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
@@ -221,6 +221,10 @@ export default {
   },
 
   methods: {
+    customLabel(option) {
+      return `${option.user_name}` + '-' + `${option.name}`
+    },
+
     currentDate() {
       const current = new Date()
       const date = `${current.getFullYear()}-${
@@ -234,6 +238,7 @@ export default {
       this.$router.push({
         name: 'erp_ho-system-user_has_role-id',
         params: { id: this.field.role_id, r: 1 },
+        query: { role_id: this.field.role_id },
       })
     },
 

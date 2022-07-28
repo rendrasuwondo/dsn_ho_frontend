@@ -227,9 +227,11 @@ export default {
 
     const header = [laboratory.data.data]
 
+    const laboratory_id = route.query.laboratory_id
+
     //user_has_role
     const posts = await $axios.$get(
-      `/api/admin/detail/laboratory_vendor/${id}?q=${search}&page=${page}`
+      `/api/admin/detail/laboratory_vendor/${id}?q=${search}&page=${page}&laboratory_id=${laboratory_id}`
     )
 
     return {
@@ -259,6 +261,7 @@ export default {
         path: this.$route.path,
         query: {
           q: this.search,
+          laboratory_id: this.laboratory_id,
         },
       })
     },
@@ -312,7 +315,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/fertilizer_vendor_laboratory/export?role_id=${this.role_id}`,
+        url: `/api/admin/laboratory_vendor/export?q=${this.search}&laboratory_id=${this.laboratory_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -321,7 +324,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Role - users.xlsx'
+        var fileName = 'Laboratory - Vendors.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()

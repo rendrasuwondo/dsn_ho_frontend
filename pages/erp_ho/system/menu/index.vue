@@ -227,7 +227,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/menu/export`,
+        url: `/api/admin/menu/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

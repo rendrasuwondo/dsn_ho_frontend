@@ -271,6 +271,7 @@ export default {
       this.$router.push({
         name: 'erp_ho-system-sub_menu-id',
         params: { id: this.field.parent_id, r: 1 },
+        query: { menu_id: this.field.parent_id },
       })
     },
 

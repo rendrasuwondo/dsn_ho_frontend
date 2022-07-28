@@ -9,7 +9,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-object-ungroup"></i>
-            <b>JOINT SAMPLING</b>
+            <b>JOIN SAMPLING</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -304,7 +304,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/t_fertilizer_sample/export`,
+        url: `/api/admin/join_sampling/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -313,7 +313,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Fertilizer Vendors.xlsx'
+        var fileName = 'Join Sampling.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()

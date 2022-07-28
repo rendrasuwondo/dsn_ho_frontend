@@ -221,6 +221,7 @@ export default {
       this.$router.push({
         name: 'erp_ho-fertilizer-parameter-id',
         params: { id: this.$route.params.id, r: 1 },
+        query: { fertilizer_type_id: this.$route.params.id },
       })
     },
 

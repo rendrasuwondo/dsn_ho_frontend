@@ -9,7 +9,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-file-contract"></i>
-            <b>CREATE JOINT SAMPLING</b>
+            <b>CREATE JOIN SAMPLING</b>
           </h3>
           <div class="card-tools"></div>
         </div>

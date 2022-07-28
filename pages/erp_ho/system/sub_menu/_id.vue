@@ -246,7 +246,7 @@ export default {
 
     const header = [menu.data.data]
 
-    const i_menu_id = this.$route.query.menu_id
+    const i_menu_id = route.query.menu_id
 
     //sub menu
     const posts = await $axios.$get(
@@ -281,7 +281,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/sub_menu/export?parent_id=${this.parent_id}`,
+        url: `/api/admin/sub_menu/export?q=${this.search}&parent_id=${this.parent_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -290,7 +290,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Sub-Menu.xlsx'
+        var fileName = 'Sub Menu.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -303,7 +303,7 @@ export default {
         path: this.$route.path,
         query: {
           q: this.search,
-          menu_id: this.$route.query.menu_id,
+          menu_id: this.menu_id,
         },
       })
     },

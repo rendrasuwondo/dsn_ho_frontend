@@ -253,7 +253,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit EMPLOYEE',
+      title: 'Edit Karyawan',
     }
   },
 
@@ -314,9 +314,6 @@ export default {
     this.$axios
       .get(`/api/admin/employee/${this.$route.params.id}`)
       .then((response) => {
-        console.log('rdr')
-        console.log(response.data.data)
-
         //data yang diambil
         this.field.location_id = response.data.data.location
         this.field.department_id = response.data.data.department
@@ -342,7 +339,6 @@ export default {
       .get('/api/admin/lov_company_table')
 
       .then((response) => {
-        console.log(response.data.data[0])
         this.company = response.data.data
         this.field.company_code =
           response.data.data.company_id + ' ' + response.data.data.company.code

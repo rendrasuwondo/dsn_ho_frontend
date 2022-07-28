@@ -332,7 +332,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/fertilizer_type_parameter/export?fertilizer_type_id=${this.fertilizer_type_id}`,
+        url: `/api/admin/input_hasil/export?q=${this.search}&fertilizer_type_id=${this.fertilizer_type_id}&input_sampel_id=${this.input_sampel_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -341,7 +341,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Role - users.xlsx'
+        var fileName = 'Hasil Analisa.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()

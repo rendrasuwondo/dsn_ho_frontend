@@ -77,6 +77,19 @@
                 ><i class="fa fa-trash"></i
               ></b-button>
             </template>
+            <template v-slot:cell(detail_phone_number)="row">
+              <b-button
+                :to="{
+                  name: 'erp_ho-master-employee_phone-id',
+                  params: { id: row.item.id },
+                }"
+                variant="link"
+                size=""
+                title="Phone Number"
+              >
+                <i class="fa fa-file-alt"></i>
+              </b-button>
+            </template>
           </b-table>
           <b-tooltip
             target="myAfdeling"
@@ -133,11 +146,16 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Grup',
-          key: 'employee_activity_group',
-          tdClass: 'align-middle text-center d-none',
-          thClass: 'd-none',
+          label: 'No.Telp',
+          key: 'detail_phone_number',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
+        // {
+        //   label: 'Grup',
+        //   key: 'employee_activity_group',
+        //   tdClass: 'align-middle text-center d-none',
+        //   thClass: 'd-none',
+        // },
         {
           label: 'NIK',
           key: 'nik',
@@ -175,7 +193,7 @@ export default {
         },
         {
           label: 'Afd',
-          key: 'afdeling_code',
+          key: 'afdeling_id',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -252,7 +270,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/employee/export`,
+        url: `/api/admin/employee/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

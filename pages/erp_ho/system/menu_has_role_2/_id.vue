@@ -278,6 +278,8 @@ export default {
         path: this.$route.path,
         query: {
           q: this.search,
+          menu_id: this.$route.query.menu_id,
+          sub_menu_id: this.$route.query.sub_menu_id,
         },
       })
     },
@@ -331,7 +333,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/menu_has_role_2/export?menu_id=${this.menu_id}`,
+        url: `/api/admin/menu_has_role/export?q=${this.search}&menu_id=${this.menu_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

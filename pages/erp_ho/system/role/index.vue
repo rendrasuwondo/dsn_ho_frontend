@@ -82,6 +82,7 @@
                 :to="{
                   name: 'erp_ho-system-user_has_role-id',
                   params: { id: row.item.id },
+                  query: { role_id: row.item.id },
                 }"
                 variant="link"
                 size=""
@@ -244,7 +245,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/role/export`,
+        url: `/api/admin/role/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
