@@ -21,10 +21,10 @@
                   >
                     <!-- params: { id: this.$route.query.sub_menu_id }, -->
                     <i class="nav-icon fas fa-th"></i>
-                    <b>Sub Menu</b>
+                    <b>SUB MENU</b>
                   </nuxt-link>
                 </td>
-                <td>/ Role</td>
+                <td>/ ROLE</td>
               </tr>
             </table>
           </h3>

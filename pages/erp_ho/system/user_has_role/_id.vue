@@ -16,10 +16,10 @@
                     class="nav-link"
                   >
                     <i class="nav-icon fas fa-book-open"></i>
-                    <b>Role</b>
+                    <b>ROLE</b>
                   </nuxt-link>
                 </td>
-                <td>/ Users</td>
+                <td>/ USERS</td>
               </tr>
             </table>
           </h3>

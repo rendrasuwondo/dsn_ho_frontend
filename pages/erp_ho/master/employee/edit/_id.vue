@@ -393,7 +393,7 @@ export default {
     },
     back() {
       this.$router.push({
-        name: 'erp_ho-admin-employee',
+        name: 'erp_ho-master-employee',
         params: { id: this.$route.params.id, r: 1 },
         query: {
           q: this.$route.query.q,

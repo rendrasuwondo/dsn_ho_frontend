@@ -382,7 +382,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: 'erp_ho-admin-employee',
+        name: 'erp_ho-master-employee',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -456,7 +456,7 @@ export default {
 
           //redirect, if success store data
           this.$router.push({
-            name: 'erp_ho-admin-employee',
+            name: 'erp_ho-master-employee',
           })
         })
         .catch((error) => {

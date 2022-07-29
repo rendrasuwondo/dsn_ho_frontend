@@ -16,10 +16,10 @@
                     class="nav-link"
                   >
                     <i class="nav-icon fas fa-users"></i>
-                    <b>Users</b>
+                    <b>USERS</b>
                   </nuxt-link>
                 </td>
-                <td>/ Role</td>
+                <td>/ ROLE</td>
               </tr>
             </table>
           </h3>

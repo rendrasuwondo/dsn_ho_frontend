@@ -18,10 +18,10 @@
                     class="nav-link"
                   >
                     <i class="nav-icon fas fa-th"></i>
-                    <b>Menu</b>
+                    <b>MENU</b>
                   </nuxt-link>
                 </td>
-                <td>/ Sub Menu</td>
+                <td>/ SUB MENU</td>
               </tr>
             </table>
           </h3>

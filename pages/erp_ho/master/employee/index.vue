@@ -82,6 +82,9 @@
                 :to="{
                   name: 'erp_ho-master-employee_phone-id',
                   params: { id: row.item.id },
+                  query: {
+                    employee_id: row.item.id,
+                  },
                 }"
                 variant="link"
                 size=""
