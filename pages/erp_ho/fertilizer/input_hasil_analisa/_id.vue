@@ -36,23 +36,45 @@
               show-empty
             ></b-table>
           </div>
+
+          <div class="form-group mt-4 mb-4 dashed">
+            <h6>
+              <b>
+                <i class="nav-icon fas fas fa-file-upload"></i> UPLOAD FILE
+              </b>
+            </h6>
+            <p class="ml-2">
+              {{ image_file }}
+            </p>
+            <b-container>
+              <b-row>
+                <b-col cols="8">
+                  <p class="selected">
+                    <label class="choose-file">
+                      Enter Your File
+                      <input
+                        type="file"
+                        name="file"
+                        @change="upload"
+                        class="choose-file"
+                      />
+                    </label>
+
+                    Selected file: <b>{{ files ? files.name : '' }}</b>
+                  </p>
+                </b-col>
+                <b-col cols="4">
+                  <button @click="submitFileUpload" class="btn-info btn-upload">
+                    <i class="nav-icon fas fas fa-upload"></i> upload
+                  </button>
+                </b-col>
+              </b-row>
+            </b-container>
+          </div>
+
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <!-- <nuxt-link
-                  :to="{
-                    name: 'erp_ho-fertilizer-input_hasil_analisa-input-id',
-                    params: { id: input_sampel_id, r: 1 },
-                    query: {
-                      fertilizer_type_id: fertilizer_type_id,
-                      input_sampel_id: input_sampel_id,
-                    },
-                  }"
-                  class="btn btn-info btn-sm"
-                  style="padding-top: 8px"
-                  title="Input Hasil Analisa"
-                  ><i class="fa fa fa-pencil-alt"> Input Hasil</i>
-                </nuxt-link> -->
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -154,6 +176,9 @@ export default {
   //data function
   data() {
     return {
+      files: null,
+      upload_files: {},
+      image_file: {},
       //table header
       fields: [
         {
@@ -186,6 +211,7 @@ export default {
       // header: [],
       fertilizer_type_id: this.$route.query.fertilizer_type_id,
       input_sampel_id: this.$route.params.id,
+      po: this.header,
 
       fields_header: [
         {
@@ -283,6 +309,38 @@ export default {
       })
     },
 
+    upload(e) {
+      // uploaded file
+      let files = e.target.files[0]
+
+      this.previewimage = URL.createObjectURL(files)
+      this.files = files
+    },
+
+    async submitFileUpload() {
+      let formData = new FormData()
+      formData.append('upload_file', this.files)
+      formData.append('input_sampel_id', this.$route.params.id)
+
+      await this.$axios
+        .post('/api/admin/upload_file', formData)
+        .then(() => {
+          //sweet alert
+          this.$swal.fire({
+            title: 'BERHASIL!',
+            text: 'Data Berhasil Disimpan!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 2000,
+          })
+          this.$nuxt.refresh()
+        })
+        .catch((error) => {
+          //assign error to state "validation"
+          this.validation = error.response.data
+        })
+    },
+
     //deletePost method
     deletePost(id) {
       this.$swal
@@ -362,7 +420,23 @@ export default {
       this.summary = 'INSPEK'
     }
 
-    console.log(newData.includes('OUTSPEK'))
+    this.$axios
+      .get(`/api/admin/master/upload_file/${this.$route.params.id}`)
+      .then((response) => {
+        //data yang diambil
+
+        this.upload_files = response.data.data.upload_file
+        // console.log(this.upload_files)
+      })
+
+    this.$axios
+      .get(`/api/admin/master/image_file/${this.$route.params.id}`)
+      .then((response) => {
+        //data yang diambil
+
+        this.image_file = response.data
+        console.log(this.image_file)
+      })
   },
 
   computed: {
@@ -398,5 +472,35 @@ export default {
 }
 .card-title .nav-link {
   color: #504d8d;
+}
+.input-file {
+  width: 100%;
+}
+.btn-upload {
+  float: right;
+  padding: 2px 10px 2px 10px;
+  border-radius: 3px;
+}
+.dashed {
+  border-style: dashed;
+  padding: 10px;
+  border-color: rgb(230, 242, 252);
+}
+h6 {
+  color: #504d8d;
+}
+.choose-file {
+  background-color: #504d8d;
+  font-size: 13px;
+  padding: 3px 10px 3px 10px;
+  border-radius: 3px;
+  color: white;
+  box-shadow: 2px 3px #f7ebfd;
+}
+.selected {
+  font-size: 13px;
+}
+input[type='file'] {
+  display: none;
 }
 </style>
