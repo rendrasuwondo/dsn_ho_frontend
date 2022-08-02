@@ -8,8 +8,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-object-ungroup"></i>
-            <b>JOIN SAMPLING</b>
+            <i class="nav-icon fas fa-cog"></i> <b>GLOBAL PARAM</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -18,7 +17,7 @@
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <nuxt-link
-                  :to="{ name: 'erp_ho-fertilizer-join_sampling-create' }"
+                  :to="{ name: 'erp_ho-system-global_param-create' }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
                   title="Tambah"
@@ -58,25 +57,10 @@
             :fields="fields"
             show-empty
           >
-            <!-- <template v-slot:head(selected)="data">
-              <span
-                ><b-form-checkbox
-                  @click.native.stop
-                  @change="select"
-                  v-model="allSelected"
-                >
-                </b-form-checkbox
-              ></span>
-            </template>
-            <template v-slot:cell(selected)="row">
-              <b-form-group>
-                <input type="checkbox" v-model="row.item.selected" />
-              </b-form-group>
-            </template> -->
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-fertilizer-join_sampling-edit-id',
+                  name: 'erp_ho-system-global_param-edit-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"
@@ -93,20 +77,6 @@
                 ><i class="fa fa-trash"></i
               ></b-button>
             </template>
-            <!-- <template v-slot:custom-foot="data">
-              <b-tr>
-                <b-td colspan="12">
-                  <b-button
-                    class="btn-info"
-                    size="sm"
-                    @click="Submit"
-                    v-if="rowcount > 0"
-                  >
-                    Verifikasi
-                  </b-button>
-                </b-td>
-              </b-tr>
-            </template> -->
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -136,74 +106,30 @@ export default {
 
   head() {
     return {
-      title: 'Joint Sampling',
+      title: 'Global Param',
     }
   },
   data() {
     return {
-      allSelected: false,
-      show_submit: true,
-
       fields: [
-        // {
-        //   label: 'Approve',
-        //   key: 'selected',
-        //   tdClass: 'align-middle text-center text-nowrap nameOfTheClass ',
-        //   sortable: false,
-        // },
         {
           label: 'Actions',
           key: 'actions',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
-        // {
-        //   label: 'Status',
-        //   key: 'verification_status',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
         {
-          label: 'PO',
-          key: 'po',
+          label: 'Code',
+          key: 'code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Supplier',
-          key: 'supplier',
+          label: 'Value 1',
+          key: 'value_1',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Jenis Pupuk',
-          key: 'fertilizer_type_code',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'PT',
-          key: 'company_code',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Estate',
-          key: 'department_code',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'QTY PO',
-          key: 'qty',
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Satuan',
-          key: 'unit_code',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Tanggal Kedatangan',
-          key: 'f_tgl_kedatangan',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Joint Sampling',
-          key: 'f_joint_sampling',
+          label: 'Value 2',
+          key: 'value_2',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -224,7 +150,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/t_fertilizer_sample?q=${search}&page=${page}`
+      `/api/admin/global_param?q=${search}&page=${page}`
     )
 
     return {
@@ -273,7 +199,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/t_fertilizer_sample/${id}`)
+              .delete(`/api/admin/global_param/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()
@@ -304,7 +230,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/join_sampling/export?q=${this.search}`,
+        url: `/api/admin/global_param/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -313,7 +239,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Join Sampling.xlsx'
+        var fileName = 'Global Param.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()

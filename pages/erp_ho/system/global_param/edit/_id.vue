@@ -8,92 +8,60 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-file-signature"></i>
-            <b>EDIT INPUT SAMPEL</b>
+            <i class="nav-icon fas fa-folder"></i> <b>EDIT GLOBAL PARAM</b>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
           <form @submit.prevent="update">
             <div class="form-group">
-              <label>PO</label>
-
+              <label>Kode</label>
               <input
                 type="text"
-                v-model="field.po"
-                placeholder="Masukkan Kode PO"
+                v-model="field.code"
+                placeholder=""
                 class="form-control"
-                readonly
+                ref="code"
               />
-            </div>
-
-            <div class="form-group">
-              <label>Tanggal Terima</label>
-              <b-form-datepicker
-                placeholder="Choose a date"
-                v-model="field.tgl_terima"
-                :date-format-options="{
-                  year: 'numeric',
-                  month: 'short',
-                  day: '2-digit',
-                  weekday: 'short',
-                }"
-              ></b-form-datepicker>
-            </div>
-
-            <div class="form-group">
-              <label>Lab Analisa</label>
-              <multiselect
-                v-model="field.laboratory_id"
-                :options="laboratory"
-                label="code"
-                track-by="id"
-                :searchable="true"
-              ></multiselect>
-
-              <div v-if="validation.laboratory_id" class="mt-2">
+              <div v-if="validation.code" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.laboratory_id[0]
+                  validation.code[0]
                 }}</b-alert>
               </div>
             </div>
 
             <div class="form-group">
-              <label>Kirim Ke Lab</label>
-              <b-form-datepicker
-                placeholder="Choose a date"
-                v-model="field.kirim_lab"
-                :date-format-options="{
-                  year: 'numeric',
-                  month: 'short',
-                  day: '2-digit',
-                  weekday: 'short',
-                }"
-              ></b-form-datepicker>
+              <label>Value 1</label>
+              <input
+                type="text"
+                v-model="field.value_1"
+                placeholder=""
+                class="form-control"
+              />
+              <div v-if="validation.value_1" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.value_1[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">
-              <label>Terima Lab</label>
-              <b-form-datepicker
-                placeholder="Choose a date"
-                v-model="field.terima_lab"
-                :date-format-options="{
-                  year: 'numeric',
-                  month: 'short',
-                  day: '2-digit',
-                  weekday: 'short',
-                }"
-              ></b-form-datepicker>
+              <label>Value 2</label>
+              <input
+                type="text"
+                v-model="field.value_2"
+                placeholder=""
+                class="form-control"
+              />
             </div>
 
             <div class="form-group">
               <label>Keterangan</label>
-
               <textarea
                 v-model="field.description"
                 class="form-control"
                 rows="3"
-                placeholder="Masukkan Deskripsi Singkat"
+                placeholder=""
               ></textarea>
               <div v-if="validation.description" class="mt-2">
                 <b-alert show variant="danger">{{
@@ -101,7 +69,6 @@
                 }}</b-alert>
               </div>
             </div>
-
             <div class="form-group">
               <b-row>
                 <b-col>
@@ -130,9 +97,8 @@
 
             <div class="form-group">
               <b-row>
-                <b-col
-                  ><label>Tanggal Ubah </label>
-
+                <b-col>
+                  <label>Tanggal Ubah </label>
                   <b-form-datepicker
                     v-model="field.updated_at"
                     :date-format-options="{
@@ -155,7 +121,6 @@
                 </b-col>
               </b-row>
             </div>
-
             <button class="btn btn-info mr-1 btn-submit" type="submit">
               <i class="fa fa-paper-plane"></i> SIMPAN
             </button>
@@ -180,7 +145,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit Input Sampel',
+      title: 'Edit Global Param',
     }
   },
 
@@ -188,29 +153,16 @@ export default {
     return {
       state: 'disabled',
       field: {
-        po: '',
-        vendors_id: '',
-        fertilizer_type_id: '',
-        company_id: '',
-        department_id: '',
-        unit_id: '',
-        qty: '',
-        tgl_kedatangan: '',
-        joint_sampling: '',
-        laboratory_id: '',
-        tgl_terima: '',
-        kirim_lab: '',
-        terima_lab: '',
+        code: '',
+        name: '',
+        is_active: '',
         description: '',
         created_at: '',
-        created_by: '',
         updated_at: '',
+        created_by: '',
         updated_by: '',
       },
 
-      laboratory: [],
-
-      vendors: '',
       //state validation
       validation: [],
     }
@@ -219,55 +171,25 @@ export default {
   mounted() {
     //get data field by ID
     this.$axios
-      .get(`/api/admin/input_sampel/${this.$route.params.id}`)
+      .get(`/api/admin/global_param/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
-        this.field.po = response.data.data.po
-        this.field.vendors_id = response.data.data.vendors_id
-        this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
-        this.field.company_id = response.data.data.company_id
-        this.field.department_id = response.data.data.department_id
-        this.field.unit_id = response.data.data.unit_id
-        this.field.qty = response.data.data.qty
-        this.field.tgl_kedatangan = response.data.data.tgl_kedatangan
-        this.field.joint_sampling = response.data.data.joint_sampling
-        this.field.laboratory_id = response.data.data.laboratory
-        this.field.tgl_terima = response.data.data.tgl_terima
-        this.field.kirim_lab = response.data.data.kirim_lab
-        this.field.terima_lab = response.data.data.terima_lab
+        this.field.code = response.data.data.code
+        this.field.value_1 = response.data.data.value_1
+        this.field.value_2 = response.data.data.value_2
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
-
-        this.vendors = response.data.data.vendors_id
-
-        console.log('cek data')
-        console.log(response.data.data.laboratory)
-        console.log(
-          `/api/admin/lov_laboratory_table?vendors_id=${response.data.data.vendors_id}`
-        )
-
-        this.$axios
-          .get(
-            `/api/admin/lov_laboratory_table?vendors_id=${response.data.data.vendors_id}`
-          )
-
-          .then((response) => {
-            this.laboratory = response.data.data
-          })
       })
+    this.$refs.code.focus()
   },
 
   methods: {
-    customLabel(laboratory) {
-      return `${laboratory.laboratory_code}`
-    },
-
     back() {
       this.$router.push({
-        name: 'erp_ho-fertilizer-input_sampel',
+        name: 'erp_ho-system-global_param',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -275,34 +197,20 @@ export default {
     // update method
     async update(e) {
       e.preventDefault()
-      console.log('coba')
-      console.log(this.field.laboratory_id)
-      console.log(this.field.laboratory_id.laboratory_id)
+
       //send data ke Rest API untuk update
       await this.$axios
-        .put(`/api/admin/input_sampel/${this.$route.params.id}`, {
-          po: this.field.po,
-          company_id: this.field.company_id,
-          department_id: this.field.department_id,
-          fertilizer_type_id: this.field.fertilizer_type_id,
-          vendors_id: this.field.vendors_id,
-          unit_id: this.field.unit_id,
-          qty: this.field.qty,
-          tgl_kedatangan: this.field.tgl_kedatangan,
-          joint_sampling: this.field.joint_sampling,
-          laboratory_id: this.field.laboratory_id
-            ? this.field.laboratory_id.laboratory_id
-            : '',
-          tgl_terima: this.field.tgl_terima,
-          kirim_lab: this.field.kirim_lab,
-          terima_lab: this.field.terima_lab,
+        .put(`/api/admin/global_param/${this.$route.params.id}`, {
+          //data yang dikirim
+          code: this.field.code,
+          value_1: this.field.value_1,
+          value_2: this.field.value_2,
           description: this.field.description,
           created_at: this.field.created_at,
           updated_at: this.field.updated_at,
           created_by: this.field.created_by,
           updated_by: this.field.updated_by,
         })
-
         .then(() => {
           //sweet alert
           this.$swal.fire({
@@ -314,7 +222,7 @@ export default {
           })
           //redirect ke route "post"
           this.$router.push({
-            name: 'erp_ho-fertilizer-input_sampel',
+            name: 'erp_ho-system-global_param',
           })
         })
         .catch((error) => {

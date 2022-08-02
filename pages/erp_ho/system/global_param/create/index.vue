@@ -8,45 +8,67 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-network-wired"></i>
-            <b>TAMBAH PARAMETER</b>
+            <i class="nav-icon fas fa-cog"></i> <b>TAMBAH GLOBAL PARAM</b>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
           <form @submit.prevent="storePost">
             <div class="form-group">
-              <label>Nama Parameter</label>
-              <multiselect
-                v-model="field.parameter_id"
-                :options="parameter"
-                label="name"
-                track-by="id"
-                :searchable="true"
-              ></multiselect>
-              <div v-if="validation.parameter_id" class="mt-2">
+              <label>Kode</label>
+              <input
+                type="text"
+                v-model="field.code"
+                placeholder="Masukkan kode Role"
+                class="form-control"
+                ref="code"
+              />
+              <div v-if="validation.code" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.parameter_id[0]
+                  validation.code[0]
                 }}</b-alert>
               </div>
             </div>
 
             <div class="form-group">
-              <label>SNI</label>
-              <number
+              <label>Value 1</label>
+              <input
+                type="text"
+                v-model="field.value_1"
+                placeholder="Masukkan Nilai 1"
                 class="form-control"
-                placeholder="Masukkan Nilai Standar"
-                v-model="field.sni"
-                prefix=""
-              ></number>
+              />
+              <div v-if="validation.value_1" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.value_1[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">
-              <label>Aktif?</label>
-              <b-form-select v-model="field.is_active" :options="options">
-              </b-form-select>
+              <label>Value 2</label>
+              <input
+                type="text"
+                v-model="field.value_2"
+                placeholder="Masukkan Nilai 2"
+                class="form-control"
+              />
             </div>
 
+            <div class="form-group">
+              <label>Keterangan</label>
+              <textarea
+                v-model="field.description"
+                class="form-control"
+                rows="3"
+                placeholder="Masukkan Deskripsi Singkat"
+              ></textarea>
+              <div v-if="validation.description" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.description[0]
+                }}</b-alert>
+              </div>
+            </div>
             <div class="form-group">
               <b-row>
                 <b-col>
@@ -128,33 +150,18 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah Parameter',
+      title: 'Tambah Global Param',
     }
-  },
-
-  components: {
-    'ckeditor-nuxt': () => {
-      if (process.client) {
-        return import('@blowstack/ckeditor-nuxt')
-      }
-    },
   },
 
   data() {
     return {
-      options: [
-        { value: 'Y', text: 'Ya' },
-        { value: 'N', text: 'Tidak' },
-      ],
-
       state: 'disabled',
-      value: undefined,
 
       field: {
-        parameter_id: '',
-        fertilizer_type_id: '',
-        sni: '',
-        is_active: 'Y',
+        code: '',
+        value_1: '',
+        value_2: '',
         description: '',
         created_at: '',
         updated_at: '',
@@ -162,20 +169,8 @@ export default {
         updated_by: '',
       },
 
-      fertilizer_type_id: '',
-
-      parameter: [],
-
       //state validation
       validation: [],
-
-      //config CKEDITOR
-      editorConfig: {
-        removePlugins: ['Title'],
-        simpleUpload: {
-          uploadUrl: 'http://localhost:8000/api/web/posts/storeImage',
-        },
-      },
     }
   },
 
@@ -186,28 +181,18 @@ export default {
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
     this.field.updated_by =
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
-    // this.$refs.user_name.focus()
 
-    this.$axios
-      .get(`/api/admin/master/fertilizer_type/${this.$route.params.id}`)
-
-      .then((response) => {
-        //  console.log(response.data.data.afdeling_id)
-        this.fertilizer_type_id = response.data.data.id
-
-        this.$nuxt.$loading.start()
-      })
-
-    //Data Users
-    this.$axios
-      .get('/api/admin/lov_parameter')
-
-      .then((response) => {
-        this.parameter = response.data.data
-      })
+    this.$refs.code.focus()
   },
 
   methods: {
+    back() {
+      this.$router.push({
+        name: 'erp_ho-system-global_param',
+        params: { id: this.$route.params.id, r: 1 },
+      })
+    },
+
     currentDate() {
       const current = new Date()
       const date = `${current.getFullYear()}-${
@@ -217,33 +202,22 @@ export default {
       return date
     },
 
-    back() {
-      this.$router.push({
-        name: 'erp_ho-fertilizer-parameter-id',
-        params: { id: this.$route.params.id, r: 1 },
-        query: { fertilizer_type_id: this.$route.params.id },
-      })
-    },
-
     async storePost() {
       //define formData
       let formData = new FormData()
 
-      formData.append(
-        'parameter_id',
-        this.field.parameter_id ? this.field.parameter_id.id : ''
-      )
-      formData.append('fertilizer_type_id', this.$route.params.id)
-      formData.append('sni', this.field.sni)
-      formData.append('is_active', this.field.is_active)
+      formData.append('code', this.field.code)
+      formData.append('value_1', this.field.value_1)
+      formData.append('value_2', this.field.value_2)
       formData.append('description', this.field.description)
       formData.append('created_at', this.field.created_at)
       formData.append('created_by', this.field.created_by)
-      formData.append('update_at', this.field.update_at)
-      formData.append('udpate_by', this.field.udpate_by)
+      formData.append('updated_at', this.field.update_at)
+      formData.append('udpated_by', this.field.udpate_by)
 
+      //sending data to server
       await this.$axios
-        .post('/api/admin/fertilizer_type_parameter', formData)
+        .post('/api/admin/global_param', formData)
         .then(() => {
           //sweet alert
           this.$swal.fire({
@@ -253,20 +227,14 @@ export default {
             showConfirmButton: false,
             timer: 2000,
           })
-          this.back()
+
+          //redirect, if success store data
+          this.$router.push({
+            name: 'erp_ho-system-global_param',
+          })
         })
         .catch((error) => {
           //assign error to state "validation"
-          // alert(error)
-          // console.log(error.response.data.message)
-
-          this.$swal.fire({
-            title: 'ERROR!',
-            text: error.response.data.message,
-            icon: 'error',
-            showConfirmButton: true,
-          })
-
           this.validation = error.response.data
         })
     },

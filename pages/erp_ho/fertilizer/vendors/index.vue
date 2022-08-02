@@ -16,13 +16,13 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <nuxt-link
+                <!-- <nuxt-link
                   :to="{ name: 'erp_ho-fertilizer-vendors-create' }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
                   title="Tambah"
                   ><i class="fa fa-plus-circle"></i>
-                </nuxt-link>
+                </nuxt-link> -->
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -128,11 +128,11 @@ export default {
   data() {
     return {
       fields: [
-        {
-          label: 'Actions',
-          key: 'actions',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
+        // {
+        //   label: 'Actions',
+        //   key: 'actions',
+        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        // },
         {
           label: 'Laboratory',
           key: 'laboratory',

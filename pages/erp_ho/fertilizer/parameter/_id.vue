@@ -15,7 +15,7 @@
                     :to="{ name: 'erp_ho-fertilizer-fertilizer_type' }"
                     class="nav-link"
                   >
-                    <i class="nav-icon fas fas fa-vial"></i>
+                    <i class="nav-icon fas fas fa-sitemap"></i>
                     <b>JENIS PUPUK</b>
                   </nuxt-link>
                 </td>

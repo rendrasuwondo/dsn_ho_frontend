@@ -7,7 +7,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-list-alt"></i>
+            <i class="nav-icon fas fa-network-wired"></i>
             <b>EDIT PARAMETER</b>
           </h3>
           <div class="card-tools"></div>
