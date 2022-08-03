@@ -97,7 +97,7 @@ export default {
   },
 
   mounted() {
-    // this.$refs.user_name.focus()
+    this.$refs.user_name.focus()
   },
 
   methods: {

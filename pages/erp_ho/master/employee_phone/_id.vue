@@ -11,9 +11,12 @@
             <table>
               <tr>
                 <td>
-                  <nuxt-link :to="{ name: 'master-employee' }" class="nav-link">
+                  <nuxt-link
+                    :to="{ name: 'erp_ho-master-employee' }"
+                    class="nav-link"
+                  >
                     <i class="nav-icon fas fa-id-badge"></i>
-                    KARYAWAN
+                    <b>KARYAWAN</b>
                   </nuxt-link>
                 </td>
                 <td>/ NOMOR TELEPON</td>

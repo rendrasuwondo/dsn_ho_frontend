@@ -312,7 +312,9 @@ export default {
 
     searchDataPO(e) {
       const data_po = this.$axios
-        .$get(`http://127.0.0.1:8000/api/PoFertilizer?PO_NO=${this.field.po}`)
+        .$get(
+          `http://127.0.0.1:8000/api/admin/PoFertilizer?PO_NO=${this.field.po}`
+        )
         // return po
         .then((response) => {
           this.data_po = response.data

@@ -36,11 +36,6 @@
                 placeholder="Masukkan Nama Karyawan"
                 class="form-control"
               />
-              <div v-if="validation.name" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.name[0]
-                }}</b-alert>
-              </div>
             </div>
 
             <div class="form-group">
@@ -444,7 +439,7 @@ export default {
           })
           //redirect ke route "post"
           this.$router.push({
-            name: 'erp_ho-admin-employee',
+            name: 'erp_ho-master-employee',
             query: {
               q: this.$route.query.q,
             },

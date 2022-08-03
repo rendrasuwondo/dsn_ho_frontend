@@ -23,23 +23,12 @@
                 class="form-control"
                 ref="user_name"
               />
-              <!-- <div v-if="validation.user_name" class="mt-2">
+              <div v-if="validation.user_name" class="mt-2">
                 <b-alert show variant="danger">{{
                   validation.user_name[0]
                 }}</b-alert>
-              </div> -->
+              </div>
             </div>
-
-            <!-- <div class="form-group">
-              <label>Nama</label>
-              <input
-                type="text"
-                v-model="field.name"
-                placeholder="Masukkan Nama User"
-                class="form-control"
-              />
-              
-            </div> -->
 
             <div class="form-group">
               <label>Nama Karyawan</label>
@@ -50,6 +39,11 @@
                 track-by="id"
                 :searchable="true"
               ></multiselect>
+              <div v-if="validation.employee_id" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.employee_id[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">
@@ -60,11 +54,11 @@
                 placeholder="Masukkan Alamat Email "
                 class="form-control"
               />
-              <!-- <div v-if="validation.email" class="mt-2">
+              <div v-if="validation.email" class="mt-2">
                 <b-alert show variant="danger">{{
                   validation.email[0]
                 }}</b-alert>
-              </div> -->
+              </div>
             </div>
 
             <div class="form-group">
@@ -75,11 +69,11 @@
                 placeholder="Masukkan Password"
                 class="form-control"
               />
-              <!-- <div v-if="validation.password" class="mt-2">
+              <div v-if="validation.password" class="mt-2">
                 <b-alert show variant="danger">{{
                   validation.password[0]
                 }}</b-alert>
-              </div> -->
+              </div>
             </div>
 
             <div class="form-group">
@@ -240,6 +234,7 @@ export default {
       await this.$axios
         .put(`/api/admin/users/${this.$route.params.id}`, {
           //data yang dikirim
+          id: this.$route.params.id,
           user_name: this.field.user_name,
           name: this.field.name,
           email: this.field.email,

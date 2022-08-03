@@ -25,6 +25,11 @@
                 v-on:keypress="isNumber($event)"
                 maxlength="13"
               />
+              <div v-if="validation.phone_number" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.phone_number[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">

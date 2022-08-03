@@ -63,6 +63,11 @@
                 rows="3"
                 placeholder="Masukkan Link Menu"
               />
+              <div v-if="validation.path_file_name" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.path_file_name[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">

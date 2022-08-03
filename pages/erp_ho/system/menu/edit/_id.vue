@@ -22,11 +22,11 @@
                 class="form-control"
                 ref="code"
               />
-              <!-- <div v-if="validation.code" class="mt-2">
+              <div v-if="validation.code" class="mt-2">
                 <b-alert show variant="danger">{{
                   validation.code[0]
                 }}</b-alert>
-              </div> -->
+              </div>
             </div>
 
             <div class="form-group">

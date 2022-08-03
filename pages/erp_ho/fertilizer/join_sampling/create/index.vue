@@ -17,7 +17,7 @@
           <form @submit.prevent="storePost">
             <div class="form-group">
               <label>PO</label>
-              <b-input-group class="mt-3">
+              <b-input-group class="">
                 <input
                   type="text"
                   v-model="field.po"
