@@ -105,6 +105,30 @@
             </div>
 
             <div class="form-group">
+              <label>Tanggal GR</label>
+              <b-form-datepicker
+                v-model="field.gr_date"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                  weekday: 'short',
+                }"
+                :disabled="disabled"
+              ></b-form-datepicker>
+            </div>
+
+            <div class="form-group">
+              <label>QTY GR</label>
+              <input
+                class="form-control"
+                placeholder="Jumlah QTY GR"
+                v-model="field.gr_qty"
+                readonly
+              />
+            </div>
+
+            <div class="form-group">
               <label>Tanggal Kedatangan</label>
               <b-form-datepicker
                 placeholder="Choose a date"
@@ -259,6 +283,8 @@ export default {
         created_by: '',
         updated_at: '',
         updated_by: '',
+        gr_date: '',
+        gr_qty: '',
       },
 
       data_po: [],
@@ -291,6 +317,8 @@ export default {
         this.field.unit_id = response.data.data.unit_id
         this.field.unit_code = response.data.data.unit_code
         this.field.qty = response.data.data.qty
+        this.field.gr_qty = response.data.data.gr_qty
+        this.field.gr_date = response.data.data.gr_date
         this.field.tgl_kedatangan = response.data.data.tgl_kedatangan
         this.field.joint_sampling = response.data.data.joint_sampling
         this.field.description = response.data.data.description
@@ -330,6 +358,8 @@ export default {
           this.field.unit_code = this.data_po.UNIT
           this.field.fertilizer_type_id = this.data_po.FERTILIZER_TYPE_ID
           this.field.fertilizer_type_code = this.data_po.FERTILIZER_TYPE
+          this.field.gr_qty = this.data_po.GR_QTY
+          this.field.gr_date = this.data_po.GR_DATE
         })
 
       console.log('data')

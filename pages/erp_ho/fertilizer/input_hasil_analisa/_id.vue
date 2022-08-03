@@ -37,41 +37,6 @@
             ></b-table>
           </div>
 
-          <div class="form-group mt-4 mb-4 dashed">
-            <h6>
-              <b>
-                <i class="nav-icon fas fas fa-file-upload"></i> UPLOAD FILE
-              </b>
-            </h6>
-            <p class="ml-2">
-              {{ image_file }}
-            </p>
-            <b-container>
-              <b-row>
-                <b-col cols="8">
-                  <p class="selected">
-                    <label class="choose-file">
-                      Enter Your File
-                      <input
-                        type="file"
-                        name="file"
-                        @change="upload"
-                        class="choose-file"
-                      />
-                    </label>
-
-                    Selected file: <b>{{ files ? files.name : '' }}</b>
-                  </p>
-                </b-col>
-                <b-col cols="4">
-                  <button @click="submitFileUpload" class="btn-info btn-upload">
-                    <i class="nav-icon fas fas fa-upload"></i> upload
-                  </button>
-                </b-col>
-              </b-row>
-            </b-container>
-          </div>
-
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -139,22 +104,40 @@
             </template>
           </b-table>
 
-          <!-- pagination -->
-          <!-- <b-row>
-            <b-col
-              ><b-pagination
-                v-model="pagination.current_page"
-                :total-rows="pagination.total"
-                :per-page="pagination.per_page"
-                @change="changePage"
-                align="left"
-                class="mt-1"
-              ></b-pagination
-            ></b-col>
-            <b-col class="text-right" align-self="center"
-              >{{ rowcount }} data</b-col
-            >
-          </b-row> -->
+          <div class="form-group mt-4 mb-4 dashed">
+            <h6>
+              <b>
+                <i class="nav-icon fas fas fa-file-upload"></i> UPLOAD FILE
+              </b>
+            </h6>
+            <p class="ml-2">
+              {{ upload_files }}
+            </p>
+            <b-container>
+              <b-row>
+                <b-col cols="8">
+                  <p class="selected">
+                    <label class="choose-file">
+                      Enter Your File
+                      <input
+                        type="file"
+                        name="file"
+                        @change="upload"
+                        class="choose-file"
+                      />
+                    </label>
+
+                    Selected file: <b>{{ files ? files.name : '' }}</b>
+                  </p>
+                </b-col>
+                <b-col cols="4">
+                  <button @click="submitFileUpload" class="btn-info btn-upload">
+                    <i class="nav-icon fas fas fa-upload"></i> upload
+                  </button>
+                </b-col>
+              </b-row>
+            </b-container>
+          </div>
         </div>
       </div>
     </section>
@@ -178,7 +161,7 @@ export default {
     return {
       files: null,
       upload_files: {},
-      image_file: {},
+      donwload_file: {},
       //table header
       fields: [
         {
@@ -430,7 +413,7 @@ export default {
       })
 
     this.$axios
-      .get(`/api/admin/master/image_file/${this.$route.params.id}`)
+      .get(`/api/admin/master/download_file/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
 

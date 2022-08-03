@@ -197,6 +197,16 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          label: 'QTY GR',
+          key: 'gr_qty',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tanggal GR',
+          key: 'f_gr_date',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
           label: 'Tanggal Kedatangan',
           key: 'f_tgl_kedatangan',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',

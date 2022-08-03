@@ -105,6 +105,30 @@
             </div>
 
             <div class="form-group">
+              <label>Tanggal GR</label>
+              <b-form-datepicker
+                v-model="data_po.GR_DATE"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                  weekday: 'short',
+                }"
+                :disabled="disabled"
+              ></b-form-datepicker>
+            </div>
+
+            <div class="form-group">
+              <label>QTY GR</label>
+              <input
+                class="form-control"
+                placeholder="Jumlah QTY GR"
+                v-model="data_po.GR_QTY"
+                readonly
+              />
+            </div>
+
+            <div class="form-group">
               <label>Tanggal Kedatangan</label>
               <b-form-datepicker
                 placeholder="Choose a date"
