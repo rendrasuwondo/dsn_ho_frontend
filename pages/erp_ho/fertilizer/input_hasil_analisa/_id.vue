@@ -110,9 +110,20 @@
                 <i class="nav-icon fas fas fa-file-upload"></i> UPLOAD FILE
               </b>
             </h6>
-            <p class="ml-2">
-              {{ upload_files }}
-            </p>
+            <b-container>
+              <b-row>
+                <b-col cols="8">
+                  <p class="selected">
+                    File Tersimpan : <b> {{ upload_files }}</b>
+                  </p>
+                </b-col>
+                <b-col cols="4">
+                  <button @click="fileDownload" class="btn-info btn-upload">
+                    <i class="nav-icon fas fas fa-download"></i> Download
+                  </button>
+                </b-col>
+              </b-row>
+            </b-container>
             <b-container>
               <b-row>
                 <b-col cols="8">
@@ -162,6 +173,7 @@ export default {
       files: null,
       upload_files: {},
       donwload_file: {},
+      newData: {},
       //table header
       fields: [
         {
@@ -296,7 +308,6 @@ export default {
       // uploaded file
       let files = e.target.files[0]
 
-      this.previewimage = URL.createObjectURL(files)
       this.files = files
     },
 
@@ -309,6 +320,7 @@ export default {
         .post('/api/admin/upload_file', formData)
         .then(() => {
           //sweet alert
+
           this.$swal.fire({
             title: 'BERHASIL!',
             text: 'Data Berhasil Disimpan!',
@@ -316,7 +328,16 @@ export default {
             showConfirmButton: false,
             timer: 2000,
           })
+
           this.$nuxt.refresh()
+          const upload_files = this.$axios
+            .get(`/api/admin/master/upload_file/${this.$route.params.id}`)
+            .then((response) => {
+              //data yang diambil
+
+              this.upload_files = response.data.data.upload_file
+            })
+          this.files = ''
         })
         .catch((error) => {
           //assign error to state "validation"
@@ -367,6 +388,36 @@ export default {
         })
     },
 
+    fileDownload() {
+      const headers = {
+        'Content-Type': 'application/json',
+      }
+
+      const newData = this.$axios
+        .get(`/api/admin/master/upload_file/${this.$route.params.id}`)
+        .then((response) => {
+          //data yang diambil
+
+          this.newData = response.data.data.upload_file
+        })
+
+      this.$axios({
+        url: `/api/admin/download?fertilizer_sampel_id=${this.$route.params.id}`,
+        method: 'GET',
+        responseType: 'blob',
+        headers: headers, // important
+      }).then((response) => {
+        this.isLoading = false
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        var fileName = this.newData
+        link.setAttribute('download', fileName) //or any other extension
+        document.body.appendChild(link)
+        link.click()
+      })
+    },
+
     exportData() {
       const headers = {
         'Content-Type': 'application/json',
@@ -409,16 +460,8 @@ export default {
         //data yang diambil
 
         this.upload_files = response.data.data.upload_file
-        // console.log(this.upload_files)
-      })
-
-    this.$axios
-      .get(`/api/admin/master/download_file/${this.$route.params.id}`)
-      .then((response) => {
-        //data yang diambil
-
-        this.image_file = response.data
-        console.log(this.image_file)
+        console.log('db')
+        console.log(this.upload_files)
       })
   },
 
@@ -461,7 +504,7 @@ export default {
 }
 .btn-upload {
   float: right;
-  padding: 2px 10px 2px 10px;
+  width: 110px;
   border-radius: 3px;
 }
 .dashed {

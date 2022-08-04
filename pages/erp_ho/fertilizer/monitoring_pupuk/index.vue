@@ -126,7 +126,7 @@ export default {
 
   head() {
     return {
-      title: 'Input Sampel',
+      title: 'Monitoring Pupuk',
     }
   },
   data() {

@@ -246,7 +246,7 @@ body {
 }
 
 .login__field {
-  padding: 20px 0px;
+  padding: 17px 0px;
   position: relative;
 }
 
@@ -340,5 +340,8 @@ body {
 }
 h4 {
   margin-top: 20px;
+}
+alert {
+  margin-bottom: 0px;
 }
 </style>

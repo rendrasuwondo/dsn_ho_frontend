@@ -14,7 +14,7 @@
                 <b> Hello, {{ this.$auth.user.employee.name }} </b>
                 <br />
                 <span class="text-2">
-                  selamat datang di halaman dashboard website eLHM
+                  selamat datang di halaman dashboard website Head Office
                 </span>
               </p>
             </div>

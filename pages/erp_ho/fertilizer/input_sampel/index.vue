@@ -70,13 +70,6 @@
               >
                 <i class="fa fa-pencil-alt"></i>
               </b-button>
-              <!-- <b-button
-                variant="link"
-                size="sm"
-                @click="deleteRole(row.item.id)"
-                title="Hapus"
-                ><i class="fa fa-trash"></i
-              ></b-button> -->
             </template>
             <template v-slot:cell(input_hasil)="row">
               <b-button
@@ -94,6 +87,10 @@
               >
                 <i class="fa fa-file-alt"></i>
               </b-button>
+            </template>
+
+            <template v-slot:cell(hasil_status)="row">
+              {{ row.item.upload_file }}
             </template>
 
             <template #cell(detail)="row">
@@ -219,7 +216,7 @@ export default {
         },
         {
           label: 'Status',
-          key: 'status',
+          key: 'hasil_status',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
