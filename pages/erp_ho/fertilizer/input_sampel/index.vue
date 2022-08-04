@@ -17,13 +17,6 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <!-- <nuxt-link
-                  :to="{ name: 'erp_ho-fertilizer-joint_sampling-create' }"
-                  class="btn btn-info btn-sm"
-                  style="padding-top: 8px"
-                  title="Tambah"
-                  ><i class="fa fa-plus-circle"></i>
-                </nuxt-link> -->
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -90,7 +83,20 @@
             </template>
 
             <template v-slot:cell(hasil_status)="row">
-              {{ row.item.upload_file }}
+              <b-link
+                v-if="row.item.upload_file !== null"
+                :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
+                terget="_blank"
+              >
+                {{ row.item.status }}
+              </b-link>
+              <b-link
+                v-else
+                :href="`http://localhost:8000/storage/HAP/${row.item.upload_file}`"
+                disabled
+              >
+                {{ row.item.status }}
+              </b-link>
             </template>
 
             <template #cell(detail)="row">
@@ -239,6 +245,8 @@ export default {
     const posts = await $axios.$get(
       `/api/admin/input_sampel?q=${search}&page=${page}`
     )
+    console.log('da')
+    console.log(posts.data.data)
 
     return {
       posts: posts.data.data,

@@ -15,7 +15,7 @@
                     :to="{ name: 'erp_ho-fertilizer-input_sampel' }"
                     class="nav-link"
                   >
-                    <i class="nav-icon fas fas fa-vial"></i>
+                    <i class="nav-icon fas fas fa-file-signature"></i>
                     <b>INPUT SAMPEL</b>
                   </nuxt-link>
                 </td>
@@ -110,7 +110,7 @@
                 <i class="nav-icon fas fas fa-file-upload"></i> UPLOAD FILE
               </b>
             </h6>
-            <b-container>
+            <b-container class="mb-1">
               <b-row>
                 <b-col cols="8">
                   <p class="selected">
@@ -118,7 +118,14 @@
                   </p>
                 </b-col>
                 <b-col cols="4">
-                  <button @click="fileDownload" class="btn-info btn-upload">
+                  <button
+                    v-if="upload_files !== ''"
+                    @click="fileDownload"
+                    class="btn-info btn-upload"
+                  >
+                    <i class="nav-icon fas fas fa-download"></i> Download
+                  </button>
+                  <button v-else class="btn-upload" disabled>
                     <i class="nav-icon fas fas fa-download"></i> Download
                   </button>
                 </b-col>
@@ -459,9 +466,11 @@ export default {
       .then((response) => {
         //data yang diambil
 
-        this.upload_files = response.data.data.upload_file
-        console.log('db')
-        console.log(this.upload_files)
+        this.upload_files = response.data.data
+          ? response.data.data.upload_file
+          : ''
+        // console.log('db')
+        // console.log(this.upload_files)
       })
   },
 
@@ -506,6 +515,7 @@ export default {
   float: right;
   width: 110px;
   border-radius: 3px;
+  padding: 2px 0px 2px 0px;
 }
 .dashed {
   border-style: dashed;
@@ -518,7 +528,7 @@ h6 {
 .choose-file {
   background-color: #504d8d;
   font-size: 13px;
-  padding: 3px 10px 3px 10px;
+  padding: 4px 10px 4px 10px;
   border-radius: 3px;
   color: white;
   box-shadow: 2px 3px #f7ebfd;

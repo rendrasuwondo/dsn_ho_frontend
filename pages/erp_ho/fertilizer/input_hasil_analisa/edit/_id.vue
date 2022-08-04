@@ -7,7 +7,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-th"></i> <b>EDIT HASIL ANALISA</b>
+            <i class="nav-icon fas fa-file-signature"></i>
+            <b>EDIT HASIL ANALISA</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -118,7 +119,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit Menu',
+      title: 'Edit Hasil Analisa',
     }
   },
 
