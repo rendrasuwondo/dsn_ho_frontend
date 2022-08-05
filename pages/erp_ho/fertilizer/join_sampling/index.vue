@@ -136,7 +136,7 @@ export default {
 
   head() {
     return {
-      title: 'Joint Sampling',
+      title: 'Join Sampling',
     }
   },
   data() {
@@ -189,6 +189,12 @@ export default {
         {
           label: 'QTY PO',
           key: 'qty',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN', {
+              minimumFractionDigits: 2,
+            })
+            return formatter.format(value)
+          },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
@@ -199,6 +205,12 @@ export default {
         {
           label: 'QTY GR',
           key: 'gr_qty',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN', {
+              minimumFractionDigits: 2,
+            })
+            return formatter.format(value)
+          },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {

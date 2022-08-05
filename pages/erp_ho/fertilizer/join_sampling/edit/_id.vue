@@ -250,7 +250,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit Mapping Laboratory',
+      title: 'Edit Join Sampling',
     }
   },
 

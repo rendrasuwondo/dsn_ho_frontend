@@ -50,6 +50,7 @@
             :items="posts"
             :fields="fields"
             show-empty
+            v-model="visibleRows"
           >
             <template v-slot:cell(actions)="row">
               <b-button
@@ -109,24 +110,33 @@
               <b-card>
                 <b-container class="bv-example-row">
                   <b-row>
-                    <b-col>Supplier : {{ row.item.supplier }}</b-col>
-                    <b-col>PT : {{ row.item.company_name }}</b-col>
-                    <b-col>Department : {{ row.item.department_name }}</b-col>
+                    <b-col cols="4">Supplier : {{ row.item.supplier }}</b-col>
+                    <b-col cols="4">PT : {{ row.item.company_name }}</b-col>
+                    <b-col cols="4"
+                      >Department : {{ row.item.department_name }}</b-col
+                    >
                   </b-row>
                   <b-row></b-row>
                   <b-row>
-                    <b-col>
+                    <b-col cols="4">
                       Joint Sampling : {{ row.item.f_joint_sampling }}
                     </b-col>
-                    <b-col>
-                      Jenis Pupuk : {{ row.item.fertilizer_type_code }}
-                    </b-col>
-                    <b-col>Parameter : {{ row.item.parameter }}</b-col>
+                    <b-col cols="4">QTY PO : {{ row.item.qty }}</b-col>
+                    <b-col cols="4"
+                      >Jenis Pupuk : {{ row.item.fertilizer_type_code }}</b-col
+                    >
                   </b-row>
                   <b-row></b-row>
                   <b-row>
-                    <b-col>Satuan : {{ row.item.unit_code }}</b-col>
-                    <b-col>QTY PO : {{ row.item.qty }}</b-col>
+                    <b-col cols="4"
+                      >Tanggal GR : {{ row.item.f_gr_date }}</b-col
+                    >
+                    <b-col cols="4">QTY GR : {{ row.item.gr_qty }}</b-col>
+                    <b-col cols="4">Parameter : {{ row.item.parameter }}</b-col>
+                  </b-row>
+                  <b-row></b-row>
+                  <b-row>
+                    <b-col cols="4">Satuan : {{ row.item.unit_code }}</b-col>
                     <b-col></b-col>
                   </b-row>
                 </b-container>
@@ -168,6 +178,7 @@ export default {
     return {
       allSelected: false,
       show_submit: true,
+      visibleRows: [],
 
       // items: [
       //   {
@@ -340,6 +351,17 @@ export default {
         link.click()
       })
     },
+  },
+
+  computed: {
+    // QTY_GR() {
+    //   this.visibleRows = (value, key, item) => {
+    //     let formatter = new Intl.NumberFormat('es-IN', {
+    //       minimumFractionDigits: 2,
+    //     })
+    //     return visibleRows.format(value)
+    //   }
+    // },
   },
 }
 </script>

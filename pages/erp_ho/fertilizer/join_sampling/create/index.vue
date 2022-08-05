@@ -256,7 +256,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah Joint Sampling',
+      title: 'Tambah Join Sampling',
     }
   },
 
