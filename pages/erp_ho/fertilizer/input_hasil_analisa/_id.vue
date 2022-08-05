@@ -106,9 +106,7 @@
 
           <div class="form-group mt-4 mb-4 dashed">
             <h6>
-              <b>
-                <i class="nav-icon fas fas fa-file-upload"></i> UPLOAD FILE
-              </b>
+              <b> <i class="nav-icon fas fa-file-upload"></i> UPLOAD FILE </b>
             </h6>
             <b-container class="mb-1">
               <b-row>
@@ -119,14 +117,20 @@
                 </b-col>
                 <b-col cols="4">
                   <button
-                    v-if="upload_files !== ''"
+                    v-if="upload_files !== null"
                     @click="fileDownload"
                     class="btn-info btn-upload"
+                    title="Download File"
                   >
-                    <i class="nav-icon fas fas fa-download"></i> Download
+                    <i class="nav-icon fas fa-download"></i> Download
                   </button>
-                  <button v-else class="btn-upload" disabled>
-                    <i class="nav-icon fas fas fa-download"></i> Download
+                  <button
+                    v-else
+                    class="btn-upload"
+                    title="File Tidak Ditemukan"
+                    disabled
+                  >
+                    <i class="nav-icon fas fa-download"></i> Download
                   </button>
                 </b-col>
               </b-row>
@@ -145,12 +149,25 @@
                       />
                     </label>
 
-                    Selected file: <b>{{ files ? files.name : '' }}</b>
+                    Selected file: <b>{{ files ? files.name : null }}</b>
                   </p>
                 </b-col>
                 <b-col cols="4">
-                  <button @click="submitFileUpload" class="btn-info btn-upload">
-                    <i class="nav-icon fas fas fa-upload"></i> upload
+                  <button
+                    v-if="files !== null"
+                    @click="submitFileUpload"
+                    class="btn-info btn-upload"
+                    title="Upload File"
+                  >
+                    <i class="nav-icon fas fa-upload"></i> upload
+                  </button>
+                  <button
+                    v-else
+                    class="btn-upload"
+                    disabled
+                    title="Enter Your File"
+                  >
+                    <i class="nav-icon fas fa-upload"></i> upload
                   </button>
                 </b-col>
               </b-row>
@@ -344,7 +361,7 @@ export default {
 
               this.upload_files = response.data.data.upload_file
             })
-          this.files = ''
+          this.files = null
         })
         .catch((error) => {
           //assign error to state "validation"
@@ -464,13 +481,10 @@ export default {
     this.$axios
       .get(`/api/admin/master/upload_file/${this.$route.params.id}`)
       .then((response) => {
-        //data yang diambil
-
+        //Mendapatkan nama file yang telah diupload
         this.upload_files = response.data.data
           ? response.data.data.upload_file
-          : ''
-        // console.log('db')
-        // console.log(this.upload_files)
+          : null
       })
   },
 
