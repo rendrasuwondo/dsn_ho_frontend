@@ -58,7 +58,7 @@
             :fields="fields"
             show-empty
           >
-            <!-- <template v-slot:head(selected)="data">
+            <template v-slot:head(selected)="data">
               <span
                 ><b-form-checkbox
                   @click.native.stop
@@ -72,7 +72,7 @@
               <b-form-group>
                 <input type="checkbox" v-model="row.item.selected" />
               </b-form-group>
-            </template> -->
+            </template>
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
@@ -93,9 +93,9 @@
                 ><i class="fa fa-trash"></i
               ></b-button>
             </template>
-            <!-- <template v-slot:custom-foot="data">
+            <template v-slot:custom-foot="data">
               <b-tr>
-                <b-td colspan="12">
+                <b-td colspan="14">
                   <b-button
                     class="btn-info"
                     size="sm"
@@ -106,7 +106,7 @@
                   </b-button>
                 </b-td>
               </b-tr>
-            </template> -->
+            </template>
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -145,22 +145,22 @@ export default {
       show_submit: true,
 
       fields: [
-        // {
-        //   label: 'Approve',
-        //   key: 'selected',
-        //   tdClass: 'align-middle text-center text-nowrap nameOfTheClass ',
-        //   sortable: false,
-        // },
+        {
+          label: 'Approve',
+          key: 'selected',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass ',
+          sortable: false,
+        },
         {
           label: 'Actions',
           key: 'actions',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
-        // {
-        //   label: 'Status',
-        //   key: 'verification_status',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
+        {
+          label: 'Status',
+          key: 'request_status_name',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
         {
           label: 'PO',
           key: 'po',
@@ -215,17 +215,17 @@ export default {
         },
         {
           label: 'Tanggal GR',
-          key: 'f_gr_date',
+          key: 'k_gr_date',
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           label: 'Tanggal Kedatangan',
-          key: 'f_tgl_kedatangan',
+          key: 'k_arrived_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Joint Sampling',
-          key: 'f_joint_sampling',
+          key: 'k_join_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -315,6 +315,56 @@ export default {
                   showConfirmButton: false,
                   timer: 2000,
                 })
+              })
+          }
+        })
+    },
+
+    select() {
+      this.posts.forEach((el) => {
+        el.selected = this.allSelected
+      })
+    },
+
+    Submit() {
+      this.$swal
+        .fire({
+          title: 'APAKAH ANDA YAKIN ?',
+          text: 'Melakukan verifikasi !',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'YA',
+          cancelButtonText: 'TIDAK',
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.selectedData = []
+
+            // console.log('ada')
+            // console.log(this.selectedData)
+
+            this.posts.forEach((el) => {
+              this.selectedData.push(el)
+              // console.log(this.selectedData.push(el))
+            })
+
+            var i = 0
+            let n = this.selectedData.length
+
+            this.$axios
+              .post(`/api/admin/update_request_status`, this.selectedData)
+              .then(() => {
+                this.$swal.fire({
+                  title: 'BERHASIL!',
+                  text: 'Data Berhasil Diupdate!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 2000,
+                })
+
+                this.$nuxt.refresh()
               })
           }
         })

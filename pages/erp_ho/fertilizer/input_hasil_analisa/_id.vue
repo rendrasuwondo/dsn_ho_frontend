@@ -86,7 +86,7 @@
                   params: { id: row.item.id, r: 1 },
                   query: {
                     fertilizer_type_id: fertilizer_type_id,
-                    input_sampel_id: input_sampel_id,
+                    input_sample_id: input_sample_id,
                   },
                 }"
                 variant="link"
@@ -229,7 +229,7 @@ export default {
 
       // header: [],
       fertilizer_type_id: this.$route.query.fertilizer_type_id,
-      input_sampel_id: this.$route.params.id,
+      input_sample_id: this.$route.params.id,
       po: this.header,
 
       fields_header: [
@@ -323,7 +323,7 @@ export default {
         query: {
           q: this.search,
           fertilizer_type_id: this.$route.query.fertilizer_type_id,
-          input_sampel_id: this.$route.params.id,
+          input_sample_id: this.$route.params.id,
         },
       })
     },
@@ -339,7 +339,7 @@ export default {
     async submitFileUpload() {
       let formData = new FormData()
       formData.append('upload_file', this.files)
-      formData.append('input_sampel_id', this.$route.params.id)
+      formData.append('input_sample_id', this.$route.params.id)
 
       await this.$axios
         .post('/api/admin/upload_file', formData)

@@ -36,13 +36,56 @@
         </div>
         <!-- /.container-fluid -->
       </div>
-      <div>
-        <b-img
-          center
-          class="img-logo"
-          src="\img/dsn_img.png"
-          alt="logo"
-        ></b-img>
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-md-3 mt-3">
+              <!-- Widget: user widget style 2 -->
+              <div class="card card-widget widget-user-2 shadow-sm">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-info">
+                  <div class="widget-user-image">
+                    <p>dropdown tanggal</p>
+                  </div>
+                </div>
+                <div class="card-footer p-0">
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        <span class="float-left badge bg-primary">3</span>
+                        <span class="ml-5">In Process</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        <span class="float-left badge bg-info">10</span>
+                        <span class="ml-5">In Monitor</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.widget-user -->
+            </div>
+
+            <!-- /.col -->
+            <div class="col-md-9">
+              <ol class="breadcrumb">
+                <b-img
+                  center
+                  class="img-logo"
+                  src="\img/dsn_img.png"
+                  alt="logo"
+                >
+                </b-img>
+              </ol>
+            </div>
+
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
       </div>
     </section>
   </div>
@@ -82,8 +125,10 @@ export default {
 
 <style>
 .img-logo {
-  height: 250px;
-  margin-top: 5%;
+  /* height: 250px; */
+  align-items: center;
+  width: 100%;
+  /* margin-top: 5%; */
 }
 .text-1 {
   font-size: 18px;

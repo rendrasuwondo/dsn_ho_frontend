@@ -31,7 +31,7 @@
               <label>Tanggal Terima</label>
               <b-form-datepicker
                 placeholder="Choose a date"
-                v-model="field.tgl_terima"
+                v-model="field.receipt_sampling_at"
                 :date-format-options="{
                   year: 'numeric',
                   month: 'short',
@@ -62,7 +62,7 @@
               <label>Kirim Ke Lab</label>
               <b-form-datepicker
                 placeholder="Choose a date"
-                v-model="field.kirim_lab"
+                v-model="field.lab_sent_at"
                 :date-format-options="{
                   year: 'numeric',
                   month: 'short',
@@ -76,7 +76,7 @@
               <label>Terima Lab</label>
               <b-form-datepicker
                 placeholder="Choose a date"
-                v-model="field.terima_lab"
+                v-model="field.lab_receipt_at"
                 :date-format-options="{
                   year: 'numeric',
                   month: 'short',
@@ -195,12 +195,12 @@ export default {
         department_id: '',
         unit_id: '',
         qty: '',
-        tgl_kedatangan: '',
-        joint_sampling: '',
+        arrived_at: '',
+        join_sampling: '',
         laboratory_id: '',
-        tgl_terima: '',
-        kirim_lab: '',
-        terima_lab: '',
+        receipt_sampling_at: '',
+        lab_sent_at: '',
+        lab_receipt_at: '',
         description: '',
         created_at: '',
         created_by: '',
@@ -229,12 +229,12 @@ export default {
         this.field.department_id = response.data.data.department_id
         this.field.unit_id = response.data.data.unit_id
         this.field.qty = response.data.data.qty
-        this.field.tgl_kedatangan = response.data.data.tgl_kedatangan
-        this.field.joint_sampling = response.data.data.joint_sampling
+        this.field.arrived_at = response.data.data.arrived_at
+        this.field.join_sampling = response.data.data.join_sampling
         this.field.laboratory_id = response.data.data.laboratory
-        this.field.tgl_terima = response.data.data.tgl_terima
-        this.field.kirim_lab = response.data.data.kirim_lab
-        this.field.terima_lab = response.data.data.terima_lab
+        this.field.receipt_sampling_at = response.data.data.receipt_sampling_at
+        this.field.lab_sent_at = response.data.data.lab_sent_at
+        this.field.lab_receipt_at = response.data.data.lab_receipt_at
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by
@@ -288,14 +288,14 @@ export default {
           vendors_id: this.field.vendors_id,
           unit_id: this.field.unit_id,
           qty: this.field.qty,
-          tgl_kedatangan: this.field.tgl_kedatangan,
-          joint_sampling: this.field.joint_sampling,
+          arrived_at: this.field.arrived_at,
+          join_sampling: this.field.join_sampling,
           laboratory_id: this.field.laboratory_id
             ? this.field.laboratory_id.laboratory_id
             : '',
-          tgl_terima: this.field.tgl_terima,
-          kirim_lab: this.field.kirim_lab,
-          terima_lab: this.field.terima_lab,
+          receipt_sampling_at: this.field.receipt_sampling_at,
+          lab_sent_at: this.field.lab_sent_at,
+          lab_receipt_at: this.field.lab_receipt_at,
           description: this.field.description,
           created_at: this.field.created_at,
           updated_at: this.field.updated_at,

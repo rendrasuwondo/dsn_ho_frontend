@@ -133,7 +133,7 @@ export default {
 
       field: {
         fertilizer_type_parameter_id: '',
-        t_fertilizer_sampel_id: '',
+        t_fertilizer_sample_id: '',
         parameter_code: '',
         value: '',
         description: '',
@@ -144,7 +144,7 @@ export default {
         updated_by: '',
       },
 
-      fertilizer_type_parameter_id: this.$route.query.input_sampel_id,
+      fertilizer_type_parameter_id: this.$route.query.input_sample_id,
       fertilizer_type_id: this.$route.query.fertilizer_type_id,
 
       parameter: [],
@@ -163,8 +163,8 @@ export default {
         this.field.parameter_code = response.data.data.parameter_code
         this.field.fertilizer_type_parameter_id =
           response.data.data.fertilizer_type_parameter_id
-        this.field.t_fertilizer_sampel_id =
-          response.data.data.t_fertilizer_sampel_id
+        this.field.t_fertilizer_sample_id =
+          response.data.data.t_fertilizer_sample_id
         this.field.value = response.data.data.value
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
@@ -182,9 +182,9 @@ export default {
     back() {
       this.$router.push({
         name: 'erp_ho-fertilizer-input_hasil_analisa-id',
-        params: { id: this.$route.query.input_sampel_id, r: 1 },
+        params: { id: this.$route.query.input_sample_id, r: 1 },
         query: {
-          input_sampel_id: this.$route.query.input_sampel_id,
+          input_sample_id: this.$route.query.input_sample_id,
           fertilizer_type_id: this.$route.query.fertilizer_type_id,
         },
       })
@@ -201,7 +201,7 @@ export default {
           //data yang dikirim
 
           fertilizer_type_parameter_id: this.field.fertilizer_type_parameter_id,
-          t_fertilizer_sampel_id: this.field.t_fertilizer_sampel_id,
+          t_fertilizer_sample_id: this.field.t_fertilizer_sample_id,
           value: this.field.value,
           description: this.field.description,
           created_at: this.field.created_at,

@@ -71,7 +71,7 @@
                   name: 'erp_ho-fertilizer-input_hasil_analisa-id',
                   params: { id: row.item.id },
                   query: {
-                    input_sampel_id: row.item.id,
+                    input_sample_id: row.item.id,
                     fertilizer_type_id: row.item.fertilizer_type_id,
                   },
                 }"
@@ -217,12 +217,12 @@ export default {
         },
         {
           label: 'Kode Sampel',
-          key: 'kode_sampel',
+          key: 'sample_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Tanggal Terima',
-          key: 'f_tgl_terima',
+          key: 'k_receipt_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -232,12 +232,12 @@ export default {
         },
         {
           label: 'Kirim Ke Lab',
-          key: 'f_kirim_lab',
+          key: 'k_lab_send_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Terima Lab',
-          key: 'f_terima_lab',
+          key: 'k_lab_receipt_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
