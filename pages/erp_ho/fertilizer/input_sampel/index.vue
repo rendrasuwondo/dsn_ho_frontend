@@ -85,9 +85,18 @@
 
             <template v-slot:cell(hasil_status)="row">
               <b-link
-                v-if="row.item.upload_file !== null"
+                v-if="
+                  row.item.upload_file !== null &&
+                  (row.item.type_file === 'png' || row.item.type_file === 'jpg')
+                "
                 :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
-                terget="_blank"
+                target="_blank"
+              >
+                {{ row.item.status }}
+              </b-link>
+              <b-link
+                v-else-if="row.item.upload_file !== null"
+                :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
               >
                 {{ row.item.status }}
               </b-link>

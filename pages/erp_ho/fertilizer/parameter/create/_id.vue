@@ -42,6 +42,16 @@
             </div>
 
             <div class="form-group">
+              <label>Minimal Nilai</label>
+              <number
+                class="form-control"
+                placeholder="Masukkan Nilai Minimal"
+                v-model="field.min_value"
+                prefix=""
+              ></number>
+            </div>
+
+            <div class="form-group">
               <label>Aktif?</label>
               <b-form-select v-model="field.is_active" :options="options">
               </b-form-select>
@@ -154,6 +164,7 @@ export default {
         parameter_id: '',
         fertilizer_type_id: '',
         sni: '',
+        min_value: '',
         is_active: 'Y',
         description: '',
         created_at: '',
@@ -235,6 +246,7 @@ export default {
       )
       formData.append('fertilizer_type_id', this.$route.params.id)
       formData.append('sni', this.field.sni)
+      formData.append('min_value', this.field.min_value)
       formData.append('is_active', this.field.is_active)
       formData.append('description', this.field.description)
       formData.append('created_at', this.field.created_at)

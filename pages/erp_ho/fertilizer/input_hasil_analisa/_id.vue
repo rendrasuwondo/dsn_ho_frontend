@@ -333,6 +333,7 @@ export default {
       let files = e.target.files[0]
 
       this.files = files
+      console.log(this.files)
     },
 
     async submitFileUpload() {

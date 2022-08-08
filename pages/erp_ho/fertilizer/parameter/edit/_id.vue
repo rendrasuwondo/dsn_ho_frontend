@@ -32,23 +32,22 @@
 
             <div class="form-group">
               <label>SNI</label>
-              <!-- <money
-                v-model="field.sni"
-                precision="1"
-                class="form-control"
-              ></money> -->
               <input
                 v-model.number="field.sni"
                 class="form-control"
                 v-on:keypress="NumbersOnly"
                 placeholder="Masukkan Nilai Standar"
               />
-              <!-- <number
+            </div>
+
+            <div class="form-group">
+              <label>Minimal Nilai</label>
+              <input
+                v-model.number="field.min_value"
                 class="form-control"
-                placeholder="Masukkan Nilai Standar"
-                v-model="field.sni"
-                prefix=""
-              ></number> -->
+                v-on:keypress="NumbersOnly"
+                placeholder="Masukkan Nilai Minimal"
+              />
             </div>
 
             <div class="form-group">
@@ -172,6 +171,7 @@ export default {
         parameter_id: '',
         fertilizer_type_id: '',
         sni: '',
+        min_value: '',
         is_active: 'Y',
         description: '',
         created_at: '',
@@ -198,9 +198,7 @@ export default {
         this.field.parameter_id = response.data.data.parameter
         this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
         this.field.sni = response.data.data.sni
-        console.log('da')
-        console.log(this.field.sni)
-        console.log(response.data.data.sni)
+        this.field.min_value = response.data.data.min_value
         this.field.is_active = response.data.data.is_active
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
@@ -241,6 +239,7 @@ export default {
             ? this.field.parameter_id.id
             : '',
           sni: this.field.sni,
+          min_value: this.field.min_value,
           is_active: this.field.is_active,
           description: this.field.description,
           created_at: this.field.created_at,

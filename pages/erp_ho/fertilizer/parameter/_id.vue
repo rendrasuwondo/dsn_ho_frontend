@@ -174,6 +174,11 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
+          label: 'Minimal Nilai',
+          key: 'min_value',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
           label: 'Aktif',
           key: 'is_active_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
