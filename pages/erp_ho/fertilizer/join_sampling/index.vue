@@ -59,8 +59,8 @@
             show-empty
           >
             <template v-slot:head(selected)="data">
-              <span
-                ><b-form-checkbox
+              <span>
+                <b-form-checkbox
                   @click.native.stop
                   @change="select"
                   v-model="allSelected"
@@ -97,8 +97,8 @@
               <b-tr>
                 <b-td colspan="14">
                   <b-button
-                    class="btn-info"
                     size="sm"
+                    variant="outline-primary"
                     @click="Submit"
                     v-if="rowcount > 0"
                   >
@@ -126,6 +126,9 @@
           </b-row>
         </div>
       </div>
+      <div v-if="loading" class="loading-page">
+        <p>Loading...</p>
+      </div>
     </section>
   </div>
 </template>
@@ -141,6 +144,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       allSelected: false,
       show_submit: true,
 
@@ -224,7 +228,7 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Joint Sampling',
+          label: 'Join Sampling',
           key: 'k_join_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
@@ -321,6 +325,8 @@ export default {
     },
 
     select() {
+      // alert('sa')
+      // this.allSelected = !this.allSelected;
       this.posts.forEach((el) => {
         el.selected = this.allSelected
       })
@@ -330,7 +336,7 @@ export default {
       this.$swal
         .fire({
           title: 'APAKAH ANDA YAKIN ?',
-          text: 'Melakukan verifikasi !',
+          text: 'Melakukan Approved !',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#d33',
@@ -341,14 +347,13 @@ export default {
         .then((result) => {
           if (result.isConfirmed) {
             this.selectedData = []
-
-            // console.log('ada')
-            // console.log(this.selectedData)
-
             this.posts.forEach((el) => {
+              // if (el.selected == true) {
+              //   this.selectedData.push(el)
+              // }
               this.selectedData.push(el)
-              // console.log(this.selectedData.push(el))
             })
+            console.log(this.selectedData)
 
             var i = 0
             let n = this.selectedData.length
@@ -401,5 +406,17 @@ export default {
 }
 .card-title {
   color: #504d8d;
+}
+.loading-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding-top: 200px;
+  font-size: 30px;
+  font-family: sans-serif;
 }
 </style>

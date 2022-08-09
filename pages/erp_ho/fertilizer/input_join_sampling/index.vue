@@ -9,7 +9,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-file-contract"></i>
-            <b>CREATE JOIN SAMPLING</b>
+            <b>INPUT JOIN SAMPLING</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -231,6 +231,9 @@
             <button class="btn btn-info mr-1 btn-submit" type="submit">
               <i class="fa fa-paper-plane"></i> SIMPAN
             </button>
+            <button class="btn btn-info mr-1 btn-submit" type="submit">
+              <i class="fa fa-paper-plane"></i> EDIT DATA
+            </button>
             <button
               v-on:click="back()"
               class="btn btn-warning btn-reset"
@@ -256,7 +259,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah Join Sampling',
+      title: 'Input Join Sampling',
     }
   },
 
@@ -267,10 +270,16 @@ export default {
       field: {
         id: '',
         po: '',
+        vendors_id: '',
         supplier: '',
         fertilizer_type_id: '',
+        fertilizer_type_code: '',
         company_id: '',
+        company_code: '',
         department_id: '',
+        department_code: '',
+        unit_id: '',
+        unit_code: '',
         qty: '',
         tgl_kedatangan: '',
         joint_sampling: '',
@@ -279,6 +288,8 @@ export default {
         created_by: '',
         updated_at: '',
         updated_by: '',
+        gr_date: '',
+        gr_qty: '',
       },
 
       data_po: [],
@@ -295,21 +306,56 @@ export default {
     this.field.updated_by =
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
 
-    // this.field.tgl_kedatangan = this.currentDate()
-    // this.field.joint_sampling = this.currentDate()
-    // this.field.tgl_terima = this.currentDate()
-    // this.field.kirim_lab = this.currentDate()
-    // this.field.terima_lab = this.currentDate()
+    this.$axios.get(`/api/admin/input_join_samplig`).then((response) => {
+      //data yang diambil
+      this.field.id = response.data.id ? response.data.id : null
+      this.field.po = response.data.data.po ? response.data.data.po : null
+      this.field.vendors_id = response.data.data.vendors_id
+        ? response.data.data.vendors_id
+        : null
+      this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
+        ? response.data.data.fertilizer_type_id
+        : null
+      this.field.company_id = response.data.data.company_id
+        ? response.data.data.company_id
+        : null
+      this.field.unit_id = response.data.data.unit_id
+        ? response.data.data.unit_id
+        : null
+      this.field.qty = response.data.data.qty ? response.data.data.qty : null
+      this.field.gr_qty = response.data.data.gr_qty
+        ? response.data.data.gr_qty
+        : null
+      this.field.gr_date = response.data.data.gr_date
+        ? response.data.data.gr_date
+        : null
+      this.field.arrived_at = response.data.data.arrived_at
+        ? response.data.data.arrived_at
+        : null
+      this.field.join_sampling = response.data.data.join_sampling
+        ? response.data.data.join_sampling
+        : null
+      this.field.description = response.data.data.description
+        ? response.data.data.description
+        : null
+      this.field.created_at = response.data.data.created_at
+        ? response.data.data.created_at
+        : null
+      this.field.created_by = response.data.data.created_by
+        ? response.data.data.created_by
+        : null
+      this.field.updated_at = response.data.data.updated_at
+        ? response.data.data.updated_at
+        : null
+      this.field.updated_by = response.data.data.updated_by
+        ? response.data.data.updated_by
+        : null
+    })
   },
 
   methods: {
     //searchData
     searchDataPO(e) {
-      // this.$axios
-      //   .get(`http://127.0.0.1:8000/api/PoFertilizer?PO_NO=${this.field.po}`)
-      //   .then((response) => {
-      //   this.po = response.data.data
-      // }).prepend(
       const data_po = this.$axios
         .$get(
           `http://127.0.0.1:8000/api/admin/PoFertilizer?PO_NO=${this.field.po}`
@@ -317,15 +363,9 @@ export default {
         // return po
         .then((response) => {
           this.data_po = response.data
-          // console.log('data')
-          // console.log(this.field.po)
-          // console.log(this.response.data)
         })
 
       e.preventDefault()
-      // console.log(
-      //   `http://127.0.0.1:8000/api/PoFertilizer?PO_NO=${this.field.po}`
-      // )
     },
 
     back() {
@@ -347,16 +387,6 @@ export default {
     async storePost() {
       //define formData
       let formData = new FormData()
-      // formData.append(
-      //   'kode_sampel',
-      //   this.$route.params.id +
-      //     '-' +
-      //     this.data_po.COMPANY_ID +
-      //     '-' +
-      //     this.data_po.DEPARTMENT_CODE_SAP +
-      //     '-' +
-      //     this.data_po.FERTILIZER_TYPE_ID
-      // )
       formData.append('po', this.field.po)
       formData.append('company_id', this.data_po.COMPANY_ID)
       formData.append('department_id', this.data_po.DEPARTMENT_ID)

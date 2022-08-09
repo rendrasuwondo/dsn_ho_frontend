@@ -319,8 +319,8 @@ export default {
         this.field.qty = response.data.data.qty
         this.field.gr_qty = response.data.data.gr_qty
         this.field.gr_date = response.data.data.gr_date
-        this.field.tgl_kedatangan = response.data.data.tgl_kedatangan
-        this.field.joint_sampling = response.data.data.joint_sampling
+        this.field.arrived_at = response.data.data.arrived_at
+        this.field.join_sampling = response.data.data.join_sampling
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by

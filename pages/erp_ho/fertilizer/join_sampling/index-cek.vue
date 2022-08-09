@@ -8,8 +8,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-file-signature"></i>
-            <b>INPUT SAMPEL</b>
+            <i class="nav-icon fas fa-object-ungroup"></i>
+            <b>JOIN SAMPLING</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -17,6 +17,13 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
+                <nuxt-link
+                  :to="{ name: 'erp_ho-fertilizer-join_sampling-create' }"
+                  class="btn btn-info btn-sm"
+                  style="padding-top: 8px"
+                  title="Tambah"
+                  ><i class="fa fa-plus-circle"></i>
+                </nuxt-link>
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -50,12 +57,11 @@
             :items="posts"
             :fields="fields"
             show-empty
-            v-model="visibleRows"
           >
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-fertilizer-input_sampel-edit-id',
+                  name: 'erp_ho-fertilizer-laboratory-edit-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"
@@ -64,92 +70,13 @@
               >
                 <i class="fa fa-pencil-alt"></i>
               </b-button>
-            </template>
-            <template v-slot:cell(input_hasil)="row">
               <b-button
-                :to="{
-                  name: 'erp_ho-fertilizer-input_hasil_analisa-id',
-                  params: { id: row.item.id },
-                  query: {
-                    input_sample_id: row.item.id,
-                    fertilizer_type_id: row.item.fertilizer_type_id,
-                  },
-                }"
                 variant="link"
-                size=""
-                title="Hasil"
-              >
-                <i class="fa fa-file-alt"></i>
-              </b-button>
-            </template>
-
-            <template v-slot:cell(hasil_status)="row">
-              <b-link
-                v-if="
-                  row.item.upload_file !== null &&
-                  (row.item.type_file === 'png' || row.item.type_file === 'jpg')
-                "
-                :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
-                target="_blank"
-              >
-                {{ row.item.status }}
-              </b-link>
-              <b-link
-                v-else-if="row.item.upload_file !== null"
-                :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
-              >
-                {{ row.item.status }}
-              </b-link>
-              <b-link
-                v-else
-                :href="`http://localhost:8000/storage/HAP/${row.item.upload_file}`"
-                disabled
-              >
-                {{ row.item.status }}
-              </b-link>
-            </template>
-
-            <template #cell(detail)="row">
-              <b-button class="btn-info" size="sm" @click="row.toggleDetails">
-                {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
-              </b-button>
-            </template>
-
-            <template #row-details="row">
-              <b-card>
-                <b-container class="bv-example-row">
-                  <b-row>
-                    <b-col cols="4">Supplier : {{ row.item.supplier }}</b-col>
-                    <b-col cols="4">PT : {{ row.item.company_name }}</b-col>
-                    <b-col cols="4"
-                      >Department : {{ row.item.department_name }}</b-col
-                    >
-                  </b-row>
-                  <b-row></b-row>
-                  <b-row>
-                    <b-col cols="4">
-                      Joint Sampling : {{ row.item.k_join_sampling_at }}
-                    </b-col>
-                    <b-col cols="4">QTY PO : {{ row.item.qty }}</b-col>
-                    <b-col cols="4"
-                      >Jenis Pupuk : {{ row.item.fertilizer_type_code }}</b-col
-                    >
-                  </b-row>
-                  <b-row></b-row>
-                  <b-row>
-                    <b-col cols="4"
-                      >Tanggal GR : {{ row.item.k_gr_date }}</b-col
-                    >
-                    <b-col cols="4">QTY GR : {{ row.item.gr_qty }}</b-col>
-                    <b-col cols="4">Parameter : {{ row.item.parameter }}</b-col>
-                  </b-row>
-                  <b-row></b-row>
-                  <b-row>
-                    <b-col cols="4">Satuan : {{ row.item.unit_code }}</b-col>
-                    <b-col></b-col>
-                  </b-row>
-                </b-container>
-              </b-card>
+                size="sm"
+                @click="deleteRole(row.item.id)"
+                title="Hapus"
+                ><i class="fa fa-trash"></i
+              ></b-button>
             </template>
           </b-table>
           <!-- pagination -->
@@ -180,20 +107,11 @@ export default {
 
   head() {
     return {
-      title: 'Input Sampel',
+      title: 'Join Sampling',
     }
   },
   data() {
     return {
-      allSelected: false,
-      show_submit: true,
-      visibleRows: [],
-
-      // items: [
-      //   {
-      //     supplier: '',
-      //   },
-      // ],
       fields: [
         {
           label: 'Actions',
@@ -201,48 +119,23 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Hasil Analisa',
-          key: 'input_hasil',
+          label: 'Vendors',
+          key: 'vendors',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
-          label: 'Detail Data',
-          key: 'detail',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'PO',
-          key: 'po',
+          label: 'Kode',
+          key: 'code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Kode Sampel',
-          key: 'sample_code',
+          label: 'Nama',
+          key: 'name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Tanggal Terima',
-          key: 'k_receipt_sampling_at',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Lab Analisa',
-          key: 'laboratory_code',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Kirim Ke Lab',
-          key: 'k_lab_send_at',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Terima Lab',
-          key: 'k_lab_receipt_at',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Status',
-          key: 'hasil_status',
+          label: 'Aktif',
+          key: 'is_active_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -263,10 +156,8 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/input_sampel?q=${search}&page=${page}`
+      `/api/admin/laboratory?q=${search}&page=${page}`
     )
-    console.log('da')
-    console.log(posts.data.data)
 
     return {
       posts: posts.data.data,
@@ -314,7 +205,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/input_sampel/${id}`)
+              .delete(`/api/admin/laboratory/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()
@@ -345,7 +236,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/input_sampel/export?q=${this.search}`,
+        url: `/api/admin/laboratory/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -354,23 +245,12 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Input Sampel.xlsx'
+        var fileName = 'Laboratory.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
       })
     },
-  },
-
-  computed: {
-    // QTY_GR() {
-    //   this.visibleRows = (value, key, item) => {
-    //     let formatter = new Intl.NumberFormat('es-IN', {
-    //       minimumFractionDigits: 2,
-    //     })
-    //     return visibleRows.format(value)
-    //   }
-    // },
   },
 }
 </script>
