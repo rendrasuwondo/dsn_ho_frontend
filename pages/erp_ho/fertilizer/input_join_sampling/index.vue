@@ -40,8 +40,17 @@
             <div class="form-group">
               <label>Supplier</label>
               <input
+                v-if="field.id === null"
                 type="text"
                 v-model="data_po.VENDOR"
+                placeholder="Masukkan Kode Sample"
+                class="form-control"
+                readonly
+              />
+              <input
+                v-else
+                type="text"
+                v-model="field.supplier"
                 placeholder="Masukkan Kode Sample"
                 class="form-control"
                 readonly
@@ -51,8 +60,17 @@
             <div class="form-group">
               <label>Jenis Pupuk</label>
               <input
+                v-if="field.id === null"
                 type="text"
                 v-model="data_po.FERTILIZER_TYPE"
+                placeholder="Jenis Pupuk"
+                class="form-control"
+                readonly
+              />
+              <input
+                v-else
+                type="text"
+                v-model="field.fertilizer_type_code"
                 placeholder="Jenis Pupuk"
                 class="form-control"
                 readonly
@@ -63,9 +81,17 @@
               <label>QTY PO</label>
 
               <input
+                v-if="field.id === null"
                 class="form-control"
                 placeholder="Jumlah Volume"
                 v-model="data_po.QTY"
+                readonly
+              />
+              <input
+                v-else
+                class="form-control"
+                placeholder="Jumlah Volume"
+                v-model="field.qty"
                 readonly
               />
             </div>
@@ -74,9 +100,17 @@
               <label>Satuan</label>
 
               <input
+                v-if="field.id === null"
                 class="form-control"
                 placeholder="Jumlah Volume"
                 v-model="data_po.UNIT"
+                readonly
+              />
+              <input
+                v-else
+                class="form-control"
+                placeholder="Jumlah Volume"
+                v-model="field.unit_code"
                 readonly
               />
             </div>
@@ -85,8 +119,17 @@
               <label>PT</label>
 
               <input
+                v-if="field.id === null"
                 type="text"
                 v-model="data_po.COMPANY_CODE"
+                placeholder="PT"
+                class="form-control"
+                readonly
+              />
+              <input
+                v-else
+                type="text"
+                v-model="field.company_code"
                 placeholder="PT"
                 class="form-control"
                 readonly
@@ -96,8 +139,17 @@
             <div class="form-group">
               <label>Estate</label>
               <input
+                v-if="field.id === null"
                 type="text"
                 v-model="data_po.DEPARTMENT_CODE"
+                placeholder="Department"
+                class="form-control"
+                readonly
+              />
+              <input
+                v-else
+                type="text"
+                v-model="field.department_code"
                 placeholder="Department"
                 class="form-control"
                 readonly
@@ -107,7 +159,19 @@
             <div class="form-group">
               <label>Tanggal GR</label>
               <b-form-datepicker
+                v-if="field.id === null"
                 v-model="data_po.GR_DATE"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                  weekday: 'short',
+                }"
+                :disabled="disabled"
+              ></b-form-datepicker>
+              <b-form-datepicker
+                v-else
+                v-model="field.gr_date"
                 :date-format-options="{
                   year: 'numeric',
                   month: 'short',
@@ -121,9 +185,17 @@
             <div class="form-group">
               <label>QTY GR</label>
               <input
+                v-if="field.id === null"
                 class="form-control"
                 placeholder="Jumlah QTY GR"
                 v-model="data_po.GR_QTY"
+                readonly
+              />
+              <input
+                v-else
+                class="form-control"
+                placeholder="Jumlah QTY GR"
+                v-model="field.gr_qty"
                 readonly
               />
             </div>
@@ -132,7 +204,7 @@
               <label>Tanggal Kedatangan</label>
               <b-form-datepicker
                 placeholder="Choose a date"
-                v-model="field.tgl_kedatangan"
+                v-model="field.arrived_at"
                 :date-format-options="{
                   year: 'numeric',
                   month: 'short',
@@ -146,7 +218,7 @@
               <label>Joint Sampling</label>
               <b-form-datepicker
                 placeholder="Choose a date"
-                v-model="field.joint_sampling"
+                v-model="field.join_sampling_at"
                 :date-format-options="{
                   year: 'numeric',
                   month: 'short',
@@ -231,15 +303,16 @@
             <button class="btn btn-info mr-1 btn-submit" type="submit">
               <i class="fa fa-paper-plane"></i> SIMPAN
             </button>
-            <button class="btn btn-info mr-1 btn-submit" type="submit">
-              <i class="fa fa-paper-plane"></i> EDIT DATA
-            </button>
             <button
+              v-if="field.id !== null && field.join_sampling !== null"
               v-on:click="back()"
               class="btn btn-warning btn-reset"
               type="reset"
             >
-              <i class="fa fa-redo"></i> BATAL
+              <i class="fa fa-check"></i> Verifikasi
+            </button>
+            <button v-else disabled class="btn btn-light btn-reset">
+              <i class="fa fa-check"></i> Verifikasi
             </button>
           </form>
         </div>
@@ -281,8 +354,8 @@ export default {
         unit_id: '',
         unit_code: '',
         qty: '',
-        tgl_kedatangan: '',
-        joint_sampling: '',
+        arrived_at: null,
+        join_sampling_at: null,
         description: '',
         created_at: '',
         created_by: '',
@@ -308,48 +381,45 @@ export default {
 
     this.$axios.get(`/api/admin/input_join_samplig`).then((response) => {
       //data yang diambil
-      this.field.id = response.data.id ? response.data.id : null
-      this.field.po = response.data.data.po ? response.data.data.po : null
-      this.field.vendors_id = response.data.data.vendors_id
-        ? response.data.data.vendors_id
-        : null
-      this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
-        ? response.data.data.fertilizer_type_id
-        : null
-      this.field.company_id = response.data.data.company_id
-        ? response.data.data.company_id
-        : null
-      this.field.unit_id = response.data.data.unit_id
-        ? response.data.data.unit_id
-        : null
-      this.field.qty = response.data.data.qty ? response.data.data.qty : null
-      this.field.gr_qty = response.data.data.gr_qty
-        ? response.data.data.gr_qty
-        : null
-      this.field.gr_date = response.data.data.gr_date
-        ? response.data.data.gr_date
-        : null
-      this.field.arrived_at = response.data.data.arrived_at
-        ? response.data.data.arrived_at
-        : null
-      this.field.join_sampling = response.data.data.join_sampling
-        ? response.data.data.join_sampling
-        : null
-      this.field.description = response.data.data.description
-        ? response.data.data.description
-        : null
-      this.field.created_at = response.data.data.created_at
-        ? response.data.data.created_at
-        : null
-      this.field.created_by = response.data.data.created_by
-        ? response.data.data.created_by
-        : null
-      this.field.updated_at = response.data.data.updated_at
-        ? response.data.data.updated_at
-        : null
-      this.field.updated_by = response.data.data.updated_by
-        ? response.data.data.updated_by
-        : null
+      if (response.data.data === null) {
+        this.field.id = null
+        this.field.po = null
+        this.field.vendors_id = null
+        this.field.fertilizer_type_id = null
+        this.field.company_id = null
+        this.field.unit_id = null
+        this.field.qty = null
+        this.field.gr_qty = null
+        this.field.gr_date = null
+        this.field.arrived_at = null
+        this.field.join_sampling_at = null
+        this.field.description = null
+      } else {
+        console.log('data')
+        console.log(response.data.data)
+        this.field.id = response.data.data.id
+        this.field.po = response.data.data.po
+        this.field.vendors_id = response.data.data.vendors_id
+        this.field.supplier = response.data.data.supplier
+        this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
+        this.field.fertilizer_type_code =
+          response.data.data.fertilizer_type_code
+        this.field.company_id = response.data.data.company_id
+        this.field.company_code = response.data.data.company_code
+        this.field.department_id = response.data.data.department_id
+        this.field.department_code = response.data.data.department_code
+        this.field.department_code_sap = response.data.data.department_code_sap
+        this.field.unit_id = response.data.data.unit_id
+        this.field.unit_code = response.data.data.unit_code
+        this.field.qty = response.data.data.qty
+        this.field.gr_qty = response.data.data.gr_qty
+        this.field.gr_date = response.data.data.gr_date
+        this.field.arrived_at = response.data.data.arrived_at
+        this.field.join_sampling_at = response.data.data.join_sampling_at
+        this.field.description = response.data.data.description
+        this.field.updated_at = response.data.data.updated_at
+        this.field.updated_by = response.data.data.updated_by
+      }
     })
   },
 
@@ -368,13 +438,6 @@ export default {
       e.preventDefault()
     },
 
-    back() {
-      this.$router.push({
-        name: 'erp_ho-fertilizer-join_sampling',
-        params: { id: this.$route.params.id, r: 1 },
-      })
-    },
-
     currentDate() {
       const current = new Date()
       const date = `${current.getFullYear()}-${
@@ -386,44 +449,113 @@ export default {
 
     async storePost() {
       //define formData
-      let formData = new FormData()
-      formData.append('po', this.field.po)
-      formData.append('company_id', this.data_po.COMPANY_ID)
-      formData.append('department_id', this.data_po.DEPARTMENT_ID)
-      formData.append('fertilizer_type_id', this.data_po.FERTILIZER_TYPE_ID)
-      formData.append('vendors_id', this.data_po.VENDOR_ID)
-      formData.append('unit_id', this.data_po.UNIT_ID)
-      formData.append('qty', this.data_po.QTY)
-      formData.append('tgl_kedatangan', this.field.tgl_kedatangan)
-      formData.append('joint_sampling', this.field.joint_sampling)
-      formData.append('description', this.field.description)
-      formData.append('created_at', this.field.created_at)
-      formData.append('created_by', this.field.created_by)
-      formData.append('updated_at', this.field.update_at)
-      formData.append('udpated_by', this.field.udpate_by)
+      console.log('cek')
+      console.log(this.field.arrived_at)
 
-      //sending data to server
-      await this.$axios
-        .post('/api/admin/t_fertilizer_sample', formData)
-        .then(() => {
-          //sweet alert
-          this.$swal.fire({
-            title: 'BERHASIL!',
-            text: 'Data Berhasil Disimpan!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 2000,
-          })
+      if (this.field.id === null) {
+        let formData = new FormData()
+        formData.append('po', this.field.po)
+        formData.append('company_id', this.data_po.COMPANY_ID)
+        formData.append('department_id', this.data_po.DEPARTMENT_ID)
+        formData.append('fertilizer_type_id', this.data_po.FERTILIZER_TYPE_ID)
+        formData.append('vendors_id', this.data_po.VENDOR_ID)
+        formData.append('unit_id', this.data_po.UNIT_ID)
+        formData.append('qty', this.data_po.QTY)
+        formData.append('arrived_at', this.field.arrived_at)
+        formData.append('join_sampling_at', this.field.join_sampling_at)
+        formData.append('description', this.field.description)
+        formData.append('created_at', this.field.created_at)
+        formData.append('created_by', this.field.created_by)
+        formData.append('updated_at', this.field.update_at)
+        formData.append('udpated_by', this.field.udpate_by)
 
-          //redirect, if success store data
-          this.$router.push({
-            name: 'erp_ho-fertilizer-join_sampling',
+        //sending data to server
+        await this.$axios
+          .post('/api/admin/t_fertilizer_sample', formData)
+          .then(() => {
+            //sweet alert
+            this.$swal.fire({
+              title: 'BERHASIL!',
+              text: 'Data Berhasil Disimpan!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
+            })
+
+            //redirect, if success store data
+            this.$nuxt.refresh()
+            this.$axios
+              .get(`/api/admin/input_join_samplig`)
+              .then((response) => {
+                this.field.id = response.data.data.id
+                this.field.po = response.data.data.po
+                this.field.vendors_id = response.data.data.vendors_id
+                this.field.supplier = response.data.data.supplier
+                this.field.fertilizer_type_id =
+                  response.data.data.fertilizer_type_id
+                this.field.fertilizer_type_code =
+                  response.data.data.fertilizer_type_code
+                this.field.company_id = response.data.data.company_id
+                this.field.company_code = response.data.data.company_code
+                this.field.department_id = response.data.data.department_id
+                this.field.department_code = response.data.data.department_code
+                this.field.department_code_sap =
+                  response.data.data.department_code_sap
+                this.field.unit_id = response.data.data.unit_id
+                this.field.unit_code = response.data.data.unit_code
+                this.field.qty = response.data.data.qty
+                this.field.gr_qty = response.data.data.gr_qty
+                this.field.gr_date = response.data.data.gr_date
+                this.field.arrived_at = response.data.data.arrived_at
+                this.field.join_sampling_at =
+                  response.data.data.join_sampling_at
+                this.field.description = response.data.data.description
+                this.field.updated_at = response.data.data.updated_at
+                this.field.updated_by = response.data.data.updated_by
+              })
           })
-        })
-        .catch((error) => {
-          //assign error to state "validation"
-          this.validation = error.response.data
-        })
+          .catch((error) => {
+            //assign error to state "validation"
+            this.validation = error.response.data
+          })
+      } else {
+        //Update data if this.field.id !== null
+        console.log('cek_id')
+        console.log(this.field.id)
+        await this.$axios
+          .put(`/api/admin/t_fertilizer_sample/${this.field.id}`, {
+            po: this.field.po,
+            company_id: this.field.company_id,
+            department_id: this.field.department_id,
+            fertilizer_type_id: this.field.fertilizer_type_id,
+            vendors_id: this.field.vendors_id,
+            unit_id: this.field.unit_id,
+            qty: this.field.qty,
+            arrived_at: this.field.arrived_at,
+            join_sampling_at: this.field.join_sampling_at,
+            description: this.field.description,
+            created_at: this.field.created_at,
+            updated_at: this.field.updated_at,
+            created_by: this.field.created_by,
+            updated_by: this.field.updated_by,
+          })
+          .then(() => {
+            //sweet alert
+            this.$swal.fire({
+              title: 'BERHASIL!',
+              text: 'Data Berhasil Diupdate!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
+            })
+            //redirect ke route "post"
+            this.$nuxt.refresh()
+          })
+          .catch((error) => {
+            //assign error validasi
+            this.validation = error.response.data
+          })
+      }
     },
   },
 

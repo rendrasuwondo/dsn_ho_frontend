@@ -132,7 +132,7 @@
               <label>Tanggal Kedatangan</label>
               <b-form-datepicker
                 placeholder="Choose a date"
-                v-model="field.tgl_kedatangan"
+                v-model="field.arrived_at"
                 :date-format-options="{
                   year: 'numeric',
                   month: 'short',
@@ -146,7 +146,7 @@
               <label>Joint Sampling</label>
               <b-form-datepicker
                 placeholder="Choose a date"
-                v-model="field.joint_sampling"
+                v-model="field.join_sampling_at"
                 :date-format-options="{
                   year: 'numeric',
                   month: 'short',
@@ -276,8 +276,8 @@ export default {
         unit_id: '',
         unit_code: '',
         qty: '',
-        tgl_kedatangan: '',
-        joint_sampling: '',
+        arrived_at: '',
+        join_sampling_at: '',
         description: '',
         created_at: '',
         created_by: '',
@@ -320,7 +320,7 @@ export default {
         this.field.gr_qty = response.data.data.gr_qty
         this.field.gr_date = response.data.data.gr_date
         this.field.arrived_at = response.data.data.arrived_at
-        this.field.join_sampling = response.data.data.join_sampling
+        this.field.join_sampling_at = response.data.data.join_sampling_at
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by
@@ -375,16 +375,6 @@ export default {
       //send data ke Rest API untuk update
       await this.$axios
         .put(`/api/admin/t_fertilizer_sample/${this.$route.params.id}`, {
-          //data yang dikirim
-          // kode_sampel:
-          //   this.$route.params.id +
-          //   '-' +
-          //   this.field.company_id +
-          //   '-' +
-          //   this.field.department_code_sap +
-          //   '-' +
-          //   this.field.fertilizer_type_id,
-
           po: this.field.po,
           company_id: this.field.company_id,
           department_id: this.field.department_id,
@@ -392,8 +382,8 @@ export default {
           vendors_id: this.field.vendors_id,
           unit_id: this.field.unit_id,
           qty: this.field.qty,
-          tgl_kedatangan: this.field.tgl_kedatangan,
-          joint_sampling: this.field.joint_sampling,
+          arrived_at: this.field.arrived_at,
+          join_sampling_at: this.field.join_sampling_at,
           //   kode_sampel: this.field.kode_sampel,
           description: this.field.description,
           created_at: this.field.created_at,

@@ -132,7 +132,7 @@
               <label>Tanggal Kedatangan</label>
               <b-form-datepicker
                 placeholder="Choose a date"
-                v-model="field.tgl_kedatangan"
+                v-model="field.arrived_at"
                 :date-format-options="{
                   year: 'numeric',
                   month: 'short',
@@ -143,10 +143,10 @@
             </div>
 
             <div class="form-group">
-              <label>Joint Sampling</label>
+              <label>Join Sampling</label>
               <b-form-datepicker
                 placeholder="Choose a date"
-                v-model="field.joint_sampling"
+                v-model="field.join_sampling_at"
                 :date-format-options="{
                   year: 'numeric',
                   month: 'short',
@@ -272,8 +272,8 @@ export default {
         company_id: '',
         department_id: '',
         qty: '',
-        tgl_kedatangan: '',
-        joint_sampling: '',
+        arrived_at: '',
+        join_sampling_at: '',
         description: '',
         created_at: '',
         created_by: '',
@@ -295,8 +295,8 @@ export default {
     this.field.updated_by =
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
 
-    // this.field.tgl_kedatangan = this.currentDate()
-    // this.field.joint_sampling = this.currentDate()
+    // this.field.arrived_at = this.currentDate()
+    // this.field.join_sampling_at = this.currentDate()
     // this.field.tgl_terima = this.currentDate()
     // this.field.kirim_lab = this.currentDate()
     // this.field.terima_lab = this.currentDate()
@@ -364,8 +364,8 @@ export default {
       formData.append('vendors_id', this.data_po.VENDOR_ID)
       formData.append('unit_id', this.data_po.UNIT_ID)
       formData.append('qty', this.data_po.QTY)
-      formData.append('tgl_kedatangan', this.field.tgl_kedatangan)
-      formData.append('joint_sampling', this.field.joint_sampling)
+      formData.append('arrived_at', this.field.arrived_at)
+      formData.append('join_sampling_at', this.field.join_sampling_at)
       formData.append('description', this.field.description)
       formData.append('created_at', this.field.created_at)
       formData.append('created_by', this.field.created_by)

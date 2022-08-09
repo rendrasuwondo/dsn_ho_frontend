@@ -128,7 +128,7 @@
                   <b-row></b-row>
                   <b-row>
                     <b-col cols="4">
-                      Joint Sampling : {{ row.item.k_join_sampling_at }}
+                      Join Sampling : {{ row.item.k_join_sampling_at }}
                     </b-col>
                     <b-col cols="4">QTY PO : {{ row.item.qty }}</b-col>
                     <b-col cols="4"
