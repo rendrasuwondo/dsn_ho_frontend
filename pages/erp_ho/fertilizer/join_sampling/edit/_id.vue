@@ -285,6 +285,8 @@ export default {
         updated_by: '',
         gr_date: '',
         gr_qty: '',
+        request_status_id: '',
+        selected: '',
       },
 
       data_po: [],
@@ -321,6 +323,8 @@ export default {
         this.field.gr_date = response.data.data.gr_date
         this.field.arrived_at = response.data.data.arrived_at
         this.field.join_sampling_at = response.data.data.join_sampling_at
+        this.field.request_status_id = response.data.data.request_status_id
+        this.field.selected = response.data.data.selected
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by
@@ -384,7 +388,8 @@ export default {
           qty: this.field.qty,
           arrived_at: this.field.arrived_at,
           join_sampling_at: this.field.join_sampling_at,
-          //   kode_sampel: this.field.kode_sampel,
+          request_status_id: this.field.request_status_id,
+          selected: this.field.selected,
           description: this.field.description,
           created_at: this.field.created_at,
           updated_at: this.field.updated_at,
