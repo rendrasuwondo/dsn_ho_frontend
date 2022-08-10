@@ -12,7 +12,7 @@
               <tr>
                 <td>
                   <nuxt-link
-                    :to="{ name: 'erp_ho-fertilizer-input_sampel' }"
+                    :to="{ name: this.$route.query.url }"
                     class="nav-link"
                   >
                     <i class="nav-icon fas fas fa-file-signature"></i>
