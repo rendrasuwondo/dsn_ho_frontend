@@ -16,7 +16,7 @@
                     class="nav-link"
                   >
                     <i class="nav-icon fas fas fa-file-signature"></i>
-                    <b>INPUT SAMPEL</b>
+                    <b>{{this.$route.query.tab_header}}</b>
                   </nuxt-link>
                 </td>
                 <td>/ HASIL ANALISA</td>

@@ -9,7 +9,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-file-signature"></i>
-            <b>INPUT SAMPEL</b>
+            <b>INPUT SAMPLE</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -73,6 +73,8 @@
                   query: {
                     input_sample_id: row.item.id,
                     fertilizer_type_id: row.item.fertilizer_type_id,
+                    url: 'erp_ho-fertilizer-input_sampel',
+                    tab_header: 'INPUT SAMPLE'
                   },
                 }"
                 variant="link"
