@@ -371,6 +371,8 @@ export default {
       formData.append('created_by', this.field.created_by)
       formData.append('updated_at', this.field.update_at)
       formData.append('udpated_by', this.field.udpate_by)
+      formData.append('request_status_id', 1)
+      formData.append('selected', 0)
 
       //sending data to server
       await this.$axios

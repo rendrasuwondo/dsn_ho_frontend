@@ -55,6 +55,11 @@
                 class="form-control"
                 readonly
               />
+              <div v-if="validation.vendors_id" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.vendors_id[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">
@@ -75,6 +80,11 @@
                 class="form-control"
                 readonly
               />
+              <div v-if="validation.fertilizer_type_id" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.fertilizer_type_id[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">
@@ -113,6 +123,11 @@
                 v-model="field.unit_code"
                 readonly
               />
+              <div v-if="validation.unit_id" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.unit_id[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">
@@ -134,6 +149,11 @@
                 class="form-control"
                 readonly
               />
+              <div v-if="validation.company_id" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.company_id[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">
@@ -154,6 +174,11 @@
                 class="form-control"
                 readonly
               />
+              <div v-if="validation.department_id" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.department_id[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">
@@ -212,6 +237,11 @@
                   weekday: 'short',
                 }"
               ></b-form-datepicker>
+              <div v-if="validation.arrived_at" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.arrived_at[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">
@@ -225,6 +255,7 @@
                   day: '2-digit',
                   weekday: 'short',
                 }"
+                @input="onChangeJoinSampling"
               ></b-form-datepicker>
             </div>
 
@@ -303,17 +334,15 @@
             <button class="btn btn-info mr-1 btn-submit" type="submit">
               <i class="fa fa-paper-plane"></i> <b>SIMPAN</b>
             </button>
-            <!-- <button
-              v-if="field.id !== null && field.join_sampling_at !== null"
-              v-on:click="back()"
-              class="btn btn-warning btn-reset"
-              type="reset"
+            <button
+              :disabled="!checkData"
+              @click="SubmitVerifikasi"
+              variant="outline-primary"
+              class="btn btn-warning"
+              type="submit"
             >
               <i class="fa fa-check-circle"></i> <b>SUBMIT</b>
             </button>
-            <button v-else disabled class="btn btn-light btn-reset">
-              <i class="fa fa-check-circle"></i> <b>SUBMIT</b>
-            </button> -->
           </form>
         </div>
       </div>
@@ -339,6 +368,7 @@ export default {
   data() {
     return {
       state: 'disabled',
+      checkData: '',
 
       field: {
         id: '',
@@ -397,8 +427,6 @@ export default {
         this.field.join_sampling_at = null
         this.field.description = null
       } else {
-        console.log('data')
-        console.log(response.data.data)
         this.field.id = response.data.data.id
         this.field.po = response.data.data.po
         this.field.vendors_id = response.data.data.vendors_id
@@ -428,12 +456,22 @@ export default {
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
       }
-      console.log('da')
-      console.log(this.field.join_sampling_at)
     })
   },
 
   methods: {
+    onChangeJoinSampling() {
+      if (
+        this.field.join_sampling_at != null &&
+        this.field.company_id != null &&
+        this.field.arrived_at != null
+      ) {
+        this.checkData = true
+      } else {
+        this.checkData = false
+      }
+    },
+
     //searchData
     searchDataPO(e) {
       const data_po = this.$axios
@@ -488,6 +526,8 @@ export default {
         formData.append('arrived_at', this.field.arrived_at)
         formData.append('join_sampling_at', this.field.join_sampling_at)
         formData.append('description', this.field.description)
+        formData.append('request_status_id', 1)
+        formData.append('selected', 0)
         formData.append('created_at', this.field.created_at)
         formData.append('created_by', this.field.created_by)
         formData.append('updated_at', this.field.update_at)
@@ -511,6 +551,7 @@ export default {
             this.$axios
               .get(`/api/admin/input_join_sampling`)
               .then((response) => {
+                //data yang diambil
                 this.field.id = response.data.data.id
                 this.field.po = response.data.data.po
                 this.field.vendors_id = response.data.data.vendors_id
@@ -531,8 +572,12 @@ export default {
                 this.field.gr_qty = response.data.data.gr_qty
                 this.field.gr_date = response.data.data.gr_date
                 this.field.arrived_at = response.data.data.arrived_at
-                this.field.join_sampling_at =
-                  response.data.data.join_sampling_at
+                  ? response.data.data.arrived_at
+                  : null
+                this.field.join_sampling_at = response.data.data
+                  .join_sampling_at
+                  ? response.data.data.join_sampling_at
+                  : null
                 this.field.description = response.data.data.description
                 this.field.created_at = response.data.data.created_at
                 this.field.created_by = response.data.data.created_by
@@ -546,7 +591,7 @@ export default {
           })
       } else {
         //Update data if this.field.id !== null
-        await this.$axios
+        this.$axios
           .put(`/api/admin/t_fertilizer_sample/${this.field.id}`, {
             po: this.field.po,
             company_id: this.field.company_id,
@@ -557,8 +602,8 @@ export default {
             qty: this.field.qty,
             arrived_at: this.field.arrived_at,
             join_sampling_at: this.field.join_sampling_at,
-            request_status_id: this.field.request_status_id,
-            selected: this.field.selected,
+            request_status_id: 1,
+            selected: 0,
             description: this.field.description,
             created_at: this.field.created_at,
             updated_at: this.field.updated_at,
@@ -579,6 +624,7 @@ export default {
             this.$axios
               .get(`/api/admin/input_join_sampling`)
               .then((response) => {
+                //data yang diambil
                 this.field.id = response.data.data.id
                 this.field.po = response.data.data.po
                 this.field.vendors_id = response.data.data.vendors_id
@@ -599,8 +645,12 @@ export default {
                 this.field.gr_qty = response.data.data.gr_qty
                 this.field.gr_date = response.data.data.gr_date
                 this.field.arrived_at = response.data.data.arrived_at
-                this.field.join_sampling_at =
-                  response.data.data.join_sampling_at
+                  ? response.data.data.arrived_at
+                  : null
+                this.field.join_sampling_at = response.data.data
+                  .join_sampling_at
+                  ? response.data.data.join_sampling_at
+                  : null
                 this.field.description = response.data.data.description
                 this.field.created_at = response.data.data.created_at
                 this.field.created_by = response.data.data.created_by
@@ -613,6 +663,144 @@ export default {
             this.validation = error.response.data
           })
       }
+    },
+
+    async SubmitVerifikasi(e) {
+      // console.log('tes')
+      e.preventDefault()
+      this.$swal
+        .fire({
+          title: 'APAKAH ANDA YAKIN ?',
+          text: 'INGIN MEMVERIFIKASI DATA INI !',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#05c46b',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'YA, VERIVIKASI!',
+          cancelButtonText: 'TIDAK',
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            if (this.field.id === null) {
+              let formData = new FormData()
+              formData.append('po', this.field.po)
+              formData.append('company_id', this.data_po.COMPANY_ID)
+              formData.append('department_id', this.data_po.DEPARTMENT_ID)
+              formData.append(
+                'fertilizer_type_id',
+                this.data_po.FERTILIZER_TYPE_ID
+              )
+              formData.append('vendors_id', this.data_po.VENDOR_ID)
+              formData.append('unit_id', this.data_po.UNIT_ID)
+              formData.append('qty', this.data_po.QTY)
+              formData.append('arrived_at', this.field.arrived_at)
+              formData.append('join_sampling_at', this.field.join_sampling_at)
+              formData.append('description', this.field.description)
+              formData.append('created_at', this.field.created_at)
+              formData.append('created_by', this.field.created_by)
+              formData.append('updated_at', this.field.update_at)
+              formData.append('udpated_by', this.field.udpate_by)
+              formData.append('request_status_id', 2)
+              formData.append('selected', 1)
+
+              //sending data to server
+              this.$axios
+                .post('/api/admin/t_fertilizer_sample', formData)
+                .then(() => {
+                  //redirect ke route "post"
+                  this.$axios
+                    .get(`/api/admin/input_join_sampling`)
+                    .then((response) => {
+                      //data yang diambil
+                      if (response.data.data === null) {
+                        this.field.id = ''
+                        this.field.po = ''
+                        this.field.supplier = ''
+                        this.field.fertilizer_type_code = ''
+                        this.field.company_code = ''
+                        this.field.unit_code = ''
+                        this.field.department_code = ''
+                        this.field.qty = ''
+                        this.field.gr_qty = ''
+                        this.field.gr_date = ''
+                        this.field.arrived_at = ''
+                        this.field.join_sampling_at = ''
+                        this.field.description = ''
+                      }
+                    })
+                  this.$swal.fire({
+                    title: 'BERHASIL!',
+                    text: 'Data Berhasil Disimpan!',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 2000,
+                  })
+                  this.$nuxt.refresh()
+                  //data
+                })
+                .catch((error) => {
+                  //assign error to state "validation"
+                  this.validation = error.response.data
+                })
+            } else {
+              this.$axios
+                .put(`/api/admin/t_fertilizer_sample/${this.field.id}`, {
+                  po: this.field.po,
+                  company_id: this.field.company_id,
+                  department_id: this.field.department_id,
+                  fertilizer_type_id: this.field.fertilizer_type_id,
+                  vendors_id: this.field.vendors_id,
+                  unit_id: this.field.unit_id,
+                  qty: this.field.qty,
+                  arrived_at: this.field.arrived_at,
+                  join_sampling_at: this.field.join_sampling_at,
+                  request_status_id: 2,
+                  selected: 1,
+                  description: this.field.description,
+                  created_at: this.field.created_at,
+                  updated_at: this.field.updated_at,
+                  created_by: this.field.created_by,
+                  updated_by: this.field.updated_by,
+                })
+                .then((response) => {
+                  //redirect ke route "post"
+                  //data
+                  this.$axios
+                    .get(`/api/admin/input_join_sampling`)
+                    .then((response) => {
+                      //data yang diambil
+                      if (response.data.data === null) {
+                        this.field.id = ''
+                        this.field.po = ''
+                        this.field.supplier = ''
+                        this.field.fertilizer_type_code = ''
+                        this.field.company_code = ''
+                        this.field.unit_code = ''
+                        this.field.department_code = ''
+                        this.field.qty = ''
+                        this.field.gr_qty = ''
+                        this.field.gr_date = ''
+                        this.field.arrived_at = ''
+                        this.field.join_sampling_at = ''
+                        this.field.description = ''
+                      }
+                    })
+                  this.$swal.fire({
+                    title: 'BERHASIL!',
+                    text: 'Data Berhasil Disimpan!',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 2000,
+                  })
+                  this.$nuxt.refresh()
+                })
+                .catch((error) => {
+                  //assign error to state "validation"
+                  this.validation = error.response.data
+                })
+            }
+          }
+        })
     },
   },
 

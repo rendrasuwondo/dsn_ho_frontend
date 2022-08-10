@@ -304,9 +304,9 @@
               <i class="fa fa-paper-plane"></i> SIMPAN
             </button>
             <button
-              v-on:click="back()"
-              class="btn btn-warning btn-reset"
-              type="reset"
+              @click="VerifikasiData"
+              class="btn btn-warning"
+              type="submit"
             >
               <i class="fa fa-redo"></i> BATAL
             </button>
