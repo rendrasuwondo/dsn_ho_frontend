@@ -583,6 +583,15 @@ export default {
                 this.field.created_by = response.data.data.created_by
                 this.field.updated_at = response.data.data.updated_at
                 this.field.updated_by = response.data.data.updated_by
+                if (
+                  this.field.join_sampling_at !== null &&
+                  this.field.vendors_id !== null &&
+                  this.field.arrived_at !== null
+                ) {
+                  this.checkData = true
+                } else {
+                  this.checkData = false
+                }
               })
           })
           .catch((error) => {
