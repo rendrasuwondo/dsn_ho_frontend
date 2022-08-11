@@ -8,8 +8,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-object-ungroup"></i>
-            <b>JOIN SAMPLING</b>
+            <i class="nav-icon fas fa-file-invoice"></i>
+            <b>MONITORING HAP</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -17,13 +17,6 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <nuxt-link
-                  :to="{ name: 'erp_ho-fertilizer-join_sampling-create' }"
-                  class="btn btn-info btn-sm"
-                  style="padding-top: 8px"
-                  title="Tambah"
-                  ><i class="fa fa-plus-circle"></i>
-                </nuxt-link>
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -58,25 +51,10 @@
             :fields="fields"
             show-empty
           >
-            <template v-slot:head(selected)="data">
-              <span>
-                <b-form-checkbox
-                  @click.native.stop
-                  @change="select"
-                  v-model="allSelected"
-                >
-                </b-form-checkbox
-              ></span>
-            </template>
-            <template v-slot:cell(selected)="row">
-              <b-form-group>
-                <input type="checkbox" v-model="row.item.selected" />
-              </b-form-group>
-            </template>
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-fertilizer-join_sampling-edit-id',
+                  name: 'erp_ho-fertilizer-input_sampel-edit-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"
@@ -85,27 +63,39 @@
               >
                 <i class="fa fa-pencil-alt"></i>
               </b-button>
-              <b-button
-                variant="link"
-                size="sm"
-                @click="deleteRole(row.item.id)"
-                title="Hapus"
-                ><i class="fa fa-trash"></i
-              ></b-button>
             </template>
-            <template v-slot:custom-foot="data">
-              <b-tr>
-                <b-td colspan="14">
-                  <b-button
-                    size="sm"
-                    variant="outline-primary"
-                    @click="Submit"
-                    v-if="rowcount > 0"
-                  >
-                    Verifikasi
-                  </b-button>
-                </b-td>
-              </b-tr>
+            <template #cell(detail)="row">
+              <b-button class="btn-info" size="sm" @click="row.toggleDetails">
+                {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
+              </b-button>
+            </template>
+
+            <template #row-details="row">
+              <b-card>
+                <b-container class="bv-example-row">
+                  <b-row>
+                    <b-col>Supplier : {{ row.item.supplier }}</b-col>
+                    <b-col>PT : {{ row.item.company_name }}</b-col>
+                    <b-col>Department : {{ row.item.department_name }}</b-col>
+                  </b-row>
+                  <b-row></b-row>
+                  <b-row>
+                    <b-col>
+                      Joint Sampling : {{ row.item.f_joint_sampling }}
+                    </b-col>
+                    <b-col>
+                      Jenis Pupuk : {{ row.item.fertilizer_type_code }}
+                    </b-col>
+                    <b-col>Parameter : {{ row.item.parameter }}</b-col>
+                  </b-row>
+                  <b-row></b-row>
+                  <b-row>
+                    <b-col>Satuan : {{ row.item.unit_code }}</b-col>
+                    <b-col>QTY PO : {{ row.item.qty }}</b-col>
+                    <b-col></b-col>
+                  </b-row>
+                </b-container>
+              </b-card>
             </template>
           </b-table>
           <!-- pagination -->
@@ -126,9 +116,6 @@
           </b-row>
         </div>
       </div>
-      <div v-if="loading" class="loading-page">
-        <p>Loading...</p>
-      </div>
     </section>
   </div>
 </template>
@@ -139,32 +126,15 @@ export default {
 
   head() {
     return {
-      title: 'Join Sampling',
+      title: 'Monitoring HAP',
     }
   },
   data() {
     return {
-      loading: false,
       allSelected: false,
       show_submit: true,
 
       fields: [
-        {
-          label: 'Approve',
-          key: 'selected',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass ',
-          sortable: false,
-        },
-        {
-          label: 'Actions',
-          key: 'actions',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Status',
-          key: 'request_status_name',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
         {
           label: 'PO',
           key: 'po',
@@ -176,30 +146,55 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Jenis Pupuk',
-          key: 'fertilizer_type_code',
+          label: 'Kode Sampel',
+          key: 'kode_sampel',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'PT',
-          key: 'company_code',
+          key: 'company_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Estate',
-          key: 'department_code',
+          label: 'Department',
+          key: 'department_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'QTY PO',
-          key: 'qty',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN', {
-              minimumFractionDigits: 2,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          label: 'Joint Sampling',
+          key: 'f_joint_sampling',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tanggal Terima',
+          key: 'f_tgl_terima',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Lab Analisa',
+          key: 'laboratory_code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Kirim Ke Lab',
+          key: 'f_kirim_lab',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Terima Lab',
+          key: 'f_terima_lab',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Jenis Pupuk',
+          key: 'fertilizer_type_code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+
+        {
+          label: 'Parameter',
+          key: 'parameter',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Satuan',
@@ -207,29 +202,13 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'QTY GR',
-          key: 'gr_qty',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN', {
-              minimumFractionDigits: 2,
-            })
-            return formatter.format(value)
-          },
+          label: 'QTY PO',
+          key: 'qty',
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          label: 'Tanggal GR',
-          key: 'k_gr_date',
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Tanggal Kedatangan',
-          key: 'k_arrived_at',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Join Sampling',
-          key: 'k_join_sampling_at',
+          label: 'Status',
+          key: 'status',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -250,8 +229,10 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/t_fertilizer_sample?q=${search}&page=${page}`
+      `/api/admin/input_sampel?q=${search}&page=${page}`
     )
+
+    console.log(posts.data.data)
 
     return {
       posts: posts.data.data,
@@ -299,7 +280,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/t_fertilizer_sample/${id}`)
+              .delete(`/api/admin/input_sampel/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()
@@ -324,64 +305,13 @@ export default {
         })
     },
 
-    select() {
-      // alert('sa')
-      // this.allSelected = !this.allSelected;
-      this.posts.forEach((el) => {
-        el.selected = this.allSelected
-      })
-    },
-
-    Submit() {
-      this.$swal
-        .fire({
-          title: 'APAKAH ANDA YAKIN ?',
-          text: 'Melakukan Approved !',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'YA',
-          cancelButtonText: 'TIDAK',
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            this.selectedData = []
-            this.posts.forEach((el) => {
-              // if (el.selected == true) {
-              //   this.selectedData.push(el)
-              // }
-              // this.selectedData.push(el)
-            })
-            console.log(this.selectedData)
-
-            var i = 0
-            let n = this.selectedData.length
-
-            this.$axios
-              .post(`/api/admin/update_request_status`, this.selectedData)
-              .then(() => {
-                this.$swal.fire({
-                  title: 'BERHASIL!',
-                  text: 'Data Berhasil Diupdate!',
-                  icon: 'success',
-                  showConfirmButton: false,
-                  timer: 2000,
-                })
-
-                this.$nuxt.refresh()
-              })
-          }
-        })
-    },
-
     exportData() {
       const headers = {
         'Content-Type': 'application/json',
       }
 
       this.$axios({
-        url: `/api/admin/join_sampling/export?q=${this.search}`,
+        url: `/api/admin/monitoring_pupuk/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -390,7 +320,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Join Sampling.xlsx'
+        var fileName = 'Monitoring Pupuk.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -406,17 +336,5 @@ export default {
 }
 .card-title {
   color: #504d8d;
-}
-.loading-page {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  padding-top: 200px;
-  font-size: 30px;
-  font-family: sans-serif;
 }
 </style>
