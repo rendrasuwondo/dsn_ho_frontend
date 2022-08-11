@@ -673,12 +673,12 @@ export default {
       this.$swal
         .fire({
           title: 'APAKAH ANDA YAKIN ?',
-          text: 'INGIN MEMVERIFIKASI DATA INI !',
+          text: 'INGIN SUBMIT DATA INI !',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#05c46b',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'YA, VERIVIKASI!',
+          confirmButtonText: 'YA',
           cancelButtonText: 'TIDAK',
         })
         .then((result) => {
