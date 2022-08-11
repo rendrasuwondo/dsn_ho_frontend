@@ -9,7 +9,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-file-signature"></i>
-            <b>EDIT {{this.$route.query.tab_header}}</b>
+            <b>EDIT {{ this.$route.query.tab_header }}</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -196,7 +196,7 @@ export default {
         unit_id: '',
         qty: '',
         arrived_at: '',
-        join_sampling: '',
+        join_sampling_at: '',
         laboratory_id: '',
         receipt_sampling_at: '',
         lab_sent_at: '',
@@ -230,7 +230,7 @@ export default {
         this.field.unit_id = response.data.data.unit_id
         this.field.qty = response.data.data.qty
         this.field.arrived_at = response.data.data.arrived_at
-        this.field.join_sampling = response.data.data.join_sampling
+        this.field.join_sampling_at = response.data.data.join_sampling_at
         this.field.laboratory_id = response.data.data.laboratory
         this.field.receipt_sampling_at = response.data.data.receipt_sampling_at
         this.field.lab_sent_at = response.data.data.lab_sent_at
@@ -289,7 +289,7 @@ export default {
           unit_id: this.field.unit_id,
           qty: this.field.qty,
           arrived_at: this.field.arrived_at,
-          join_sampling: this.field.join_sampling,
+          join_sampling_at: this.field.join_sampling_at,
           laboratory_id: this.field.laboratory_id
             ? this.field.laboratory_id.laboratory_id
             : '',
