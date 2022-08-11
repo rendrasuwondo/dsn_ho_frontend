@@ -52,6 +52,22 @@
             show-empty
             v-model="visibleRows"
           >
+            <template v-slot:head(selected_rna)="data">
+              <span
+                ><b-form-checkbox
+                  v-show="false"
+                  @click.native.stop
+                  @change="select"
+                  v-model="allSelected"
+                >
+                </b-form-checkbox
+              ></span>
+            </template>
+            <template v-slot:cell(selected_rna)="row">
+              <b-form-group>
+                <input type="checkbox" v-model="row.item.selected_rna" />
+              </b-form-group>
+            </template>
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
@@ -74,7 +90,7 @@
                     input_sample_id: row.item.id,
                     fertilizer_type_id: row.item.fertilizer_type_id,
                     url: 'erp_ho-fertilizer-in_process_rna',
-                    tab_header: 'IN PROCESS'
+                    tab_header: 'IN PROCESS',
                   },
                 }"
                 variant="link"
@@ -153,6 +169,19 @@
                 </b-container>
               </b-card>
             </template>
+            <template v-slot:custom-foot="data">
+              <b-tr>
+                <b-td colspan="11"
+                  ><b-button
+                    size="sm"
+                    variant="outline-primary"
+                    @click="Submit"
+                    v-if="rowcount > 0"
+                    >Submit</b-button
+                  ></b-td
+                >
+              </b-tr>
+            </template>
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -182,7 +211,7 @@ export default {
 
   head() {
     return {
-      title: 'Input Sampel',
+      title: 'In Process',
     }
   },
   data() {
@@ -198,9 +227,16 @@ export default {
       // ],
       fields: [
         {
+          label: 'Approve',
+          key: 'selected_rna',
+          thClass: 'text-right',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass ',
+          sortable: false,
+        },
+        {
           label: 'Actions',
           key: 'actions',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           label: 'Hasil Analisa',
@@ -243,7 +279,7 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Status',
+          label: 'Hasil',
           key: 'hasil_status',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
@@ -265,7 +301,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/input_sampel?q=${search}&page=${page}`
+      `/api/admin/input_sampel?q=${search}&page=${page}&request_status_code=j`
     )
     console.log('da')
     console.log(posts.data.data)
@@ -361,6 +397,121 @@ export default {
         document.body.appendChild(link)
         link.click()
       })
+    },
+
+    select() {
+      // alert('sa')
+      // this.allSelected = !this.allSelected;
+      this.posts.forEach((el) => {
+        el.selected_rna = !this.allSelected
+      })
+    },
+
+    Submit() {
+      this.$swal
+        .fire({
+          title: 'Message',
+          input: 'text',
+          icon: 'warning',
+          inputPlaceholder: 'Hanya diisi jika melakukan Reject...',
+          showDenyButton: true,
+          reverseButtons: true,
+          confirmButtonText: 'Reject',
+          denyButtonText: 'Approve',
+          confirmButtonColor: 'red',
+          denyButtonColor: '#3085d6',
+          allowOutsideClick: true,
+          customClass: {
+            validationMessage: 'my-validation-message',
+          },
+          preConfirm: (value) => {
+            if (!value) {
+              this.$swal.showValidationMessage(
+                '<i class="fa fa-info-circle"></i> Message harus diisi!'
+              )
+            }
+          },
+          preDeny: (value) => {
+            if (!value) {
+              this.$swal.showValidationMessage(
+                '<i class="fa fa-info-circle"></i> Message harus diisi!'
+              )
+            }
+          },
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            //REJECT
+            this.selectedData = []
+            this.posts.forEach((el) => {
+              if (el.selected_rna == true) {
+                this.selectedData.push(el)
+              }
+            })
+            // console.log('rendra')
+            // console.log(this.selectedData)
+
+            var i = 0
+            let n = this.selectedData.length
+
+            this.$axios
+              .post(
+                `/api/admin/update_request_status_rna_reject`,
+                this.selectedData
+              )
+              .then((response) => {
+                this.$swal.fire({
+                  title: 'BERHASIL!',
+                  text: 'Data Berhasil Di Approve!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 2000,
+                })
+              })
+
+            this.$nuxt.refresh()
+            // alert(result.value)
+            //  this.$swal.fire('Changes are not saved', '', 'info')
+            // this.$swal.fire.showValidationMessage(
+            //       '<i class="fa fa-info-circle"></i> Your name is required'
+            //     )
+          } else if (result.isDenied) {
+            //APPROVE
+            this.selectedData = []
+            this.posts.forEach((el) => {
+              if (el.selected_rna == true) {
+                this.selectedData.push(el)
+              }
+            })
+            // console.log('rendra')
+            // console.log(this.selectedData)
+
+            var i = 0
+            let n = this.selectedData.length
+
+            this.$axios
+              .post(
+                `/api/admin/update_request_status_rna_approve`,
+                this.selectedData
+              )
+              .then((response) => {
+                this.$swal.fire({
+                  title: 'BERHASIL!',
+                  text: 'Data Berhasil Di Approve!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 2000,
+                })
+              })
+
+            this.$nuxt.refresh()
+            // alert(result.value)
+            //  this.$swal.fire('Changes are not saved', '', 'info')
+            // this.$swal.fire.showValidationMessage(
+            //       '<i class="fa fa-info-circle"></i> Your name is required'
+            //     )
+          }
+        })
     },
   },
 
