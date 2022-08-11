@@ -57,6 +57,10 @@
                 :to="{
                   name: 'erp_ho-fertilizer-input_sampel-edit-id',
                   params: { id: row.item.id },
+                  query: {
+                    url: 'erp_ho-fertilizer-input_sampel',
+                    tab_header: 'INPUT SAMPLE'
+                  },
                 }"
                 variant="link"
                 size="sm"
@@ -200,7 +204,7 @@ export default {
         {
           label: 'Actions',
           key: 'actions',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           label: 'Hasil Analisa',

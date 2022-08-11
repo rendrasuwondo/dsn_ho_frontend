@@ -9,7 +9,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-file-signature"></i>
-            <b>EDIT INPUT SAMPEL</b>
+            <b>EDIT {{this.$route.query.tab_header}}</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -180,7 +180,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit Input Sampel',
+      title: 'Edit ' + this.$route.query.tab_header,
     }
   },
 
@@ -267,7 +267,7 @@ export default {
 
     back() {
       this.$router.push({
-        name: 'erp_ho-fertilizer-input_sampel',
+        name: this.$route.query.url,
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -314,7 +314,7 @@ export default {
           })
           //redirect ke route "post"
           this.$router.push({
-            name: 'erp_ho-fertilizer-input_sampel',
+            name: this.$route.query.url,
           })
         })
         .catch((error) => {
