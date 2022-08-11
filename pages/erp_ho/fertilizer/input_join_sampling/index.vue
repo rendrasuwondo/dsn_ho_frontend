@@ -700,7 +700,7 @@ export default {
               formData.append('created_by', this.field.created_by)
               formData.append('updated_at', this.field.update_at)
               formData.append('udpated_by', this.field.udpate_by)
-              formData.append('request_status_id', 2)
+              formData.append('request_status_id', 3)
               formData.append('selected', 1)
 
               //sending data to server
@@ -754,7 +754,7 @@ export default {
                   qty: this.field.qty,
                   arrived_at: this.field.arrived_at,
                   join_sampling_at: this.field.join_sampling_at,
-                  request_status_id: 2,
+                  request_status_id: 3,
                   selected: 1,
                   description: this.field.description,
                   created_at: this.field.created_at,
