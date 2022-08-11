@@ -136,79 +136,48 @@ export default {
 
       fields: [
         {
-          label: 'PO',
-          key: 'po',
+          label: 'NO. PO',
+          key: 'PO_NO',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tanggal PO',
+          key: 'PO_DATE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Supplier',
-          key: 'supplier',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Kode Sampel',
-          key: 'kode_sampel',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'PT',
-          key: 'company_name',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Department',
-          key: 'department_name',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Joint Sampling',
-          key: 'f_joint_sampling',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Tanggal Terima',
-          key: 'f_tgl_terima',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Lab Analisa',
-          key: 'laboratory_code',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Kirim Ke Lab',
-          key: 'f_kirim_lab',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Terima Lab',
-          key: 'f_terima_lab',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Jenis Pupuk',
-          key: 'fertilizer_type_code',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-
-        {
-          label: 'Parameter',
-          key: 'parameter',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Satuan',
-          key: 'unit_code',
+          key: 'PO_VENDOR_NAME',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'QTY PO',
-          key: 'qty',
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          key: 'PO_QTY',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Status',
-          key: 'status',
+          label: 'Tanggal GR',
+          key: 'GR_DATE',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Join Sampling',
+          key: 'JOIN_SAMPLING_AT',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'PT',
+          key: 'COMPANY_NAME',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Department',
+          key: 'DEPARTMENT_CODE',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Lokasi',
+          key: 'LOCATION_CODE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -227,9 +196,11 @@ export default {
     //search
     let search = query.q ? query.q : ''
 
+    // let year =
+
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/input_sampel?q=${search}&page=${page}`
+      `/api/admin/monitoring_hap?q=${search}&page=${page}`
     )
 
     console.log(posts.data.data)
