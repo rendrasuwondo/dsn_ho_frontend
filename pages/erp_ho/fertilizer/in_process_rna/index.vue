@@ -73,6 +73,10 @@
                 :to="{
                   name: 'erp_ho-fertilizer-input_sampel-edit-id',
                   params: { id: row.item.id },
+                  query: {
+                    url: 'erp_ho-fertilizer-in_process_rna',
+                    tab_header: 'IN PROCESS',
+                  },
                 }"
                 variant="link"
                 size="sm"
