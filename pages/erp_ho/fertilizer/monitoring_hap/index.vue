@@ -13,6 +13,94 @@
           </h3>
           <div class="card-tools"></div>
         </div>
+        <b-card
+          border-variant="primary"
+          header="Filter"
+          header-bg-variant="info"
+          header-text-variant="white"
+        >
+          <b-card-text>
+            <b-container class="bv-example-row mb-3">
+              <b-row>
+                <b-col cols="1">Tanggal</b-col>
+                <b-col>
+                  <b-input-group>
+                    <b-form-datepicker
+                      v-model="activitied_at_start"
+                      :date-format-options="{
+                        year: 'numeric',
+                        month: 'short',
+                        day: '2-digit',
+                        weekday: 'short',
+                      }"
+                      size="sm"
+                    ></b-form-datepicker>
+                    <template #append>
+                      <b-btn size="sm" @click="activitied_at_start = ''"
+                        ><i class="fa fa-trash"></i
+                      ></b-btn>
+                      &nbsp; s.d
+                    </template>
+                  </b-input-group>
+                </b-col>
+                <b-col>
+                  <b-input-group>
+                    <b-datepicker
+                      v-model="activitied_at_end"
+                      reset-button
+                      size="sm"
+                      :date-format-options="{
+                        year: 'numeric',
+                        month: 'short',
+                        day: '2-digit',
+                        weekday: 'short',
+                      }"
+                    ></b-datepicker>
+                    <template #append>
+                      <b-btn size="sm" @click="activitied_at_end = ''"
+                        ><i class="fa fa-trash"></i
+                      ></b-btn>
+                    </template>
+                  </b-input-group>
+                </b-col>
+                <b-col></b-col>
+              </b-row>
+            </b-container>
+            <b-container class="bv-example-row">
+              <b-row>
+                <b-col cols="1">Afdeling</b-col>
+                <b-col cols="7">
+                  <div class="form-group">
+                    <multiselect
+                      v-model="afdeling_id"
+                      :options="afdeling"
+                      :custom-label="customLabel"
+                      x
+                      track-by="afdeling_id"
+                      :searchable="true"
+                      @input="onChangeAfdeling"
+                    ></multiselect></div
+                ></b-col>
+              </b-row>
+            </b-container>
+            <b-container class="bv-example-row">
+              <b-row>
+                <b-col cols="1">Mandor</b-col>
+                <b-col cols="7">
+                  <div class="form-group">
+                    <multiselect
+                      v-model="foreman_employee_id"
+                      :options="foreman"
+                      label="employee_description"
+                      track-by="employee_id"
+                      :searchable="true"
+                    ></multiselect></div
+                ></b-col>
+              </b-row>
+            </b-container>
+          </b-card-text>
+        </b-card>
+
         <div class="card-body">
           <div class="form-group">
             <div class="input-group mb-3">
