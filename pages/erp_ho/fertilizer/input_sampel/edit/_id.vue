@@ -231,7 +231,7 @@ export default {
         this.field.qty = response.data.data.qty
         this.field.arrived_at = response.data.data.arrived_at
         this.field.join_sampling_at = response.data.data.join_sampling_at
-        this.field.laboratory_id = response.data.data.laboratory_id
+        this.field.laboratory_id = response.data.data.laboratory
         this.field.receipt_sampling_at = response.data.data.receipt_sampling_at
         this.field.lab_sent_at = response.data.data.lab_sent_at
         this.field.lab_receipt_at = response.data.data.lab_receipt_at
@@ -245,6 +245,9 @@ export default {
 
         console.log('cek data')
         console.log(this.laboratory)
+        console.log(
+          `/api/admin/lov_laboratory_table?vendors_id=${response.data.data.vendors_id}`
+        )
 
         this.$axios
           .get(
@@ -253,8 +256,6 @@ export default {
 
           .then((response) => {
             this.laboratory = response.data.data
-            console.log('cek data')
-            console.log(this.laboratory)
           })
       })
   },
@@ -274,9 +275,9 @@ export default {
     // update method
     async update(e) {
       e.preventDefault()
-      console.log('coba')
-      console.log(this.field.laboratory_id.id)
-      console.log(this.field.laboratory_id.laboratory_id)
+      // console.log('coba')
+      // console.log(this.field.laboratory_id.id)
+      // console.log(this.field.laboratory_id.laboratory_id)
       //send data ke Rest API untuk update
       await this.$axios
         .put(`/api/admin/input_sampel/${this.$route.params.id}`, {
