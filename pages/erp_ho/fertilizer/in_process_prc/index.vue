@@ -8,7 +8,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-file-signature"></i>
+            <i class="nav-icon fas fa-object-ungroup"></i>
             <b>IN PROCESS</b>
           </h3>
           <div class="card-tools"></div>
@@ -17,6 +17,13 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
+                <nuxt-link
+                  :to="{ name: 'erp_ho-fertilizer-join_sampling-create' }"
+                  class="btn btn-info btn-sm"
+                  style="padding-top: 8px"
+                  title="Tambah"
+                  ><i class="fa fa-plus-circle"></i>
+                </nuxt-link>
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -50,12 +57,10 @@
             :items="posts"
             :fields="fields"
             show-empty
-            v-model="visibleRows"
           >
-            <template v-slot:head(selected_rna)="data">
+            <template v-slot:head(selected)="data">
               <span
                 ><b-form-checkbox
-                  v-show="false"
                   @click.native.stop
                   @change="select"
                   v-model="allSelected"
@@ -63,20 +68,16 @@
                 </b-form-checkbox
               ></span>
             </template>
-            <template v-slot:cell(selected_rna)="row">
+            <template v-slot:cell(selected)="row">
               <b-form-group>
-                <input type="checkbox" v-model="row.item.selected_rna" />
+                <input type="checkbox" v-model="row.item.selected" />
               </b-form-group>
             </template>
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-fertilizer-input_sampel-edit-id',
+                  name: 'erp_ho-fertilizer-join_sampling-edit-id',
                   params: { id: row.item.id },
-                  query: {
-                    url: 'erp_ho-fertilizer-in_process_rna',
-                    tab_header: 'IN PROCESS',
-                  },
                 }"
                 variant="link"
                 size="sm"
@@ -84,106 +85,26 @@
               >
                 <i class="fa fa-pencil-alt"></i>
               </b-button>
-            </template>
-            <template v-slot:cell(input_hasil)="row">
               <b-button
-                :to="{
-                  name: 'erp_ho-fertilizer-input_hasil_analisa-id',
-                  params: { id: row.item.id },
-                  query: {
-                    input_sample_id: row.item.id,
-                    fertilizer_type_id: row.item.fertilizer_type_id,
-                    url: 'erp_ho-fertilizer-in_process_rna',
-                    tab_header: 'IN PROCESS',
-                  },
-                }"
                 variant="link"
-                size=""
-                title="Hasil"
-              >
-                <i class="fa fa-file-alt"></i>
-              </b-button>
-            </template>
-
-            <template v-slot:cell(hasil_status)="row">
-              <b-link
-                v-if="
-                  row.item.upload_file !== null &&
-                  (row.item.type_file === 'png' || row.item.type_file === 'jpg')
-                "
-                :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
-                target="_blank"
-              >
-                {{ row.item.status }}
-              </b-link>
-              <b-link
-                v-else-if="row.item.upload_file !== null"
-                :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
-              >
-                {{ row.item.status }}
-              </b-link>
-              <b-link
-                v-else
-                :href="`http://localhost:8000/storage/HAP/${row.item.upload_file}`"
-                disabled
-              >
-                {{ row.item.status }}
-              </b-link>
-            </template>
-
-            <template #cell(detail)="row">
-              <b-button class="btn-info" size="sm" @click="row.toggleDetails">
-                {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
-              </b-button>
-            </template>
-
-            <template #row-details="row">
-              <b-card>
-                <b-container class="bv-example-row">
-                  <b-row>
-                    <b-col cols="4">Supplier : {{ row.item.supplier }}</b-col>
-                    <b-col cols="4">PT : {{ row.item.company_name }}</b-col>
-                    <b-col cols="4"
-                      >Department : {{ row.item.department_name }}</b-col
-                    >
-                  </b-row>
-                  <b-row></b-row>
-                  <b-row>
-                    <b-col cols="4">
-                      Join Sampling : {{ row.item.k_join_sampling_at }}
-                    </b-col>
-                    <b-col cols="4">QTY PO : {{ row.item.qty }}</b-col>
-                    <b-col cols="4"
-                      >Jenis Pupuk : {{ row.item.fertilizer_type_code }}</b-col
-                    >
-                  </b-row>
-                  <b-row></b-row>
-                  <b-row>
-                    <b-col cols="4"
-                      >Tanggal GR : {{ row.item.k_gr_date }}</b-col
-                    >
-                    <b-col cols="4">QTY GR : {{ row.item.gr_qty }}</b-col>
-                    <b-col cols="4">Parameter : {{ row.item.parameter }}</b-col>
-                  </b-row>
-                  <b-row></b-row>
-                  <b-row>
-                    <b-col cols="4">Satuan : {{ row.item.unit_code }}</b-col>
-                    <b-col></b-col>
-                  </b-row>
-                </b-container>
-              </b-card>
+                size="sm"
+                @click="deleteRole(row.item.id)"
+                title="Hapus"
+                ><i class="fa fa-trash"></i
+              ></b-button>
             </template>
             <template v-slot:custom-foot="data">
               <b-tr>
-                <b-td colspan="11"
-                  ><b-button
+                <b-td colspan="14">
+                  <b-button
                     size="sm"
                     variant="outline-primary"
                     @click="Submit"
                     v-if="rowcount > 0"
-                    >Submit</b-button
-                  ></b-td
-                >
+                  >
+                    Submit
+                  </b-button>
+                </b-td>
               </b-tr>
             </template>
           </b-table>
@@ -205,6 +126,9 @@
           </b-row>
         </div>
       </div>
+      <div v-if="loading" class="loading-page">
+        <p>Loading...</p>
+      </div>
     </section>
   </div>
 </template>
@@ -215,47 +139,31 @@ export default {
 
   head() {
     return {
-      title: 'In Process',
+      title: 'Join Sampling',
     }
   },
   data() {
     return {
+      loading: false,
       allSelected: false,
       show_submit: true,
-      visibleRows: [],
 
-      // items: [
-      //   {
-      //     supplier: '',
-      //   },
-      // ],
       fields: [
         {
           label: 'Approve',
-          key: 'selected_rna',
-          thClass: 'text-right',
+          key: 'selected',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass ',
           sortable: false,
         },
         {
           label: 'Actions',
           key: 'actions',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Hasil Analisa',
-          key: 'input_hasil',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Detail Data',
-          key: 'detail',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Status',
           key: 'request_status_name',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'PO',
@@ -263,33 +171,65 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Kode Sampel',
-          key: 'sample_code',
+          label: 'Supplier',
+          key: 'supplier',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Tanggal Terima',
-          key: 'k_receipt_sampling_at',
+          label: 'Jenis Pupuk',
+          key: 'fertilizer_type_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Lab Analisa',
-          key: 'laboratory_code',
+          label: 'PT',
+          key: 'company_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Kirim Ke Lab',
-          key: 'k_lab_send_at',
+          label: 'Estate',
+          key: 'department_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Terima Lab',
-          key: 'k_lab_receipt_at',
+          label: 'QTY PO',
+          key: 'qty',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN', {
+              minimumFractionDigits: 2,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Satuan',
+          key: 'unit_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Hasil',
-          key: 'hasil_status',
+          label: 'QTY GR',
+          key: 'gr_qty',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN', {
+              minimumFractionDigits: 2,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tanggal GR',
+          key: 'k_gr_date',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tanggal Kedatangan',
+          key: 'k_arrived_at',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Join Sampling',
+          key: 'k_join_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -310,10 +250,8 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/input_sampel?q=${search}&page=${page}&request_status_code=j`
+      `/api/admin/in_process_prc?q=${search}&page=${page}`
     )
-    console.log('da')
-    console.log(posts.data.data)
 
     return {
       posts: posts.data.data,
@@ -361,7 +299,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/input_sampel/${id}`)
+              .delete(`/api/admin/t_fertilizer_sample/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()
@@ -386,33 +324,11 @@ export default {
         })
     },
 
-    exportData() {
-      const headers = {
-        'Content-Type': 'application/json',
-      }
-
-      this.$axios({
-        url: `/api/admin/input_sampel/export?q=${this.search}`,
-        method: 'GET',
-        responseType: 'blob',
-        headers: headers, // important
-      }).then((response) => {
-        this.isLoading = false
-        const url = window.URL.createObjectURL(new Blob([response.data]))
-        const link = document.createElement('a')
-        link.href = url
-        var fileName = 'Input Sampel.xlsx'
-        link.setAttribute('download', fileName) //or any other extension
-        document.body.appendChild(link)
-        link.click()
-      })
-    },
-
     select() {
       // alert('sa')
       // this.allSelected = !this.allSelected;
       this.posts.forEach((el) => {
-        el.selected_rna = !this.allSelected
+        el.selected = this.allSelected
       })
     },
 
@@ -465,7 +381,7 @@ export default {
 
             this.$axios
               .post(
-                `/api/admin/update_request_status_rna_reject`,
+                `/api/admin/update_request_status_prc_reject`,
                 this.selectedData
               )
               .then((response) => {
@@ -488,19 +404,19 @@ export default {
             //APPROVE
             this.selectedData = []
             this.posts.forEach((el) => {
-              if (el.selected_rna == true) {
+              if (el.selected == true) {
                 this.selectedData.push(el)
               }
             })
-            // console.log('rendra')
-            // console.log(this.selectedData)
+            console.log('rendra')
+            console.log(this.selectedData)
 
             var i = 0
             let n = this.selectedData.length
 
             this.$axios
               .post(
-                `/api/admin/update_request_status_rna_approve`,
+                `/api/admin/update_request_status_prc_approve`,
                 this.selectedData
               )
               .then((response) => {
@@ -521,18 +437,69 @@ export default {
             //     )
           }
         })
-    },
-  },
+      // this.$swal
+      //   .fire({
+      //     title: 'APAKAH ANDA YAKIN ?',
+      //     text: 'Melakukan Approved !',
+      //     icon: 'warning',
+      //     showCancelButton: true,
+      //     confirmButtonColor: '#d33',
+      //     cancelButtonColor: '#3085d6',
+      //     confirmButtonText: 'YA',
+      //     cancelButtonText: 'TIDAK',
+      //   })
+      //   .then((result) => {
+      //     if (result.isConfirmed) {
+      //       this.selectedData = []
+      //       this.posts.forEach((el) => {
+      //         // if (el.selected == true) {
+      //         //   this.selectedData.push(el)
+      //         // }
+      //         // this.selectedData.push(el)
+      //       })
+      //       console.log(this.selectedData)
 
-  computed: {
-    // QTY_GR() {
-    //   this.visibleRows = (value, key, item) => {
-    //     let formatter = new Intl.NumberFormat('es-IN', {
-    //       minimumFractionDigits: 2,
-    //     })
-    //     return visibleRows.format(value)
-    //   }
-    // },
+      //       var i = 0
+      //       let n = this.selectedData.length
+
+      //       this.$axios
+      //         .post(`/api/admin/update_request_status`, this.selectedData)
+      //         .then(() => {
+      //           this.$swal.fire({
+      //             title: 'BERHASIL!',
+      //             text: 'Data Berhasil Diupdate!',
+      //             icon: 'success',
+      //             showConfirmButton: false,
+      //             timer: 2000,
+      //           })
+
+      //           this.$nuxt.refresh()
+      //         })
+      //     }
+      //   })
+    },
+
+    exportData() {
+      const headers = {
+        'Content-Type': 'application/json',
+      }
+
+      this.$axios({
+        url: `/api/admin/join_sampling/export?q=${this.search}`,
+        method: 'GET',
+        responseType: 'blob',
+        headers: headers, // important
+      }).then((response) => {
+        this.isLoading = false
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        var fileName = 'Join Sampling.xlsx'
+        link.setAttribute('download', fileName) //or any other extension
+        document.body.appendChild(link)
+        link.click()
+      })
+    },
   },
 }
 </script>
@@ -543,5 +510,17 @@ export default {
 }
 .card-title {
   color: #504d8d;
+}
+.loading-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding-top: 200px;
+  font-size: 30px;
+  font-family: sans-serif;
 }
 </style>
