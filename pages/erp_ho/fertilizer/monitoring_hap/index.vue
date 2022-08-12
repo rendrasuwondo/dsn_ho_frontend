@@ -24,24 +24,14 @@
               <b-container class="bv-example-row mb-3">
                 <b-row>
                   <b-col cols="1">Tahun</b-col>
-                  <b-col>
-                    <b-input-group>
-                      <b-form-datepicker
-                        v-model="activitied_at_start"
-                        :date-format-options="{
-                          year: 'numeric',
-                          month: 'short',
-                          day: '2-digit',
-                          weekday: 'short',
-                        }"
-                        size="sm"
-                      ></b-form-datepicker>
-                      <template #append>
-                        <b-btn size="sm" @click="activitied_at_start = ''"
-                          ><i class="fa fa-trash"></i
-                        ></b-btn>
-                      </template>
-                    </b-input-group>
+                  <b-col cols="3">
+                    <multiselect
+                      v-model="year_id"
+                      :options="years"
+                      label="year_at"
+                      track-by="year_at"
+                      :searchable="true"
+                    ></multiselect>
                   </b-col>
                 </b-row>
               </b-container>
@@ -142,11 +132,12 @@
                 @change="changePage"
                 align="left"
                 class="mt-1"
-              ></b-pagination
-            ></b-col>
-            <b-col class="text-right" align-self="center"
-              >{{ rowcount }} data</b-col
-            >
+              >
+              </b-pagination>
+            </b-col>
+            <b-col class="text-right" align-self="center">
+              {{ rowcount }} data
+            </b-col>
           </b-row>
         </div>
       </div>
@@ -168,6 +159,8 @@ export default {
       allSelected: false,
       show_submit: true,
 
+      years: [],
+
       fields: [
         {
           label: 'NO. PO',
@@ -187,12 +180,17 @@ export default {
         {
           label: 'QTY PO',
           key: 'PO_QTY',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           label: 'Tanggal GR',
           key: 'GR_DATE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'QTY GR',
+          key: 'GR_QTY',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           label: 'Join Sampling',
@@ -205,109 +203,147 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Department',
+          label: 'Dept.',
           key: 'DEPARTMENT_CODE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
-        {
-          label: 'Lokasi',
-          key: 'LOCATION_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
+        // {
+        //   label: 'Lokasi',
+        //   key: 'LOCATION_CODE',
+        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        // },
       ],
+
       sweet_alert: {
         title: '',
         icon: '',
       },
+
+      year_id: this.$route.query.q_year_id,
+      query_year_id: '',
     }
   },
-  watchQuery: ['q', 'page'],
+  watchQuery: ['q', 'page', 'q_year_id'],
 
   async asyncData({ $axios, query }) {
+    function currentDate() {
+      const current = new Date()
+      current.setDate(current.getDate())
+      const date = `${current.getFullYear()}`
+
+      return date
+    }
+
     //page
     let page = query.page ? parseInt(query.page) : ''
 
     //search
     let search = query.q ? query.q : ''
 
-    // let year =
+    let q_year_id = query.q_year_id ? query.q_year_id : currentDate()
+    let year_id = []
+
+    const year_list = await $axios.$get(
+      `/api/admin/lov_years?q_year_id=${q_year_id}`
+    )
+
+    if (query.q_year_id) {
+      //Mandor
+      $axios
+        .get(`/api/admin/lov_years?q_year_id=${q_year_id}`)
+        .then((response) => {
+          year_id = response.data.data
+          console.log('cekkkkk')
+          console.log(response)
+        })
+    } else {
+      year_id = []
+
+      q_year_id = year_id.year_at
+    }
+    if (q_year_id == undefined) {
+      q_year_id = ''
+    }
+
+    console.log('aida')
+    console.log(
+      `/api/admin/monitoring_hap?q=${search}&page=${page}&q_year_id=${q_year_id}`
+    )
+    console.log(year_id)
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/monitoring_hap?q=${search}&page=${page}`
+      `/api/admin/monitoring_hap?q=${search}&page=${page}&q_year_id=${q_year_id}`
     )
-
-    console.log(posts.data.data)
 
     return {
       posts: posts.data.data,
       pagination: posts.data,
       search: search,
       rowcount: posts.data.total,
+      years: year_list.data,
+      year_id: year_id,
     }
   },
 
+  mounted() {
+    // this.year_at = this.$route.query.year_at
+    //   ? this.$route.query.year_at
+    //   : this.currentDate()
+
+    // console.log('cek')
+    // console.log(this.year_at)
+
+    //Data years
+    this.$axios
+      .get('/api/admin/lov_years')
+
+      .then((response) => {
+        this.years = response.data.data
+      })
+  },
+
   methods: {
+    currentDate() {
+      const current = new Date()
+      current.setDate(current.getDate())
+      const date = `${current.getFullYear()}`
+      return date
+    },
+
     changePage(page) {
       this.$router.push({
         path: this.$route.path,
         query: {
           q: this.$route.query.q,
           page: page,
+          year_id: this.$route.query.year_id
+            ? this.$route.query.year_id
+            : this.currentDate(),
         },
       })
     },
     //searchData
     searchData() {
+      try {
+        if (this.year_id.year_at === null) {
+          this.query_year_id = this.currentDate()
+        } else if (this.year_id.year_at === undefined) {
+          this.query_year_id = this.$route.query.q_year_id
+        } else {
+          this.query_year_id = this.year_id.year_at
+            ? this.year_id.year_at
+            : this.currentDate()
+        }
+      } catch (err) {}
+
       this.$router.push({
         path: this.$route.path,
         query: {
           q: this.search,
+          q_year_id: this.query_year_id,
         },
       })
-    },
-
-    //deletePost method
-    deleteRole(id) {
-      this.$swal
-        .fire({
-          title: 'APAKAH ANDA YAKIN ?',
-          text: 'INGIN MENGHAPUS DATA INI !',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'YA, HAPUS!',
-          cancelButtonText: 'TIDAK',
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            //delete tag from server
-
-            this.$axios
-              .delete(`/api/admin/input_sampel/${id}`)
-              .then((response) => {
-                //feresh data
-                this.$nuxt.refresh()
-                if (response.data.success == true) {
-                  this.sweet_alert.title = 'BERHASIL!'
-                  this.sweet_alert.icon = 'success'
-                } else {
-                  this.sweet_alert.title = 'GAGAL!'
-                  this.sweet_alert.icon = 'error'
-                }
-
-                //alert
-                this.$swal.fire({
-                  title: this.sweet_alert.title,
-                  text: response.data.message,
-                  icon: this.sweet_alert.icon,
-                  showConfirmButton: false,
-                  timer: 2000,
-                })
-              })
-          }
-        })
     },
 
     exportData() {
