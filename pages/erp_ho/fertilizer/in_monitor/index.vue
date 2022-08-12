@@ -8,8 +8,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-file-invoice"></i>
-            <b>MONITORING HAP</b>
+            <i class="nav-icon fas fa-tablet-alt"></i>
+            <b>IN MONITOR</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -124,7 +124,7 @@
             </template>
           </b-table>
           <!-- pagination -->
-          <b-row>
+          <!-- <b-row>
             <b-col
               ><b-pagination
                 v-model="pagination.current_page"
@@ -139,7 +139,7 @@
             <b-col class="text-right" align-self="center">
               {{ rowcount }} data
             </b-col>
-          </b-row>
+          </b-row> -->
         </div>
       </div>
     </section>
@@ -152,7 +152,7 @@ export default {
 
   head() {
     return {
-      title: 'Monitoring HAP',
+      title: 'In Monitor',
     }
   },
   data() {
@@ -165,64 +165,42 @@ export default {
       fields: [
         {
           label: 'NO. PO',
-          key: 'PO_NO',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Tanggal PO',
-          key: 'PO_DATE',
+          key: 'po',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Supplier',
-          key: 'PO_VENDOR_NAME',
+          key: 'supplier',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'QTY PO',
-          key: 'PO_QTY',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN', {
-              minimumFractionDigits: 2,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Tanggal GR',
-          key: 'GR_DATE',
+          label: 'Kode Sampel',
+          key: 'sample_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'QTY GR',
-          key: 'GR_QTY',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN', {
-              minimumFractionDigits: 2,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          label: 'Tgl Kedatangan',
+          key: 'k_arrived_at',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Join Sampling',
-          key: 'JOIN_SAMPLING_AT',
+          key: 'k_join_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'PT',
-          key: 'COMPANY_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Dept.',
-          key: 'DEPARTMENT_CODE',
+          label: 'Tgl Terima',
+          key: 'k_receipt_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Status Wf',
-          key: 'STATUS',
+          key: 'request_status_name',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Status HAP',
+          key: 'status',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -276,15 +254,9 @@ export default {
       q_year_id = currentDate()
     }
 
-    console.log('aida')
-    console.log(
-      `/api/admin/monitoring_hap?q=${search}&page=${page}&q_year_id=${q_year_id}`
-    )
-    console.log(year_id)
-
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/monitoring_hap?q=${search}&page=${page}&q_year_id=${q_year_id}`
+      `/api/admin/input_sampel?q=${search}&page=${page}&q_year_id=${q_year_id}`
     )
 
     return {
@@ -306,8 +278,8 @@ export default {
       },
     ]
 
-    // console.log('cek')
-    // console.log(this.year_at)
+    console.log('cek')
+    console.log(this.$route.query.q_year_id)
 
     //Data years
     this.$axios
@@ -383,7 +355,7 @@ export default {
       } catch (err) {}
 
       this.$axios({
-        url: `/api/admin/monitoring_hap/export?q=${this.search}&q_year_id=${this.query_year_id}`,
+        url: `/api/admin/in_monitor/export?q=${this.search}&q_year_id=${this.query_year_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -392,7 +364,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Monitoring HAP.xlsx'
+        var fileName = 'In Monitor.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
