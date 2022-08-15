@@ -16,7 +16,7 @@
                     class="nav-link"
                   >
                     <i class="nav-icon fas fas fa-file-signature"></i>
-                    <b>{{this.$route.query.tab_header}}</b>
+                    <b>{{ this.$route.query.tab_header }}</b>
                   </nuxt-link>
                 </td>
                 <td>/ HASIL ANALISA</td>
@@ -213,6 +213,11 @@ export default {
         {
           label: 'Nilai Standar',
           key: 'sni',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Nilai Minimal',
+          key: 'min_value',
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
