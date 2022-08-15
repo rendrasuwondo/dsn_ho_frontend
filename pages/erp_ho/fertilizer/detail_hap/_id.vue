@@ -12,11 +12,11 @@
               <tr>
                 <td>
                   <nuxt-link
-                    :to="{ name: this.$route.query.url }"
+                    :to="{ name: 'erp_ho-fertilizer-in_monitor' }"
                     class="nav-link"
                   >
-                    <i class="nav-icon fas fas fa-file-signature"></i>
-                    <b>{{ this.$route.query.tab_header }}</b>
+                    <i class="nav-icon fas fa-tablet-alt"></i>
+                    <b>IN MONITOR</b>
                   </nuxt-link>
                 </td>
                 <td>/ HASIL ANALISA</td>
@@ -34,6 +34,7 @@
               :items="header"
               :fields="fields_header"
               show-empty
+              class="table-1"
             ></b-table>
           </div>
 
@@ -76,6 +77,7 @@
             :fields="fields"
             outlined
             show-empty
+            class="table-1"
           >
             <template v-slot:cell(comments)="row">
               <i class="fa fa-comments"></i> {{ row.item.comments.length }}
@@ -90,6 +92,7 @@
                     input_sample_id: input_sample_id,
                   },
                 }"
+                disabled
                 variant="link"
                 size=""
                 title="Edit"
@@ -107,70 +110,36 @@
 
           <div class="form-group mt-4 mb-4 dashed">
             <h6>
-              <b> <i class="nav-icon fas fa-file-upload"></i> UPLOAD FILE </b>
+              <b>
+                <i class="nav-icon fas fa-file-download"></i> DONWLOAD FILE
+              </b>
             </h6>
             <b-container class="mb-1">
               <b-row>
-                <b-col cols="8">
+                <b-col cols="12">
                   <p class="selected">
-                    File Tersimpan : <b> {{ upload_files }}</b>
+                    <i class="nav-icon fas fa-file-pdf logo-file"></i> <br />
+                    <span v-if="upload_files != null">
+                      File Tersimpan :<br />
+                      <b>
+                        {{ upload_files }}
+                      </b>
+                      <br />
+                      <button
+                        @click="fileDownload"
+                        class="btn-info btn-upload"
+                        title="Download File"
+                      >
+                        <i class="nav-icon fas fa-download"></i> Download
+                      </button>
+                    </span>
+                    <span v-else>
+                      <i class="nav-icon fas fa-file-alt logo-file"></i> <br />
+                      Tidak Terdapat File Dalam Data Ini! <br />
+                    </span>
                   </p>
                 </b-col>
-                <b-col cols="4">
-                  <button
-                    v-if="upload_files !== null"
-                    @click="fileDownload"
-                    class="btn-info btn-upload"
-                    title="Download File"
-                  >
-                    <i class="nav-icon fas fa-download"></i> Download
-                  </button>
-                  <button
-                    v-else
-                    class="btn-upload"
-                    title="File Tidak Ditemukan"
-                    disabled
-                  >
-                    <i class="nav-icon fas fa-download"></i> Download
-                  </button>
-                </b-col>
-              </b-row>
-            </b-container>
-            <b-container>
-              <b-row>
-                <b-col cols="8">
-                  <p class="selected">
-                    <label class="choose-file">
-                      Enter Your File
-                      <input
-                        type="file"
-                        name="file"
-                        @change="upload"
-                        class="choose-file"
-                      />
-                    </label>
-
-                    Selected file: <b>{{ files ? files.name : null }}</b>
-                  </p>
-                </b-col>
-                <b-col cols="4">
-                  <button
-                    v-if="files !== null"
-                    @click="submitFileUpload"
-                    class="btn-info btn-upload"
-                    title="Upload File"
-                  >
-                    <i class="nav-icon fas fa-upload"></i> upload
-                  </button>
-                  <button
-                    v-else
-                    class="btn-upload"
-                    disabled
-                    title="Enter Your File"
-                  >
-                    <i class="nav-icon fas fa-upload"></i> upload
-                  </button>
-                </b-col>
+                <b-col cols="4"> </b-col>
               </b-row>
             </b-container>
           </div>
@@ -251,6 +220,11 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          label: 'Supplier',
+          key: 'supplier',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
           label: 'Kode Sampel',
           key: 'sample_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
@@ -261,8 +235,8 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Lab Analisa',
-          key: 'laboratory_code',
+          label: 'Status Wf',
+          key: 'request_status_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -309,7 +283,6 @@ export default {
 
     return {
       posts: posts.data,
-      pagination: posts.data,
       rowcount: posts.data.length,
       search: search,
       header: header,
@@ -383,47 +356,6 @@ export default {
     },
 
     //deletePost method
-    deletePost(id) {
-      this.$swal
-        .fire({
-          title: 'APAKAH ANDA YAKIN ?',
-          text: 'INGIN MENGHAPUS DATA INI !',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'YA, HAPUS!',
-          cancelButtonText: 'TIDAK',
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            //delete tag from server
-
-            this.$axios
-              .delete(`/api/admin/input_hasil/${id}`)
-              .then((response) => {
-                //feresh data
-                this.$nuxt.refresh()
-                if (response.data.success == true) {
-                  this.sweet_alert.title = 'BERHASIL!'
-                  this.sweet_alert.icon = 'success'
-                } else {
-                  this.sweet_alert.title = 'GAGAL!'
-                  this.sweet_alert.icon = 'error'
-                }
-
-                //alert
-                this.$swal.fire({
-                  title: this.sweet_alert.title,
-                  text: response.data.message,
-                  icon: this.sweet_alert.icon,
-                  showConfirmButton: false,
-                  timer: 2000,
-                })
-              })
-          }
-        })
-    },
 
     fileDownload() {
       const headers = {
@@ -539,10 +471,11 @@ export default {
   width: 100%;
 }
 .btn-upload {
-  float: right;
   width: 110px;
   border-radius: 3px;
   padding: 2px 0px 2px 0px;
+  margin-top: 10px;
+  font-size: 14px;
 }
 .dashed {
   border-style: dashed;
@@ -561,9 +494,25 @@ h6 {
   box-shadow: 2px 3px #f7ebfd;
 }
 .selected {
-  font-size: 13px;
+  font-size: 15px;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  text-align: center;
+  color: rgb(205, 227, 234);
 }
 input[type='file'] {
   display: none;
+}
+.table-1 {
+  font-size: 15px;
+}
+.logo-file {
+  font-size: 45px;
+  border: 3px solid;
+  padding: 15px;
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  margin-bottom: 7px;
 }
 </style>

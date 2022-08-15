@@ -95,6 +95,25 @@
               </b-button>
             </template>
 
+            <template v-slot:cell(detail_hap)="row">
+              <b-button
+                :to="{
+                  name: 'erp_ho-fertilizer-detail_hap-id',
+                  params: { id: row.item.id },
+                  query: {
+                    input_sample_id: row.item.id,
+                    fertilizer_type_id: row.item.fertilizer_type_id,
+                  },
+                }"
+                variant="link"
+                size=""
+                title="Status"
+                class="table-1"
+              >
+                {{ row.item.status }}
+              </b-button>
+            </template>
+
             <template #row-details="row">
               <b-card>
                 <b-container class="bv-example-row">
@@ -124,7 +143,7 @@
             </template>
           </b-table>
           <!-- pagination -->
-          <!-- <b-row>
+          <b-row>
             <b-col
               ><b-pagination
                 v-model="pagination.current_page"
@@ -139,7 +158,7 @@
             <b-col class="text-right" align-self="center">
               {{ rowcount }} data
             </b-col>
-          </b-row> -->
+          </b-row>
         </div>
       </div>
     </section>
@@ -179,6 +198,11 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          label: 'Jenis Pupuk',
+          key: 'fertilizer_type_code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
           label: 'Tgl Kedatangan',
           key: 'k_arrived_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
@@ -200,7 +224,7 @@ export default {
         },
         {
           label: 'Status HAP',
-          key: 'status',
+          key: 'detail_hap',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
