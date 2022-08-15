@@ -61,13 +61,15 @@
 
             <div class="form-group">
               <label>QTY PO</label>
-
-              <input
-                class="form-control"
-                placeholder="Jumlah Volume"
+              <money
                 v-model="data_po.QTY"
+                v-bind="money"
+                precision="2"
+                prefix=""
+                class="form-control"
                 readonly
-              />
+              ></money>  
+              
             </div>
 
             <div class="form-group">
@@ -302,30 +304,7 @@ export default {
     this.field.updated_by =
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
 
-    this.$axios.get(`/api/admin/input_join_sampling`).then((response) => {
-      console.log(response.data.data)
-      this.field.id = response.data.data.id
-      this.field.po = response.data.data.po
-      this.data_po.VENDOR = response.data.data.supplier
-      this.data_po.FERTILIZER_TYPE = response.data.data.fertilizer_type_code
-      this.data_po.COMPANY_CODE = response.data.data.company_code
-      this.data_po.DEPARTMENT_CODE = response.data.data.department_code
-      this.data_po.UNIT = response.data.data.unit_code
-      this.data_po.QTY = response.data.data.qty
-      this.data_po.GR_QTY = response.data.data.gr_qty
-      this.data_po.GR_DATE = response.data.data.gr_date
-      this.field.arrived_at = response.data.data.arrived_at
-        ? response.data.data.arrived_at
-        : null
-      this.field.join_sampling_at = response.data.data.join_sampling_at
-        ? response.data.data.join_sampling_at
-        : null
-      this.field.description = response.data.data.description
-      this.field.created_at = response.data.data.created_at
-      this.field.created_by = response.data.data.created_by
-      this.field.updated_at = response.data.data.updated_at
-      this.field.updated_by = response.data.data.updated_by
-    })
+    this.bind()
   },
 
   methods: {
@@ -371,63 +350,139 @@ export default {
     },
 
     async storePost() {
-      //define formData
-      let formData = new FormData()
-      formData.append('po', this.field.po)
-      formData.append(
-        'company_id',
-        this.data_po.COMPANY_ID ? this.data_po.COMPANY_ID : null
-      )
-      formData.append(
-        'department_id',
-        this.data_po.DEPARTMENT_ID ? this.data_po.DEPARTMENT_ID : null
-      )
-      formData.append(
-        'fertilizer_type_id',
-        this.data_po.FERTILIZER_TYPE_ID ? this.data_po.FERTILIZER_TYPE_ID : null
-      )
-      formData.append(
-        'vendors_id',
-        this.data_po.VENDOR_ID ? this.data_po.VENDOR_ID : null
-      )
-      formData.append(
-        'unit_id',
-        this.data_po.UNIT_ID ? this.data_po.UNIT_ID : null
-      )
-      formData.append('qty', this.data_po.QTY ? this.data_po.QTY : null)
-      formData.append('arrived_at', this.field.arrived_at)
-      formData.append(
-        'join_sampling_at',
-        this.field.join_sampling_at ? this.field.join_sampling_at : null
-      )
-      formData.append('description', this.field.description)
-      formData.append('request_status_id', 1)
-      formData.append('selected', 0)
-
-      formData.append('created_by', this.field.created_by)
-
-      formData.append('updated_by', this.field.updated_by)
-      console.log('sada')
-      //sending data to server
-      await this.$axios
-        .post('/api/admin/t_fertilizer_sample', formData)
-        .then(() => {
-          //sweet alert
-          this.$swal.fire({
-            title: 'BERHASIL!',
-            text: 'Data Berhasil Disimpan!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 2000,
+      if (this.field.id != '') {
+        //UPDATE
+        this.$axios
+          .put(`/api/admin/t_fertilizer_sample/${this.field.id}`, {
+            po: this.field.po,
+            company_id: this.field.company_id,
+            department_id: this.field.department_id,
+            fertilizer_type_id: this.field.fertilizer_type_id,
+            vendors_id: this.field.vendors_id,
+            unit_id: this.field.unit_id,
+            qty: this.field.qty,
+            arrived_at: this.field.arrived_at,
+            join_sampling_at: this.field.join_sampling_at,
+            request_status_id: 1,
+            selected: 0,
+            description: this.field.description,
+            created_at: this.field.created_at,
+            updated_at: this.field.updated_at,
+            created_by: this.field.created_by,
+            updated_by: this.field.updated_by,
           })
+          .then(() => {
+            //sweet alert
+            this.$swal.fire({
+              title: 'BERHASIL!',
+              text: 'Data Berhasil Diupdate!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
+            })
+            //redirect ke route "post"
+            this.$nuxt.refresh()
+            this.bind()
+          })
+          .catch((error) => {
+            //assign error validasi
+            this.validation = error.response.data
+          })
+      } else {
+        //INSERT
+        //define formData
+        let formData = new FormData()
+        formData.append('po', this.field.po)
+        formData.append(
+          'company_id',
+          this.data_po.COMPANY_ID ? this.data_po.COMPANY_ID : null
+        )
+        formData.append(
+          'department_id',
+          this.data_po.DEPARTMENT_ID ? this.data_po.DEPARTMENT_ID : null
+        )
+        formData.append(
+          'fertilizer_type_id',
+          this.data_po.FERTILIZER_TYPE_ID
+            ? this.data_po.FERTILIZER_TYPE_ID
+            : null
+        )
+        formData.append(
+          'vendors_id',
+          this.data_po.VENDOR_ID ? this.data_po.VENDOR_ID : null
+        )
+        formData.append(
+          'unit_id',
+          this.data_po.UNIT_ID ? this.data_po.UNIT_ID : null
+        )
+        formData.append('qty', this.data_po.QTY ? this.data_po.QTY : null)
+        formData.append('arrived_at', this.field.arrived_at)
+        formData.append(
+          'join_sampling_at',
+          this.field.join_sampling_at ? this.field.join_sampling_at : null
+        )
+        formData.append('description', this.field.description)
+        formData.append('request_status_id', 1)
+        formData.append('selected', 0)
 
-          //redirect, if success store data
-          this.$nuxt.refresh()
-        })
-        .catch((error) => {
-          //assign error to state "validation"
-          this.validation = error.response.data
-        })
+        formData.append('created_by', this.field.created_by)
+
+        formData.append('updated_by', this.field.updated_by)
+        console.log('sada')
+        //sending data to server
+        await this.$axios
+          .post('/api/admin/t_fertilizer_sample', formData)
+          .then(() => {
+            //sweet alert
+            this.$swal.fire({
+              title: 'BERHASIL!',
+              text: 'Data Berhasil Disimpan!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
+            })
+
+            //redirect, if success store data
+            this.$nuxt.refresh()
+          })
+          .catch((error) => {
+            //assign error to state "validation"
+            this.validation = error.response.data
+          })
+      }
+    },
+
+    bind() {
+      this.$axios.get(`/api/admin/input_join_sampling`).then((response) => {
+        // console.log(response.data.data)
+        this.field.id = response.data.data.id
+        this.field.po = response.data.data.po
+        this.field.vendors_id =  response.data.data.vendors_id
+        this.data_po.VENDOR = response.data.data.supplier
+        this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
+        this.data_po.FERTILIZER_TYPE = response.data.data.fertilizer_type_code
+        this.field.company_id = response.data.data.company_id
+        this.data_po.COMPANY_CODE = response.data.data.company_code
+        this.field.department_id = response.data.data.department_id
+        this.data_po.DEPARTMENT_CODE = response.data.data.department_code
+        this.field.unit_id = response.data.data.unit_id
+        this.data_po.UNIT = response.data.data.unit_code
+        this.data_po.QTY = response.data.data.qty
+        this.field.qty = response.data.data.gr_qty
+        this.data_po.GR_QTY = response.data.data.gr_qty
+        this.data_po.GR_DATE = response.data.data.gr_date
+        this.field.arrived_at = response.data.data.arrived_at
+          ? response.data.data.arrived_at
+          : null
+        this.field.join_sampling_at = response.data.data.join_sampling_at
+          ? response.data.data.join_sampling_at
+          : null
+        this.field.description = response.data.data.description
+        this.field.created_at = response.data.data.created_at
+        this.field.created_by = response.data.data.created_by
+        this.field.updated_at = response.data.data.updated_at
+        this.field.updated_by = response.data.data.updated_by
+      })
     },
   },
 
