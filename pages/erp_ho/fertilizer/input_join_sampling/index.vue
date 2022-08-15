@@ -68,8 +68,7 @@
                 prefix=""
                 class="form-control"
                 readonly
-              ></money>  
-              
+              ></money>
             </div>
 
             <div class="form-group">
@@ -241,11 +240,11 @@
               <i class="fa fa-paper-plane"></i> SIMPAN
             </button>
             <button
-              v-on:click="back()"
-              class="btn btn-warning btn-reset"
-              type="reset"
+              class="btn btn-warning btn-submit"
+              @click="SubmitVerifikasi"
+              type="submit"
             >
-              <i class="fa fa-redo"></i> BATAL
+              <i class="fa fa-check-double"></i> <b>SUBMIT</b>
             </button>
           </form>
         </div>
@@ -452,12 +451,176 @@ export default {
       }
     },
 
+    async SubmitVerifikasi(e) {
+      // console.log('tes')
+      e.preventDefault()
+      this.$swal
+        .fire({
+          title: 'APAKAH ANDA YAKIN ?',
+          text: 'INGIN SUBMIT DATA INI !',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#05c46b',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'YA',
+          cancelButtonText: 'TIDAK',
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            if (this.field.id === null) {
+              let formData = new FormData()
+              formData.append(
+                'company_id',
+                this.data_po.COMPANY_ID ? this.data_po.COMPANY_ID : null
+              )
+              formData.append(
+                'department_id',
+                this.data_po.DEPARTMENT_ID ? this.data_po.DEPARTMENT_ID : null
+              )
+              formData.append(
+                'fertilizer_type_id',
+                this.data_po.FERTILIZER_TYPE_ID
+                  ? this.data_po.FERTILIZER_TYPE_ID
+                  : null
+              )
+              formData.append(
+                'vendors_id',
+                this.data_po.VENDOR_ID ? this.data_po.VENDOR_ID : null
+              )
+              formData.append(
+                'unit_id',
+                this.data_po.UNIT_ID ? this.data_po.UNIT_ID : null
+              )
+              formData.append('qty', this.data_po.QTY ? this.data_po.QTY : null)
+              formData.append('arrived_at', this.field.arrived_at)
+              formData.append(
+                'join_sampling_at',
+                this.field.join_sampling_at ? this.field.join_sampling_at : null
+              )
+              formData.append('description', this.field.description)
+              formData.append('request_status_id', 3)
+              formData.append('selected', 1)
+
+              formData.append('created_by', this.field.created_by)
+
+              formData.append('updated_by', this.field.updated_by)
+
+              //sending data to server
+              this.$axios
+                .post('/api/admin/t_fertilizer_sample', formData)
+                .then(() => {
+                  //redirect ke route "post"
+                  this.$axios
+                    .get(`/api/admin/input_join_sampling`)
+                    .then((response) => {
+                      //data yang diambil
+                      if (response.data.data === null) {
+                        this.field.id = ''
+                        this.field.po = ''
+                        this.field.supplier = ''
+                        this.field.fertilizer_type_code = ''
+                        this.field.company_code = ''
+                        this.field.unit_code = ''
+                        this.field.department_code = ''
+                        this.field.qty = ''
+                        this.field.gr_qty = ''
+                        this.field.gr_date = ''
+                        this.field.arrived_at = ''
+                        this.field.join_sampling_at = ''
+                        this.field.description = ''
+                      }
+                    })
+                  this.$swal.fire({
+                    title: 'BERHASIL!',
+                    text: 'Data Berhasil Disimpan!',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 2000,
+                  })
+                  this.$nuxt.refresh()
+                  //data
+                })
+                .catch((error) => {
+                  //assign error to state "validation"
+                  this.validation = error.response.data
+                })
+            } else {
+              this.$axios
+                .put(`/api/admin/t_fertilizer_sample/${this.field.id}`, {
+                  po: this.field.po,
+                  company_id: this.field.company_id,
+                  department_id: this.field.department_id,
+                  fertilizer_type_id: this.field.fertilizer_type_id,
+                  vendors_id: this.field.vendors_id,
+                  unit_id: this.field.unit_id,
+                  qty: this.field.qty,
+                  arrived_at: this.field.arrived_at,
+                  join_sampling_at: this.field.join_sampling_at,
+                  request_status_id: 3,
+                  selected: 1,
+                  description: this.field.description,
+                  created_at: this.field.created_at,
+                  updated_at: this.field.updated_at,
+                  created_by: this.field.created_by,
+                  updated_by: this.field.updated_by,
+                })
+                .then((response) => {
+                  //redirect ke route "post"
+                  //data
+                  this.$axios
+                    .get(`/api/admin/input_join_sampling`)
+                    .then((response) => {
+                      //data yang diambil
+                      if (response.data.data === null) {
+                        this.field.id = ''
+                        this.field.po = ''
+                        this.field.vendors_id = ''
+                        this.data_po.VENDOR = ''
+                        this.field.fertilizer_type_id = ''
+                        this.data_po.FERTILIZER_TYPE = ''
+                        this.field.company_id = ''
+                        this.data_po.COMPANY_CODE = ''
+                        this.field.department_id = ''
+                        this.data_po.DEPARTMENT_CODE = ''
+                        this.field.unit_id = ''
+                        this.data_po.UNIT = ''
+                        this.data_po.QTY = ''
+                        this.field.qty = ''
+                        this.data_po.GR_QTY = ''
+                        this.data_po.GR_DATE = ''
+                        this.field.arrived_at = ''
+                        this.field.join_sampling_at = ''
+                        this.field.description = ''
+                        this.field.created_at = ''
+                        this.field.created_by = ''
+                        this.field.updated_at = ''
+                        this.field.updated_by = ''
+                      }
+                    })
+                  this.$swal.fire({
+                    title: 'BERHASIL!',
+                    text: 'Data Berhasil Disimpan!',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 2000,
+                  })
+                  this.$nuxt.refresh()
+                })
+                .catch((error) => {
+                  //assign error to state "validation"
+                  this.validation = error.response.data
+                })
+            }
+          }
+        })
+    },
+
     bind() {
       this.$axios.get(`/api/admin/input_join_sampling`).then((response) => {
         // console.log(response.data.data)
         this.field.id = response.data.data.id
         this.field.po = response.data.data.po
-        this.field.vendors_id =  response.data.data.vendors_id
+        this.field.vendors_id = response.data.data.vendors_id
         this.data_po.VENDOR = response.data.data.supplier
         this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
         this.data_po.FERTILIZER_TYPE = response.data.data.fertilizer_type_code

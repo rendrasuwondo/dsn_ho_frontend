@@ -118,8 +118,10 @@
               <b-row>
                 <b-col cols="12">
                   <p class="selected">
-                    <i class="nav-icon fas fa-file-pdf logo-file"></i> <br />
-                    <span v-if="upload_files != null">
+                    <span v-if="upload_files != null" class="cf-1">
+                      <i class="nav-icon fas fa-file-alt cf-1 logo-file"></i>
+                      <br />
+
                       File Tersimpan :<br />
                       <b>
                         {{ upload_files }}
@@ -133,9 +135,10 @@
                         <i class="nav-icon fas fa-download"></i> Download
                       </button>
                     </span>
-                    <span v-else>
+                    <span v-else class="cf-2">
                       <i class="nav-icon fas fa-file-alt logo-file"></i> <br />
                       Tidak Terdapat File Dalam Data Ini! <br />
+                      <br />
                     </span>
                   </p>
                 </b-col>
@@ -476,6 +479,9 @@ export default {
   padding: 2px 0px 2px 0px;
   margin-top: 10px;
   font-size: 14px;
+  background-color: rgb(89, 89, 224);
+  border: 1.5px solid rgb(111, 65, 228);
+  box-shadow: 2px 2px 0px rgb(234, 228, 247);
 }
 .dashed {
   border-style: dashed;
@@ -498,7 +504,6 @@ h6 {
   margin-bottom: 2px;
   margin-top: 2px;
   text-align: center;
-  color: rgb(205, 227, 234);
 }
 input[type='file'] {
   display: none;
@@ -514,5 +519,11 @@ input[type='file'] {
   width: 80px;
   border-radius: 50%;
   margin-bottom: 7px;
+}
+.cf-1 {
+  color: rgb(163, 163, 255);
+}
+.cf-2 {
+  color: rgb(205, 228, 235);
 }
 </style>
