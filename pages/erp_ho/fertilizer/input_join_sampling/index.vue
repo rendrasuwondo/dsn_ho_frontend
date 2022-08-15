@@ -467,8 +467,10 @@ export default {
         })
         .then((result) => {
           if (result.isConfirmed) {
-            if (this.field.id === null) {
+            this.checkId = this.field.id ? this.field.id : undefined
+            if (this.checkId === undefined) {
               let formData = new FormData()
+              formData.append('po', this.field.po)
               formData.append(
                 'company_id',
                 this.data_po.COMPANY_ID ? this.data_po.COMPANY_ID : null
@@ -517,14 +519,20 @@ export default {
                       if (response.data.data === null) {
                         this.field.id = ''
                         this.field.po = ''
-                        this.field.supplier = ''
-                        this.field.fertilizer_type_code = ''
-                        this.field.company_code = ''
-                        this.field.unit_code = ''
-                        this.field.department_code = ''
+                        this.field.vendors_id = ''
+                        this.data_po.VENDOR = ''
+                        this.field.fertilizer_type_id = ''
+                        this.data_po.FERTILIZER_TYPE = ''
+                        this.field.company_id = ''
+                        this.data_po.COMPANY_CODE = ''
+                        this.field.department_id = ''
+                        this.data_po.DEPARTMENT_CODE = ''
+                        this.field.unit_id = ''
+                        this.data_po.UNIT = ''
+                        this.data_po.QTY = ''
                         this.field.qty = ''
-                        this.field.gr_qty = ''
-                        this.field.gr_date = ''
+                        this.data_po.GR_QTY = ''
+                        this.data_po.GR_DATE = ''
                         this.field.arrived_at = ''
                         this.field.join_sampling_at = ''
                         this.field.description = ''
@@ -559,14 +567,8 @@ export default {
                   request_status_id: 3,
                   selected: 1,
                   description: this.field.description,
-                  created_at: this.field.created_at,
-                  updated_at: this.field.updated_at,
-                  created_by: this.field.created_by,
-                  updated_by: this.field.updated_by,
                 })
-                .then((response) => {
-                  //redirect ke route "post"
-                  //data
+                .then(() => {
                   this.$axios
                     .get(`/api/admin/input_join_sampling`)
                     .then((response) => {
@@ -591,10 +593,6 @@ export default {
                         this.field.arrived_at = ''
                         this.field.join_sampling_at = ''
                         this.field.description = ''
-                        this.field.created_at = ''
-                        this.field.created_by = ''
-                        this.field.updated_at = ''
-                        this.field.updated_by = ''
                       }
                     })
                   this.$swal.fire({
