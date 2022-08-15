@@ -141,6 +141,9 @@
                 }"
               ></b-form-datepicker>
             </div>
+            <div v-if="validation.arrived_at" class="mt-2">
+                <b-alert show variant="danger">{{ validation.arrived_at[0] }}</b-alert>
+              </div>
 
             <div class="form-group">
               <label>Join Sampling</label>
