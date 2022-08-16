@@ -132,6 +132,18 @@
             </div>
 
             <div class="form-group">
+              <label>PO PRICE</label>
+              <money
+                v-model="data_po.PO_PRICE"
+                v-bind="money"
+                precision="2"
+                prefix=""
+                class="form-control"
+                readonly
+              ></money>
+            </div>
+
+            <div class="form-group">
               <label>Tanggal Kedatangan</label>
               <b-form-datepicker
                 placeholder="Choose a date"
