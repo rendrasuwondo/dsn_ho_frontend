@@ -334,9 +334,7 @@ export default {
       //   this.po = response.data.data
       // }).prepend(
       const data_po = this.$axios
-        .$get(
-          `http://127.0.0.1:8000/api/admin/PoFertilizer?PO_NO=${this.field.po}`
-        )
+        .$get(`/api/admin/PoFertilizer?PO_NO=${this.field.po}`)
         // return po
         .then((response) => {
           this.data_po = response.data
