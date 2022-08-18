@@ -292,6 +292,17 @@ export default {
           key: 'hasil_status',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
+        {
+          label: 'Hasil Hitung',
+          key: 'fertilizer_analysis_calculation',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN', {
+              minimumFractionDigits: 2,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
       ],
       sweet_alert: {
         title: '',

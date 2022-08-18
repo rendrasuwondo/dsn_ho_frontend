@@ -155,11 +155,11 @@ export default {
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass ',
           sortable: false,
         },
-        {
-          label: 'Actions',
-          key: 'actions',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
+        // {
+        //   label: 'Actions',
+        //   key: 'actions',
+        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        // },
         {
           label: 'Status',
           key: 'request_status_name',
@@ -231,6 +231,17 @@ export default {
           label: 'Join Sampling',
           key: 'k_join_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Klaim Analisa Pupuk',
+          key: 'fertilizer_analysis_calculation',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN', {
+              minimumFractionDigits: 2,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
       ],
       sweet_alert: {

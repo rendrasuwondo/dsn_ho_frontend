@@ -121,7 +121,7 @@
 
             <div class="form-group">
               <label>QTY GR</label>
-             <input
+              <input
                 type="text"
                 v-model="data_po.GR_QTY"
                 placeholder=""
@@ -139,7 +139,7 @@
                 placeholder=""
                 class="form-control"
                 readonly
-                 v-number="number"
+                v-number="number"
               />
             </div>
 
@@ -290,13 +290,13 @@ export default {
     return {
       state: 'disabled',
       number: {
-          decimal: '.',
-          separator: ',',
-          prefix: '',
-          suffix: '',
-          precision: 2,
-          masked: false 
-        },
+        decimal: '.',
+        separator: ',',
+        prefix: '',
+        suffix: '',
+        precision: 2,
+        masked: false,
+      },
       field: {
         id: '',
         po: '',
@@ -304,7 +304,7 @@ export default {
         fertilizer_type_id: '',
         company_id: '',
         department_id: '',
-        qty: '0.00',
+        qty: '',
         arrived_at: '',
         join_sampling_at: '',
         description: '',
@@ -328,7 +328,6 @@ export default {
     this.field.updated_by =
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
 
- 
     this.bind()
     // this.refreshNewForm()
   },
