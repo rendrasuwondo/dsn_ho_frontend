@@ -383,7 +383,7 @@ export default {
             fertilizer_type_id: this.field.fertilizer_type_id,
             vendors_id: this.field.vendors_id,
             unit_id: this.field.unit_id,
-            qty: this.field.qty,
+            qty: this.field.qty.replace(',', ''),
             arrived_at: this.field.arrived_at,
             join_sampling_at: this.field.join_sampling_at,
             request_status_id: 1,
@@ -438,7 +438,10 @@ export default {
           'unit_id',
           this.data_po.UNIT_ID ? this.data_po.UNIT_ID : null
         )
-        formData.append('qty', this.data_po.QTY ? this.data_po.QTY : null)
+        formData.append(
+          'qty',
+          this.data_po.QTY ? this.data_po.QTY.replace(',', '') : null
+        )
         formData.append('arrived_at', this.field.arrived_at)
         formData.append('join_sampling_at', this.field.join_sampling_at)
         formData.append('description', this.field.description)
@@ -448,7 +451,7 @@ export default {
         formData.append('created_by', this.field.created_by)
 
         formData.append('updated_by', this.field.updated_by)
-        console.log('sada')
+        // console.log('sada')
         //sending data to server
         await this.$axios
           .post('/api/admin/t_fertilizer_sample', formData)
@@ -464,10 +467,19 @@ export default {
 
             //redirect, if success store data
             this.$nuxt.refresh()
+             this.bind()
           })
           .catch((error) => {
             //assign error to state "validation"
             this.validation = error.response.data
+            console.log(error.response.data.message)
+            this.$swal.fire({
+              title: 'Error!',
+              text: error.response.data.message,
+              icon: 'error',
+              showConfirmButton: true,
+              // timer: 2000,
+            })
           })
       }
     },
@@ -518,6 +530,7 @@ export default {
               .catch((error) => {
                 //assign error to state "validation"
                 this.validation = error.response.data
+                alert(error.response.data)
               })
           }
         })
