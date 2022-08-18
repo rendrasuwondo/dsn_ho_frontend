@@ -61,14 +61,14 @@
 
             <div class="form-group">
               <label>QTY PO</label>
-              <money
+              <input
+                type="text"
                 v-model="data_po.QTY"
-                v-bind="money"
-                precision="2"
-                prefix=""
+                placeholder=""
                 class="form-control"
                 readonly
-              ></money>
+                v-number="number"
+              />
             </div>
 
             <div class="form-group">
@@ -121,26 +121,26 @@
 
             <div class="form-group">
               <label>QTY GR</label>
-              <money
+             <input
+                type="text"
                 v-model="data_po.GR_QTY"
-                v-bind="money"
-                precision="2"
-                prefix=""
+                placeholder=""
                 class="form-control"
                 readonly
-              ></money>
+                v-number="number"
+              />
             </div>
 
             <div class="form-group">
               <label>PO PRICE</label>
-              <money
+              <input
+                type="text"
                 v-model="data_po.PO_PRICE"
-                v-bind="money"
-                precision="2"
-                prefix=""
+                placeholder=""
                 class="form-control"
                 readonly
-              ></money>
+                 v-number="number"
+              />
             </div>
 
             <div class="form-group">
@@ -289,7 +289,14 @@ export default {
   data() {
     return {
       state: 'disabled',
-
+      number: {
+          decimal: '.',
+          separator: ',',
+          prefix: '',
+          suffix: '',
+          precision: 2,
+          masked: false 
+        },
       field: {
         id: '',
         po: '',
@@ -297,7 +304,7 @@ export default {
         fertilizer_type_id: '',
         company_id: '',
         department_id: '',
-        qty: '',
+        qty: '0.00',
         arrived_at: '',
         join_sampling_at: '',
         description: '',
@@ -321,8 +328,9 @@ export default {
     this.field.updated_by =
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
 
+ 
     this.bind()
-    this.refreshNewForm()
+    // this.refreshNewForm()
   },
 
   methods: {
@@ -519,33 +527,35 @@ export default {
     bind() {
       this.$axios.get(`/api/admin/input_join_sampling`).then((response) => {
         // console.log(response.data.data)
-        this.field.id = response.data.data.id
-        this.field.po = response.data.data.po
-        this.field.vendors_id = response.data.data.vendors_id
-        this.data_po.VENDOR = response.data.data.supplier
-        this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
-        this.data_po.FERTILIZER_TYPE = response.data.data.fertilizer_type_code
-        this.field.company_id = response.data.data.company_id
-        this.data_po.COMPANY_CODE = response.data.data.company_code
-        this.field.department_id = response.data.data.department_id
-        this.data_po.DEPARTMENT_CODE = response.data.data.department_code
-        this.field.unit_id = response.data.data.unit_id
-        this.data_po.UNIT = response.data.data.unit_code
-        this.data_po.QTY = response.data.data.qty
-        this.field.qty = response.data.data.gr_qty
-        this.data_po.GR_QTY = response.data.data.gr_qty
-        this.data_po.GR_DATE = response.data.data.gr_date
-        this.field.arrived_at = response.data.data.arrived_at
-          ? response.data.data.arrived_at
-          : null
-        this.field.join_sampling_at = response.data.data.join_sampling_at
-          ? response.data.data.join_sampling_at
-          : null
-        this.field.description = response.data.data.description
-        this.field.created_at = response.data.data.created_at
-        this.field.created_by = response.data.data.created_by
-        this.field.updated_at = response.data.data.updated_at
-        this.field.updated_by = response.data.data.updated_by
+        if (response.data.data != null) {
+          this.field.id = response.data.data.id
+          this.field.po = response.data.data.po
+          this.field.vendors_id = response.data.data.vendors_id
+          this.data_po.VENDOR = response.data.data.supplier
+          this.field.fertilizer_type_id = response.data.data.fertilizer_type_id
+          this.data_po.FERTILIZER_TYPE = response.data.data.fertilizer_type_code
+          this.field.company_id = response.data.data.company_id
+          this.data_po.COMPANY_CODE = response.data.data.company_code
+          this.field.department_id = response.data.data.department_id
+          this.data_po.DEPARTMENT_CODE = response.data.data.department_code
+          this.field.unit_id = response.data.data.unit_id
+          this.data_po.UNIT = response.data.data.unit_code
+          this.data_po.QTY = response.data.data.qty
+          this.field.qty = response.data.data.gr_qty
+          this.data_po.GR_QTY = response.data.data.gr_qty
+          this.data_po.GR_DATE = response.data.data.gr_date
+          this.field.arrived_at = response.data.data.arrived_at
+            ? response.data.data.arrived_at
+            : null
+          this.field.join_sampling_at = response.data.data.join_sampling_at
+            ? response.data.data.join_sampling_at
+            : null
+          this.field.description = response.data.data.description
+          this.field.created_at = response.data.data.created_at
+          this.field.created_by = response.data.data.created_by
+          this.field.updated_at = response.data.data.updated_at
+          this.field.updated_by = response.data.data.updated_by
+        }
       })
     },
 
