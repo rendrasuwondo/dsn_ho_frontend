@@ -59,7 +59,7 @@
                   params: { id: row.item.id },
                   query: {
                     url: 'erp_ho-fertilizer-input_sampel',
-                    tab_header: 'INPUT SAMPLE'
+                    tab_header: 'INPUT SAMPLE',
                   },
                 }"
                 variant="link"
@@ -78,7 +78,7 @@
                     input_sample_id: row.item.id,
                     fertilizer_type_id: row.item.fertilizer_type_id,
                     url: 'erp_ho-fertilizer-input_sampel',
-                    tab_header: 'INPUT SAMPLE'
+                    tab_header: 'INPUT SAMPLE',
                   },
                 }"
                 variant="link"
@@ -251,6 +251,17 @@ export default {
           key: 'hasil_status',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
+        {
+          label: 'Hasil Hitung',
+          key: 'fertilizer_analysis_calculation',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN', {
+              minimumFractionDigits: 2,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
       ],
       sweet_alert: {
         title: '',
@@ -272,6 +283,7 @@ export default {
       `/api/admin/input_sampel?q=${search}&page=${page}`
     )
     console.log('da')
+    console.log(`/api/admin/input_sampel?q=${search}&page=${page}`)
     console.log(posts.data.data)
 
     return {
