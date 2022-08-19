@@ -207,7 +207,7 @@ export default {
         },
         {
           label: 'Join Sampling',
-          key: 'JOIN_SAMPLING_AT',
+          key: 'K_JOIN_SAMPLING_AT',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
