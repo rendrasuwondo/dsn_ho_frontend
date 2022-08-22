@@ -53,7 +53,7 @@
               <input
                 type="text"
                 v-model="data_po.FERTILIZER_TYPE"
-                placeholder="Jenis Pupuk"
+                placeholder="Masukkan Jenis Pupuk"
                 class="form-control"
                 readonly
               />
@@ -64,7 +64,7 @@
               <input
                 type="text"
                 v-model="data_po.QTY"
-                placeholder=""
+                placeholder="Masukkan QTY "
                 class="form-control"
                 readonly
                 v-number="number"
@@ -76,7 +76,7 @@
 
               <input
                 class="form-control"
-                placeholder="Jumlah Volume"
+                placeholder="Masukkan Satuan"
                 v-model="data_po.UNIT"
                 readonly
               />
@@ -88,7 +88,7 @@
               <input
                 type="text"
                 v-model="data_po.COMPANY_CODE"
-                placeholder="PT"
+                placeholder="Masukkan Nama PT"
                 class="form-control"
                 readonly
               />
@@ -99,7 +99,7 @@
               <input
                 type="text"
                 v-model="data_po.DEPARTMENT_CODE"
-                placeholder="Department"
+                placeholder="Masukkan Nama Department"
                 class="form-control"
                 readonly
               />
@@ -124,7 +124,7 @@
               <input
                 type="text"
                 v-model="data_po.GR_QTY"
-                placeholder=""
+                placeholder="Masukkan QTY GR"
                 class="form-control"
                 readonly
                 v-number="number"
@@ -136,7 +136,7 @@
               <input
                 type="text"
                 v-model="data_po.PO_PRICE"
-                placeholder=""
+                placeholder="Masukkan PO Price"
                 class="form-control"
                 readonly
                 v-number="number"
@@ -468,7 +468,7 @@ export default {
 
             //redirect, if success store data
             this.$nuxt.refresh()
-             this.bind()
+            this.bind()
           })
           .catch((error) => {
             //assign error to state "validation"
@@ -577,7 +577,7 @@ export default {
       this.validationCelar
       this.$axios.get(`/api/admin/input_join_sampling`).then((response) => {
         //data yang diambil
-        
+
         if (response.data.data === null) {
           this.field.id = ''
           this.field.po = ''
@@ -606,7 +606,7 @@ export default {
       this.validation.po = ''
       this.validation.arrived_at = ''
       this.validation.join_sampling_at = ''
-    }
+    },
   },
 
   computed: {

@@ -228,7 +228,7 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Klaim Analisa Pupuk',
+          label: 'Klaim Mutu Pupuk',
           key: 'fertilizer_analysis_calculation',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN', {
@@ -266,12 +266,10 @@ export default {
     //search
     let search = query.q ? query.q : ''
 
-    let q_year_id = query.q_year_id ? query.q_year_id : currentDate()
+    let q_year_id = query.q_year_id ? query.q_year_id : ''
     let year_id = []
 
-    const year_list = await $axios.$get(
-      `/api/admin/lov_years?q_year_id=${q_year_id}`
-    )
+    const year_list = await $axios.$get(`/api/admin/lov_years`)
 
     if (query.q_year_id) {
       //Mandor
@@ -285,8 +283,10 @@ export default {
 
       q_year_id = year_id.year_at
     }
+
     if (q_year_id == undefined) {
-      q_year_id = currentDate()
+      // q_year_id = currentDate()
+      q_year_id = ''
     }
 
     //fetching posts
@@ -307,22 +307,15 @@ export default {
   mounted() {
     this.year_id = [
       {
-        year_at: this.$route.query.q_year_id
-          ? this.$route.query.q_year_id
-          : this.currentDate(),
+        year_at: this.currentDate(),
       },
     ]
-
-    console.log('cek')
-    console.log(this.$route.query.q_year_id)
-
     //Data years
-    this.$axios
-      .get('/api/admin/lov_years')
-
-      .then((response) => {
-        this.years = response.data.data
-      })
+    // this.$axios
+    //   .get('/api/admin/lov_years')
+    //   .then((response) => {
+    //     this.years = response.data.data
+    //   })
   },
 
   methods: {
@@ -339,9 +332,7 @@ export default {
         query: {
           q: this.$route.query.q,
           page: page,
-          year_id: this.$route.query.year_id
-            ? this.$route.query.year_id
-            : this.currentDate(),
+          year_id: this.$route.query.year_id,
         },
       })
     },
@@ -349,13 +340,11 @@ export default {
     searchData() {
       try {
         if (this.year_id.year_at === null) {
-          this.query_year_id = this.currentDate()
+          this.query_year_id = ''
         } else if (this.year_id.year_at === undefined) {
           this.query_year_id = this.$route.query.q_year_id
         } else {
-          this.query_year_id = this.year_id.year_at
-            ? this.year_id.year_at
-            : this.currentDate()
+          this.query_year_id = this.year_id.year_at ? this.year_id.year_at : ''
         }
       } catch (err) {}
 
@@ -363,9 +352,7 @@ export default {
         path: this.$route.path,
         query: {
           q: this.search,
-          q_year_id: this.query_year_id
-            ? this.query_year_id
-            : this.currentDate(),
+          q_year_id: this.query_year_id,
         },
       })
     },

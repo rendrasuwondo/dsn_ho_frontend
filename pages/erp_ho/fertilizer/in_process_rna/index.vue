@@ -293,7 +293,7 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Klaim Untuk Pupuk',
+          label: 'Klaim Mutu Pupuk',
           key: 'fertilizer_analysis_calculation',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN', {
