@@ -236,9 +236,7 @@ export default {
           label: 'Klaim Mutu Pupuk',
           key: 'fertilizer_analysis_calculation',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN', {
-              minimumFractionDigits: 2,
-            })
+            let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',

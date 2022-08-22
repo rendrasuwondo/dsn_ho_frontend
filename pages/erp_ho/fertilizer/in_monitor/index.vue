@@ -231,9 +231,7 @@ export default {
           label: 'Klaim Mutu Pupuk',
           key: 'fertilizer_analysis_calculation',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN', {
-              minimumFractionDigits: 2,
-            })
+            let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -267,6 +265,7 @@ export default {
     let search = query.q ? query.q : ''
 
     let q_year_id = query.q_year_id ? query.q_year_id : ''
+
     let year_id = []
 
     const year_list = await $axios.$get(`/api/admin/lov_years`)
@@ -285,10 +284,14 @@ export default {
     }
 
     if (q_year_id == undefined) {
-      // q_year_id = currentDate()
-      q_year_id = ''
+      q_year_id = query.q_year_id ? query.q_year_id : currentDate()
+      // q_year_id = ''
     }
 
+    console.log('cek')
+    console.log(
+      `/api/admin/input_sampel?q=${search}&page=${page}&q_year_id=${q_year_id}`
+    )
     //fetching posts
     const posts = await $axios.$get(
       `/api/admin/input_sampel?q=${search}&page=${page}&q_year_id=${q_year_id}`
@@ -305,11 +308,11 @@ export default {
   },
 
   mounted() {
-    this.year_id = [
-      {
-        year_at: this.currentDate(),
-      },
-    ]
+    // this.year_id = [
+    //   {
+    //     year_at: this.currentDate(),
+    //   },
+    // ]
     //Data years
     // this.$axios
     //   .get('/api/admin/lov_years')
@@ -332,10 +335,13 @@ export default {
         query: {
           q: this.$route.query.q,
           page: page,
-          year_id: this.$route.query.year_id,
+          q_year_id: this.$route.query.q_year_id
+            ? this.$route.query.q_year_id
+            : this.currentDate(),
         },
       })
     },
+
     //searchData
     searchData() {
       try {

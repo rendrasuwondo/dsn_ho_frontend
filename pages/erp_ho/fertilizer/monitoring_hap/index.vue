@@ -229,9 +229,7 @@ export default {
           label: 'Klaim Mutu Pupuk',
           key: 'fertilizer_analysis_calculation',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN', {
-              minimumFractionDigits: 2,
-            })
+            let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -282,7 +280,7 @@ export default {
       q_year_id = year_id.year_at
     }
     if (q_year_id == undefined) {
-      q_year_id = ''
+      q_year_id = query.q_year_id ? query.q_year_id : currentDate()
     }
     console.log(q_year_id)
     console.log(
@@ -325,7 +323,9 @@ export default {
         query: {
           q: this.$route.query.q,
           page: page,
-          year_id: this.$route.query.year_id,
+          q_year_id: this.$route.query.q_year_id
+            ? this.$route.query.q_year_id
+            : this.currentDate(),
         },
       })
     },
