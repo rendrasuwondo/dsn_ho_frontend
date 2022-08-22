@@ -308,11 +308,11 @@ export default {
   },
 
   mounted() {
-    // this.year_id = [
-    //   {
-    //     year_at: this.currentDate(),
-    //   },
-    // ]
+    this.year_id = [
+      {
+        year_at: this.currentDate(),
+      },
+    ]
     //Data years
     // this.$axios
     //   .get('/api/admin/lov_years')
