@@ -406,6 +406,7 @@ export default {
             //redirect ke route "post"
             this.$nuxt.refresh()
             this.bind()
+            this.validationCelar()
           })
           .catch((error) => {
             //assign error validasi
@@ -538,7 +539,7 @@ export default {
 
     bind() {
       this.$axios.get(`/api/admin/input_join_sampling`).then((response) => {
-        // console.log(response.data.data)
+        console.log(response.data.data)
         if (response.data.data != null) {
           this.field.id = response.data.data.id
           this.field.po = response.data.data.po
@@ -553,6 +554,7 @@ export default {
           this.field.unit_id = response.data.data.unit_id
           this.data_po.UNIT = response.data.data.unit_code
           this.data_po.QTY = response.data.data.qty
+          this.data_po.PO_PRICE = response.data.data.po_price
           this.field.qty = response.data.data.gr_qty
           this.data_po.GR_QTY = response.data.data.gr_qty
           this.data_po.GR_DATE = response.data.data.gr_date
@@ -572,8 +574,10 @@ export default {
     },
 
     refreshNewForm() {
+      this.validationCelar
       this.$axios.get(`/api/admin/input_join_sampling`).then((response) => {
         //data yang diambil
+        
         if (response.data.data === null) {
           this.field.id = ''
           this.field.po = ''
@@ -597,6 +601,12 @@ export default {
         }
       })
     },
+
+    validationCelar() {
+      this.validation.po = ''
+      this.validation.arrived_at = ''
+      this.validation.join_sampling_at = ''
+    }
   },
 
   computed: {
