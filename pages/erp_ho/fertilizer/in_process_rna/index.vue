@@ -46,6 +46,7 @@
             responsive
             striped
             bordered
+            outlined
             hover
             :items="posts"
             :fields="fields"
@@ -141,41 +142,77 @@
               <b-card>
                 <b-container class="bv-example-row">
                   <b-row>
-                    <b-col cols="4">Supplier : {{ row.item.supplier }}</b-col>
-                    <b-col cols="4">PT : {{ row.item.company_name }}</b-col>
-                    <b-col cols="4"
-                      >Department : {{ row.item.department_name }}</b-col
-                    >
-                  </b-row>
-                  <b-row></b-row>
-                  <b-row>
+                    <b-col cols="5">Supplier : {{ row.item.supplier }}</b-col>
                     <b-col cols="4">
                       Join Sampling : {{ row.item.k_join_sampling_at }}
                     </b-col>
-                    <b-col cols="4">QTY PO : {{ row.item.qty }}</b-col>
-                    <b-col cols="4"
-                      >Jenis Pupuk : {{ row.item.fertilizer_type_code }}</b-col
-                    >
+                    <b-col cols="3">
+                      QTY PO :
+                      {{
+                        row.item.qty.replace(
+                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
+                          '$1\.'
+                        )
+                      }}
+                    </b-col>
                   </b-row>
                   <b-row></b-row>
                   <b-row>
-                    <b-col cols="4"
-                      >Tanggal GR : {{ row.item.k_gr_date }}</b-col
-                    >
-                    <b-col cols="4">QTY GR : {{ row.item.gr_qty }}</b-col>
-                    <b-col cols="4">Parameter : {{ row.item.parameter }}</b-col>
+                    <b-col cols="5">PT : {{ row.item.company_name }}</b-col>
+                    <b-col cols="4">
+                      Tanggal GR : {{ row.item.k_gr_date }}
+                    </b-col>
+                    <b-col cols="3">
+                      QTY GR :
+                      {{
+                        row.item.gr_qty.replace(
+                          /(\d)(?=(\d{3})+(?:\.\d)?$)/g,
+                          '$1\.'
+                        )
+                      }}
+                    </b-col>
                   </b-row>
                   <b-row></b-row>
                   <b-row>
+                    <b-col cols="5">
+                      Department : {{ row.item.department_name }}
+                    </b-col>
+                    <b-col cols="4">
+                      Jenis Pupuk : {{ row.item.fertilizer_type_code }}
+                    </b-col>
+                    <b-col cols="3">
+                      PO Price :
+                      {{
+                        row.item.po_price.replace(
+                          /(\d)(?=(\d{3})+(?:\.\d)?$)/g,
+                          '$1\.'
+                        )
+                      }}
+                    </b-col>
+                  </b-row>
+                  <b-row></b-row>
+                  <b-row>
+                    <b-col cols="5">Parameter : {{ row.item.parameter }}</b-col>
                     <b-col cols="4">Satuan : {{ row.item.unit_code }}</b-col>
-                    <b-col></b-col>
+                    <b-col cols="3">
+                      Total Price :
+                      {{ row.item.po_price * row.item.qty }}
+                    </b-col>
+                  </b-row>
+                  <b-row></b-row>
+                  <b-row>
+                    <b-col cols="5">
+                      Parameter Outspek : {{ row.item.parameter_outspek }}
+                    </b-col>
+                    <b-col cols="4"></b-col>
+                    <b-col cols="3"></b-col>
                   </b-row>
                 </b-container>
               </b-card>
             </template>
             <template v-slot:custom-foot="data">
               <b-tr>
-                <b-td colspan="11"
+                <b-td colspan="13"
                   ><b-button
                     size="sm"
                     variant="outline-primary"

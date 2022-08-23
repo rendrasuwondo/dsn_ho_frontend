@@ -143,7 +143,7 @@
                   <b-row>
                     <b-col cols="5">PT : {{ row.item.company_name }}</b-col>
                     <b-col cols="4">
-                      Jenis Pupuk : {{ row.item.fertilizer_type_code }}
+                      Tanggal GR : {{ row.item.k_gr_date }}
                     </b-col>
                     <b-col cols="3">
                       QTY GR :
@@ -161,7 +161,7 @@
                       Department : {{ row.item.department_name }}
                     </b-col>
                     <b-col cols="4">
-                      Tanggal GR : {{ row.item.k_gr_date }}
+                      Jenis Pupuk : {{ row.item.fertilizer_type_code }}
                     </b-col>
                     <b-col cols="3">
                       PO Price :
@@ -178,7 +178,7 @@
                     <b-col cols="5">Parameter : {{ row.item.parameter }}</b-col>
                     <b-col cols="4">Satuan : {{ row.item.unit_code }}</b-col>
                     <b-col cols="3">
-                      Total Hitung:
+                      Total Price :
                       {{ row.item.po_price * row.item.qty }}
                     </b-col>
                   </b-row>
@@ -187,6 +187,8 @@
                     <b-col cols="5">
                       Parameter Outspek : {{ row.item.parameter_outspek }}
                     </b-col>
+                    <b-col cols="4"></b-col>
+                    <b-col cols="3"></b-col>
                   </b-row>
                 </b-container>
               </b-card>
