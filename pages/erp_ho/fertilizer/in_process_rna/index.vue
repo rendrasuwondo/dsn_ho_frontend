@@ -508,12 +508,7 @@ export default {
             var i = 0
             let n = this.selectedData.length
 
-            let formData = [
-              this.selectedData,
-              result.value,
-              'Reject',
-              'In Monitor RNA',
-            ]
+            let formData = [this.selectedData, result.value]
 
             this.$axios
               .post(`/api/admin/update_request_status_rna_reject`, formData)
@@ -547,10 +542,11 @@ export default {
             var i = 0
             let n = this.selectedData.length
 
-            let formData = [this.selectedData, 'Approve', 'In Monitor RNA']
-
             this.$axios
-              .post(`/api/admin/update_request_status_rna_approve`, formData)
+              .post(
+                `/api/admin/update_request_status_rna_approve`,
+                this.selectedData
+              )
               .then((response) => {
                 this.$swal.fire({
                   title: 'BERHASIL!',
