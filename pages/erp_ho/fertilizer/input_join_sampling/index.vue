@@ -154,6 +154,7 @@
                   day: '2-digit',
                   weekday: 'short',
                 }"
+                reset-button
               ></b-form-datepicker>
             </div>
             <div v-if="validation.arrived_at" class="mt-2">
@@ -173,6 +174,7 @@
                   day: '2-digit',
                   weekday: 'short',
                 }"
+                reset-button
               ></b-form-datepicker>
             </div>
             <div v-if="validation.join_sampling_at" class="mt-2">

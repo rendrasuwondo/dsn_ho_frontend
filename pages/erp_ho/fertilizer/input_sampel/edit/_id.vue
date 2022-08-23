@@ -38,6 +38,7 @@
                   day: '2-digit',
                   weekday: 'short',
                 }"
+                reset-button
               ></b-form-datepicker>
             </div>
 
@@ -69,6 +70,7 @@
                   day: '2-digit',
                   weekday: 'short',
                 }"
+                reset-button
               ></b-form-datepicker>
             </div>
 
@@ -83,6 +85,7 @@
                   day: '2-digit',
                   weekday: 'short',
                 }"
+                reset-button
               ></b-form-datepicker>
             </div>
 
