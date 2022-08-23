@@ -358,8 +358,6 @@ export default {
     const posts = await $axios.$get(
       `/api/admin/input_sampel?q=${search}&page=${page}&request_status_code=j`
     )
-    console.log('da')
-    console.log(posts.data.data)
 
     return {
       posts: posts.data.data,
@@ -503,17 +501,22 @@ export default {
                 this.selectedData.push(el)
               }
             })
-            // console.log('rendra')
-            // console.log(this.selectedData)
+            console.log('rendra')
+            console.log(result.value)
+            console.log(this.selectedData)
 
             var i = 0
             let n = this.selectedData.length
 
+            let formData = [
+              this.selectedData,
+              result.value,
+              'Reject',
+              'In Monitor RNA',
+            ]
+
             this.$axios
-              .post(
-                `/api/admin/update_request_status_rna_reject`,
-                this.selectedData
-              )
+              .post(`/api/admin/update_request_status_rna_reject`, formData)
               .then((response) => {
                 this.$swal.fire({
                   title: 'BERHASIL!',
@@ -544,11 +547,10 @@ export default {
             var i = 0
             let n = this.selectedData.length
 
+            let formData = [this.selectedData, 'Approve', 'In Monitor RNA']
+
             this.$axios
-              .post(
-                `/api/admin/update_request_status_rna_approve`,
-                this.selectedData
-              )
+              .post(`/api/admin/update_request_status_rna_approve`, formData)
               .then((response) => {
                 this.$swal.fire({
                   title: 'BERHASIL!',
