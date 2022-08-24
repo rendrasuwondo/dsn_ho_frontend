@@ -471,6 +471,7 @@ export default {
             //redirect, if success store data
             this.$nuxt.refresh()
             this.bind()
+            this.validationCelar()
           })
           .catch((error) => {
             //assign error to state "validation"
