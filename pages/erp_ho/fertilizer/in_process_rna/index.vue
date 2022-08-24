@@ -316,7 +316,7 @@ export default {
         },
         {
           label: 'Kirim Ke Lab',
-          key: 'k_lab_send_at',
+          key: 'k_lab_sent_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
