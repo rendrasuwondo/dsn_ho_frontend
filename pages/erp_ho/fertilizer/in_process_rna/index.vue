@@ -536,17 +536,17 @@ export default {
                 this.selectedData.push(el)
               }
             })
-            // console.log('rendra')
-            // console.log(this.selectedData)
 
             var i = 0
             let n = this.selectedData.length
 
+            let formData = [this.selectedData]
+
+            console.log('rendra')
+            console.log(formData)
+
             this.$axios
-              .post(
-                `/api/admin/update_request_status_rna_approve`,
-                this.selectedData
-              )
+              .post(`/api/admin/update_request_status_rna_approve`, formData)
               .then((response) => {
                 this.$swal.fire({
                   title: 'BERHASIL!',
