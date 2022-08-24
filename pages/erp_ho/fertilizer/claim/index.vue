@@ -80,10 +80,10 @@
             <template v-slot:cell(parameter)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-fertilizer-parameter-id',
+                  name: 'erp_ho-fertilizer-claim_sample-id',
                   params: { id: row.item.id },
                   query: {
-                    fertilizer_type_id: row.item.id,
+                    claim_id: row.item.id,
                   },
                 }"
                 variant="link"
@@ -94,20 +94,6 @@
               </b-button>
             </template>
           </b-table>
-          <b-tooltip
-            target="myAfdeling"
-            triggers="hover"
-            container="myAfdeling"
-          >
-            Afdeling
-          </b-tooltip>
-          <b-tooltip
-            target="myDepartment"
-            triggers="hover"
-            container="myDepartment"
-          >
-            Departemen
-          </b-tooltip>
           <!-- pagination -->
           <b-row>
             <b-col

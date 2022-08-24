@@ -193,10 +193,9 @@ export default {
             showConfirmButton: false,
             timer: 2000,
           })
-          //redirect ke route "post"
-          this.$router.push({
-            name: 'erp_ho-system-role',
-          })
+
+          //redirect, if success store data
+          this.back()
         })
         .catch((error) => {
           //assign error validasi

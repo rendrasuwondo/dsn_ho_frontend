@@ -32,7 +32,6 @@
 
             <div class="form-group">
               <label>Keterangan</label>
-
               <textarea
                 v-model="field.description"
                 class="form-control"
