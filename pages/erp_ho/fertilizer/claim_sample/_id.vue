@@ -42,7 +42,7 @@
                 <nuxt-link
                   :to="{
                     name: 'erp_ho-fertilizer-claim_sample-create-id',
-                    params: { id: fertilizer_type_id, r: 1 },
+                    params: { id: claim_id, r: 1 },
                   }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
@@ -91,10 +91,11 @@
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-fertilizer-parameter-edit-id',
+                  name: 'erp_ho-fertilizer-claim_sample-edit-id',
                   params: { id: row.item.id, r: 1 },
                   query: {
-                    fertilizer_type_id: row.item.id.fertilizer_type_id,
+                    claim_id: row.item.claim_id,
+                    t_fertilizer_sample_id: row.item.t_fertilizer_sample_id,
                   },
                 }"
                 variant="link"
@@ -182,7 +183,7 @@ export default {
 
       // header: [],
 
-      fertilizer_type_id: this.$route.params.id,
+      claim_id: this.$route.params.id,
 
       fields_header: [
         {
@@ -317,7 +318,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/parameter/export?q=${this.search}&fertilizer_type_id=${this.fertilizer_type_id}`,
+        url: `/api/admin/parameter/export?q=${this.search}&claim_id=${this.claim_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

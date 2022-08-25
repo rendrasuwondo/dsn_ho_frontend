@@ -436,7 +436,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/input_sampel/export?q=${this.search}`,
+        url: `/api/admin/in_process_rna/export?q=${this.search}&request_status_code=j`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -445,7 +445,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Input Sampel.xlsx'
+        var fileName = 'In Process.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()

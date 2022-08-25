@@ -138,7 +138,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah Parameter',
+      title: 'Tambah Klaim Sampel HAP',
     }
   },
 

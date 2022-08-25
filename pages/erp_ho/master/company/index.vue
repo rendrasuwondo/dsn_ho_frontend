@@ -143,7 +143,7 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Status',
+          label: 'Status Server',
           key: 'status_server_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
