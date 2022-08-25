@@ -542,8 +542,8 @@ export default {
 
             let formData = [this.selectedData]
 
-            console.log('rendra')
-            console.log(formData)
+            // console.log('rendra')
+            // console.log(formData)
 
             this.$axios
               .post(`/api/admin/update_request_status_rna_approve`, formData)

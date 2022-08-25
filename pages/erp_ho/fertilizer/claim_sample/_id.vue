@@ -286,7 +286,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/fertilizer_type_parameter/${id}`)
+              .delete(`/api/admin/claim_sample/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()

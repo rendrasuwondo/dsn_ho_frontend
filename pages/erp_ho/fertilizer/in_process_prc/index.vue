@@ -378,7 +378,7 @@ export default {
             //REJECT
             this.selectedData = []
             this.posts.forEach((el) => {
-              if (el.selected_rna == true) {
+              if (el.selected == true) {
                 this.selectedData.push(el)
               }
             })
@@ -388,11 +388,10 @@ export default {
             var i = 0
             let n = this.selectedData.length
 
+            let formData = [this.selectedData, result.value]
+
             this.$axios
-              .post(
-                `/api/admin/update_request_status_prc_reject`,
-                this.selectedData
-              )
+              .post(`/api/admin/update_request_status_prc_reject`, formData)
               .then((response) => {
                 this.$swal.fire({
                   title: 'BERHASIL!',
@@ -423,11 +422,10 @@ export default {
             var i = 0
             let n = this.selectedData.length
 
+            let formData = [this.selectedData]
+
             this.$axios
-              .post(
-                `/api/admin/update_request_status_prc_approve`,
-                this.selectedData
-              )
+              .post(`/api/admin/update_request_status_prc_approve`, formData)
               .then((response) => {
                 this.$swal.fire({
                   title: 'BERHASIL!',
