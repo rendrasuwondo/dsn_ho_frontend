@@ -512,7 +512,9 @@ export default {
         .then((result) => {
           if (result.isConfirmed) {
             this.checkId = this.field.id ? this.field.id : undefined
-            sample.push({id: this.checkId, selected: 1 }) 
+            sample.push([{id: this.checkId, 
+                         selected: 1,
+                         po: this.field.po}] ) 
       
             this.$axios
               .post(
