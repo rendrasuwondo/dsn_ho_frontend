@@ -490,6 +490,13 @@ export default {
 
     async SubmitVerifikasi(e) {
       // console.log('tes')
+
+      var sample = []
+     
+     
+
+
+
       e.preventDefault()
       this.$swal
         .fire({
@@ -505,21 +512,15 @@ export default {
         .then((result) => {
           if (result.isConfirmed) {
             this.checkId = this.field.id ? this.field.id : undefined
+            sample.push([{id: this.checkId, 
+                         selected: 1,
+                         po: this.field.po}] ) 
+      
             this.$axios
-              .put(`/api/admin/t_fertilizer_sample/${this.field.id}`, {
-                po: this.field.po,
-                company_id: this.field.company_id,
-                department_id: this.field.department_id,
-                fertilizer_type_id: this.field.fertilizer_type_id,
-                vendors_id: this.field.vendors_id,
-                unit_id: this.field.unit_id,
-                qty: this.field.qty,
-                arrived_at: this.field.arrived_at,
-                join_sampling_at: this.field.join_sampling_at,
-                request_status_id: 3,
-                selected: 1,
-                description: this.field.description,
-              })
+              .post(
+                `/api/admin/update_request_status_prc_approve`,
+               sample
+              )
               .then(() => {
                 this.$swal.fire({
                   title: 'BERHASIL!',
@@ -601,6 +602,7 @@ export default {
           this.field.arrived_at = ''
           this.field.join_sampling_at = ''
           this.field.description = ''
+          this.data_po.PO_PRICE = ''
         }
       })
     },
