@@ -522,7 +522,15 @@ export default {
                 })
               })
 
-            this.$nuxt.refresh()
+            this.$router.push({
+              name: 'erp_ho-fertilizer-in_process_rna',
+              params: {  },
+              query: {
+                
+              },
+            })
+
+            // this.$nuxt.refresh()
             // alert(result.value)
             //  this.$swal.fire('Changes are not saved', '', 'info')
             // this.$swal.fire.showValidationMessage(
