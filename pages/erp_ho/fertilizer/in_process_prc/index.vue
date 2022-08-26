@@ -9,7 +9,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-object-ungroup"></i>
-            <b>IN PROCESS</b>
+            <b>IN PROCESS PRC</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -78,6 +78,7 @@
                 :to="{
                   name: 'erp_ho-fertilizer-join_sampling-edit-id',
                   params: { id: row.item.id },
+                  query: { url: 'erp_ho-fertilizer-in_process_prc' },
                 }"
                 variant="link"
                 size="sm"
@@ -90,6 +91,7 @@
                 size="sm"
                 @click="deleteRole(row.item.id)"
                 title="Hapus"
+                style="display: none"
                 ><i class="fa fa-trash"></i
               ></b-button>
             </template>
@@ -155,11 +157,11 @@ export default {
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass ',
           sortable: false,
         },
-        // {
-        //   label: 'Actions',
-        //   key: 'actions',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
+        {
+          label: 'Actions',
+          key: 'actions',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
         {
           label: 'Status',
           key: 'request_status_name',
@@ -436,7 +438,10 @@ export default {
                 })
               })
 
-            this.$nuxt.refresh()
+            this.$router.push({
+              name: 'erp_ho-fertilizer-in_process_prc',
+            })
+            // this.$nuxt.refresh()
             // alert(result.value)
             //  this.$swal.fire('Changes are not saved', '', 'info')
             // this.$swal.fire.showValidationMessage(

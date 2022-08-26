@@ -24,9 +24,10 @@
                   placeholder="Masukkan Kode PO"
                   class="form-control"
                   @keypress.enter="searchDataPO"
+                  readonly
                 />
                 <b-input-group-append>
-                  <button @click="searchDataPO" class="btn btn-info">
+                  <button @click="searchDataPO" class="btn btn-info" disabled>
                     <i class="fa fa-search"></i>
                     CARI
                   </button>
@@ -337,7 +338,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: 'erp_ho-fertilizer-join_sampling',
+        name: this.$route.query.url==="" ? 'erp_ho-fertilizer-join_sampling' : 'erp_ho-fertilizer-in_process_prc',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -407,7 +408,7 @@ export default {
           })
           //redirect ke route "post"
           this.$router.push({
-            name: 'erp_ho-fertilizer-join_sampling',
+            name: this.$route.query.url==="" ? 'erp_ho-fertilizer-join_sampling' : 'erp_ho-fertilizer-in_process_prc',
           })
         })
         .catch((error) => {

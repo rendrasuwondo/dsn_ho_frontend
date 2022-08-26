@@ -67,7 +67,7 @@
             </template>
             <template v-slot:cell(selected_rna)="row">
               <b-form-group>
-                <input type="checkbox" v-model="row.item.selected_rna" />
+                <input type="checkbox" v-model="row.item.selected_rna" :disabled="row.item.status == null"  />
               </b-form-group>
             </template>
             <template v-slot:cell(actions)="row">
@@ -354,7 +354,7 @@ export default {
     const posts = await $axios.$get(
       `/api/admin/input_sampel?q=${search}&page=${page}&request_status_code=j`
     )
-
+  console.log(posts.data.data)
     return {
       posts: posts.data.data,
       pagination: posts.data,
