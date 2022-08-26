@@ -12,11 +12,11 @@
               <tr>
                 <td>
                   <nuxt-link
-                    :to="{ name: 'erp_ho-fertilizer-in_monitor' }"
+                    :to="{ name: this.$route.query.url }"
                     class="nav-link"
                   >
-                    <i class="nav-icon fas fa-tablet-alt"></i>
-                    <b>IN MONITOR</b>
+                    <i class="nav-icon fas fa-chart-bar"></i>
+                    <b>{{ this.$route.query.tab_header }}</b>
                   </nuxt-link>
                 </td>
                 <td>/ HASIL ANALISA</td>
@@ -82,27 +82,10 @@
             <template v-slot:cell(comments)="row">
               <i class="fa fa-comments"></i> {{ row.item.comments.length }}
             </template>
-            <template v-slot:cell(actions)="row">
-              <b-button
-                :to="{
-                  name: 'erp_ho-fertilizer-input_hasil_analisa-edit-id',
-                  params: { id: row.item.id, r: 1 },
-                  query: {
-                    fertilizer_type_id: fertilizer_type_id,
-                    input_sample_id: input_sample_id,
-                  },
-                }"
-                disabled
-                variant="link"
-                size=""
-                title="Edit"
-              >
-                <i class="fa fa-pencil-alt"></i>
-              </b-button>
-            </template>
+
             <template v-slot:custom-foot="data">
               <b-tr>
-                <b-td colspan="5" align="right"><b>Kesimpulan</b></b-td>
+                <b-td colspan="4" align="right"><b>Kesimpulan</b></b-td>
                 <b-td align="center">{{ summary }}</b-td>
               </b-tr>
             </template>
@@ -173,11 +156,11 @@ export default {
       newData: {},
       //table header
       fields: [
-        {
-          label: 'Actions',
-          key: 'actions',
-          tdClass: '',
-        },
+        // {
+        //   label: 'Actions',
+        //   key: 'actions',
+        //   tdClass: '',
+        // },
         {
           label: 'Parameter',
           key: 'parameter_code',

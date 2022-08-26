@@ -12,11 +12,14 @@
               <tr>
                 <td>
                   <nuxt-link
-                    :to="{ name: this.$route.query.url }"
+                    :to="{
+                      name: 'erp_ho-fertilizer-claim_sample-id',
+                      params: { id: this.$route.query.claim_id },
+                    }"
                     class="nav-link"
                   >
-                    <i class="nav-icon fas fas fa-tablet-alt"></i>
-                    <b>{{ this.$route.query.tab_header }}</b>
+                    <i class="nav-icon fas fa-chart-bar"></i>
+                    <b>Klaim Sampel HAP</b>
                   </nuxt-link>
                 </td>
                 <td>/ HASIL ANALISA</td>
@@ -34,6 +37,7 @@
               :items="header"
               :fields="fields_header"
               show-empty
+              class="table-1"
             ></b-table>
           </div>
 
@@ -76,30 +80,14 @@
             :fields="fields"
             outlined
             show-empty
+            class="table-1"
           >
             <template v-slot:cell(comments)="row">
               <i class="fa fa-comments"></i> {{ row.item.comments.length }}
             </template>
-            <template v-slot:cell(actions)="row">
-              <b-button
-                :to="{
-                  name: 'erp_ho-fertilizer-input_hasil_analisa-edit-id',
-                  params: { id: row.item.id, r: 1 },
-                  query: {
-                    fertilizer_type_id: fertilizer_type_id,
-                    input_sample_id: input_sample_id,
-                  },
-                }"
-                variant="link"
-                size=""
-                title="Edit"
-              >
-                <i class="fa fa-pencil-alt"></i>
-              </b-button>
-            </template>
             <template v-slot:custom-foot="data">
               <b-tr>
-                <b-td colspan="5" align="right"><b>Kesimpulan</b></b-td>
+                <b-td colspan="4" align="right"><b>Kesimpulan</b></b-td>
                 <b-td align="center">{{ summary }}</b-td>
               </b-tr>
             </template>
@@ -107,70 +95,39 @@
 
           <div class="form-group mt-4 mb-4 dashed">
             <h6>
-              <b> <i class="nav-icon fas fa-file-upload"></i> UPLOAD FILE </b>
+              <b>
+                <i class="nav-icon fas fa-file-download"></i> DONWLOAD FILE
+              </b>
             </h6>
             <b-container class="mb-1">
               <b-row>
-                <b-col cols="8">
+                <b-col cols="12">
                   <p class="selected">
-                    File Tersimpan : <b> {{ upload_files }}</b>
-                  </p>
-                </b-col>
-                <b-col cols="4">
-                  <button
-                    v-if="upload_files !== null"
-                    @click="fileDownload"
-                    class="btn-info btn-upload"
-                    title="Download File"
-                  >
-                    <i class="nav-icon fas fa-download"></i> Download
-                  </button>
-                  <button
-                    v-else
-                    class="btn-upload"
-                    title="File Tidak Ditemukan"
-                    disabled
-                  >
-                    <i class="nav-icon fas fa-download"></i> Download
-                  </button>
-                </b-col>
-              </b-row>
-            </b-container>
-            <b-container>
-              <b-row>
-                <b-col cols="8">
-                  <p class="selected">
-                    <label class="choose-file">
-                      Enter Your File
-                      <input
-                        type="file"
-                        name="file"
-                        @change="upload"
-                        class="choose-file"
-                      />
-                    </label>
+                    <span v-if="upload_files != null" class="cf-1">
+                      <i class="nav-icon fas fa-file-alt cf-1 logo-file"></i>
+                      <br />
 
-                    Selected file: <b>{{ files ? files.name : null }}</b>
+                      File Tersimpan :<br />
+                      <b>
+                        {{ upload_files }}
+                      </b>
+                      <br />
+                      <button
+                        @click="fileDownload"
+                        class="btn-info btn-upload"
+                        title="Download File"
+                      >
+                        <i class="nav-icon fas fa-download"></i> Download
+                      </button>
+                    </span>
+                    <span v-else class="cf-2">
+                      <i class="nav-icon fas fa-file-alt logo-file"></i> <br />
+                      Tidak Terdapat File Dalam Data Ini! <br />
+                      <br />
+                    </span>
                   </p>
                 </b-col>
-                <b-col cols="4">
-                  <button
-                    v-if="files !== null"
-                    @click="submitFileUpload"
-                    class="btn-info btn-upload"
-                    title="Upload File"
-                  >
-                    <i class="nav-icon fas fa-upload"></i> upload
-                  </button>
-                  <button
-                    v-else
-                    class="btn-upload"
-                    disabled
-                    title="Enter Your File"
-                  >
-                    <i class="nav-icon fas fa-upload"></i> upload
-                  </button>
-                </b-col>
+                <b-col cols="4"> </b-col>
               </b-row>
             </b-container>
           </div>
@@ -201,11 +158,6 @@ export default {
       newData: {},
       //table header
       fields: [
-        {
-          label: 'Actions',
-          key: 'actions',
-          tdClass: '',
-        },
         {
           label: 'Parameter',
           key: 'parameter_code',
@@ -251,6 +203,11 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          label: 'Supplier',
+          key: 'supplier',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
           label: 'Kode Sampel',
           key: 'sample_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
@@ -261,8 +218,8 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Lab Analisa',
-          key: 'laboratory_code',
+          label: 'Status Wf',
+          key: 'request_status_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -309,7 +266,6 @@ export default {
 
     return {
       posts: posts.data,
-      pagination: posts.data,
       rowcount: posts.data.length,
       search: search,
       header: header,
@@ -383,47 +339,6 @@ export default {
     },
 
     //deletePost method
-    deletePost(id) {
-      this.$swal
-        .fire({
-          title: 'APAKAH ANDA YAKIN ?',
-          text: 'INGIN MENGHAPUS DATA INI !',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'YA, HAPUS!',
-          cancelButtonText: 'TIDAK',
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            //delete tag from server
-
-            this.$axios
-              .delete(`/api/admin/input_hasil/${id}`)
-              .then((response) => {
-                //feresh data
-                this.$nuxt.refresh()
-                if (response.data.success == true) {
-                  this.sweet_alert.title = 'BERHASIL!'
-                  this.sweet_alert.icon = 'success'
-                } else {
-                  this.sweet_alert.title = 'GAGAL!'
-                  this.sweet_alert.icon = 'error'
-                }
-
-                //alert
-                this.$swal.fire({
-                  title: this.sweet_alert.title,
-                  text: response.data.message,
-                  icon: this.sweet_alert.icon,
-                  showConfirmButton: false,
-                  timer: 2000,
-                })
-              })
-          }
-        })
-    },
 
     fileDownload() {
       const headers = {
@@ -539,10 +454,14 @@ export default {
   width: 100%;
 }
 .btn-upload {
-  float: right;
   width: 110px;
   border-radius: 3px;
   padding: 2px 0px 2px 0px;
+  margin-top: 10px;
+  font-size: 14px;
+  background-color: rgb(89, 89, 224);
+  border: 1.5px solid rgb(111, 65, 228);
+  box-shadow: 2px 2px 0px rgb(234, 228, 247);
 }
 .dashed {
   border-style: dashed;
@@ -561,9 +480,30 @@ h6 {
   box-shadow: 2px 3px #f7ebfd;
 }
 .selected {
-  font-size: 13px;
+  font-size: 15px;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  text-align: center;
 }
 input[type='file'] {
   display: none;
+}
+.table-1 {
+  font-size: 15px;
+}
+.logo-file {
+  font-size: 45px;
+  border: 3px solid;
+  padding: 15px;
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  margin-bottom: 7px;
+}
+.cf-1 {
+  color: rgb(163, 163, 255);
+}
+.cf-2 {
+  color: rgb(205, 228, 235);
 }
 </style>

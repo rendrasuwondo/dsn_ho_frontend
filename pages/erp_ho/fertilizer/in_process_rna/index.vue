@@ -52,6 +52,7 @@
             :fields="fields"
             show-empty
             v-model="visibleRows"
+            class="table-1"
           >
             <template v-slot:head(selected_rna)="data">
               <span
@@ -106,30 +107,25 @@
               </b-button>
             </template>
 
-            <template v-slot:cell(hasil_status)="row">
-              <b-link
-                v-if="
-                  row.item.upload_file !== null &&
-                  (row.item.type_file === 'png' || row.item.type_file === 'jpg')
-                "
-                :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
-                target="_blank"
+            <template v-slot:cell(detail_hap)="row">
+              <b-button
+                :to="{
+                  name: 'erp_ho-fertilizer-detail_hap-id',
+                  params: { id: row.item.id },
+                  query: {
+                    input_sample_id: row.item.id,
+                    fertilizer_type_id: row.item.fertilizer_type_id,
+                    url: 'erp_ho-fertilizer-in_process_rna',
+                    tab_header: 'IN PROCESS',
+                  },
+                }"
+                variant="link"
+                size=""
+                title="Status"
+                class="table-1"
               >
                 {{ row.item.status }}
-              </b-link>
-              <b-link
-                v-else-if="row.item.upload_file !== null"
-                :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
-              >
-                {{ row.item.status }}
-              </b-link>
-              <b-link
-                v-else
-                :href="`http://localhost:8000/storage/HAP/${row.item.upload_file}`"
-                disabled
-              >
-                {{ row.item.status }}
-              </b-link>
+              </b-button>
             </template>
 
             <template #cell(detail)="row">
@@ -326,7 +322,7 @@ export default {
         },
         {
           label: 'Hasil',
-          key: 'hasil_status',
+          key: 'detail_hap',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -524,10 +520,8 @@ export default {
 
             this.$router.push({
               name: 'erp_ho-fertilizer-in_process_rna',
-              params: {  },
-              query: {
-                
-              },
+              params: {},
+              query: {},
             })
 
             // this.$nuxt.refresh()
@@ -595,5 +589,8 @@ export default {
 }
 .card-title {
   color: #504d8d;
+}
+.table-1 {
+  font-size: 14px;
 }
 </style>

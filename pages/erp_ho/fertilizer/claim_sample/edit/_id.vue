@@ -176,28 +176,21 @@ export default {
     this.$axios
       .get(`/api/admin/claim_sample/${this.$route.params.id}`)
       .then((response) => {
+        // console.log('da')
+        // console.log(response.data.data.t_fertilizer_sample)
+
         //data yang diambil
         this.field.claim_id = response.data.data.claim_id
         this.field.t_fertilizer_sample_id =
-          response.data.data.t_fertilizer_type_id
+          response.data.data.t_fertilizer_sample
+        this.field.is_completed =
+          response.data.data.t_fertilizer_sample.is_completed
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
       })
-
-    this.$axios
-      .get(
-        `/api/admin/lov_is_completed?t_fertilizer_sample=${this.$route.query.t_fertilizer_sample_id}`
-      )
-      .then((response) => {
-        //data yang diambil
-        this.field.is_completed = response.data.is_completed
-      })
-
-    console.log('da')
-    console.log(this.$route.query.t_fertilizer_sample_id)
 
     //Data Users
     this.$axios
@@ -220,7 +213,8 @@ export default {
     // update method
     async update(e) {
       e.preventDefault()
-
+      console.log('tes')
+      console.log(this.field)
       //send data ke Rest API untuk update
       await this.$axios
         .put(`api/admin/claim_sample/${this.$route.params.id}`, {

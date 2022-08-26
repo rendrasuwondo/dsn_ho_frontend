@@ -81,6 +81,7 @@
             striped
             bordered
             hover
+            class="table-1"
             :items="posts"
             :fields="fields"
             show-empty
@@ -88,6 +89,7 @@
             <template v-slot:cell(comments)="row">
               <i class="fa fa-comments"></i> {{ row.item.comments.length }}
             </template>
+
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
@@ -112,6 +114,26 @@
                 @click="deletePost(row.item.id)"
                 ><i class="fa fa-trash"></i
               ></b-button>
+            </template>
+
+            <template v-slot:cell(detail_hap)="row">
+              <b-button
+                :to="{
+                  name: 'erp_ho-fertilizer-detail_claim_sample-id',
+                  params: { id: row.item.t_fertilizer_sample_id },
+                  query: {
+                    input_sample_id: row.item.t_fertilizer_sample_id,
+                    fertilizer_type_id: row.item.fertilizer_type_id,
+                    claim_id: row.item.claim_id,
+                  },
+                }"
+                variant="link"
+                size=""
+                title="Status HAP"
+                class="table-1"
+              >
+                {{ row.item.status }}
+              </b-button>
             </template>
           </b-table>
 
@@ -160,24 +182,55 @@ export default {
           tdClass: '',
         },
         {
-          label: 'Status',
-          key: 'request_status_name',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
           label: 'NO.PO',
           key: 'po',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Kode Sampel',
-          key: 'sample_code',
+          label: 'Supplier',
+          key: 'supplier',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Status Wf',
-          key: 'status',
+          label: 'QTY PO',
+          key: 'po_qty',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Nilai PO',
+          key: 'po_price',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'QTY GR',
+          key: 'gr_qty',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Nilai Klaim Outspek',
+          key: 'claim_calculation',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Hasil',
+          key: 'detail_hap',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
       ],
 
@@ -357,5 +410,8 @@ export default {
 }
 .card-title .nav-link {
   color: #504d8d;
+}
+.table-1 {
+  font-size: 14px;
 }
 </style>
