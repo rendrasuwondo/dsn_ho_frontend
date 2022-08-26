@@ -15,7 +15,7 @@
                     :to="{ name: this.$route.query.url }"
                     class="nav-link"
                   >
-                    <i class="nav-icon fas fas fa-tablet-alt"></i>
+                    <i class="nav-icon fas fas fa-chart-bar"></i>
                     <b>{{ this.$route.query.tab_header }}</b>
                   </nuxt-link>
                 </td>
@@ -221,12 +221,12 @@ export default {
         {
           label: 'Minimal Nilai',
           key: 'min_value',
-          // formatter: (value, key, item) => {
-          //   let formatter = new Intl.NumberFormat({
-          //     minimumFractionDigits: 2,
-          //   })
-          //   return formatter.format(value)
-          // },
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat({
+              minimumFractionDigits: 2,
+            })
+            return formatter.format(value)
+          },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
@@ -493,6 +493,9 @@ export default {
 
     if (newData.includes('OUTSPEK') == true) {
       this.summary = 'OUTSPEK'
+    }
+    if (newData.includes(null)) {
+      this.summary = null
     } else {
       this.summary = 'INSPEK'
     }

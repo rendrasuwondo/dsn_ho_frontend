@@ -108,7 +108,7 @@
               </b-link>
               <b-link
                 v-else
-                :href="`http://localhost:8000/storage/HAP/${row.item.upload_file}`"
+                :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
                 disabled
               >
                 {{ row.item.status }}
