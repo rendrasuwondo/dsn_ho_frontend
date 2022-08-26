@@ -493,9 +493,6 @@ export default {
 
     if (newData.includes('OUTSPEK') == true) {
       this.summary = 'OUTSPEK'
-    }
-    if (newData.includes(null)) {
-      this.summary = null
     } else {
       this.summary = 'INSPEK'
     }
