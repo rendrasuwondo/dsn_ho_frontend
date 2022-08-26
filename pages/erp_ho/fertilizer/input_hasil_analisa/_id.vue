@@ -88,6 +88,8 @@
                   query: {
                     fertilizer_type_id: fertilizer_type_id,
                     input_sample_id: input_sample_id,
+                    url: url,
+                    tab_header: tab_header,
                   },
                 }"
                 variant="link"
@@ -219,12 +221,12 @@ export default {
         {
           label: 'Minimal Nilai',
           key: 'min_value',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN', {
-              minimumFractionDigits: 2,
-            })
-            return formatter.format(value)
-          },
+          // formatter: (value, key, item) => {
+          //   let formatter = new Intl.NumberFormat({
+          //     minimumFractionDigits: 2,
+          //   })
+          //   return formatter.format(value)
+          // },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
@@ -242,6 +244,8 @@ export default {
       // header: [],
       fertilizer_type_id: this.$route.query.fertilizer_type_id,
       input_sample_id: this.$route.params.id,
+      url: this.$route.query.url,
+      tab_header: this.$route.query.tab_header,
       po: this.header,
 
       fields_header: [
@@ -336,6 +340,8 @@ export default {
           q: this.search,
           fertilizer_type_id: this.$route.query.fertilizer_type_id,
           input_sample_id: this.$route.params.id,
+          url: this.$route.query.url,
+          tab_header: this.$route.query.tab_header,
         },
       })
     },

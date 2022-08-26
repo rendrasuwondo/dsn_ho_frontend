@@ -145,9 +145,22 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Keterangan',
-          key: 'description',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          label: 'Total Klaim Outspek',
+          key: 'claim_calculation',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Total Klaim Mutu Pupuk',
+          key: 'claim_fertilizer',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
       ],
       sweet_alert: {

@@ -186,6 +186,8 @@ export default {
         query: {
           input_sample_id: this.$route.query.input_sample_id,
           fertilizer_type_id: this.$route.query.fertilizer_type_id,
+          url: this.$route.query.url,
+          tab_header: this.$route.query.tab_header,
         },
       })
     },

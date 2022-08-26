@@ -379,7 +379,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/input_hasil/export?q=${this.search}&fertilizer_type_id=${this.fertilizer_type_id}&input_sampel_id=${this.input_sampel_id}`,
+        url: `/api/admin/input_hasil/export?q=${this.search}&fertilizer_type_id=${this.fertilizer_type_id}&input_sampel_id=${this.input_sample_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -457,9 +457,9 @@ export default {
   width: 100%;
 }
 .btn-upload {
-  width: 110px;
+  width: 120px;
   border-radius: 3px;
-  padding: 2px 0px 2px 0px;
+  padding: 3px 0px 3px 0px;
   margin-top: 10px;
   font-size: 14px;
   background-color: rgb(89, 89, 224);

@@ -116,6 +116,91 @@
               ></b-button>
             </template>
 
+            <template v-slot:cell(detail_nilai)="row">
+              <b-button
+                title="Detail Nilai Klaim Outspek"
+                class="btn"
+                variant="link"
+                @click="exportData2"
+              >
+                <i class="fa fa-file-invoice"></i>
+              </b-button>
+            </template>
+
+            <template #cell(detail)="row">
+              <b-button class="btn-info" size="sm" @click="row.toggleDetails">
+                {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
+              </b-button>
+            </template>
+
+            <template #row-details="row">
+              <b-card>
+                <b-container class="bv-example-row">
+                  <b-row>
+                    <b-col cols="4">
+                      PO PRICE :
+                      {{
+                        row.item.po_price.replace(
+                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
+                          '$1\.'
+                        )
+                      }}</b-col
+                    >
+                    <b-col cols="4">
+                      QTY PO :
+                      {{
+                        row.item.po_qty.replace(
+                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
+                          '$1\.'
+                        )
+                      }}
+                    </b-col>
+                    <b-col cols="4">
+                      QTY GR :
+                      {{
+                        row.item.gr_qty.replace(
+                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
+                          '$1\.'
+                        )
+                      }}
+                    </b-col>
+                  </b-row>
+                  <b-row></b-row>
+                  <b-row>
+                    <b-col cols="4" class="mt-1">
+                      Klaim Mutu Pupuk :
+                      {{
+                        row.item.claim_fertilizer.replace(
+                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
+                          '$1\.'
+                        )
+                      }}
+                    </b-col>
+                    <b-col cols="4" class="mt-1">
+                      Nilai Klaim Outspek :
+                      {{
+                        row.item.claim_calculation.replace(
+                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
+                          '$1\.'
+                        )
+                      }}
+                    </b-col>
+                    <b-col cols="4">
+                      Detail Nilai Klaim :
+                      <b-button
+                        title="Detail Nilai Klaim Outspek"
+                        class="btn"
+                        variant="link"
+                        :href="`${$axios.defaults.baseURL}/api/claim_calculation/export?q=${search}&claim_id=${row.item.claim_id}&t_fertilizer_sample_id=${row.item.t_fertilizer_sample_id}`"
+                      >
+                        Klik Disini
+                      </b-button>
+                    </b-col>
+                  </b-row>
+                </b-container>
+              </b-card>
+            </template>
+
             <template v-slot:cell(detail_hap)="row">
               <b-button
                 :to="{
@@ -182,8 +267,18 @@ export default {
           tdClass: '',
         },
         {
+          label: 'Status',
+          key: 'request_status_name',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
           label: 'NO.PO',
           key: 'po',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Kode Sampel',
+          key: 'sample_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -191,41 +286,46 @@ export default {
           key: 'supplier',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
+        // {
+        //   label: 'QTY PO',
+        //   key: 'po_qty',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-IN')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   label: 'Nilai PO',
+        //   key: 'po_price',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-IN')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   label: 'QTY GR',
+        //   key: 'gr_qty',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-IN')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   label: 'Nilai Klaim Outspek',
+        //   key: 'claim_calculation',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-IN')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
         {
-          label: 'QTY PO',
-          key: 'po_qty',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Nilai PO',
-          key: 'po_price',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'QTY GR',
-          key: 'gr_qty',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Nilai Klaim Outspek',
-          key: 'claim_calculation',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          label: 'Detail Data',
+          key: 'detail',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           label: 'Hasil',
@@ -290,6 +390,9 @@ export default {
     const posts = await $axios.$get(
       `/api/admin/detail/claim_sample/${id}?q=${search}&page=${page}`
     )
+
+    console.log('tes')
+    console.log(posts)
 
     return {
       posts: posts.data.data,
@@ -371,7 +474,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/parameter/export?q=${this.search}&claim_id=${this.claim_id}`,
+        url: `/api/admin/claim_sample/export?q=${this.search}&claim_id=${this.claim_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -380,7 +483,29 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Jenis Pupuk - Parameter.xlsx'
+        var fileName = 'Klaim Sample HAP.xlsx'
+        link.setAttribute('download', fileName) //or any other extension
+        document.body.appendChild(link)
+        link.click()
+      })
+    },
+
+    exportData2() {
+      const headers = {
+        'Content-Type': 'application/json',
+      }
+
+      this.$axios({
+        url: `/api/admin/claim_calculation/export?q=${this.search}&claim_id=${this.claim_id}`,
+        method: 'GET',
+        responseType: 'blob',
+        headers: headers, // important
+      }).then((response) => {
+        this.isLoading = false
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        var fileName = 'Detail Nilai Klaim Outspek.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
