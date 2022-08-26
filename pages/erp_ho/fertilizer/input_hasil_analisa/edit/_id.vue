@@ -34,12 +34,12 @@
 
             <div class="form-group">
               <label>Hasil Analisa</label>
-              <money
-                v-model="field.value"
-                v-bind="money"
-                precision="1"
+              <number
                 class="form-control"
-              ></money>
+                placeholder="Masukkan Nilai HAP"
+                v-model="field.value"
+                prefix=""
+              ></number>
             </div>
 
             <div class="form-group">
