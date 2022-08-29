@@ -56,6 +56,13 @@
                 >
                   <i class="fa fa-file-excel"></i>
                 </button>
+                <button
+                  title="Detail Claim Calculation"
+                  class="btn btn-info"
+                  @click="exportData2"
+                >
+                  <i class="fa fa-file-invoice"></i>
+                </button>
               </div>
               <input
                 type="text"
@@ -186,7 +193,7 @@
                       }}
                     </b-col>
                     <b-col cols="4">
-                      Detail Nilai Klaim :
+                      <!-- Detail Nilai Klaim :
                       <b-button
                         title="Detail Nilai Klaim Outspek"
                         class="btn"
@@ -194,7 +201,7 @@
                         :href="`${$axios.defaults.baseURL}/api/claim_calculation/export?q=${search}&claim_id=${row.item.claim_id}&t_fertilizer_sample_id=${row.item.t_fertilizer_sample_id}`"
                       >
                         Klik Disini
-                      </b-button>
+                      </b-button> -->
                     </b-col>
                   </b-row>
                 </b-container>
