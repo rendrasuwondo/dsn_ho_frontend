@@ -67,7 +67,11 @@
             </template>
             <template v-slot:cell(selected_rna)="row">
               <b-form-group>
-                <input type="checkbox" v-model="row.item.selected_rna" :disabled="row.item.status == null"  />
+                <input
+                  type="checkbox"
+                  v-model="row.item.selected_rna"
+                  :disabled="row.item.status == null"
+                />
               </b-form-group>
             </template>
             <template v-slot:cell(actions)="row">
@@ -116,7 +120,7 @@
                     input_sample_id: row.item.id,
                     fertilizer_type_id: row.item.fertilizer_type_id,
                     url: 'erp_ho-fertilizer-in_process_rna',
-                    tab_header: 'IN PROCESS',
+                    tab_header: 'IN PROCESS (RNA)',
                   },
                 }"
                 variant="link"
@@ -124,7 +128,10 @@
                 title="Status"
                 class="table-1"
               >
-                {{ row.item.status }}
+                <div v-if="row.item.status === 'OUTSPEK'" class="text-danger">
+                  {{ row.item.status }}
+                </div>
+                <div v-else>{{ row.item.status }}</div>
               </b-button>
             </template>
 
@@ -135,73 +142,73 @@
             </template>
 
             <template #row-details="row">
-              <b-card>
+              <b-card class="cs">
                 <b-container class="bv-example-row">
                   <b-row>
-                    <b-col cols="5">Supplier : {{ row.item.supplier }}</b-col>
-                    <b-col cols="4">
-                      Join Sampling : {{ row.item.k_join_sampling_at }}
-                    </b-col>
-                    <b-col cols="3">
-                      QTY PO :
-                      {{
-                        row.item.qty.replace(
-                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
-                          '$1\.'
-                        )
-                      }}
-                    </b-col>
-                  </b-row>
-                  <b-row></b-row>
-                  <b-row>
-                    <b-col cols="5">PT : {{ row.item.company_name }}</b-col>
-                    <b-col cols="4">
-                      Tanggal GR : {{ row.item.k_gr_date }}
-                    </b-col>
-                    <b-col cols="3">
-                      QTY GR :
-                      {{
-                        row.item.gr_qty.replace(
-                          /(\d)(?=(\d{3})+(?:\.\d)?$)/g,
-                          '$1\.'
-                        )
-                      }}
+                    <b-col cols="1">Supplier</b-col>
+                    <b-col cols="3">: {{ row.item.supplier }}</b-col>
+                    <b-col cols="2">Tanggal GR</b-col>
+                    <b-col cols="3">: {{ row.item.k_gr_date }}</b-col>
+                    <b-col cols="1">QTY PO</b-col>
+                    <b-col cols="2">
+                      :
+                      <span class="float-right">
+                        {{
+                          new Intl.NumberFormat('es-US').format(row.item.qty)
+                        }}
+                      </span>
                     </b-col>
                   </b-row>
-                  <b-row></b-row>
                   <b-row>
-                    <b-col cols="5">
-                      Department : {{ row.item.department_name }}
-                    </b-col>
-                    <b-col cols="4">
-                      Jenis Pupuk : {{ row.item.fertilizer_type_code }}
-                    </b-col>
+                    <b-col cols="1">PT</b-col>
+                    <b-col cols="3">: {{ row.item.company_name }}</b-col>
+                    <b-col cols="2">Jenis Pupuk</b-col>
                     <b-col cols="3">
-                      PO Price :
-                      {{
-                        row.item.po_price.replace(
-                          /(\d)(?=(\d{3})+(?:\.\d)?$)/g,
-                          '$1\.'
-                        )
-                      }}
+                      : {{ row.item.fertilizer_type_code }}
+                    </b-col>
+                    <b-col cols="1">QTY GR</b-col>
+                    <b-col cols="2">
+                      :
+                      <span class="float-right">
+                        {{
+                          new Intl.NumberFormat('es-US').format(row.item.gr_qty)
+                        }}
+                      </span>
                     </b-col>
                   </b-row>
-                  <b-row></b-row>
                   <b-row>
-                    <b-col cols="5">Parameter : {{ row.item.parameter }}</b-col>
-                    <b-col cols="4">Satuan : {{ row.item.unit_code }}</b-col>
-                    <b-col cols="3">
-                      Total Price :
-                      {{ row.item.po_price * row.item.qty }}
+                    <b-col cols="1">Dept.</b-col>
+                    <b-col cols="3">: {{ row.item.department_name }}</b-col>
+                    <b-col cols="2">Parameter</b-col>
+                    <b-col cols="3"> : {{ row.item.parameter }} </b-col>
+                    <b-col cols="1">PO Price</b-col>
+                    <b-col cols="2">
+                      :
+                      <span class="float-right">
+                        {{
+                          new Intl.NumberFormat('es-US').format(
+                            row.item.po_price
+                          )
+                        }}
+                      </span>
                     </b-col>
                   </b-row>
-                  <b-row></b-row>
                   <b-row>
-                    <b-col cols="5">
-                      Parameter Outspek : {{ row.item.parameter_outspek }}
+                    <b-col cols="1">Satuan</b-col>
+                    <b-col cols="3">: {{ row.item.unit_code }}</b-col>
+                    <b-col cols="2">Parameter Outspek</b-col>
+                    <b-col cols="3"> : {{ row.item.parameter_outspek }} </b-col>
+                    <b-col cols="1">Total Price</b-col>
+                    <b-col cols="2">
+                      :
+                      <span class="float-right">
+                        {{
+                          new Intl.NumberFormat('es-US').format(
+                            row.item.t_price
+                          )
+                        }}
+                      </span>
                     </b-col>
-                    <b-col cols="4"></b-col>
-                    <b-col cols="3"></b-col>
                   </b-row>
                 </b-container>
               </b-card>
@@ -301,6 +308,11 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          label: 'Joint Sampling',
+          key: 'k_join_sampling_at',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
           label: 'Tanggal Terima',
           key: 'k_receipt_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
@@ -329,7 +341,7 @@ export default {
           label: 'Klaim Mutu Pupuk',
           key: 'fertilizer_analysis_calculation',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -354,7 +366,7 @@ export default {
     const posts = await $axios.$get(
       `/api/admin/input_sampel?q=${search}&page=${page}&request_status_code=j`
     )
-  console.log(posts.data.data)
+    console.log(posts.data.data)
     return {
       posts: posts.data.data,
       pagination: posts.data,
@@ -591,6 +603,9 @@ export default {
   color: #504d8d;
 }
 .table-1 {
+  font-size: 15px;
+}
+.cs-1 {
   font-size: 14px;
 }
 </style>

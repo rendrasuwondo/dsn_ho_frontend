@@ -56,6 +56,7 @@
             hover
             :items="posts"
             :fields="fields"
+            class="table-1"
             show-empty
           >
             <template v-slot:head(selected)="data">
@@ -92,9 +93,11 @@
                 @click="deleteRole(row.item.id)"
                 title="Hapus"
                 style="display: none"
-                ><i class="fa fa-trash"></i
-              ></b-button>
+              >
+                <i class="fa fa-trash"> </i>
+              </b-button>
             </template>
+
             <template v-slot:custom-foot="data">
               <b-tr>
                 <b-td colspan="14">
@@ -109,6 +112,33 @@
                 </b-td>
               </b-tr>
             </template>
+
+            <template v-slot:cell(detail_hap)="row">
+              <b-button
+                :to="{
+                  name: 'erp_ho-fertilizer-detail_hap-id',
+                  params: { id: row.item.id },
+                  query: {
+                    input_sample_id: row.item.id,
+                    fertilizer_type_id: row.item.fertilizer_type_id,
+                    url: 'erp_ho-fertilizer-in_process_prc',
+                    tab_header: 'IN PROCESS (PRC)',
+                  },
+                }"
+                variant="link"
+                size=""
+                title="Status"
+                class="table-1"
+              >
+                <div
+                  v-if="row.item.status === 'OUTSPEK'"
+                  class="text-danger table-1"
+                >
+                  {{ row.item.status }}
+                </div>
+                <div v-else class="table-1">{{ row.item.status }}</div>
+              </b-button>
+            </template>
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -122,9 +152,9 @@
                 class="mt-1"
               ></b-pagination
             ></b-col>
-            <b-col class="text-right" align-self="center"
-              >{{ rowcount }} data</b-col
-            >
+            <b-col class="text-right" align-self="center">
+              {{ rowcount }} data
+            </b-col>
           </b-row>
         </div>
       </div>
@@ -168,6 +198,11 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          label: 'Hasil Analisa',
+          key: 'detail_hap',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
           label: 'PO',
           key: 'po',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
@@ -196,9 +231,7 @@ export default {
           label: 'QTY PO',
           key: 'qty',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN', {
-              minimumFractionDigits: 2,
-            })
+            let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -212,9 +245,7 @@ export default {
           label: 'QTY GR',
           key: 'gr_qty',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN', {
-              minimumFractionDigits: 2,
-            })
+            let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -534,5 +565,8 @@ export default {
   padding-top: 200px;
   font-size: 30px;
   font-family: sans-serif;
+}
+.table-1 {
+  font-size: 15px;
 }
 </style>

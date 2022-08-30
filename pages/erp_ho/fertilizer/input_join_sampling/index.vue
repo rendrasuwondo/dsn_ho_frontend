@@ -492,10 +492,6 @@ export default {
       // console.log('tes')
 
       var sample = []
-     
-     
-
-
 
       e.preventDefault()
       this.$swal
@@ -512,15 +508,10 @@ export default {
         .then((result) => {
           if (result.isConfirmed) {
             this.checkId = this.field.id ? this.field.id : undefined
-            sample.push([{id: this.checkId, 
-                         selected: 1,
-                         po: this.field.po}] ) 
-      
+            sample.push([{ id: this.checkId, selected: 1, po: this.field.po }])
+
             this.$axios
-              .post(
-                `/api/admin/update_request_status_prc_approve`,
-               sample
-              )
+              .post(`/api/admin/update_request_status_prc_approve`, sample)
               .then(() => {
                 this.$swal.fire({
                   title: 'BERHASIL!',

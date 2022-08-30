@@ -77,7 +77,7 @@
                 ><i class="fa fa-trash"></i
               ></b-button>
             </template>
-            <template v-slot:cell(parameter)="row">
+            <template v-slot:cell(claim_sample)="row">
               <b-button
                 :to="{
                   name: 'erp_ho-fertilizer-claim_sample-id',
@@ -113,6 +113,17 @@
                 </b-container>
               </b-card>
             </template>
+
+            <!-- <template #cell(aksi)="row">
+              <b-button @click="row.toggleDetails(row.item.id)">
+                Details
+              </b-button>
+            </template>
+
+            <template v-slot:row-details="row">
+              <b-table :items="row.item.details" :fields="subRoomsHeader">
+              </b-table>
+            </template> -->
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -156,7 +167,7 @@ export default {
         },
         {
           label: 'Detail',
-          key: 'parameter',
+          key: 'claim_sample',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
@@ -187,6 +198,11 @@ export default {
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
+        {
+          label: 'Detail PO',
+          key: 'aksi',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
       ],
       sweet_alert: {
         title: '',
@@ -206,8 +222,10 @@ export default {
     //fetching posts
     const posts = await $axios.$get(`/api/admin/claim?q=${search}&page=${page}`)
 
+    const list_po = await $axios.$get(`/api/admin/lov_list_po_claim?claim_id=1`)
     console.log('da')
-    console.log(posts.data.data.po_list)
+    console.log(list_po.data)
+    console.log(posts.data.data)
 
     return {
       posts: posts.data.data,

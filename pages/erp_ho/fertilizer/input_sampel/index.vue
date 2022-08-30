@@ -51,6 +51,7 @@
             :fields="fields"
             show-empty
             v-model="visibleRows"
+            class="table-1"
           >
             <template v-slot:cell(actions)="row">
               <b-button
@@ -104,14 +105,20 @@
                 v-else-if="row.item.upload_file !== null"
                 :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
               >
-                {{ row.item.status }}
+                <div v-if="row.item.status === 'OUTSPEK'" class="text-danger">
+                  {{ row.item.status }}
+                </div>
+                <div v-else>{{ row.item.status }}</div>
               </b-link>
               <b-link
                 v-else
                 :href="`${$axios.defaults.baseURL}/storage/HAP/${row.item.upload_file}`"
                 disabled
               >
-                {{ row.item.status }}
+                <div v-if="row.item.status === 'OUTSPEK'" class="text-danger">
+                  {{ row.item.status }}
+                </div>
+                <div v-else>{{ row.item.status }}</div>
               </b-link>
             </template>
 
@@ -433,5 +440,8 @@ export default {
 }
 .card-title {
   color: #504d8d;
+}
+.table-1 {
+  font-size: 15px;
 }
 </style>

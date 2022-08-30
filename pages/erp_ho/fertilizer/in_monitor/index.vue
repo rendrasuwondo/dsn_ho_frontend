@@ -112,7 +112,10 @@
                 title="Status"
                 class="table-1"
               >
-                {{ row.item.status }}
+                <div v-if="row.item.status === 'OUTSPEK'" class="text-danger">
+                  {{ row.item.status }}
+                </div>
+                <div v-else>{{ row.item.status }}</div>
               </b-button>
             </template>
 
@@ -189,6 +192,12 @@ export default {
           key: 'po',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
+
+        {
+          label: 'Hasil Analisa',
+          key: 'detail_hap',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
         {
           label: 'Supplier',
           key: 'supplier',
@@ -220,13 +229,8 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Status Wf',
+          label: 'Status',
           key: 'request_status_name',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Status HAP',
-          key: 'detail_hap',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {

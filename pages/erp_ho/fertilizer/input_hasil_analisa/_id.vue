@@ -34,7 +34,23 @@
               :items="header"
               :fields="fields_header"
               show-empty
-            ></b-table>
+            >
+              <template v-slot:cell(u_finished_at)="row">
+                <b-form-datepicker
+                  placeholder="Choose a date"
+                  v-model="finished_at"
+                  :date-format-options="{
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    weekday: 'short',
+                  }"
+                  v-on:input="update_finished_at"
+                  class="border-transparent bg-transparent"
+                  reset-button
+                ></b-form-datepicker>
+              </template>
+            </b-table>
           </div>
 
           <div class="form-group">
@@ -201,6 +217,8 @@ export default {
       upload_files: {},
       donwload_file: {},
       newData: {},
+      finished_at: '',
+
       //table header
       fields: [
         {
@@ -232,6 +250,10 @@ export default {
         {
           label: 'Hasil Analisa',
           key: 'value',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
@@ -267,6 +289,11 @@ export default {
         {
           label: 'Lab Analisa',
           key: 'laboratory_code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tanggal Selesai',
+          key: 'u_finished_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -321,6 +348,26 @@ export default {
   },
 
   methods: {
+    //update data
+    async update_finished_at(e) {
+      // alert(this.finished_at)
+      // e.preventDefault()
+      await this.$axios
+        .post(`/api/admin/update_finished_at`, {
+          finished_at: this.finished_at,
+          id: this.$route.params.id,
+        })
+
+        .then(() => {
+          //redirect ke route "post"
+          this.$nuxt.refresh()
+        })
+        .catch((error) => {
+          //assign error validasi
+          this.validation = error.response.data
+        })
+    },
+
     //change page pagination
     changePage(page) {
       this.$router.push({
@@ -351,7 +398,7 @@ export default {
       let files = e.target.files[0]
 
       this.files = files
-      console.log(this.files)
+      // console.log(this.files)
     },
 
     async submitFileUpload() {
@@ -504,6 +551,13 @@ export default {
         this.upload_files = response.data.data
           ? response.data.data.upload_file
           : null
+      })
+
+    this.$axios
+      .get(`/api/admin/master/input_sampel/${this.$route.params.id}`)
+      .then((response) => {
+        this.finished_at = response.data.data.finished_at
+        // console.log(response.data.data.finished_at)
       })
   },
 

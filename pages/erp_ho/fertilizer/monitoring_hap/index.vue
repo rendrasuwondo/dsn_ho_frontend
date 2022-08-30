@@ -89,6 +89,31 @@
                 <i class="fa fa-pencil-alt"></i>
               </b-button>
             </template>
+
+            <template v-slot:cell(detail_hap)="row">
+              <b-button
+                :to="{
+                  name: 'erp_ho-fertilizer-detail_hap-id',
+                  params: { id: row.item.t_fertilizer_sample_id },
+                  query: {
+                    input_sample_id: row.item.t_fertilizer_sample_id,
+                    fertilizer_type_id: row.item.fertilizer_type_id,
+                    url: 'erp_ho-fertilizer-monitoring_hap',
+                    tab_header: 'Monitoring HAP',
+                  },
+                }"
+                variant="link"
+                size=""
+                title="Status"
+                class="table-1"
+              >
+                <div v-if="row.item.STATUS === 'OUTSPEK'" class="text-danger">
+                  {{ row.item.STATUS }}
+                </div>
+                <div v-else>{{ row.item.STATUS }}</div>
+              </b-button>
+            </template>
+
             <template #cell(detail)="row">
               <b-button class="btn-info" size="sm" @click="row.toggleDetails">
                 {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
@@ -169,6 +194,11 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          label: 'Hasil Analisa',
+          key: 'detail_hap',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
           label: 'Tanggal PO',
           key: 'PO_DATE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
@@ -218,11 +248,6 @@ export default {
         {
           label: 'Dept.',
           key: 'DEPARTMENT_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Status Wf',
-          key: 'STATUS',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -397,6 +422,6 @@ export default {
   color: #504d8d;
 }
 .table-1 {
-  font-size: 14px;
+  font-size: 15px;
 }
 </style>
