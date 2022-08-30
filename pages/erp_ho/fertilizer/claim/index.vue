@@ -93,6 +93,26 @@
                 <i class="fa fa-file-alt"></i>
               </b-button>
             </template>
+
+            <template #cell(detail)="row">
+              <b-button class="btn-info" size="sm" @click="row.toggleDetails">
+                {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
+              </b-button>
+            </template>
+
+            <template #row-details="row">
+              <b-card>
+                <b-container class="bv-example-row">
+                  <b-row>
+                    <b-col cols="3">List No.PO : </b-col>
+
+                    <b-col cols="9">
+                      {{ row.item.po_list }}
+                    </b-col>
+                  </b-row>
+                </b-container>
+              </b-card>
+            </template>
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -145,6 +165,11 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          label: 'Detail PO',
+          key: 'detail',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
           label: 'Total Klaim Outspek',
           key: 'claim_calculation',
           formatter: (value, key, item) => {
@@ -180,6 +205,9 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(`/api/admin/claim?q=${search}&page=${page}`)
+
+    console.log('da')
+    console.log(posts.data.data.po_list)
 
     return {
       posts: posts.data.data,

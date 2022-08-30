@@ -137,6 +137,7 @@
 </template>
 
 <script>
+import el from '~/static/plugins/fullcalendar/locales/el'
 export default {
   //layout
   layout: 'admin',
@@ -185,7 +186,7 @@ export default {
         employee_id: '',
         phone_number: '',
         is_active: 'Y',
-        is_default: 'N',
+        is_default: 'Y',
         description: '',
         create_at: '',
         update_at: '',
