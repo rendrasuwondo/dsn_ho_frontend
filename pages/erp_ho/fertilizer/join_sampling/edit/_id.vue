@@ -9,7 +9,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-file-contract"></i>
-            <b>EDIT JOIN SAMPLING</b>
+            <b>EDIT {{ this.$route.query.tab_header }}</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -140,6 +140,7 @@
                   day: '2-digit',
                   weekday: 'short',
                 }"
+                reset-button
               ></b-form-datepicker>
             </div>
 
@@ -154,6 +155,7 @@
                   day: '2-digit',
                   weekday: 'short',
                 }"
+                reset-button
               ></b-form-datepicker>
             </div>
 
@@ -338,7 +340,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: this.$route.query.url==="" ? 'erp_ho-fertilizer-join_sampling' : 'erp_ho-fertilizer-in_process_prc',
+        name: this.$route.query.url,
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -407,9 +409,7 @@ export default {
             timer: 2000,
           })
           //redirect ke route "post"
-          this.$router.push({
-            name: this.$route.query.url==="" ? 'erp_ho-fertilizer-join_sampling' : 'erp_ho-fertilizer-in_process_prc',
-          })
+          this.back()
         })
         .catch((error) => {
           //assign error validasi

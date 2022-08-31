@@ -100,7 +100,7 @@
                     input_sample_id: row.item.id,
                     fertilizer_type_id: row.item.fertilizer_type_id,
                     url: 'erp_ho-fertilizer-in_process_rna',
-                    tab_header: 'IN PROCESS',
+                    tab_header: 'IN PROCESS (RNA)',
                   },
                 }"
                 variant="link"

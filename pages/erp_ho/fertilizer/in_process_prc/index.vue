@@ -8,7 +8,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-object-ungroup"></i>
+            <i class="nav-icon fas fa-object-group"></i>
             <b>IN PROCESS PRC</b>
           </h3>
           <div class="card-tools"></div>
@@ -17,13 +17,13 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <nuxt-link
+                <!-- <nuxt-link
                   :to="{ name: 'erp_ho-fertilizer-join_sampling-create' }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
                   title="Tambah"
                   ><i class="fa fa-plus-circle"></i>
-                </nuxt-link>
+                </nuxt-link> -->
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -79,7 +79,10 @@
                 :to="{
                   name: 'erp_ho-fertilizer-join_sampling-edit-id',
                   params: { id: row.item.id },
-                  query: { url: 'erp_ho-fertilizer-in_process_prc' },
+                  query: {
+                    url: 'erp_ho-fertilizer-in_process_prc',
+                    tab_header: 'IN PROCESS (PRC)',
+                  },
                 }"
                 variant="link"
                 size="sm"
@@ -468,6 +471,7 @@ export default {
                   timer: 2000,
                 })
               })
+            this.$nuxt.refresh()
 
             this.$router.push({
               name: 'erp_ho-fertilizer-in_process_prc',

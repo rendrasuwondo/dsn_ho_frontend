@@ -115,11 +115,25 @@
                 <i class="fa fa-pencil-alt"></i>
               </b-button>
             </template>
+
             <template v-slot:custom-foot="data">
               <b-tr>
-                <b-td colspan="5" align="right"><b>Kesimpulan</b></b-td>
+                <b-td colspan="4" align="right"><b>Kesimpulan</b></b-td>
                 <b-td align="center">{{ summary }}</b-td>
               </b-tr>
+            </template>
+
+            <template v-slot:cell(u_value)="row">
+              <number
+                class="border-transparent bg-transparent float-right"
+                placeholder="0"
+                v-model="row.item.value"
+                v-on:input="
+                  update_value(row.item.id, row.item.value),
+                    (event) => event.preventDefault()
+                "
+                prefix=""
+              ></number>
             </template>
           </b-table>
 
@@ -218,14 +232,15 @@ export default {
       donwload_file: {},
       newData: {},
       finished_at: '',
+      value: [],
 
       //table header
       fields: [
-        {
-          label: 'Actions',
-          key: 'actions',
-          tdClass: '',
-        },
+        // {
+        //   label: 'Actions',
+        //   key: 'actions',
+        //   tdClass: '',
+        // },
         {
           label: 'Parameter',
           key: 'parameter_code',
@@ -249,12 +264,8 @@ export default {
         },
         {
           label: 'Hasil Analisa',
-          key: 'value',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          key: 'u_value',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           label: 'Status',
@@ -348,7 +359,7 @@ export default {
   },
 
   methods: {
-    //update data
+    //update data finished_at
     async update_finished_at(e) {
       // alert(this.finished_at)
       // e.preventDefault()
@@ -366,6 +377,34 @@ export default {
           //assign error validasi
           this.validation = error.response.data
         })
+    },
+
+    //update data i_value
+    async update_value(id, value) {
+      const id_hap = `${id}`
+
+      const i_value = `${value}`
+
+      console.log('daa')
+      console.log(id_hap)
+      console.log(i_value)
+      await this.$axios
+        .put(`/api/admin/update_value/${id}`, {
+          //data yang dikirim
+          id: id_hap,
+          fertilizer_type_parameter_id: this.$route.query.fertilizer_type_id,
+          // t_fertilizer_sample_id: this.$route.query.input_sample_id,
+          value: i_value,
+        })
+        .then(() => {
+          //redirect ke route "post"
+          this.$nuxt.refresh()
+        })
+        .catch((error) => {
+          //assign error validasi
+          this.validation = error.response.data
+        })
+      // e.preventDefault()
     },
 
     //change page pagination
@@ -558,6 +597,15 @@ export default {
       .then((response) => {
         this.finished_at = response.data.data.finished_at
         // console.log(response.data.data.finished_at)
+      })
+
+    this.$axios
+      .get(
+        `/api/admin/detail/table_hasil/${this.$route.params.id}?q=${this.search}&page=${this.page}&fertilizer_type_id=${this.$route.query.fertilizer_type_id}`
+      )
+      .then((response) => {
+        this.value = response.data.data
+        console.log(this.value)
       })
   },
 

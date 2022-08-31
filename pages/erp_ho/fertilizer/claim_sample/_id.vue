@@ -144,64 +144,62 @@
               <b-card>
                 <b-container class="bv-example-row">
                   <b-row>
-                    <b-col cols="4">
-                      PO PRICE :
-                      {{
-                        row.item.po_price.replace(
-                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
-                          '$1\.'
-                        )
-                      }}</b-col
-                    >
-                    <b-col cols="4">
-                      QTY PO :
-                      {{
-                        row.item.po_qty.replace(
-                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
-                          '$1\.'
-                        )
-                      }}
+                    <b-col cols="2"> QTY PO</b-col>
+                    <b-col cols="2">
+                      :
+                      <span class="float-right">
+                        {{
+                          new Intl.NumberFormat('es-US').format(row.item.po_qty)
+                        }}
+                      </span>
                     </b-col>
-                    <b-col cols="4">
-                      QTY GR :
-                      {{
-                        row.item.gr_qty.replace(
-                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
-                          '$1\.'
-                        )
-                      }}
+                    <b-col cols="1"></b-col>
+                    <b-col cols="3">Klaim Mutu Pupuk</b-col>
+                    <b-col cols="3">
+                      :
+                      <span class="float-right">
+                        {{
+                          new Intl.NumberFormat('es-US').format(
+                            row.item.claim_fertilizer
+                          )
+                        }}
+                      </span>
                     </b-col>
                   </b-row>
-                  <b-row></b-row>
                   <b-row>
-                    <b-col cols="4" class="mt-1">
-                      Klaim Mutu Pupuk :
-                      {{
-                        row.item.claim_fertilizer.replace(
-                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
-                          '$1\.'
-                        )
-                      }}
+                    <b-col cols="2"> QTY GR</b-col>
+                    <b-col cols="2">
+                      :
+                      <span class="float-right">
+                        {{
+                          new Intl.NumberFormat('es-US').format(row.item.gr_qty)
+                        }}
+                      </span>
                     </b-col>
-                    <b-col cols="4" class="mt-1">
-                      Nilai Klaim Outspek :
-                      {{
-                        row.item.claim_calculation.replace(
-                          /(\d)(?=(\d{3})+(?:\.\d+)?$)/g,
-                          '$1\.'
-                        )
-                      }}
+                    <b-col cols="1"></b-col>
+                    <b-col cols="3">Nilai Klaim Outspek</b-col>
+                    <b-col cols="3">
+                      :
+                      <span class="float-right">
+                        {{
+                          new Intl.NumberFormat('es-US').format(
+                            row.item.claim_calculation
+                          )
+                        }}
+                      </span>
                     </b-col>
-                    <b-col cols="4">
-                      <!-- Detail Nilai Klaim :
-                      <b-button
-                        title="Detail Nilai Klaim Outspek"
-                        class="btn"
-                        variant="link"
-                        :href="`${$axios.defaults.baseURL}/api/claim_calculation/export?q=${search}&claim_id=${row.item.claim_id}&t_fertilizer_sample_id=${row.item.t_fertilizer_sample_id}`"
-                      >
-                        Klik Disini
-                      </b-button> -->
+                  </b-row>
+                  <b-row>
+                    <b-col cols="2">PO PRICE</b-col>
+                    <b-col cols="2">
+                      :
+                      <span class="float-right">
+                        {{
+                          new Intl.NumberFormat('es-US').format(
+                            row.item.po_price
+                          )
+                        }}
+                      </span>
                     </b-col>
                   </b-row>
                 </b-container>
@@ -224,7 +222,13 @@
                 title="Status HAP"
                 class="table-1"
               >
-                {{ row.item.status }}
+                <div
+                  v-if="row.item.status === 'OUTSPEK'"
+                  class="text-danger table-1"
+                >
+                  {{ row.item.status }}
+                </div>
+                <div v-else class="table-1">{{ row.item.status }}</div>
               </b-button>
             </template>
           </b-table>
@@ -274,9 +278,19 @@ export default {
           tdClass: '',
         },
         {
+          label: 'Detail Data',
+          key: 'detail',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
           label: 'Status',
           key: 'request_status_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Hasil Analisa',
+          key: 'detail_hap',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           label: 'NO.PO',
@@ -292,52 +306,6 @@ export default {
           label: 'Supplier',
           key: 'supplier',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        // {
-        //   label: 'QTY PO',
-        //   key: 'po_qty',
-        //   formatter: (value, key, item) => {
-        //     let formatter = new Intl.NumberFormat('es-IN')
-        //     return formatter.format(value)
-        //   },
-        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        // },
-        // {
-        //   label: 'Nilai PO',
-        //   key: 'po_price',
-        //   formatter: (value, key, item) => {
-        //     let formatter = new Intl.NumberFormat('es-IN')
-        //     return formatter.format(value)
-        //   },
-        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        // },
-        // {
-        //   label: 'QTY GR',
-        //   key: 'gr_qty',
-        //   formatter: (value, key, item) => {
-        //     let formatter = new Intl.NumberFormat('es-IN')
-        //     return formatter.format(value)
-        //   },
-        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        // },
-        // {
-        //   label: 'Nilai Klaim Outspek',
-        //   key: 'claim_calculation',
-        //   formatter: (value, key, item) => {
-        //     let formatter = new Intl.NumberFormat('es-IN')
-        //     return formatter.format(value)
-        //   },
-        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        // },
-        {
-          label: 'Detail Data',
-          key: 'detail',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Hasil',
-          key: 'detail_hap',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
       ],
 

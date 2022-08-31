@@ -198,11 +198,11 @@ export default {
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
-        {
-          label: 'Detail PO',
-          key: 'aksi',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
-        },
+        // {
+        //   label: 'Detail PO',
+        //   key: 'aksi',
+        //   tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        // },
       ],
       sweet_alert: {
         title: '',
@@ -293,29 +293,27 @@ export default {
           if (result.isConfirmed) {
             //delete tag from server
 
-            this.$axios
-              .delete(`/api/admin/fertilizer_type/${id}`)
-              .then((response) => {
-                //feresh data
-                this.$nuxt.refresh()
+            this.$axios.delete(`/api/admin/claim/${id}`).then((response) => {
+              //feresh data
+              this.$nuxt.refresh()
 
-                if (response.data.success == true) {
-                  this.sweet_alert.title = 'BERHASIL!'
-                  this.sweet_alert.icon = 'success'
-                } else {
-                  this.sweet_alert.title = 'GAGAL!'
-                  this.sweet_alert.icon = 'error'
-                }
+              if (response.data.success == true) {
+                this.sweet_alert.title = 'BERHASIL!'
+                this.sweet_alert.icon = 'success'
+              } else {
+                this.sweet_alert.title = 'GAGAL!'
+                this.sweet_alert.icon = 'error'
+              }
 
-                //alert
-                this.$swal.fire({
-                  title: this.sweet_alert.title,
-                  text: response.data.message,
-                  icon: this.sweet_alert.icon,
-                  showConfirmButton: false,
-                  timer: 2000,
-                })
+              //alert
+              this.$swal.fire({
+                title: this.sweet_alert.title,
+                text: response.data.message,
+                icon: this.sweet_alert.icon,
+                showConfirmButton: false,
+                timer: 2000,
               })
+            })
           }
         })
     },
