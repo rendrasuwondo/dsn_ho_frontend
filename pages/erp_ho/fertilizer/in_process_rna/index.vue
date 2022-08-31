@@ -283,19 +283,28 @@ export default {
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Hasil Analisa',
           key: 'input_hasil',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Detail Data',
           key: 'detail',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Status',
           key: 'request_status_name',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          label: 'Hasil',
+          key: 'detail_hap',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'PO',
@@ -303,41 +312,44 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Kode Sampel',
           key: 'sample_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Joint Sampling',
           key: 'k_join_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Tanggal Terima',
           key: 'k_receipt_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Lab Analisa',
           key: 'laboratory_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Kirim Ke Lab',
           key: 'k_lab_sent_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Terima Lab',
           key: 'k_lab_receipt_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
+
         {
-          label: 'Hasil',
-          key: 'detail_hap',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Klaim Mutu Pupuk',
           key: 'fertilizer_analysis_calculation',
           formatter: (value, key, item) => {

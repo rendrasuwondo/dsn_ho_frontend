@@ -188,12 +188,14 @@ export default {
 
       fields: [
         {
-          label: 'NO. PO',
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          label: 'PO',
           key: 'po',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
 
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Hasil Analisa',
           key: 'detail_hap',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',

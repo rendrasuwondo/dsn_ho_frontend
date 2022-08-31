@@ -227,8 +227,9 @@ export default {
       formData.append('description', this.field.description)
       formData.append('created_at', this.field.created_at)
       formData.append('created_by', this.field.created_by)
-      formData.append('update_at', this.field.update_at)
-      formData.append('udpate_by', this.field.udpate_by)
+      formData.append('updated_at', this.field.updated_at)
+      formData.append('updated_by', this.field.updated_by)
+      formData.append('status', 'vendor')
 
       await this.$axios
         .post('/api/admin/fertilizer_vendor_laboratory', formData)

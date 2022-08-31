@@ -214,6 +214,7 @@ export default {
             created_by: this.field.description,
             updated_at: this.field.updated_at,
             updated_by: this.field.updated_by,
+            status: 'vendor',
           }
         )
         .then(() => {

@@ -189,26 +189,31 @@ export default {
 
       fields: [
         {
-          label: 'NO. PO',
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          label: 'PO',
           key: 'PO_NO',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Hasil Analisa',
           key: 'detail_hap',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Tanggal PO',
           key: 'PO_DATE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Supplier',
           key: 'PO_VENDOR_NAME',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'QTY PO',
           key: 'PO_QTY',
           formatter: (value, key, item) => {
@@ -220,11 +225,13 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Tanggal GR',
           key: 'GR_DATE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'QTY GR',
           key: 'GR_QTY',
           formatter: (value, key, item) => {
@@ -236,21 +243,25 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Join Sampling',
           key: 'K_JOIN_SAMPLING_AT',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'PT',
           key: 'COMPANY_CODE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Dept.',
           key: 'DEPARTMENT_CODE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Klaim Mutu Pupuk',
           key: 'fertilizer_analysis_calculation',
           formatter: (value, key, item) => {
