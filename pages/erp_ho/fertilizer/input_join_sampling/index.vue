@@ -4,7 +4,25 @@
       <div class="container-fluid"></div>
     </section>
 
-    <section class="content">
+    <div v-if="show === 0">
+      <table align="center" size="100%">
+        <tr>
+          <td>
+            <b-button variant="primary" disabled>
+              <b-spinner small></b-spinner>
+              <span class="sr-only">Loading...</span>
+            </b-button>
+
+            <b-button variant="primary" disabled>
+              <b-spinner small type="grow"></b-spinner>
+              Loading...
+            </b-button>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <section class="content" v-if="show === 1">
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
@@ -319,6 +337,7 @@ export default {
       data_po: [],
       //state validation
       validation: [],
+      show: 1,
     }
   },
 
@@ -375,6 +394,7 @@ export default {
     },
 
     async storePost() {
+      this.show = 0
       if (this.field.id != '') {
         //UPDATE
         this.$axios
@@ -472,6 +492,8 @@ export default {
             this.$nuxt.refresh()
             this.bind()
             this.validationCelar()
+
+            this.show = 1
           })
           .catch((error) => {
             //assign error to state "validation"
@@ -484,6 +506,8 @@ export default {
               showConfirmButton: true,
               // timer: 2000,
             })
+
+            this.show = 1
           })
       }
     },
