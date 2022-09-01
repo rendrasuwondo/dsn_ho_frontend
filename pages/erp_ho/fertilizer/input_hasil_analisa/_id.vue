@@ -125,7 +125,7 @@
 
             <template v-slot:cell(u_value)="row">
               <number
-                class="border-transparent bg-transparent float-right"
+                class="border-transparent bg-transparent float-right txt-1"
                 placeholder="0"
                 v-model="row.item.value"
                 v-on:input="
@@ -266,7 +266,7 @@ export default {
         {
           label: 'Hasil Analisa',
           key: 'u_value',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass txt-1',
         },
         {
           label: 'Status',
@@ -404,7 +404,8 @@ export default {
           value: i_value,
         })
         .then(() => {
-          //redirect ke route "post"
+          this.update_summary()
+
           this.$nuxt.refresh()
         })
         .catch((error) => {
@@ -574,20 +575,24 @@ export default {
         link.click()
       })
     },
+
+    update_summary() {
+      let newData = []
+      this.posts.forEach((value, index) => {
+        newData.push(value.status)
+        // console.log("newData", newData);
+      })
+
+      if (newData.includes('OUTSPEK') == true) {
+        this.summary = 'OUTSPEK'
+      } else {
+        this.summary = 'INSPEK'
+      }
+    },
   },
 
   mounted() {
-    let newData = []
-    this.posts.forEach((value, index) => {
-      newData.push(value.status)
-      // console.log("newData", newData);
-    })
-
-    if (newData.includes('OUTSPEK') == true) {
-      this.summary = 'OUTSPEK'
-    } else {
-      this.summary = 'INSPEK'
-    }
+    this.update_summary()
 
     this.$axios
       .get(`/api/admin/master/upload_file/${this.$route.params.id}`)
@@ -676,6 +681,7 @@ export default {
   border-radius: 3px;
   border: 1px solid #edededc2;
   color: rgba(0, 0, 0, 0.419);
+  margin-bottom: 5px;
   box-shadow: 2px 3px #655e695b;
 }
 .dashed {
@@ -699,5 +705,9 @@ h6 {
 }
 input[type='file'] {
   display: none;
+}
+.txt-1 {
+  width: 200px;
+  text-align: right;
 }
 </style>
