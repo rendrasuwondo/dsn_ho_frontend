@@ -229,6 +229,11 @@ export default {
           key: 'request_status_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
+        // {
+        //   label: 'Tgl Selesai',
+        //   key: 'finished_at',
+        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        // },
       ],
       sweet_alert: {
         title: '',

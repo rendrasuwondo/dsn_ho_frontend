@@ -201,41 +201,49 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Supplier',
           key: 'supplier',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Kode Sampel',
           key: 'sample_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Jenis Pupuk',
           key: 'fertilizer_type_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Tgl Kedatangan',
           key: 'k_arrived_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Join Sampling',
           key: 'k_join_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Tgl Terima',
           key: 'k_receipt_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Status',
           key: 'request_status_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Klaim Mutu Pupuk',
           key: 'fertilizer_analysis_calculation',
           formatter: (value, key, item) => {
