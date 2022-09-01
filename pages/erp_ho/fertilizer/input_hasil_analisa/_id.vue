@@ -144,7 +144,7 @@
             <b-container class="mb-1">
               <b-row>
                 <b-col cols="8">
-                  <p class="selected">
+                  <p class="selected float-left">
                     File Tersimpan : <b> {{ upload_files }}</b>
                   </p>
                 </b-col>
@@ -152,14 +152,14 @@
                   <button
                     v-if="upload_files !== null"
                     @click="fileDownload"
-                    class="btn-info btn-upload"
+                    class="btn-upd float-right"
                     title="Download File"
                   >
                     <i class="nav-icon fas fa-download"></i> Download
                   </button>
                   <button
                     v-else
-                    class="btn-upload"
+                    class="float-right btn-disable"
                     title="File Tidak Ditemukan"
                     disabled
                   >
@@ -171,7 +171,7 @@
             <b-container>
               <b-row>
                 <b-col cols="8">
-                  <p class="selected">
+                  <p class="selected float-left">
                     <label class="choose-file">
                       Enter Your File
                       <input
@@ -189,16 +189,16 @@
                   <button
                     v-if="files !== null"
                     @click="submitFileUpload"
-                    class="btn-info btn-upload"
+                    class="btn-ud float-right"
                     title="Upload File"
                   >
                     <i class="nav-icon fas fa-upload"></i> upload
                   </button>
                   <button
                     v-else
-                    class="btn-upload"
+                    class="float-right btn-disable"
                     disabled
-                    title="Enter Your File"
+                    title="Pilih File Yang Akan Diupload"
                   >
                     <i class="nav-icon fas fa-upload"></i> upload
                   </button>
@@ -231,8 +231,7 @@ export default {
       upload_files: {},
       donwload_file: {},
       newData: {},
-      finished_at: '',
-      value: [],
+      value: '',
 
       //table header
       fields: [
@@ -249,15 +248,17 @@ export default {
         {
           label: 'Nilai Standar',
           key: 'sni',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US')
+            return formatter.format(value)
+          },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           label: 'Minimal Nilai',
           key: 'min_value',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat({
-              minimumFractionDigits: 2,
-            })
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -316,6 +317,7 @@ export default {
       //state search
       search: '',
       summary: '',
+      finished_at: '',
     }
   },
 
@@ -340,6 +342,10 @@ export default {
       `/api/admin/master/input_sampel/${id}`
     )
 
+    let finished_at = input_sampel.data.data.finished_at
+      ? input_sampel.data.data.finished_at
+      : ''
+
     const header = [input_sampel.data.data]
 
     const i_fertilizer_type_id = route.query.fertilizer_type_id
@@ -349,12 +355,16 @@ export default {
       `/api/admin/detail/table_hasil/${id}?q=${search}&page=${page}&fertilizer_type_id=${i_fertilizer_type_id}`
     )
 
+    console.log('daa')
+    console.log(posts.data)
+
     return {
       posts: posts.data,
       pagination: posts.data,
       rowcount: posts.data.length,
       search: search,
       header: header,
+      finished_at: finished_at,
     }
   },
 
@@ -385,9 +395,6 @@ export default {
 
       const i_value = `${value}`
 
-      console.log('daa')
-      console.log(id_hap)
-      console.log(i_value)
       await this.$axios
         .put(`/api/admin/update_value/${id}`, {
           //data yang dikirim
@@ -404,7 +411,6 @@ export default {
           //assign error validasi
           this.validation = error.response.data
         })
-      // e.preventDefault()
     },
 
     //change page pagination
@@ -592,21 +598,23 @@ export default {
           : null
       })
 
-    this.$axios
-      .get(`/api/admin/master/input_sampel/${this.$route.params.id}`)
-      .then((response) => {
-        this.finished_at = response.data.data.finished_at
-        // console.log(response.data.data.finished_at)
-      })
+    // this.$axios
+    //   .get(`/api/admin/master/input_sampel/${this.$route.params.id}`)
+    //   .then((response) => {
+    //     this.finished_at = response.data.data.finished_at
+    //       ? response.data.data.finished_at
+    //       : null
+    //     // console.log(response.data.data.finished_at)
+    //   })
 
-    this.$axios
-      .get(
-        `/api/admin/detail/table_hasil/${this.$route.params.id}?q=${this.search}&page=${this.page}&fertilizer_type_id=${this.$route.query.fertilizer_type_id}`
-      )
-      .then((response) => {
-        this.value = response.data.data
-        console.log(this.value)
-      })
+    // this.$axios
+    //   .get(
+    //     `/api/admin/detail/table_hasil/${this.$route.params.id}?q=${this.search}&page=${this.page}&fertilizer_type_id=${this.$route.query.fertilizer_type_id}`
+    //   )
+    //   .then((response) => {
+    //     this.value = response.data.data
+    //     console.log(this.value)
+    //   })
   },
 
   computed: {
@@ -646,11 +654,29 @@ export default {
 .input-file {
   width: 100%;
 }
-.btn-upload {
-  float: right;
-  width: 110px;
+.btn-upd {
+  background-color: #6c5ce7;
+  font-size: 13px;
+  width: 120px;
+  padding: 5px 0px 5px 0px;
   border-radius: 3px;
-  padding: 2px 0px 2px 0px;
+  color: white;
+  border: none;
+  box-shadow: 2px 3px #f7ebfd;
+  margin-bottom: 4px;
+}
+.btn-upd:hover {
+  background-color: rgb(100, 87, 200);
+}
+.btn-disable {
+  background-color: #edededaa;
+  font-size: 13px;
+  width: 120px;
+  padding: 4px 0px 4px 0px;
+  border-radius: 3px;
+  border: 1px solid #edededc2;
+  color: rgba(0, 0, 0, 0.419);
+  box-shadow: 2px 3px #655e695b;
 }
 .dashed {
   border-style: dashed;

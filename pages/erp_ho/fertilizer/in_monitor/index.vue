@@ -95,6 +95,16 @@
               </b-button>
             </template>
 
+            <template v-slot:cell(detail_klaim)="row">
+              <div v-if="row.item.status != null">
+                {{
+                  new Intl.NumberFormat('es-US').format(
+                    row.item.fertilizer_analysis_calculation
+                  )
+                }}
+              </div>
+            </template>
+
             <template v-slot:cell(detail_hap)="row">
               <b-button
                 :to="{
@@ -245,11 +255,7 @@ export default {
         {
           thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Klaim Mutu Pupuk',
-          key: 'fertilizer_analysis_calculation',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
+          key: 'detail_klaim',
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
       ],

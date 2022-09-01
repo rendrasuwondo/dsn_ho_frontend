@@ -171,15 +171,17 @@ export default {
         {
           label: 'SNI',
           key: 'sni',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US')
+            return formatter.format(value)
+          },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           label: 'Minimal Nilai',
           key: 'min_value',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat({
-              minimumFractionDigits: 2,
-            })
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',

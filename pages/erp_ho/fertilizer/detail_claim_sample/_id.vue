@@ -114,7 +114,7 @@
                       <br />
                       <button
                         @click="fileDownload"
-                        class="btn-info btn-upload"
+                        class="btn-upd"
                         title="Download File"
                       >
                         <i class="nav-icon fas fa-download"></i> Download
@@ -462,16 +462,19 @@ export default {
 .input-file {
   width: 100%;
 }
-.btn-upload {
+.btn-upd {
+  background-color: #8177cf;
+  font-size: 13px;
   width: 120px;
+  padding: 5px 0px 5px 0px;
   border-radius: 3px;
-  padding: 3px 0px 3px 0px;
-  margin-top: 10px;
-  font-size: 14px;
-  background-color: rgb(89, 89, 224);
-  border: 1.5px solid rgb(111, 65, 228);
-  box-shadow: 2px 2px 0px rgb(234, 228, 247);
-  float: none;
+  color: white;
+  border: none;
+  box-shadow: 2px 3px #f7ebfd;
+  margin-top: 5px;
+}
+.btn-upd:hover {
+  background-color: rgb(100, 87, 200);
 }
 .dashed {
   border-style: dashed;
