@@ -554,7 +554,7 @@ export default {
               query: {},
             })
 
-            // this.$nuxt.refresh()
+            this.$nuxt.refresh()
             // alert(result.value)
             //  this.$swal.fire('Changes are not saved', '', 'info')
             // this.$swal.fire.showValidationMessage(
@@ -589,7 +589,7 @@ export default {
                 })
               })
 
-            // this.$nuxt.refresh()
+            this.$nuxt.refresh()
             // alert(result.value)
             //  this.$swal.fire('Changes are not saved', '', 'info')
             // this.$swal.fire.showValidationMessage(
