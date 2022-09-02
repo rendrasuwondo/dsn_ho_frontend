@@ -251,7 +251,7 @@ export default {
         .put(`api/admin/user_has_role/${this.$route.params.id}`, {
           //data yang dikirim
           id: this.$route.params.id,
-          users_id: this.field.users_id ? this.field.users_id.id : '',
+          users_id: this.field.users_id.id ? this.field.users_id.id : '',
           role_id: this.field.role_id,
           is_active: this.field.is_active,
           description: this.field.description,

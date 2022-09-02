@@ -19,7 +19,7 @@
               <multiselect
                 v-model="field.user_id"
                 :options="users"
-                label="user_description"
+                label="users_description"
                 track-by="id"
                 :searchable="true"
               ></multiselect>
@@ -217,8 +217,8 @@ export default {
       let formData = new FormData()
 
       formData.append(
-        'user_id',
-        this.field.user_id ? this.field.user_id.id : ''
+        'users_id',
+        this.field.user_id.id ? this.field.user_id.id : ''
       )
       console.log('daaaa')
       console.log(this.field.user_id.id)
