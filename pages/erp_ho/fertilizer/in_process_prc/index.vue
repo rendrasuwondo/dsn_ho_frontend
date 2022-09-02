@@ -477,12 +477,12 @@ export default {
                   timer: 2000,
                 })
               })
-            this.$nuxt.refresh()
+            // this.$nuxt.refresh()
 
             this.$router.push({
               name: 'erp_ho-fertilizer-in_process_prc',
             })
-            // this.$nuxt.refresh()
+            this.$nuxt.refresh()
             // alert(result.value)
             //  this.$swal.fire('Changes are not saved', '', 'info')
             // this.$swal.fire.showValidationMessage(
