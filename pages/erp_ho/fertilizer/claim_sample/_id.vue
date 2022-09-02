@@ -315,6 +315,7 @@ export default {
 
       fields_header: [
         {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'No. Klaim',
           key: 'claim_no',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
