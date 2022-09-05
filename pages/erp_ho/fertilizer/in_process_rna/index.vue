@@ -4,7 +4,13 @@
       <div class="container-fluid"></div>
     </section>
 
-    <section class="content">
+    <div v-if="show === 0">
+      <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+      <p class="txt-2">Loading</p>
+      <div class="spinonediv-4"></div>
+    </div>
+
+    <section class="content" v-if="show === 1">
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
@@ -369,6 +375,8 @@ export default {
         title: '',
         icon: '',
       },
+
+      show: 1,
     }
   },
   watchQuery: ['q', 'page'],
@@ -520,6 +528,8 @@ export default {
         })
         .then((result) => {
           if (result.isConfirmed) {
+            this.show = 0
+
             //REJECT
             this.selectedData = []
             this.posts.forEach((el) => {
@@ -539,6 +549,8 @@ export default {
             this.$axios
               .post(`/api/admin/update_request_status_rna_reject`, formData)
               .then((response) => {
+                this.show = 1
+
                 this.$swal.fire({
                   title: 'BERHASIL!',
                   text: 'Data Berhasil Di Approve!',
@@ -562,6 +574,8 @@ export default {
             //     )
           } else if (result.isDenied) {
             //APPROVE
+            this.show = 0
+
             this.selectedData = []
             this.posts.forEach((el) => {
               if (el.selected_rna == true) {
@@ -580,6 +594,8 @@ export default {
             this.$axios
               .post(`/api/admin/update_request_status_rna_approve`, formData)
               .then((response) => {
+                this.show = 1
+
                 this.$swal.fire({
                   title: 'BERHASIL!',
                   text: 'Data Berhasil Di Approve!',
@@ -625,5 +641,19 @@ export default {
 }
 .cs-1 {
   font-size: 14px;
+}
+.img-logo {
+  width: 160px;
+  padding-top: 10px;
+  padding-right: 20px;
+}
+.txt-2 {
+  color: #be65e2;
+  padding-top: 17%;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  font-size: 27px;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.148);
+  font-weight: bold;
 }
 </style>

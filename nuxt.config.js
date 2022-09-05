@@ -60,6 +60,8 @@ export default {
     css: [
         '@/assets/css/fontawesome-free/css/all.min.css',
         '@/assets/css/adminlte.min.css',
+        '@/assets/css/loading.css',
+
     ],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

@@ -5,21 +5,9 @@
     </section>
 
     <div v-if="show === 0">
-      <table align="center" size="100%">
-        <tr>
-          <td>
-            <b-button variant="primary" disabled>
-              <b-spinner small></b-spinner>
-              <span class="sr-only">Loading...</span>
-            </b-button>
-
-            <b-button variant="primary" disabled>
-              <b-spinner small type="grow"></b-spinner>
-              Loading...
-            </b-button>
-          </td>
-        </tr>
-      </table>
+      <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+      <p class="txt-2">Loading</p>
+      <div class="spinonediv-4"></div>
     </div>
 
     <section class="content" v-if="show === 1">
@@ -429,6 +417,7 @@ export default {
             this.$nuxt.refresh()
             this.bind()
             this.validationCelar()
+            this.show = 1
           })
           .catch((error) => {
             //assign error validasi
@@ -496,6 +485,8 @@ export default {
             this.show = 1
           })
           .catch((error) => {
+            this.show = 1
+
             //assign error to state "validation"
             this.validation = error.response.data
             console.log(error.response.data.message)
@@ -507,7 +498,7 @@ export default {
               // timer: 2000,
             })
 
-            this.show = 1
+            // this.show = 1
           })
       }
     },
@@ -531,12 +522,16 @@ export default {
         })
         .then((result) => {
           if (result.isConfirmed) {
+            this.show = 0
+
             this.checkId = this.field.id ? this.field.id : undefined
             sample.push([{ id: this.checkId, selected: 1, po: this.field.po }])
 
             this.$axios
               .post(`/api/admin/update_request_status_prc_approve`, sample)
               .then(() => {
+                this.show = 1
+
                 this.$swal.fire({
                   title: 'BERHASIL!',
                   text: 'Data Berhasil Disimpan!',
@@ -548,6 +543,8 @@ export default {
                 this.refreshNewForm()
               })
               .catch((error) => {
+                this.show = 1
+
                 //assign error to state "validation"
                 this.validation = error.response.data
                 alert(error.response.data)
@@ -649,5 +646,19 @@ export default {
 }
 .card-title {
   color: #504d8d;
+}
+.img-logo {
+  width: 160px;
+  padding-top: 10px;
+  padding-right: 20px;
+}
+.txt-2 {
+  color: #be65e2;
+  padding-top: 17%;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  font-size: 27px;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.148);
+  font-weight: bold;
 }
 </style>

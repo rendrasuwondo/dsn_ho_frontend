@@ -4,7 +4,13 @@
       <div class="container-fluid"></div>
     </section>
 
-    <section class="content">
+    <div v-if="show === 0">
+      <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+      <p class="txt-2">Loading</p>
+      <div class="spinonediv-4"></div>
+    </div>
+
+    <section class="content" v-if="show === 1">
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
@@ -21,20 +27,20 @@
             header-text-variant="white"
           >
             <b-card-text>
-              <b-container class="bv-example-row mb-3">
-                <b-row>
-                  <b-col cols="1">Tahun</b-col>
-                  <b-col cols="3">
-                    <multiselect
-                      v-model="year_id"
-                      :options="years"
-                      label="year_at"
-                      track-by="year_at"
-                      :searchable="true"
-                    ></multiselect>
-                  </b-col>
-                </b-row>
-              </b-container>
+              <!-- <b-container class="bv-example-row mb-3"> -->
+              <b-row>
+                <b-col cols="1">Tahun</b-col>
+                <b-col cols="3">
+                  <multiselect
+                    v-model="year_id"
+                    :options="years"
+                    label="year_at"
+                    track-by="year_at"
+                    :searchable="true"
+                  ></multiselect>
+                </b-col>
+              </b-row>
+              <!-- </b-container> -->
             </b-card-text>
           </b-card>
 
@@ -281,6 +287,7 @@ export default {
 
       year_id: this.$route.query.q_year_id,
       query_year_id: '',
+      show: 1,
     }
   },
   watchQuery: ['q', 'page', 'q_year_id'],
@@ -320,10 +327,10 @@ export default {
     if (q_year_id == undefined) {
       q_year_id = query.q_year_id ? query.q_year_id : currentDate()
     }
-    console.log(q_year_id)
-    console.log(
-      `/api/admin/monitoring_hap?q=${search}&page=${page}&q_year_id=${q_year_id}`
-    )
+    console.log('tes ')
+    // console.log(
+    //   `/api/admin/monitoring_hap?q=${search}&page=${page}&q_year_id=${q_year_id}`
+    // )
     //fetching posts
     const posts = await $axios.$get(
       `/api/admin/monitoring_hap?q=${search}&page=${page}&q_year_id=${q_year_id}`

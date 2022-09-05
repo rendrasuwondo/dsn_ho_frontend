@@ -102,15 +102,15 @@
 
             <template #row-details="row">
               <b-card>
-                <b-container class="bv-example-row">
-                  <b-row>
-                    <b-col cols="3">List No.PO : </b-col>
+                <!-- <b-container class="bv-example-row"> -->
+                <b-row>
+                  <b-col cols="3">List No.PO : </b-col>
 
-                    <b-col cols="9">
-                      {{ row.item.po_list }}
-                    </b-col>
-                  </b-row>
-                </b-container>
+                  <b-col cols="9">
+                    {{ row.item.po_list }}
+                  </b-col>
+                </b-row>
+                <!-- </b-container> -->
               </b-card>
             </template>
 
@@ -223,9 +223,6 @@ export default {
     const posts = await $axios.$get(`/api/admin/claim?q=${search}&page=${page}`)
 
     const list_po = await $axios.$get(`/api/admin/lov_list_po_claim?claim_id=1`)
-    console.log('da')
-    console.log(list_po.data)
-    console.log(posts.data.data)
 
     return {
       posts: posts.data.data,
@@ -235,6 +232,12 @@ export default {
     }
   },
   methods: {
+    // list_po(id) {
+    //   // await $axios.$get(`/api/admin/lov_list_po_claim?claim_id=1`)
+    //   console.log('test data id')
+    //   // alert('tes')
+    // },
+
     changePage(page) {
       this.$router.push({
         path: this.$route.path,
@@ -244,6 +247,7 @@ export default {
         },
       })
     },
+
     //searchData
     searchData() {
       this.$router.push({
