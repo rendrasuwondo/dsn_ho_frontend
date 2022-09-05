@@ -4,7 +4,13 @@
       <div class="container-fluid"></div>
     </section>
 
-    <section class="content">
+    <div v-if="show === 0">
+      <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+      <p class="txt-2">Loading</p>
+      <div class="spinonediv-4"></div>
+    </div>
+
+    <section class="content" v-if="show === 1">
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
@@ -156,6 +162,7 @@ export default {
 
       //state validation
       validation: [],
+      show: 1,
 
       //config CKEDITOR
       editorConfig: {
@@ -213,6 +220,8 @@ export default {
     },
 
     async storePost() {
+      this.show = 0
+
       //define formData
       let formData = new FormData()
 
@@ -232,6 +241,8 @@ export default {
       await this.$axios
         .post('/api/admin/menu_has_role', formData)
         .then(() => {
+          this.show = 1
+
           //sweet alert
           this.$swal.fire({
             title: 'BERHASIL!',
@@ -243,6 +254,8 @@ export default {
           this.back()
         })
         .catch((error) => {
+          this.show = 1
+
           //assign error to state "validation"
           // alert(error)
           // console.log(error.response.data.message)
@@ -279,5 +292,19 @@ export default {
 }
 .card-title {
   color: #504d8d;
+}
+.img-logo {
+  width: 160px;
+  padding-top: 10px;
+  padding-right: 20px;
+}
+.txt-2 {
+  color: #be65e2;
+  padding-top: 17%;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  font-size: 27px;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.148);
+  font-weight: bold;
 }
 </style>
