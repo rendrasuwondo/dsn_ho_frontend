@@ -61,10 +61,10 @@
                   class="btn btn-info"
                   @click="exportData"
                 >
-                  <i class="fa fa-file-excel"></i>
+                  <i class="fa fa-file-excel"></i> Download Hasil Analisa
                 </button>
               </div>
-              <input
+              <!-- <input
                 type="text"
                 class="form-control"
                 v-model="search"
@@ -76,7 +76,7 @@
                   <i class="fa fa-search"></i>
                   CARI
                 </button>
-              </div>
+              </div> -->
             </div>
           </div>
 
@@ -138,73 +138,75 @@
           </b-table>
 
           <div class="form-group mt-4 mb-4 dashed">
-            <h6>
-              <b> <i class="nav-icon fas fa-file-upload"></i> UPLOAD FILE </b>
-            </h6>
-            <b-container class="mb-1">
-              <b-row>
-                <b-col cols="8">
-                  <p class="selected float-left">
-                    File Tersimpan : <b> {{ upload_files }}</b>
-                  </p>
-                </b-col>
-                <b-col cols="4">
-                  <button
-                    v-if="upload_files !== null"
-                    @click="fileDownload"
-                    class="btn-upd float-right"
-                    title="Download File"
-                  >
-                    <i class="nav-icon fas fa-download"></i> Download
-                  </button>
-                  <button
-                    v-else
-                    class="float-right btn-disable"
-                    title="File Tidak Ditemukan"
-                    disabled
-                  >
-                    <i class="nav-icon fas fa-download"></i> Download
-                  </button>
-                </b-col>
-              </b-row>
-            </b-container>
-            <b-container>
-              <b-row>
-                <b-col cols="8">
-                  <p class="selected float-left">
-                    <label class="choose-file">
-                      Enter Your File
-                      <input
-                        type="file"
-                        name="file"
-                        @change="upload"
-                        class="choose-file"
-                      />
-                    </label>
+            <b-row class="mt-2 ml-1 mr-1">
+              <b-col>
+                <h6>
+                  <b>
+                    <i class="nav-icon fas fa-file-upload"></i> UPLOAD FILE
+                  </b>
+                </h6>
+              </b-col>
+            </b-row>
+            <b-row class="mb-3 mt-3 ml-1 mr-1">
+              <b-col cols="8">
+                <p class="selected float-left">
+                  File Tersimpan : <b> {{ upload_files }}</b>
+                </p>
+              </b-col>
+              <b-col cols="4">
+                <button
+                  v-if="upload_files !== null"
+                  @click="fileDownload"
+                  class="btn-upd float-right"
+                  title="Download File"
+                >
+                  <i class="nav-icon fas fa-download"></i> Download
+                </button>
+                <button
+                  v-else
+                  class="float-right btn-disable"
+                  title="File Tidak Ditemukan"
+                  disabled
+                >
+                  <i class="nav-icon fas fa-download"></i> Download
+                </button>
+              </b-col>
+            </b-row>
+            <b-row class="ml-1 mr-1 mb-2">
+              <b-col cols="8">
+                <p class="selected float-left">
+                  <label class="choose-file">
+                    Enter Your File
+                    <input
+                      type="file"
+                      name="file"
+                      @change="upload"
+                      class="choose-file"
+                    />
+                  </label>
 
-                    Selected file: <b>{{ files ? files.name : null }}</b>
-                  </p>
-                </b-col>
-                <b-col cols="4">
-                  <button
-                    v-if="files !== null"
-                    @click="submitFileUpload"
-                    class="btn-ud float-right"
-                    title="Upload File"
-                  >
-                    <i class="nav-icon fas fa-upload"></i> upload
-                  </button>
-                  <button
-                    v-else
-                    class="float-right btn-disable"
-                    disabled
-                    title="Pilih File Yang Akan Diupload"
-                  >
-                    <i class="nav-icon fas fa-upload"></i> upload
-                  </button>
-                </b-col>
-              </b-row>
-            </b-container>
+                  Selected file: <b>{{ files ? files.name : null }}</b>
+                </p>
+              </b-col>
+              <b-col cols="4">
+                <button
+                  v-if="files !== null"
+                  @click="submitFileUpload"
+                  class="btn-upd float-right"
+                  title="Upload File"
+                >
+                  <i class="nav-icon fas fa-upload"></i> upload
+                </button>
+                <button
+                  v-else
+                  class="float-right btn-disable"
+                  disabled
+                  title="Pilih File Yang Akan Diupload"
+                >
+                  <i class="nav-icon fas fa-upload"></i> upload
+                </button>
+              </b-col>
+            </b-row>
           </div>
         </div>
       </div>
@@ -660,7 +662,7 @@ export default {
   width: 100%;
 }
 .btn-upd {
-  background-color: #6c5ce7;
+  background-color: rgb(118, 106, 216);
   font-size: 13px;
   width: 120px;
   padding: 5px 0px 5px 0px;
@@ -668,10 +670,10 @@ export default {
   color: white;
   border: none;
   box-shadow: 2px 3px #f7ebfd;
-  margin-bottom: 4px;
 }
 .btn-upd:hover {
-  background-color: rgb(100, 87, 200);
+  background-color: #504d8d;
+  box-shadow: 2px 3px #f7ebfd;
 }
 .btn-disable {
   background-color: #edededaa;

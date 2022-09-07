@@ -159,74 +159,68 @@
 
             <template #row-details="row">
               <b-card class="cs">
-                <b-container class="bv-example-row">
-                  <b-row>
-                    <b-col cols="1">Supplier</b-col>
-                    <b-col cols="3">: {{ row.item.supplier }}</b-col>
-                    <b-col cols="2">Tanggal GR</b-col>
-                    <b-col cols="3">: {{ row.item.k_gr_date }}</b-col>
-                    <b-col cols="1">QTY PO</b-col>
-                    <b-col cols="2">
-                      :
-                      <span class="float-right">
-                        {{
-                          new Intl.NumberFormat('es-US').format(row.item.qty)
-                        }}
-                      </span>
-                    </b-col>
-                  </b-row>
-                  <b-row>
-                    <b-col cols="1">PT</b-col>
-                    <b-col cols="3">: {{ row.item.company_name }}</b-col>
-                    <b-col cols="2">Jenis Pupuk</b-col>
-                    <b-col cols="3">
-                      : {{ row.item.fertilizer_type_code }}
-                    </b-col>
-                    <b-col cols="1">QTY GR</b-col>
-                    <b-col cols="2">
-                      :
-                      <span class="float-right">
-                        {{
-                          new Intl.NumberFormat('es-US').format(row.item.gr_qty)
-                        }}
-                      </span>
-                    </b-col>
-                  </b-row>
-                  <b-row>
-                    <b-col cols="1">Dept.</b-col>
-                    <b-col cols="3">: {{ row.item.department_name }}</b-col>
-                    <b-col cols="2">Parameter</b-col>
-                    <b-col cols="3"> : {{ row.item.parameter }} </b-col>
-                    <b-col cols="1">PO Price</b-col>
-                    <b-col cols="2">
-                      :
-                      <span class="float-right">
-                        {{
-                          new Intl.NumberFormat('es-US').format(
-                            row.item.po_price
-                          )
-                        }}
-                      </span>
-                    </b-col>
-                  </b-row>
-                  <b-row>
-                    <b-col cols="1">Satuan</b-col>
-                    <b-col cols="3">: {{ row.item.unit_code }}</b-col>
-                    <b-col cols="2">Parameter Outspek</b-col>
-                    <b-col cols="3"> : {{ row.item.parameter_outspek }} </b-col>
-                    <b-col cols="1">Total Price</b-col>
-                    <b-col cols="2">
-                      :
-                      <span class="float-right">
-                        {{
-                          new Intl.NumberFormat('es-US').format(
-                            row.item.t_price
-                          )
-                        }}
-                      </span>
-                    </b-col>
-                  </b-row>
-                </b-container>
+                <!-- <b-container class="bv-example-row"> -->
+                <b-row>
+                  <b-col cols="1">Supplier</b-col>
+                  <b-col cols="3">: {{ row.item.supplier }}</b-col>
+                  <b-col cols="2">Tanggal GR</b-col>
+                  <b-col cols="3">: {{ row.item.k_gr_date }}</b-col>
+                  <b-col cols="1">QTY PO</b-col>
+                  <b-col cols="2">
+                    :
+                    <span class="float-right">
+                      {{ new Intl.NumberFormat('es-US').format(row.item.qty) }}
+                    </span>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col cols="1">PT</b-col>
+                  <b-col cols="3">: {{ row.item.company_name }}</b-col>
+                  <b-col cols="2">Jenis Pupuk</b-col>
+                  <b-col cols="3">
+                    : {{ row.item.fertilizer_type_code }}
+                  </b-col>
+                  <b-col cols="1">QTY GR</b-col>
+                  <b-col cols="2">
+                    :
+                    <span class="float-right">
+                      {{
+                        new Intl.NumberFormat('es-US').format(row.item.gr_qty)
+                      }}
+                    </span>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col cols="1">Dept.</b-col>
+                  <b-col cols="3">: {{ row.item.department_name }}</b-col>
+                  <b-col cols="2">Parameter</b-col>
+                  <b-col cols="3"> : {{ row.item.parameter }} </b-col>
+                  <b-col cols="1">PO Price</b-col>
+                  <b-col cols="2">
+                    :
+                    <span class="float-right">
+                      {{
+                        new Intl.NumberFormat('es-US').format(row.item.po_price)
+                      }}
+                    </span>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col cols="1">Satuan</b-col>
+                  <b-col cols="3">: {{ row.item.unit_code }}</b-col>
+                  <b-col cols="2">Parameter Outspek</b-col>
+                  <b-col cols="3"> : {{ row.item.parameter_outspek }} </b-col>
+                  <b-col cols="1">Total Price</b-col>
+                  <b-col cols="2">
+                    :
+                    <span class="float-right">
+                      {{
+                        new Intl.NumberFormat('es-US').format(row.item.t_price)
+                      }}
+                    </span>
+                  </b-col>
+                </b-row>
+                <!-- </b-container> -->
               </b-card>
             </template>
             <template v-slot:custom-foot="data">
