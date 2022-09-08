@@ -124,8 +124,8 @@
                   update_value(row.item.id, row.item.value),
                     (event) => event.preventDefault()
                 "
-                max="3"
                 prefix=""
+                maxlength="7"
               ></number>
             </template>
           </b-table>
@@ -370,7 +370,7 @@ export default {
 
     //user_has_role
     const posts = await $axios.$get(
-      `/api/admin/detail/table_hasil/${id}?q=${search}&page=${page}&fertilizer_type_id=${i_fertilizer_type_id}`
+      `/api/admin/detail/table_hasil/${id}?fertilizer_type_id=${i_fertilizer_type_id}`
     )
 
     return {
@@ -387,6 +387,23 @@ export default {
   },
 
   methods: {
+    bind() {
+      this.$axios
+        .get(
+          `/api/admin/detail/table_hasil/${this.input_sample_id}?fertilizer_type_id=${this.fertilizer_type_id}`
+        )
+        .then((response) => {
+          // this.$nuxt.refresh()
+          this.posts = response.data.data
+        })
+    },
+
+    isNumber(e) {
+      let char = String.fromCharCode(e.keyCode)
+      if (/^[0-9]+$/.test(char)) return true
+      else e.preventDefault()
+    },
+
     //update data finished_at
     async update_finished_at(e) {
       // alert(this.finished_at)
@@ -423,8 +440,8 @@ export default {
         })
         .then(() => {
           this.update_summary()
-
-          this.$nuxt.refresh()
+          this.bind()
+          // this.$nuxt.refresh()
         })
         .catch((error) => {
           //assign error validasi
@@ -720,7 +737,6 @@ export default {
     //   )
     //   .then((response) => {
     //     this.value = response.data.data
-    //     console.log(this.value)
     //   })
   },
 
@@ -728,7 +744,6 @@ export default {
     totalStatus() {
       // var kesimpulan = ''
       // var int_outspek = 0
-      // console.log(this.visibleRows)
       // this.fields.forEach((e) => {
       //   if ((e.status = 'OUTSPEK')) {
       //     int_outspek = 1

@@ -153,15 +153,13 @@
                       }}
                     </span>
                   </b-col>
-                  <b-col cols="1"></b-col>
-                  <b-col cols="3">Klaim Mutu Pupuk</b-col>
-                  <b-col cols="3">
+                  <b-col cols="2"></b-col>
+                  <b-col cols="2">PO PRICE</b-col>
+                  <b-col cols="2">
                     :
                     <span class="float-right">
                       {{
-                        new Intl.NumberFormat('es-US').format(
-                          row.item.claim_fertilizer
-                        )
+                        new Intl.NumberFormat('es-US').format(row.item.po_price)
                       }}
                     </span>
                   </b-col>
@@ -176,26 +174,15 @@
                       }}
                     </span>
                   </b-col>
-                  <b-col cols="1"></b-col>
-                  <b-col cols="3">Nilai Klaim Outspek</b-col>
-                  <b-col cols="3">
-                    :
-                    <span class="float-right">
-                      {{
-                        new Intl.NumberFormat('es-US').format(
-                          row.item.claim_calculation
-                        )
-                      }}
-                    </span>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col cols="2">PO PRICE</b-col>
+                  <b-col cols="2"></b-col>
+                  <b-col cols="2">Klaim Mutu Pupuk</b-col>
                   <b-col cols="2">
                     :
                     <span class="float-right">
                       {{
-                        new Intl.NumberFormat('es-US').format(row.item.po_price)
+                        new Intl.NumberFormat('es-US').format(
+                          row.item.claim_fertilizer
+                        )
                       }}
                     </span>
                   </b-col>

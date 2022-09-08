@@ -181,15 +181,6 @@ export default {
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
-          label: 'Total Klaim Outspek',
-          key: 'claim_calculation',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
           label: 'Total Klaim Mutu Pupuk',
           key: 'claim_fertilizer',
           formatter: (value, key, item) => {
