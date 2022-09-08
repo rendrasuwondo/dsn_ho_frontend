@@ -260,10 +260,24 @@
             </div>
 
             <div class="form-group"></div>
+            <div>
+              <button
+                v-if="statusPO === 1"
+                class="btn btn-info mr-1 btn-submit"
+                type="submit"
+              >
+                <i class="fa fa-paper-plane"></i> SIMPAN
+              </button>
+              <button
+                v-else
+                title="Nilai GR QTY Masih Belum Memenuhi Standar"
+                class="btn btn-info mr-1 btn-submit"
+                disabled
+              >
+                <i class="fa fa-paper-plane"></i> SIMPAN
+              </button>
+            </div>
 
-            <button class="btn btn-info mr-1 btn-submit" type="submit">
-              <i class="fa fa-paper-plane"></i> SIMPAN
-            </button>
             <button
               v-if="field.id !== ''"
               class="btn btn-warning btn-submit"
@@ -290,7 +304,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah Join Sampling',
+      title: 'Input Sampling',
     }
   },
 
@@ -323,6 +337,11 @@ export default {
       },
 
       data_po: [],
+
+      nilai: '',
+      percentage: '',
+      statusPO: '',
+
       //state validation
       validation: [],
       show: 1,
@@ -338,6 +357,12 @@ export default {
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
 
     this.bind()
+
+    this.$axios
+      .get(`/api/admin/lov_percentage_input_sampling`)
+      .then((response) => {
+        this.nilai = response.data.data[0].value_1
+      })
     // this.refreshNewForm()
   },
 
@@ -354,9 +379,14 @@ export default {
         // return po
         .then((response) => {
           this.data_po = response.data
-          // console.log('data')
-          // console.log(this.field.po)
-          // console.log(this.response.data)
+
+          this.percentage = (this.nilai / 100) * response.data.QTY
+
+          if (response.data.GR_QTY >= this.percentage) {
+            this.statusPO = 1
+          } else {
+            this.statusPO = 0
+          }
         })
 
       e.preventDefault()

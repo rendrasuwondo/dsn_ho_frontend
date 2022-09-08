@@ -28,6 +28,7 @@
                 placeholder=""
                 class="form-control"
                 ref="claim_no"
+                disabled
               />
               <div v-if="validation.claim_no" class="mt-2">
                 <b-alert show variant="danger">{{

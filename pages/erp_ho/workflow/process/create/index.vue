@@ -53,11 +53,11 @@
             </div>
 
             <div class="form-group">
-              <label>Before Submit</label>
+              <label>File Taksbox</label>
               <input
                 type="text"
                 v-model="field.TASKBOX_FILE"
-                placeholder="Masukkan Before Submit"
+                placeholder="Masukkan  File Taksbox"
                 class="form-control"
               />
               <div v-if="validation.TASKBOX_FILE" class="mt-2">
@@ -68,11 +68,11 @@
             </div>
 
             <div class="form-group">
-              <label>After Submit</label>
+              <label>Before Submit</label>
               <input
                 type="text"
                 v-model="field.SUBMIT_BEFORE"
-                placeholder="Masukkan After Submit"
+                placeholder="Masukkan Before Submit"
                 class="form-control"
               />
               <div v-if="validation.SUBMIT_BEFORE" class="mt-2">
@@ -83,11 +83,11 @@
             </div>
 
             <div class="form-group">
-              <label>File Taksbox</label>
+              <label>After Submit</label>
               <input
                 type="text"
                 v-model="field.SUBMIT_AFTER"
-                placeholder="Masukkan File Taksbox"
+                placeholder="Masukkan After Submit"
                 class="form-control"
               />
               <div v-if="validation.SUBMIT_AFTER" class="mt-2">

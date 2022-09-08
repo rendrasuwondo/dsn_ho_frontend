@@ -4,6 +4,12 @@
       <div class="container-fluid"></div>
     </section>
 
+    <!-- <div v-if="show === 0">
+      <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+      <p class="txt-2">Loading</p>
+      <div class="spinonediv-4"></div>
+    </div> -->
+
     <section class="content">
       <div class="card card-outline card-info">
         <div class="card-header">
@@ -16,13 +22,13 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <nuxt-link
-                  :to="{ name: 'erp_ho-fertilizer-claim-create' }"
+                <button
+                  title="Tambah Data"
                   class="btn btn-info btn-sm"
-                  style="padding-top: 8px"
-                  title="Tambah"
-                  ><i class="fa fa-plus-circle"></i>
-                </nuxt-link>
+                  @click="storePost"
+                >
+                  <i class="fa fa-plus-circle"></i>
+                </button>
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -103,6 +109,7 @@
             <template #row-details="row">
               <b-card>
                 <!-- <b-container class="bv-example-row"> -->
+
                 <b-row>
                   <b-col cols="3">List No.PO : </b-col>
 
@@ -113,18 +120,8 @@
                 <!-- </b-container> -->
               </b-card>
             </template>
-
-            <!-- <template #cell(aksi)="row">
-              <b-button @click="row.toggleDetails(row.item.id)">
-                Details
-              </b-button>
-            </template>
-
-            <template v-slot:row-details="row">
-              <b-table :items="row.item.details" :fields="subRoomsHeader">
-              </b-table>
-            </template> -->
           </b-table>
+
           <!-- pagination -->
           <b-row>
             <b-col
@@ -135,11 +132,12 @@
                 @change="changePage"
                 align="left"
                 class="mt-1"
-              ></b-pagination
-            ></b-col>
-            <b-col class="text-right" align-self="center"
-              >{{ rowcount }} data</b-col
-            >
+              >
+              </b-pagination>
+            </b-col>
+            <b-col class="text-right" align-self="center">
+              {{ rowcount }} data
+            </b-col>
           </b-row>
         </div>
       </div>
@@ -159,6 +157,8 @@ export default {
 
   data() {
     return {
+      show: 1,
+
       fields: [
         {
           label: 'Actions',
@@ -198,11 +198,6 @@ export default {
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
-        // {
-        //   label: 'Detail PO',
-        //   key: 'aksi',
-        //   tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
-        // },
       ],
       sweet_alert: {
         title: '',
@@ -221,8 +216,6 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(`/api/admin/claim?q=${search}&page=${page}`)
-
-    const list_po = await $axios.$get(`/api/admin/lov_list_po_claim?claim_id=1`)
 
     return {
       posts: posts.data.data,
@@ -256,6 +249,47 @@ export default {
           q: this.search,
         },
       })
+    },
+
+    storePost() {
+      this.$swal
+        .fire({
+          title: 'APAKAH ANDA YAKIN ?',
+          text: 'INGIN MENAMBAHKAN DATA KLAIM !',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#27ae60',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'YA!',
+          cancelButtonText: 'TIDAK',
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            //delete tag from server
+
+            this.$axios.post('/api/admin/claim').then((response) => {
+              //feresh data
+              this.$nuxt.refresh()
+
+              if (response.data.success == true) {
+                this.sweet_alert.title = 'BERHASIL!'
+                this.sweet_alert.icon = 'success'
+              } else {
+                this.sweet_alert.title = 'GAGAL!'
+                this.sweet_alert.icon = 'error'
+              }
+
+              //alert
+              this.$swal.fire({
+                title: this.sweet_alert.title,
+                text: response.data.message,
+                icon: this.sweet_alert.icon,
+                showConfirmButton: false,
+                timer: 2000,
+              })
+            })
+          }
+        })
     },
 
     exportData() {
@@ -334,5 +368,19 @@ export default {
 }
 .table-1 {
   font-size: 14px;
+}
+.img-logo {
+  width: 160px;
+  padding-top: 10px;
+  padding-right: 20px;
+}
+.txt-2 {
+  color: #be65e2;
+  padding-top: 17%;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  font-size: 27px;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.148);
+  font-weight: bold;
 }
 </style>

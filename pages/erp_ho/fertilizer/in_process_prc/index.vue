@@ -207,84 +207,99 @@ export default {
           sortable: false,
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Actions',
           key: 'actions',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Status',
           key: 'request_status_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Hasil Analisa',
           key: 'detail_hap',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'PO',
           key: 'po',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Supplier',
           key: 'supplier',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Jenis Pupuk',
           key: 'fertilizer_type_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'PT',
           key: 'company_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Estate',
           key: 'department_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'QTY PO',
           key: 'qty',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Satuan',
           key: 'unit_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'QTY GR',
           key: 'gr_qty',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Tanggal GR',
           key: 'k_gr_date',
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Tanggal Kedatangan',
           key: 'k_arrived_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Join Sampling',
           key: 'k_join_sampling_at',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
           label: 'Klaim Mutu Pupuk',
           key: 'detail_klaim',
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -596,7 +611,6 @@ export default {
 .table-1 {
   font-size: 15px;
 }
-
 .img-logo {
   width: 160px;
   padding-top: 10px;

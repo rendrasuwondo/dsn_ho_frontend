@@ -543,8 +543,6 @@ export default {
             this.$axios
               .post(`/api/admin/update_request_status_rna_reject`, formData)
               .then((response) => {
-                this.show = 1
-
                 this.$swal.fire({
                   title: 'BERHASIL!',
                   text: 'Data Berhasil Di Approve!',
@@ -559,7 +557,7 @@ export default {
               params: {},
               query: {},
             })
-
+            this.show = 1
             this.$nuxt.refresh()
             // alert(result.value)
             //  this.$swal.fire('Changes are not saved', '', 'info')

@@ -4,7 +4,13 @@
       <div class="container-fluid"></div>
     </section>
 
-    <section class="content">
+    <div v-if="show === 0">
+      <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+      <p class="txt-2">Loading</p>
+      <div class="spinonediv-4"></div>
+    </div>
+
+    <section class="content" v-if="show === 1">
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
@@ -53,35 +59,21 @@
             </b-table>
           </div>
 
-          <div class="form-group">
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
+          <div class="mb-3 mt-3">
+            <b-row>
+              <b-col>
                 <button
                   title="Export To Excel"
-                  class="btn btn-info"
+                  class="btn-info btn-exp"
                   @click="exportData"
                 >
                   <i class="fa fa-file-excel"></i> Download Hasil Analisa
                 </button>
-              </div>
-              <!-- <input
-                type="text"
-                class="form-control"
-                v-model="search"
-                @keypress.enter="searchData"
-                placeholder="cari berdasarkan nama tag"
-              />
-              <div class="input-group-append">
-                <button @click="searchData" class="btn btn-info">
-                  <i class="fa fa-search"></i>
-                  CARI
-                </button>
-              </div> -->
-            </div>
+              </b-col>
+            </b-row>
           </div>
 
           <!-- table -->
-
           <b-table
             small
             responsive
@@ -132,13 +124,14 @@
                   update_value(row.item.id, row.item.value),
                     (event) => event.preventDefault()
                 "
+                max="3"
                 prefix=""
               ></number>
             </template>
           </b-table>
 
           <div class="form-group mt-4 mb-4 dashed">
-            <b-row class="mt-2 ml-1 mr-1">
+            <b-row class="mt-3 ml-1 mr-1">
               <b-col>
                 <h6>
                   <b>
@@ -147,7 +140,7 @@
                 </h6>
               </b-col>
             </b-row>
-            <b-row class="mb-3 mt-3 ml-1 mr-1">
+            <b-row class="mb-2 mt-2 ml-1 mr-1">
               <b-col cols="8">
                 <p class="selected float-left">
                   File Tersimpan : <b> {{ upload_files }}</b>
@@ -157,7 +150,7 @@
                 <button
                   v-if="upload_files !== null"
                   @click="fileDownload"
-                  class="btn-upd float-right"
+                  class="btn-upload float-right"
                   title="Download File"
                 >
                   <i class="nav-icon fas fa-download"></i> Download
@@ -175,14 +168,9 @@
             <b-row class="ml-1 mr-1 mb-2">
               <b-col cols="8">
                 <p class="selected float-left">
-                  <label class="choose-file">
+                  <label class="btn-upload">
                     Enter Your File
-                    <input
-                      type="file"
-                      name="file"
-                      @change="upload"
-                      class="choose-file"
-                    />
+                    <input type="file" name="file" @change="upload" />
                   </label>
 
                   Selected file: <b>{{ files ? files.name : null }}</b>
@@ -192,7 +180,7 @@
                 <button
                   v-if="files !== null"
                   @click="submitFileUpload"
-                  class="btn-upd float-right"
+                  class="btn-upload float-right"
                   title="Upload File"
                 >
                   <i class="nav-icon fas fa-upload"></i> upload
@@ -205,6 +193,21 @@
                 >
                   <i class="nav-icon fas fa-upload"></i> upload
                 </button>
+              </b-col>
+            </b-row>
+          </div>
+
+          <div class="form-group mb-3 mt-3">
+            <b-row>
+              <b-col>
+                <b-button
+                  v-if="po_status != null && upload_files !== null"
+                  variant="warning"
+                  class="btn-sumbit"
+                  @click="submit_data"
+                >
+                  <b> <i class="nav-icon fas fa-check-double"></i> SUBMIT </b>
+                </b-button>
               </b-col>
             </b-row>
           </div>
@@ -234,6 +237,10 @@ export default {
       donwload_file: {},
       newData: {},
       value: '',
+      input_sample: [],
+      finished_at: '',
+      po_status: '',
+      f_upload: '',
 
       //table header
       fields: [
@@ -319,7 +326,8 @@ export default {
       //state search
       search: '',
       summary: '',
-      finished_at: '',
+
+      show: 1,
     }
   },
 
@@ -348,6 +356,14 @@ export default {
       ? input_sampel.data.data.finished_at
       : ''
 
+    let po_status = input_sampel.data.data.status
+      ? input_sampel.data.data.status
+      : null
+
+    let f_upload = input_sampel.data.data.upload_file
+      ? input_sampel.data.data.upload_file
+      : null
+
     const header = [input_sampel.data.data]
 
     const i_fertilizer_type_id = route.query.fertilizer_type_id
@@ -357,9 +373,6 @@ export default {
       `/api/admin/detail/table_hasil/${id}?q=${search}&page=${page}&fertilizer_type_id=${i_fertilizer_type_id}`
     )
 
-    console.log('daa')
-    console.log(posts.data)
-
     return {
       posts: posts.data,
       pagination: posts.data,
@@ -367,6 +380,9 @@ export default {
       search: search,
       header: header,
       finished_at: finished_at,
+      po_status: po_status,
+      input_sample: input_sampel,
+      f_upload: f_upload,
     }
   },
 
@@ -446,7 +462,6 @@ export default {
       let files = e.target.files[0]
 
       this.files = files
-      // console.log(this.files)
     },
 
     async submitFileUpload() {
@@ -591,6 +606,100 @@ export default {
         this.summary = 'INSPEK'
       }
     },
+
+    submit_data() {
+      this.$swal
+        .fire({
+          title: 'Message',
+          input: 'text',
+          icon: 'warning',
+          inputPlaceholder: 'Hanya diisi jika melakukan Reject...',
+          showDenyButton: true,
+          reverseButtons: true,
+          confirmButtonText: 'Reject',
+          denyButtonText: 'Approve',
+          confirmButtonColor: 'red',
+          denyButtonColor: '#3085d6',
+          allowOutsideClick: true,
+          customClass: {
+            validationMessage: 'my-validation-message',
+          },
+          preConfirm: (value) => {
+            if (!value) {
+              this.$swal.showValidationMessage(
+                '<i class="fa fa-info-circle"></i> Message harus diisi!'
+              )
+            }
+          },
+          preDeny: (value) => {
+            if (!value) {
+              this.$swal.showValidationMessage(
+                '<i class="fa fa-info-circle"></i> Message harus diisi!'
+              )
+            }
+          },
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.show = 0
+
+            //REJECT
+            this.selectedData = this.input_sample.data.data
+
+            this.dataTable = [this.selectedData]
+
+            let formData = [this.dataTable, result.value]
+
+            this.$axios
+              .post(`/api/admin/update_request_status_rna_reject`, formData)
+              .then((response) => {
+                this.show = 1
+
+                this.$swal.fire({
+                  title: 'BERHASIL!',
+                  text: 'Data Berhasil Di Approve!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 2000,
+                })
+              })
+
+            this.$router.push({
+              name: 'erp_ho-fertilizer-in_process_rna',
+              params: {},
+              query: {},
+            })
+          } else if (result.isDenied) {
+            //APPROVE
+            this.show = 0
+
+            this.selectedData = this.input_sample.data.data
+
+            this.dataTable = [this.selectedData]
+
+            let formData = [this.dataTable]
+
+            this.$axios
+              .post(`/api/admin/update_request_status_rna_approve`, formData)
+              .then((response) => {
+                this.show = 1
+                this.$swal.fire({
+                  title: 'BERHASIL!',
+                  text: 'Data Berhasil Di Approve!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 2000,
+                })
+              })
+
+            this.$router.push({
+              name: 'erp_ho-fertilizer-in_process_rna',
+              params: {},
+              query: {},
+            })
+          }
+        })
+    },
   },
 
   mounted() {
@@ -604,15 +713,6 @@ export default {
           ? response.data.data.upload_file
           : null
       })
-
-    // this.$axios
-    //   .get(`/api/admin/master/input_sampel/${this.$route.params.id}`)
-    //   .then((response) => {
-    //     this.finished_at = response.data.data.finished_at
-    //       ? response.data.data.finished_at
-    //       : null
-    //     // console.log(response.data.data.finished_at)
-    //   })
 
     // this.$axios
     //   .get(
@@ -630,8 +730,6 @@ export default {
       // var int_outspek = 0
       // console.log(this.visibleRows)
       // this.fields.forEach((e) => {
-      //   console.log('da')
-      //   console.log(this.item)
       //   if ((e.status = 'OUTSPEK')) {
       //     int_outspek = 1
       //   }
@@ -661,30 +759,18 @@ export default {
 .input-file {
   width: 100%;
 }
-.btn-upd {
-  background-color: rgb(118, 106, 216);
+.btn-disable {
+  background-color: #d3d1d574;
   font-size: 13px;
   width: 120px;
   padding: 5px 0px 5px 0px;
   border-radius: 3px;
-  color: white;
-  border: none;
-  box-shadow: 2px 3px #f7ebfd;
-}
-.btn-upd:hover {
-  background-color: #504d8d;
-  box-shadow: 2px 3px #f7ebfd;
-}
-.btn-disable {
-  background-color: #edededaa;
-  font-size: 13px;
-  width: 120px;
-  padding: 4px 0px 4px 0px;
-  border-radius: 3px;
-  border: 1px solid #edededc2;
   color: rgba(0, 0, 0, 0.419);
   margin-bottom: 5px;
-  box-shadow: 2px 3px #655e695b;
+  box-shadow: 2px 3px #bfbbc22c;
+  border-style: solid;
+  border-width: 0px 2px 2px 0px;
+  border-color: #d1cdcdc2;
 }
 .dashed {
   border-style: dashed;
@@ -692,15 +778,7 @@ export default {
   border-color: rgb(230, 242, 252);
 }
 h6 {
-  color: #504d8d;
-}
-.choose-file {
-  background-color: #504d8d;
-  font-size: 13px;
-  padding: 4px 10px 4px 10px;
-  border-radius: 3px;
-  color: white;
-  box-shadow: 2px 3px #f7ebfd;
+  color: rgb(92, 68, 190);
 }
 .selected {
   font-size: 13px;
@@ -711,5 +789,58 @@ input[type='file'] {
 .txt-1 {
   width: 200px;
   text-align: right;
+}
+.btn-exp {
+  border-radius: 3px;
+  padding: 4px 10px 4px 10px;
+  box-shadow: 2px 2px #ebf1fd;
+  font-size: 13px;
+  font-weight: bold;
+}
+.btn-sumbit {
+  font-size: 13px;
+  width: 120px;
+  padding: 6px 0px 4px 0px;
+  border-radius: 3px;
+  color: white;
+  border: none;
+  background-color: #ffd739;
+  color: rgb(63, 63, 61);
+  box-shadow: 2px 2px #7e7f7b56;
+  border-style: solid;
+  border-width: 0px 2px 2px 0px;
+  border-color: #e0b717;
+}
+.btn-upload {
+  background-color: rgba(82, 68, 190, 0.911);
+  font-size: 13px;
+  width: 120px;
+  padding: 4px 0px 4px 0px;
+  border-radius: 3px;
+  color: white;
+  box-shadow: 2px 3px #f7ebfd;
+  border-style: solid;
+  border-width: 0px 2px 2px 0px;
+  border-color: rgb(57, 50, 106);
+}
+.btn-upload:hover {
+  background-color: rgb(64, 51, 161);
+  border-style: solid;
+  border-width: 0px 2px 2px 0px;
+  border-color: rgb(69, 61, 129);
+}
+.img-logo {
+  width: 160px;
+  padding-top: 10px;
+  padding-right: 20px;
+}
+.txt-2 {
+  color: #be65e2;
+  padding-top: 17%;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  font-size: 27px;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.148);
+  font-weight: bold;
 }
 </style>
