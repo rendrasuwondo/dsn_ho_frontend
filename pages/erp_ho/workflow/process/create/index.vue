@@ -219,8 +219,6 @@ export default {
         SUBMIT_BEFORE: '',
         SUBMIT_AFTER: '',
         P_APPLICATION_ID: '',
-        TSTOP: '',
-        PARENT_ID: '',
         IS_ACTIVE: 'Y',
         DESCRIPTION: '',
         CREATE_DATE: '',
