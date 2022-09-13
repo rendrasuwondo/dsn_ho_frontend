@@ -48,7 +48,7 @@
               <input
                 type="text"
                 v-model="data_po.VENDOR"
-                placeholder="Masukkan Kode Sample"
+                placeholder="Masukkan Kode Supplier"
                 class="form-control"
                 readonly
               />
