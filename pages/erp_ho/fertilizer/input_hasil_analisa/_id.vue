@@ -112,6 +112,9 @@
               <b-tr>
                 <b-td colspan="4" align="right"><b>Kesimpulan</b></b-td>
                 <b-td align="center">{{ summary }}</b-td>
+                <b-td align="right">
+                  {{ new Intl.NumberFormat('es-US').format(calculation_f) }}
+                </b-td>
               </b-tr>
             </template>
 
@@ -241,6 +244,7 @@ export default {
       finished_at: '',
       po_status: '',
       f_upload: '',
+      calculation_f: '',
 
       //table header
       fields: [
@@ -281,6 +285,15 @@ export default {
           label: 'Status',
           key: 'status',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Klaim Mutu Pupuk',
+          key: 'calculation',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
       ],
 
@@ -366,6 +379,10 @@ export default {
 
     const header = [input_sampel.data.data]
 
+    let calculation_f = input_sampel.data.data.fertilizer_analysis_calculation
+      ? input_sampel.data.data.fertilizer_analysis_calculation
+      : 0
+
     const i_fertilizer_type_id = route.query.fertilizer_type_id
 
     //user_has_role
@@ -383,6 +400,7 @@ export default {
       po_status: po_status,
       input_sample: input_sampel,
       f_upload: f_upload,
+      calculation_f: calculation_f,
     }
   },
 
@@ -395,6 +413,16 @@ export default {
         .then((response) => {
           // this.$nuxt.refresh()
           this.posts = response.data.data
+        })
+    },
+
+    total_calculation() {
+      this.$axios
+        .get(`/api/admin/master/input_sampel/${this.input_sample_id}`)
+        .then((response) => {
+          // this.$nuxt.refresh()
+          this.calculation_f =
+            response.data.data.fertilizer_analysis_calculation
         })
     },
 
@@ -441,6 +469,7 @@ export default {
         .then(() => {
           this.update_summary()
           this.bind()
+          this.total_calculation()
           // this.$nuxt.refresh()
         })
         .catch((error) => {
