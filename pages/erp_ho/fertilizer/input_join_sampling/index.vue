@@ -29,6 +29,8 @@
                   v-model="field.po"
                   placeholder="Masukkan Kode PO"
                   class="form-control"
+                  v-on:keypress="isNumber($event)"
+                  maxlength="10"
                   @keypress.enter="searchDataPO"
                 />
                 <b-input-group-append>
@@ -39,7 +41,7 @@
                 </b-input-group-append>
               </b-input-group>
               <div v-if="validation.po" class="mt-2">
-                <b-alert show variant="danger">{{ validation.po[0] }}</b-alert>
+                <b-alert show variant="danger">{{ validation.po }}</b-alert>
               </div>
             </div>
 
@@ -262,7 +264,7 @@
             <div class="form-group"></div>
             <div>
               <button
-                v-if="statusPO === 1"
+                v-if="statusPO === 1 || field.id !== ''"
                 class="btn btn-info mr-1 btn-submit"
                 type="submit"
               >
@@ -271,21 +273,20 @@
               <button
                 v-else
                 title="Nilai GR QTY Masih Belum Memenuhi Standar"
-                class="btn btn-info mr-1 btn-submit"
+                class="btn btn-info mr-1"
                 disabled
               >
                 <i class="fa fa-paper-plane"></i> SIMPAN
               </button>
+              <button
+                v-if="field.id !== ''"
+                class="btn btn-warning btn-submit"
+                @click="SubmitVerifikasi"
+                type="submit"
+              >
+                <i class="fa fa-check-double"></i> <b>SUBMIT</b>
+              </button>
             </div>
-
-            <button
-              v-if="field.id !== ''"
-              class="btn btn-warning btn-submit"
-              @click="SubmitVerifikasi"
-              type="submit"
-            >
-              <i class="fa fa-check-double"></i> <b>SUBMIT</b>
-            </button>
           </form>
         </div>
       </div>
@@ -367,6 +368,12 @@ export default {
   },
 
   methods: {
+    isNumber(e) {
+      let char = String.fromCharCode(e.keyCode)
+      if (/^[0-9]+$/.test(char)) return true
+      else e.preventDefault()
+    },
+
     //searchData
     searchDataPO(e) {
       // this.$axios
@@ -375,18 +382,26 @@ export default {
       //   this.po = response.data.data
       // }).prepend(
       const data_po = this.$axios
-        .$get(`/api/admin/PoFertilizer?PO_NO=${this.field.po}`)
+        .$get(`/api/admin/PoFertilizer?po=${this.field.po}`)
         // return po
         .then((response) => {
-          this.data_po = response.data
+          if (response.data.CHECK === 0) {
+            this.data_po = response.data
 
-          this.percentage = (this.nilai / 100) * response.data.QTY
+            this.percentage = (this.nilai / 100) * response.data.QTY
 
-          if (response.data.GR_QTY >= this.percentage) {
-            this.statusPO = 1
-          } else {
-            this.statusPO = 0
+            if (response.data.GR_QTY >= this.percentage) {
+              this.statusPO = 1
+            } else {
+              this.statusPO = 0
+            }
           }
+        })
+        .catch((error) => {
+          //assign error validasi
+          this.validation = error.response.data
+          console.log('valid')
+          console.log(this.field.po)
         })
 
       e.preventDefault()
@@ -418,12 +433,12 @@ export default {
         this.$axios
           .put(`/api/admin/t_fertilizer_sample/${this.field.id}`, {
             po: this.field.po,
-            company_id: this.field.company_id,
-            department_id: this.field.department_id,
-            fertilizer_type_id: this.field.fertilizer_type_id,
-            vendors_id: this.field.vendors_id,
-            unit_id: this.field.unit_id,
-            qty: this.field.qty.replace(',', ''),
+            company_id: this.data_po.COMPANY_ID,
+            department_id: this.data_po.DEPARTMENT_ID,
+            fertilizer_type_id: this.data_po.FERTILIZER_TYPE_ID,
+            vendors_id: this.data_po.VENDOR_ID,
+            unit_id: this.data_po.UNIT_ID,
+            qty: this.data_po.QTY.replace(',', ''),
             arrived_at: this.field.arrived_at,
             join_sampling_at: this.field.join_sampling_at,
             request_status_id: 1,
