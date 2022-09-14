@@ -381,6 +381,8 @@ export default {
       //   .then((response) => {
       //   this.po = response.data.data
       // }).prepend(
+      let no_po = this.field.po
+      console.log(no_po)
       const data_po = this.$axios
         .$get(`/api/admin/PoFertilizer?po=${this.field.po}`)
         // return po
@@ -433,12 +435,24 @@ export default {
         this.$axios
           .put(`/api/admin/t_fertilizer_sample/${this.field.id}`, {
             po: this.field.po,
-            company_id: this.data_po.COMPANY_ID,
-            department_id: this.data_po.DEPARTMENT_ID,
-            fertilizer_type_id: this.data_po.FERTILIZER_TYPE_ID,
-            vendors_id: this.data_po.VENDOR_ID,
-            unit_id: this.data_po.UNIT_ID,
-            qty: this.data_po.QTY.replace(',', ''),
+            company_id: this.data_po.COMPANY_ID
+              ? this.data_po.COMPANY_ID
+              : this.field.company_id,
+            department_id: this.data_po.DEPARTMENT_ID
+              ? this.data_po.DEPARTMENT_ID
+              : this.field.department_id,
+            fertilizer_type_id: this.data_po.FERTILIZER_TYPE_ID
+              ? this.data_po.FERTILIZER_TYPE_ID
+              : this.field.fertilizer_type_id,
+            vendors_id: this.data_po.VENDOR_ID
+              ? this.data_po.VENDOR_ID
+              : this.field.vendors_id,
+            unit_id: this.data_po.UNIT_ID
+              ? this.data_po.UNIT_ID
+              : this.field.unit_id,
+            qty: this.data_po.QTY.replace(',', '')
+              ? this.data_po.QTY.replace(',', '')
+              : this.field.qty,
             arrived_at: this.field.arrived_at,
             join_sampling_at: this.field.join_sampling_at,
             request_status_id: 1,

@@ -6,8 +6,10 @@
           <div class="login__field">
             <b-img class="dsn-logo" src="/img/dsn_logo.png" alt="logo"></b-img>
           </div>
-          <div v-if="validation.message" class="mt-2">
-            <b-alert show variant="danger">{{ validation.message }}</b-alert>
+          <div v-if="validation.message" class="mt-2 fs-valid">
+            <b-alert show variant="danger">
+              {{ validation.message }}
+            </b-alert>
           </div>
           <div class="login__field">
             <i class="login__icon fas fa-user"></i>
@@ -163,6 +165,8 @@ body {
   justify-content: center;
   min-height: 87vh;
   padding-bottom: 0px;
+  margin-top: -50px;
+  width: 400px;
 }
 
 .screen {
@@ -217,10 +221,10 @@ body {
 }
 
 .screen__background__shape3 {
-  height: 520px;
-  width: 175px;
+  height: 570px;
+  width: 165px;
   background: linear-gradient(270deg, #5d54a4, #6a679e);
-  top: -30px;
+  top: -55px;
   right: 0;
   border-radius: 32px;
 }
@@ -281,8 +285,8 @@ body {
 .login__submit {
   background: #fff;
   font-size: 13px;
-  margin-top: 25px;
-  margin-left: 20px;
+  margin-top: 20px;
+  margin-left: 15px;
   padding: 13px 20px;
   border-radius: 30px;
   border: 1px solid #d4d3e8;
@@ -295,6 +299,7 @@ body {
   box-shadow: 0px 2px 2px #5c5696;
   cursor: pointer;
   transition: 0.2s;
+  margin-bottom: 0px;
 }
 
 .login__submit:active,
@@ -343,5 +348,10 @@ h4 {
 }
 alert {
   margin-bottom: 0px;
+}
+.alert-danger {
+  font-size: 14px;
+  padding: 7px 0px 7px 10px;
+  margin-bottom: 5px;
 }
 </style>
