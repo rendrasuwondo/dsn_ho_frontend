@@ -59,6 +59,7 @@
             show-empty
             v-model="visibleRows"
             class="table-1"
+            :tbody-tr-class="rowClass"
           >
             <template v-slot:head(selected_rna)="data">
               <span
@@ -144,10 +145,7 @@
                 title="Status"
                 class="table-1"
               >
-                <div v-if="row.item.status === 'OUTSPEK'" class="text-danger">
-                  {{ row.item.status }}
-                </div>
-                <div v-else>{{ row.item.status }}</div>
+                {{ row.item.status }}
               </b-button>
             </template>
 
@@ -396,6 +394,11 @@ export default {
   },
 
   methods: {
+    rowClass(item, type) {
+      if (!item || type !== 'row') return
+      if (item.status === 'OUTSPEK') return 'table-danger'
+    },
+
     changePage(page) {
       this.$router.push({
         path: this.$route.path,

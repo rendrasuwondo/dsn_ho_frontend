@@ -84,6 +84,7 @@
             :fields="fields"
             outlined
             show-empty
+            :tbody-tr-class="rowClass"
           >
             <template v-slot:cell(comments)="row">
               <i class="fa fa-comments"></i> {{ row.item.comments.length }}
@@ -405,6 +406,11 @@ export default {
   },
 
   methods: {
+    rowClass(item, type) {
+      if (!item || type !== 'row') return
+      if (item.status === 'OUTSPEK') return 'table-danger'
+    },
+
     bind() {
       this.$axios
         .get(

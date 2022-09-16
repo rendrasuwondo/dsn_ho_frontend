@@ -75,6 +75,7 @@
             :fields="fields"
             show-empty
             class="table-1"
+            :tbody-tr-class="rowClass"
           >
             <template v-slot:cell(actions)="row">
               <b-button
@@ -122,10 +123,7 @@
                 title="Status"
                 class="table-1"
               >
-                <div v-if="row.item.status === 'OUTSPEK'" class="text-danger">
-                  {{ row.item.status }}
-                </div>
-                <div v-else>{{ row.item.status }}</div>
+                {{ row.item.status }}
               </b-button>
             </template>
 
@@ -344,6 +342,11 @@ export default {
   },
 
   methods: {
+    rowClass(item, type) {
+      if (!item || type !== 'row') return
+      if (item.status === 'OUTSPEK') return 'table-danger'
+    },
+
     currentDate() {
       const current = new Date()
       current.setDate(current.getDate())

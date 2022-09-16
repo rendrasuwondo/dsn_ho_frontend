@@ -78,6 +78,7 @@
             outlined
             show-empty
             class="table-1"
+            :tbody-tr-class="rowClass"
           >
             <template v-slot:cell(comments)="row">
               <i class="fa fa-comments"></i> {{ row.item.comments.length }}
@@ -285,6 +286,11 @@ export default {
   },
 
   methods: {
+    rowClass(item, type) {
+      if (!item || type !== 'row') return
+      if (item.status === 'OUTSPEK') return 'table-danger'
+    },
+
     //change page pagination
     changePage(page) {
       this.$router.push({

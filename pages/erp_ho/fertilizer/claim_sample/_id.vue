@@ -92,6 +92,7 @@
             :items="posts"
             :fields="fields"
             show-empty
+            :tbody-tr-class="rowClass"
           >
             <template v-slot:cell(comments)="row">
               <i class="fa fa-comments"></i> {{ row.item.comments.length }}
@@ -207,13 +208,7 @@
                 title="Status HAP"
                 class="table-1"
               >
-                <div
-                  v-if="row.item.status === 'OUTSPEK'"
-                  class="text-danger table-1"
-                >
-                  {{ row.item.status }}
-                </div>
-                <div v-else class="table-1">{{ row.item.status }}</div>
+                {{ row.item.status }}
               </b-button>
             </template>
           </b-table>
@@ -365,6 +360,11 @@ export default {
   },
 
   methods: {
+    rowClass(item, type) {
+      if (!item || type !== 'row') return
+      if (item.status === 'OUTSPEK') return 'table-danger'
+    },
+
     //change page pagination
     changePage(page) {
       this.$router.push({
