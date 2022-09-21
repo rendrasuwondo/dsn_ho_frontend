@@ -68,18 +68,6 @@
             </div>
 
             <div class="form-group">
-              <label>QTY PO</label>
-              <input
-                type="text"
-                v-model="data_po.QTY"
-                placeholder="Masukkan QTY "
-                class="form-control"
-                readonly
-                v-number="number"
-              />
-            </div>
-
-            <div class="form-group">
               <label>Satuan</label>
 
               <input
@@ -114,17 +102,27 @@
             </div>
 
             <div class="form-group">
-              <label>Tanggal GR</label>
-              <b-form-datepicker
-                v-model="data_po.GR_DATE"
-                :date-format-options="{
-                  year: 'numeric',
-                  month: 'short',
-                  day: '2-digit',
-                  weekday: 'short',
-                }"
-                :disabled="disabled"
-              ></b-form-datepicker>
+              <label>PO PRICE</label>
+              <input
+                type="text"
+                v-model="data_po.PO_PRICE"
+                placeholder="Masukkan PO Price"
+                class="form-control"
+                readonly
+                v-number="number"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>QTY PO</label>
+              <input
+                type="text"
+                v-model="data_po.QTY"
+                placeholder="Masukkan QTY "
+                class="form-control"
+                readonly
+                v-number="number"
+              />
             </div>
 
             <div class="form-group">
@@ -140,15 +138,17 @@
             </div>
 
             <div class="form-group">
-              <label>PO PRICE</label>
-              <input
-                type="text"
-                v-model="data_po.PO_PRICE"
-                placeholder="Masukkan PO Price"
-                class="form-control"
-                readonly
-                v-number="number"
-              />
+              <label>Tanggal GR</label>
+              <b-form-datepicker
+                v-model="data_po.GR_DATE"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                  weekday: 'short',
+                }"
+                :disabled="disabled"
+              ></b-form-datepicker>
             </div>
 
             <div class="form-group">
@@ -264,7 +264,7 @@
             <div class="form-group"></div>
             <div>
               <button
-                v-if="statusPO === 1 || field.id !== ''"
+                v-if="statusPO !== 0 && field.id !== ''"
                 class="btn btn-info mr-1 btn-submit"
                 type="submit"
               >
@@ -279,7 +279,7 @@
                 <i class="fa fa-paper-plane"></i> SIMPAN
               </button>
               <button
-                v-if="field.id !== ''"
+                v-if="statusPO !== 0 && field.id !== ''"
                 class="btn btn-warning btn-submit"
                 @click="SubmitVerifikasi"
                 type="submit"
@@ -365,6 +365,21 @@ export default {
         this.nilai = response.data.data[0].value_1
       })
     // this.refreshNewForm()
+
+    // this.$axios
+    //   .$get(`/api/admin/PoFertilizer?po=${this.field.po}`)
+    //   // return po
+    //   .then((response) => {
+    //     if (response.data.CHECK === 0) {
+    //       this.percentage = (this.nilai / 100) * response.data.QTY
+
+    //       if (response.data.GR_QTY >= this.percentage) {
+    //         this.statusPO = 1
+    //       } else {
+    //         this.statusPO = 0
+    //       }
+    //     }
+    //   })
   },
 
   methods: {
@@ -376,15 +391,10 @@ export default {
 
     //searchData
     searchDataPO(e) {
-      // this.$axios
-      //   .get(`http://127.0.0.1:8000/api/PoFertilizer?PO_NO=${this.field.po}`)
-      //   .then((response) => {
-      //   this.po = response.data.data
-      // }).prepend(
       let no_po = this.field.po
       console.log(no_po)
       const data_po = this.$axios
-        .$get(`/api/admin/PoFertilizer?po=${this.field.po}`)
+        .$get(`/api/admin/PoFertilizer?po=${this.field.po}&id=${this.field.id}`)
         // return po
         .then((response) => {
           if (response.data.CHECK === 0) {
@@ -616,6 +626,8 @@ export default {
       this.$axios.get(`/api/admin/input_join_sampling`).then((response) => {
         console.log(response.data.data)
         if (response.data.data != null) {
+          let formatter = new Intl.NumberFormat('es-US')
+
           this.field.id = response.data.data.id
           this.field.po = response.data.data.po
           this.field.vendors_id = response.data.data.vendors_id
@@ -628,10 +640,10 @@ export default {
           this.data_po.DEPARTMENT_CODE = response.data.data.department_code
           this.field.unit_id = response.data.data.unit_id
           this.data_po.UNIT = response.data.data.unit_code
-          this.data_po.QTY = response.data.data.qty
-          this.data_po.PO_PRICE = response.data.data.po_price
+          this.data_po.QTY = formatter.format(response.data.data.qty)
+          this.data_po.PO_PRICE = formatter.format(response.data.data.po_price)
           this.field.qty = response.data.data.gr_qty
-          this.data_po.GR_QTY = response.data.data.gr_qty
+          this.data_po.GR_QTY = formatter.format(response.data.data.gr_qty)
           this.data_po.GR_DATE = response.data.data.gr_date
           this.field.arrived_at = response.data.data.arrived_at
             ? response.data.data.arrived_at

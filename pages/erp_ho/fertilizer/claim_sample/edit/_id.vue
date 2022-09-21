@@ -15,7 +15,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-swatchbook"></i>
-            <b>EDIT KLAIM SAMPEL HAP</b>
+            <b>TAMBAH KLAIM SAMPEL HAP</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -31,30 +31,26 @@
                 :searchable="true"
               ></multiselect>
               <div v-if="validation.t_fertilizer_sample_id" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.t_fertilizer_sample_id[0]
-                }}</b-alert>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>Apakah Sudah Lengkap?</label>
-              <b-form-select v-model="field.is_completed" :options="options">
-              </b-form-select>
-              <div v-if="validation.is_completed" class="mt-2">
                 <b-alert show variant="danger">
-                  {{ validation.is_completed[0] }}
+                  {{ validation.t_fertilizer_sample_id[0] }}
                 </b-alert>
               </div>
             </div>
 
             <div class="form-group">
+              <label>Apakah Sudah Lengkap ?</label>
+              <b-form-select v-model="field.is_completed" :options="options">
+              </b-form-select>
+            </div>
+
+            <div class="form-group">
               <label>Keterangan</label>
+
               <textarea
                 v-model="field.description"
                 class="form-control"
                 rows="3"
-                placeholder="Masukkan Deskripsi Singkat"
+                placeholder=""
               ></textarea>
               <div v-if="validation.description" class="mt-2">
                 <b-alert show variant="danger">{{
@@ -62,7 +58,6 @@
                 }}</b-alert>
               </div>
             </div>
-
             <div class="form-group">
               <b-row>
                 <b-col>
@@ -140,7 +135,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit Klaim Sample HAP',
+      title: 'Edit Klaim Sampel HAP',
     }
   },
 
@@ -150,14 +145,8 @@ export default {
         { value: 1, text: 'Ya' },
         { value: 0, text: 'Tidak' },
       ],
+
       state: 'disabled',
-
-      props: {
-        value: {
-          type: Number,
-        },
-      },
-
       field: {
         claim_id: '',
         t_fertilizer_sample_id: '',
@@ -168,13 +157,11 @@ export default {
         created_by: '',
         updated_by: '',
       },
-
-      claim_id: '',
-
       po_no: [],
 
       //state validation
       validation: [],
+      show: 1,
     }
   },
 
@@ -183,29 +170,28 @@ export default {
     this.$axios
       .get(`/api/admin/claim_sample/${this.$route.params.id}`)
       .then((response) => {
-        // console.log('da')
-        // console.log(response.data.data.t_fertilizer_sample)
-
+        console.log('check')
+        console.log(response.data.data.claim_id)
         //data yang diambil
         this.field.claim_id = response.data.data.claim_id
-        this.field.t_fertilizer_sample_id =
-          response.data.data.t_fertilizer_sample
         this.field.is_completed =
           response.data.data.t_fertilizer_sample.is_completed
-        this.field.description = response.data.data.description
+        this.field.is_active = response.data.data.is_active
+        this.field.t_fertilizer_sample_id =
+          response.data.data.t_fertilizer_sample
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
       })
 
-    //Data Users
     this.$axios
       .get('/api/admin/lov_fertilizer_sample_claim')
 
       .then((response) => {
         this.po_no = response.data.data
       })
+    // this.$refs.code.focus()
   },
 
   methods: {
@@ -220,23 +206,21 @@ export default {
     // update method
     async update(e) {
       e.preventDefault()
-      // console.log('tes')
-      // console.log(this.field)
       this.show = 0
 
       //send data ke Rest API untuk update
       await this.$axios
-        .put(`api/admin/claim_sample/${this.$route.params.id}`, {
-          //data yang dikirim
+        .put(`/api/admin/claim_sample/${this.$route.params.id}`, {
+          // data yang dikirim
+          is_completed: this.field.is_completed,
           claim_id: this.field.claim_id,
           t_fertilizer_sample_id: this.field.t_fertilizer_sample_id
             ? this.field.t_fertilizer_sample_id.id
             : '',
-          is_completed: this.field.is_completed,
           description: this.field.description,
           created_at: this.field.created_at,
-          created_by: this.field.description,
           updated_at: this.field.updated_at,
+          created_by: this.field.created_by,
           updated_by: this.field.updated_by,
         })
         .then(() => {
@@ -250,6 +234,7 @@ export default {
             showConfirmButton: false,
             timer: 2000,
           })
+          //redirect ke route "post"
           this.back()
         })
         .catch((error) => {
@@ -258,20 +243,6 @@ export default {
           //assign error validasi
           this.validation = error.response.data
         })
-    },
-
-    NumbersOnly(evt) {
-      evt = evt ? evt : window.event
-      var charCode = evt.which ? evt.which : evt.keyCode
-      if (
-        charCode > 31 &&
-        (charCode < 48 || charCode > 57) &&
-        charCode !== 46
-      ) {
-        evt.preventDefault()
-      } else {
-        return true
-      }
     },
   },
   computed: {

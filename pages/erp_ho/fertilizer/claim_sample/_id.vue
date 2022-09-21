@@ -145,45 +145,36 @@
               <b-card>
                 <!-- <b-container class="bv-example-row"> -->
                 <b-row>
-                  <b-col cols="2"> QTY PO</b-col>
-                  <b-col cols="2">
-                    :
-                    <span class="float-right">
-                      {{
-                        new Intl.NumberFormat('es-US').format(row.item.po_qty)
-                      }}
-                    </span>
-                  </b-col>
-                  <b-col cols="2"></b-col>
+                  <b-col cols="2">Kode Sample</b-col>
+                  <b-col cols="2">: {{ row.item.sample_code }}</b-col>
+                </b-row>
+                <b-row>
                   <b-col cols="2">PO PRICE</b-col>
-                  <b-col cols="2">
-                    :
+                  <b-col cols="2"
+                    >:
                     <span class="float-right">
                       {{
                         new Intl.NumberFormat('es-US').format(row.item.po_price)
                       }}
                     </span>
                   </b-col>
-                </b-row>
-                <b-row>
-                  <b-col cols="2"> QTY GR</b-col>
-                  <b-col cols="2">
-                    :
+                  <b-col cols="1"></b-col>
+                  <b-col cols="1"> QTY PO</b-col>
+                  <b-col cols="2"
+                    >:
                     <span class="float-right">
                       {{
-                        new Intl.NumberFormat('es-US').format(row.item.gr_qty)
+                        new Intl.NumberFormat('es-US').format(row.item.po_qty)
                       }}
                     </span>
                   </b-col>
-                  <b-col cols="2"></b-col>
-                  <b-col cols="2">Klaim Mutu Pupuk</b-col>
-                  <b-col cols="2">
-                    :
+                  <b-col cols="1"></b-col>
+                  <b-col cols="1"> QTY GR</b-col>
+                  <b-col cols="2"
+                    >:
                     <span class="float-right">
                       {{
-                        new Intl.NumberFormat('es-US').format(
-                          row.item.claim_fertilizer
-                        )
+                        new Intl.NumberFormat('es-US').format(row.item.gr_qty)
                       }}
                     </span>
                   </b-col>
@@ -253,39 +244,62 @@ export default {
       //table header
       fields: [
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass ',
           label: 'Actions',
           key: 'actions',
-          tdClass: '',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass ',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass ',
           label: 'Detail Data',
           key: 'detail',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass ',
           label: 'Status',
           key: 'request_status_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass ',
           label: 'Hasil Analisa',
           key: 'detail_hap',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass ',
           label: 'NO.PO',
           key: 'po',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
+        // {
+        //   thClass: 'align-middle text-left text-nowrap nameOfTheClass ',
+        //   label: 'Kode Sampel',
+        //   key: 'sample_code',
+        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        // },
         {
-          label: 'Kode Sampel',
-          key: 'sample_code',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass ',
           label: 'Supplier',
           key: 'supplier',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass ',
+          label: '  Lengkap?',
+          key: 'is_completed_code',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-left text-nowrap nameOfTheClass ',
+          label: 'Klaim Mutu Pupuk',
+          key: 'claim_fertilizer',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
       ],
 

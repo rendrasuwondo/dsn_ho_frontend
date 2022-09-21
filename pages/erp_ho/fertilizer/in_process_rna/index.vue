@@ -156,13 +156,24 @@
             </template>
 
             <template #row-details="row">
-              <b-card class="cs">
+              <b-card>
                 <!-- <b-container class="bv-example-row"> -->
+
                 <b-row>
-                  <b-col cols="1">Supplier</b-col>
+                  <b-col cols="2">Supplier</b-col>
                   <b-col cols="3">: {{ row.item.supplier }}</b-col>
-                  <b-col cols="2">Tanggal GR</b-col>
-                  <b-col cols="3">: {{ row.item.k_gr_date }}</b-col>
+                  <b-col cols="1">Tanggal GR</b-col>
+                  <b-col cols="2">: {{ row.item.k_gr_date }}</b-col>
+                </b-row>
+                <b-row>
+                  <b-col cols="2">PT</b-col>
+                  <b-col cols="3">: {{ row.item.company_name }}</b-col>
+                  <b-col cols="1">Satuan</b-col>
+                  <b-col cols="2">: {{ row.item.unit_code }}</b-col>
+                </b-row>
+                <b-row>
+                  <b-col cols="2">Dept.</b-col>
+                  <b-col cols="3">: {{ row.item.department_name }}</b-col>
                   <b-col cols="1">QTY PO</b-col>
                   <b-col cols="2">
                     :
@@ -172,8 +183,6 @@
                   </b-col>
                 </b-row>
                 <b-row>
-                  <b-col cols="1">PT</b-col>
-                  <b-col cols="3">: {{ row.item.company_name }}</b-col>
                   <b-col cols="2">Jenis Pupuk</b-col>
                   <b-col cols="3">
                     : {{ row.item.fertilizer_type_code }}
@@ -189,8 +198,6 @@
                   </b-col>
                 </b-row>
                 <b-row>
-                  <b-col cols="1">Dept.</b-col>
-                  <b-col cols="3">: {{ row.item.department_name }}</b-col>
                   <b-col cols="2">Parameter</b-col>
                   <b-col cols="3"> : {{ row.item.parameter }} </b-col>
                   <b-col cols="1">PO Price</b-col>
@@ -204,8 +211,6 @@
                   </b-col>
                 </b-row>
                 <b-row>
-                  <b-col cols="1">Satuan</b-col>
-                  <b-col cols="3">: {{ row.item.unit_code }}</b-col>
                   <b-col cols="2">Parameter Outspek</b-col>
                   <b-col cols="3"> : {{ row.item.parameter_outspek }} </b-col>
                   <b-col cols="1">Total Price</b-col>
@@ -635,7 +640,7 @@ export default {
   font-size: 15px;
 }
 .cs-1 {
-  font-size: 14px;
+  font-size: 12px;
 }
 .img-logo {
   width: 160px;
