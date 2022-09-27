@@ -264,7 +264,7 @@
             <div class="form-group"></div>
             <div>
               <button
-                v-if="statusPO !== 0 && field.id !== ''"
+                v-if="statusPO !== 0 && field.id !== '' && detection_po == true"
                 class="btn btn-info mr-1 btn-submit"
                 type="submit"
               >
@@ -279,7 +279,7 @@
                 <i class="fa fa-paper-plane"></i> SIMPAN
               </button>
               <button
-                v-if="statusPO !== 0 && field.id !== ''"
+                v-if="statusPO !== 0 && field.id !== '' && detection_po == true"
                 class="btn btn-warning btn-submit"
                 @click="SubmitVerifikasi"
                 type="submit"
@@ -342,6 +342,7 @@ export default {
       nilai: '',
       percentage: '',
       statusPO: '',
+      detection_po: true,
 
       //state validation
       validation: [],
@@ -391,8 +392,10 @@ export default {
 
     //searchData
     searchDataPO(e) {
+      this.DataNull()
+
       let no_po = this.field.po
-      console.log(no_po)
+      // console.log(no_po)
       const data_po = this.$axios
         .$get(`/api/admin/PoFertilizer?po=${this.field.po}&id=${this.field.id}`)
         // return po
@@ -407,13 +410,13 @@ export default {
             } else {
               this.statusPO = 0
             }
+            this.detection_po = true
           }
         })
         .catch((error) => {
           //assign error validasi
           this.validation = error.response.data
-          console.log('valid')
-          console.log(this.field.po)
+          this.detection_po = false
         })
 
       e.preventDefault()
@@ -688,6 +691,25 @@ export default {
           this.data_po.PO_PRICE = ''
         }
       })
+    },
+
+    DataNull() {
+      this.field.vendors_id = ''
+      this.data_po.VENDOR = ''
+      this.field.fertilizer_type_id = ''
+      this.data_po.FERTILIZER_TYPE = ''
+      this.field.company_id = ''
+      this.data_po.COMPANY_CODE = ''
+      this.field.department_id = ''
+      this.data_po.DEPARTMENT_CODE = ''
+      this.field.unit_id = ''
+      this.data_po.UNIT = ''
+      this.data_po.QTY = ''
+      this.field.qty = ''
+      this.data_po.GR_QTY = ''
+      this.data_po.GR_DATE = ''
+      this.data_po.PO_PRICE = ''
+      this.validation = ''
     },
 
     validationCelar() {
