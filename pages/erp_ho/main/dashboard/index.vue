@@ -41,9 +41,9 @@
           <div class="row mb-2">
             <div class="col-md-3 mt-3">
               <!-- Widget: user widget style 2 -->
-              <div class="card card-widget widget-user-2 shadow-sm">
-                <!-- Add the bg color to the header using any of the bg-* classes -->
-                <div class="widget-user-header bg-info">
+              <!-- <div class="card card-widget widget-user-2 shadow-sm"> -->
+              <!-- Add the bg color to the header using any of the bg-* classes -->
+              <!-- <div class="widget-user-header bg-info">
                   <div class="widget-user-image">
                     <p>dropdown tanggal</p>
                   </div>
@@ -63,13 +63,13 @@
                       </a>
                     </li>
                   </ul>
-                </div>
-              </div>
+                </div> 
+              </div>-->
               <!-- /.widget-user -->
             </div>
 
             <!-- /.col -->
-            <div class="col-md-9">
+            <div class="">
               <ol class="breadcrumb">
                 <b-img
                   center
@@ -117,8 +117,8 @@ export default {
   },
 
   mounted() {
-    console.log('cek data')
-    console.log(this.$auth.user.employee.name)
+    // console.log('cek data')
+    // console.log(this.$auth.user.employee.name)
   },
 }
 </script>
@@ -127,7 +127,7 @@ export default {
 .img-logo {
   /* height: 250px; */
   align-items: center;
-  width: 100%;
+  width: 80%;
   /* margin-top: 5%; */
 }
 .text-1 {

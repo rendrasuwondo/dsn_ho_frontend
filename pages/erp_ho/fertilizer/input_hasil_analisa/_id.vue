@@ -300,7 +300,7 @@ export default {
 
       // header: [],
       fertilizer_type_id: this.$route.query.fertilizer_type_id,
-      input_sample_id: this.$route.params.id,
+      input_sample_id: this.$route.query.input_sample_id,
       url: this.$route.query.url,
       tab_header: this.$route.query.tab_header,
       po: this.header,
@@ -355,6 +355,7 @@ export default {
     //search
     let search = query.q ? query.q : ''
 
+    const input_sample_id = route.params.id
     //fetching posts
     // const posts = await $axios.$get(
     //   `/api/admin/site?q=${search}&page=${page}`
@@ -402,6 +403,7 @@ export default {
       input_sample: input_sampel,
       f_upload: f_upload,
       calculation_f: calculation_f,
+      input_sample_id: input_sample_id,
     }
   },
 
@@ -629,7 +631,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/input_hasil/export?q=${this.search}&fertilizer_type_id=${this.fertilizer_type_id}&input_sampel_id=${this.input_sampel_id}`,
+        url: `/api/admin/input_hasil/export?q=${this.search}&fertilizer_type_id=${this.fertilizer_type_id}&input_sampel_id=${this.input_sample_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

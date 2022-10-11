@@ -141,7 +141,7 @@ export default {
         { value: 'Y', text: 'Ya' },
         { value: 'N', text: 'Tidak' },
       ],
-
+      show: 1,
       state: 'disabled',
       value: undefined,
 

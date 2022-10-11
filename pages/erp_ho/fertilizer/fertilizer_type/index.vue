@@ -88,7 +88,7 @@
                 }"
                 variant="link"
                 size=""
-                title="Role"
+                title="Detail Parameter"
               >
                 <i class="fa fa-file-alt"></i>
               </b-button>

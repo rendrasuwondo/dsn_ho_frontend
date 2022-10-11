@@ -411,6 +411,17 @@ export default {
               this.statusPO = 0
             }
             this.detection_po = true
+          } else {
+            this.data_po = response.data
+
+            this.percentage = (this.nilai / 100) * response.data.QTY
+
+            if (response.data.GR_QTY >= this.percentage) {
+              this.statusPO = 1
+            } else {
+              this.statusPO = 0
+            }
+            this.detection_po = true
           }
         })
         .catch((error) => {
@@ -561,7 +572,7 @@ export default {
 
             //assign error to state "validation"
             this.validation = error.response.data
-            console.log(error.response.data.message)
+            // console.log(error.response.data.message)
             this.$swal.fire({
               title: 'Error!',
               text: error.response.data.message,
@@ -627,7 +638,7 @@ export default {
 
     bind() {
       this.$axios.get(`/api/admin/input_join_sampling`).then((response) => {
-        console.log(response.data.data)
+        // console.log(response.data.data)
         if (response.data.data != null) {
           let formatter = new Intl.NumberFormat('es-US')
 

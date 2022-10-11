@@ -98,7 +98,7 @@
             </template>
 
             <template v-slot:cell(detail_klaim)="row">
-              <div v-if="row.item.status != null">
+              <div v-if="row.item.STATUS != null">
                 {{
                   new Intl.NumberFormat('es-US').format(
                     row.item.fertilizer_analysis_calculation
