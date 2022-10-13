@@ -264,7 +264,7 @@
             <div class="form-group"></div>
             <div>
               <button
-                v-if="statusPO !== 0 && field.id !== '' && detection_po == true"
+                v-if="statusPO !== 0 && detection_po == true"
                 class="btn btn-info mr-1 btn-submit"
                 type="submit"
               >
@@ -503,8 +503,17 @@ export default {
             this.show = 1
           })
           .catch((error) => {
+            this.show = 1
             //assign error validasi
             this.validation = error.response.data
+
+            this.$swal.fire({
+              title: 'Error!',
+              text: error.response.data.message,
+              icon: 'error',
+              showConfirmButton: true,
+              // timer: 2000,
+            })
           })
       } else {
         //INSERT
