@@ -265,6 +265,7 @@ export default {
 
       year_id: this.$route.query.q_year_id,
       query_year_id: '',
+      show: 1,
     }
   },
   watchQuery: ['q', 'page', 'q_year_id'],
@@ -308,10 +309,6 @@ export default {
       // q_year_id = ''
     }
 
-    console.log('cek')
-    console.log(
-      `/api/admin/input_sampel?q=${search}&page=${page}&q_year_id=${q_year_id}`
-    )
     //fetching posts
     const posts = await $axios.$get(
       `/api/admin/input_sampel?q=${search}&page=${page}&q_year_id=${q_year_id}`
@@ -362,7 +359,7 @@ export default {
           page: page,
           q_year_id: this.$route.query.q_year_id
             ? this.$route.query.q_year_id
-            : this.currentDate(),
+            : '',
         },
       })
     },
