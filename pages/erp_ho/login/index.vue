@@ -51,9 +51,17 @@
         <div class="social-login">
           <h4><b>ERP - HO</b></h4>
           <div class="social-icons">
-            Enterprise Resource Planning <br />
-            Head Office
+            Enterprise Resource Planning Head Office
           </div>
+          <b-button
+            variant="light"
+            class="mt-2 btn-modul"
+            target="_blank"
+            :to="{ name: 'erp_ho-modul' }"
+          >
+            <i class="nav-icon fas fa-window-restore mr-1"></i>
+            <b> Modul ERP-HO</b>
+          </b-button>
         </div>
       </div>
       <div class="screen__background">
@@ -317,9 +325,10 @@ body {
 
 .social-login {
   position: absolute;
-  height: 130px;
+  height: 145px;
   width: 160px;
-  text-align: center;
+  text-align: right;
+  margin-right: 15px;
   bottom: 0px;
   right: 0px;
   color: #fff;
@@ -353,5 +362,18 @@ alert {
   font-size: 14px;
   padding: 7px 0px 7px 10px;
   margin-bottom: 5px;
+}
+.btn-modul {
+  font-size: 12px;
+  color: #463c9c;
+  border-radius: 3px;
+  padding: 6px 0px 4px 0px;
+  width: 140px;
+  border: none;
+  background-color: #ffffff;
+  box-shadow: 2px 2px #7e7f7b9f;
+  border-style: solid;
+  border-width: 0px 2px 2px 0px;
+  border-color: #cdcdf1;
 }
 </style>
