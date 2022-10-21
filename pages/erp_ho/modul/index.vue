@@ -69,6 +69,8 @@ export default {
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+
 body {
   background: linear-gradient(70deg, #c7c5f4, #776bcc);
   /* background-image: url('/img/bg2.jpg'); */
@@ -110,15 +112,16 @@ body {
   border-color: #cdcdf1;
 }
 h5 {
-  color: #4c3cc4;
+  color: #4a3f9e;
   font-weight: bold;
   text-shadow: 1px 2px #c7c5f4;
   font-family: 'Teko', sans-serif;
-  font-size: 35px;
+  font-size: 27px;
 }
 
 .card-link {
   margin-top: 20px;
+  font-family: 'Oswald', sans-serif;
   font-size: 16px;
 }
 </style>
