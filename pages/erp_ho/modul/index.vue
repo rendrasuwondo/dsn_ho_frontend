@@ -6,8 +6,12 @@
           <template #header>
             <h5>
               <b>
-                <i class="nav-icon fas fa-swatchbook mr-1"></i> DOKUMEN
-                MONITORING HAP
+                <b-img
+                  class="logo-user mr-1"
+                  src="/img/folder.png"
+                  alt="modul"
+                ></b-img>
+                DOKUMEN MONITORING HAP
               </b>
             </h5>
           </template>
@@ -116,12 +120,16 @@ h5 {
   font-weight: bold;
   text-shadow: 1px 2px #c7c5f4;
   font-family: 'Teko', sans-serif;
-  font-size: 27px;
+  font-size: 30px;
 }
 
 .card-link {
   margin-top: 20px;
   font-family: 'Oswald', sans-serif;
   font-size: 16px;
+}
+
+.logo-user {
+  height: 27px;
 }
 </style>

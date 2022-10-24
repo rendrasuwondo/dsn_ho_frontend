@@ -59,7 +59,13 @@
             target="_blank"
             :to="{ name: 'erp_ho-modul' }"
           >
-            <i class="nav-icon fas fa-window-restore mr-1"></i>
+            <!-- <i class="nav-icon fas fa-window-restore mr-1"></i> -->
+            <b-img
+              class="logo-modul mr-1"
+              src="/img/folder.png"
+              alt="modul"
+            ></b-img>
+
             <b> Modul ERP-HO</b>
           </b-button>
         </div>
@@ -251,6 +257,11 @@ body {
   margin-left: 0px;
 }
 
+.logo-modul {
+  height: 20px;
+  margin-left: 0px;
+}
+
 .login {
   width: 320px;
   padding: 30px;
@@ -376,4 +387,10 @@ alert {
   border-width: 0px 2px 2px 0px;
   border-color: #cdcdf1;
 }
+
+/* .img-download {
+  width: 25px;
+  height: 25px;
+  margin-right: 3px;
+} */
 </style>
