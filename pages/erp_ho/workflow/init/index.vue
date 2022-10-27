@@ -134,7 +134,7 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'AKTIF?',
+          label: 'Aktif?',
           key: 'IS_ACTIVE_CODE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },

@@ -8,7 +8,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-chart-bar"></i> <b> CHART</b>
+            <i class="nav-icon fas fa-clipboard-list"></i> <b> Task</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -17,7 +17,7 @@
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <nuxt-link
-                  :to="{ name: 'erp_ho-workflow-chart-create' }"
+                  :to="{ name: 'erp_ho-workflow-task-create' }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
                   title="Tambah"
@@ -56,13 +56,12 @@
             :items="posts"
             :fields="fields"
             show-empty
-            class="table-w"
           >
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-workflow-chart-edit-id',
-                  params: { id: row.item.P_WF_CHART_PROC_ID },
+                  name: 'erp_ho-workflow-task-edit-id',
+                  params: { id: row.item.P_WF_TASK_ID },
                 }"
                 variant="link"
                 size="sm"
@@ -73,7 +72,7 @@
               <b-button
                 variant="link"
                 size="sm"
-                @click="deletePost(row.item.P_WF_CHART_PROC_ID)"
+                @click="deletePost(row.item.P_WF_TASK_ID)"
                 title="Hapus"
                 ><i class="fa fa-trash"></i
               ></b-button>
@@ -107,7 +106,7 @@ export default {
 
   head() {
     return {
-      title: 'CHART',
+      title: 'Task',
     }
   },
 
@@ -120,38 +119,23 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Jenis',
-          key: 'DOC_NAME',
+          label: 'Proses',
+          key: 'PROC_NAME',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'No Sebelum',
+          label: 'Status',
+          key: 'DOC_STATUS',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Task',
+          key: 'TASK',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'No',
           key: 'LISTING_NO',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'No Sesudah',
-          key: 'LISTING_NO_NEXT',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Proses Sebelum',
-          key: 'PROC_NAME_PREV',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Proses Sesudah',
-          key: 'PROC_NAME_NEXT',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Status Sebelum',
-          key: 'DOC_STATUS_PREV',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Status Sesudah',
-          key: 'DOC_STATUS_NEXT',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -177,7 +161,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/chart_workflow?q=${search}&page=${page}`
+      `/api/admin/task_workflow?q=${search}&page=${page}`
     )
 
     return {
@@ -213,7 +197,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/chart/export?q=${this.search}`,
+        url: `/api/admin/task/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -222,7 +206,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Chart.xlsx'
+        var fileName = 'Task.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -247,7 +231,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/chart_workflow/${id}`)
+              .delete(`/api/admin/task_workflow/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()
@@ -282,8 +266,5 @@ export default {
 }
 .card-title {
   color: #504d8d;
-}
-.table-w {
-  font-size: 13px;
 }
 </style>
