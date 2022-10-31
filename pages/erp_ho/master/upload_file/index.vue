@@ -463,6 +463,7 @@ export default {
           })
 
           this.$nuxt.refresh()
+          this.hideModal()
           this.files = null
         })
         .catch((error) => {
