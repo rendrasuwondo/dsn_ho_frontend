@@ -72,6 +72,12 @@
             </div>
 
             <div class="form-group">
+              <label>Header?</label>
+              <b-form-select v-model="field.is_header" :options="options">
+              </b-form-select>
+            </div>
+
+            <div class="form-group">
               <label>Aktif?</label>
               <b-form-select v-model="field.is_active" :options="options">
               </b-form-select>
@@ -196,6 +202,7 @@ export default {
         updated_at: '',
         created_by: '',
         updated_by: '',
+        is_header: '',
       },
 
       //state validation
@@ -217,6 +224,7 @@ export default {
         this.field.is_parent = response.data.data.is_parent
         this.field.parent_id = response.data.data.parent_id
         this.field.path_file_name = response.data.data.path_file_name
+        this.field.is_header = response.data.data.is_header
         this.field.is_active = response.data.data.is_active
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
@@ -252,6 +260,7 @@ export default {
           is_parent: this.field.is_parent,
           parent_id: this.field.parent_id,
           path_file_name: this.field.path_file_name,
+          is_header: this.field.is_header,
           is_active: this.field.is_active,
           description: this.field.description,
           created_at: this.field.created_at,

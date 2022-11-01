@@ -77,6 +77,12 @@
             </div>
 
             <div class="form-group">
+              <label>Header?</label>
+              <b-form-select v-model="field.is_header" :options="options">
+              </b-form-select>
+            </div>
+
+            <div class="form-group">
               <label>Aktif?</label>
               <b-form-select v-model="field.is_active" :options="options">
               </b-form-select>
@@ -218,6 +224,7 @@ export default {
         created_by: '',
         updated_at: '',
         updated_by: '',
+        is_header: 'N',
       },
 
       //state validation
@@ -281,6 +288,7 @@ export default {
       formData.append('created_by', this.field.created_by)
       formData.append('update_at', this.field.update_at)
       formData.append('udpate_by', this.field.udpate_by)
+      formData.append('is_header', this.field.is_active)
 
       //sending data to server
       await this.$axios

@@ -61,7 +61,7 @@
             style="opacity: 0.8"
             width="35"
             height="35"
-          /> 
+          />
           {{ user.employee.nik }} - {{ user.employee.name }}
         </a>
 
@@ -180,5 +180,25 @@ export default {
 .navbar-light .navbar-nav .nav-link:focus,
 .navbar-light .navbar-nav .nav-link:hover {
   color: #7c739e;
+}
+.sidebar-mini .main-sidebar .pad_ul .nav-link,
+.sidebar-mini-md .main-sidebar .pad_ul .nav-link,
+.sidebar-mini-xs .main-sidebar .pad_ul .nav-link {
+  width: calc(230px - 0.5rem * 2);
+}
+
+.sidebar-collapse.sidebar-mini .main-sidebar.sidebar-focused .pad_ul .nav-link,
+.sidebar-collapse.sidebar-mini .main-sidebar:hover .pad_ul .nav-link,
+.sidebar-collapse.sidebar-mini-md
+  .main-sidebar.sidebar-focused
+  .pad_ul
+  .nav-link,
+.sidebar-collapse.sidebar-mini-md .main-sidebar:hover .pad_ul .nav-link,
+.sidebar-collapse.sidebar-mini-xs
+  .main-sidebar.sidebar-focused
+  .pad_ul
+  .nav-link,
+.sidebar-collapse.sidebar-mini-xs .main-sidebar:hover .pad_ul .nav-link {
+  width: calc(230px - 0.5rem * 2);
 }
 </style>
