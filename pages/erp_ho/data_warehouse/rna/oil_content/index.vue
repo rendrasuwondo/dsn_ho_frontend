@@ -903,22 +903,6 @@ export default {
   },
 
   mounted() {
-    // // Dropdown Year
-    // this.$axios
-    //   .get('/api/admin/lov_years')
-
-    //   .then((response) => {
-    //     this.years = response.data.data
-    //   })
-
-    // // Dropdown Months
-    // this.$axios
-    //   .get('/api/admin/lov_months')
-
-    //   .then((response) => {
-    //     this.months = response.data.data
-    //   })
-
     //GET DATA MONTH SAAT AWAL BUKA MENU
     const current = new Date()
 
