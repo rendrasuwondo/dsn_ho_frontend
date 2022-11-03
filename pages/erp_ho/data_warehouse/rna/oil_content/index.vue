@@ -8,21 +8,55 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-upload"></i> <b>LATIHAN UPLOAD FILE</b>
+            <i class="nav-icon fas fa-oil-can"></i> <b>OIL CONTENT</b>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
+          <b-card
+            border-variant="primary"
+            header="Filter"
+            header-bg-variant="info"
+            header-text-variant="white"
+          >
+            <b-card-text>
+              <!-- <b-container class="bv-example-row mb-3"> -->
+              <b-row>
+                <b-col cols="1">Bulan :</b-col>
+                <b-col cols="4">
+                  <multiselect
+                    v-model="f_month_id"
+                    :options="months"
+                    label="name"
+                    track-by="id"
+                    :searchable="true"
+                  ></multiselect>
+                </b-col>
+                <b-col class="ml-4" cols="1">Tahun : </b-col>
+                <b-col cols="4">
+                  <multiselect
+                    v-model="f_year_id"
+                    :options="years"
+                    label="year_at"
+                    track-by="id"
+                    :searchable="true"
+                  ></multiselect>
+                </b-col>
+              </b-row>
+              <!-- </b-container> -->
+            </b-card-text>
+          </b-card>
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <nuxt-link
-                  :to="{ name: 'erp_ho-master-employee-create' }"
-                  class="btn btn-info btn-sm"
-                  style="padding-top: 8px"
-                  title="Tambah"
-                  ><i class="fa fa-plus-circle"></i>
-                </nuxt-link>
+                <button
+                  title="Upload File"
+                  class="btn btn-info"
+                  @click="showModal"
+                >
+                  <i class="fa fa-file-upload"></i>
+                </button>
+
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -32,11 +66,11 @@
                 </button>
 
                 <button
-                  title="Upload File"
+                  title="Export To Template Excel"
                   class="btn btn-info"
-                  @click="showModal"
+                  @click="exportDataTemplate"
                 >
-                  <i class="fa fa-file-upload"></i>
+                  <i class="fa fa-file-alt"></i>
                 </button>
 
                 <b-modal ref="my-modal" hide-footer title="Form Upload File">
@@ -153,42 +187,10 @@
             :items="posts"
             :fields="fields"
             show-empty
+            class="table-oil"
           >
-            <template v-slot:cell(actions)="row">
-              <b-button
-                :to="{
-                  name: 'erp_ho-master-employee-edit-id',
-                  params: { id: row.item.id },
-                }"
-                variant="link"
-                size="sm"
-                title="Edit"
-              >
-                <i class="fa fa-pencil-alt"></i>
-              </b-button>
-              <b-button
-                variant="link"
-                size="sm"
-                @click="deletePost(row.item.id)"
-                title="Hapus"
-                ><i class="fa fa-trash"></i
-              ></b-button>
-            </template>
           </b-table>
-          <b-tooltip
-            target="myAfdeling"
-            triggers="hover"
-            container="myAfdeling"
-          >
-            Afdeling
-          </b-tooltip>
-          <b-tooltip
-            target="myDepartment"
-            triggers="hover"
-            container="myDepartment"
-          >
-            Departemen
-          </b-tooltip>
+
           <!-- pagination -->
           <b-row>
             <b-col
@@ -217,68 +219,360 @@ export default {
 
   head() {
     return {
-      title: 'Upload File',
+      title: 'Oil Content',
     }
   },
 
   data() {
     return {
+      f_year_id: this.$route.query.q_year_id,
+      f_month_id: this.$route.query.q_month_id,
+
+      query_year_id: '',
+      query_month_id: '',
+
       files: null,
+
       year_id: '',
       month_id: '',
+
       years: [],
       months: [],
 
       fields: [
         {
-          label: 'Actions',
-          key: 'actions',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Hari',
           key: 'PERIOD_DAY',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Bulan',
-          key: 'PERIOD_MONTH',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'Tahun',
-          key: 'PERIOD_YEAR',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'PT',
-          key: 'COMPANY_CODE',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Bulan',
+          key: 'PERIOD_MONTH',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Tahun',
+          key: 'PERIOD_YEAR',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'PT',
+          key: 'COMPANY_CODE',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Estate',
           key: 'DEPARTMENT_CODE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Afd',
           key: 'AFDELING_CODE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Blok',
           key: 'BLOCK',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'PKS',
           key: 'MILL',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Kode Unit',
           key: 'UNIT_CODE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Berat',
+          key: 'WEIGHT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Kriteria Matang',
+          key: 'RIPE_CRITERIA',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Jml Brondol Setelah Panen',
+          key: 'amount_of_brondol_after_harvest',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Berat Brondol lepas (Kg)',
+          key: 'weight_of_free_brondol',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Berat Brondol Jadi (Kg)',
+          key: 'weight_brondol_complete',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Mesocarp (gram)',
+          key: 'MESOCARP',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Mesocarp dan NUT (gram)',
+          key: 'MESOCARP_AND_NUT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'WET NUT',
+          key: 'WET_NUT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'DRY NUT',
+          key: 'DRY_NUT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Kernel',
+          key: 'KERNEL',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Cangkang',
+          key: 'SHELL',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Oil WM',
+          key: 'OIL_WM',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Buah Normal',
+          key: 'NORMAL_FRUIT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Buah Tdk Normal',
+          key: 'ABNORMAL_FRUIT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Moisture',
+          key: 'MOISTURE',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Total Buah',
+          key: 'TOTAL_FRUIT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'NUT (gram)',
+          key: 'NUT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'NUT/Fruit',
+          key: 'NUT_OR_FRUIT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'NUT/Bunch',
+          key: 'NUT_OR_BUNCH',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Mesocarp/Fruit',
+          key: 'MESOCARP_OR_FRUIT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Fruit/TBS',
+          key: 'FRUIT_OR_TBS',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Fruit Set',
+          key: 'FRUIT_SET',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Non Oil Substance',
+          key: 'NON_OIL_SUBSTANCE',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Oil Content',
+          key: 'OIL_CONTENT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'WET NUT',
+          key: 'T_WET_NUT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Kernel/WN',
+          key: 'KERNEL_OR_WN',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Kernel/Fruit',
+          key: 'KERNEL_OR_FRUIT',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Kernel/TBS',
+          key: 'KERNEL_OR_TBS',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
       ],
       sweet_alert: {
@@ -287,15 +581,68 @@ export default {
       },
     }
   },
-  watchQuery: ['q', 'page'],
+  watchQuery: ['q', 'page', 'q_year_id', 'q_month_id'],
 
   async asyncData({ $axios, query }) {
+    // DEFAULT MONTH AND YEAR
     const current = new Date()
-
-    //GET YEAR
-    let year_id = []
+    let month_at = current.getMonth() + 1
 
     let year_at = current.getFullYear()
+
+    let year_list = await $axios.$get(`/api/admin/lov_years`)
+
+    let month_list = await $axios.$get(`/api/admin/lov_months`)
+
+    // console.log('daaaa')
+    // console.log(month_list.data)
+    //FILTER PADA TABLE
+    //MONTH
+    let q_month_id = query.q_month_id ? query.q_month_id : month_at
+
+    let f_month_id = []
+
+    if (query.q_month_id) {
+      // console.log('rendra')
+      $axios
+        .get(`/api/admin/lov_months?q_month_id=${q_month_id}`)
+        .then((response) => {
+          f_month_id = response.data.data
+        })
+    } else {
+      f_month_id = []
+
+      q_month_id = month_at
+    }
+
+    if (q_month_id == undefined || q_month_id == '') {
+      q_month_id = month_at
+    }
+
+    //YEAR
+    let q_year_id = query.q_year_id ? query.q_year_id : year_at
+
+    let f_year_id = []
+
+    if (query.q_year_id) {
+      $axios
+        .get(`/api/admin/lov_years?q_year_id=${q_year_id}`)
+        .then((response) => {
+          f_year_id = response.data.data
+        })
+    } else {
+      f_year_id = []
+
+      q_year_id = year_at
+    }
+
+    if (q_year_id == undefined || q_year_id == '') {
+      q_year_id = year_at
+    }
+
+    //MODAL
+    //GET YEAR
+    let year_id = []
 
     $axios.get(`/api/admin/lov_years?q_year_id=${year_at}`).then((response) => {
       year_id = response.data.data
@@ -303,8 +650,6 @@ export default {
 
     // GET MONTH
     let month_id = []
-
-    let month_at = current.getMonth() + 1
 
     $axios
       .get(`/api/admin/lov_months?q_month_id=${month_at}`)
@@ -320,7 +665,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/oil_content?q=${search}&page=${page}`
+      `/api/admin/oil_content?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
     )
 
     return {
@@ -330,6 +675,10 @@ export default {
       rowcount: posts.data.total,
       year_id: year_id,
       month_id: month_id,
+      f_month_id: f_month_id,
+      f_year_id: f_year_id,
+      years: year_list.data,
+      months: month_list.data,
     }
   },
   methods: {
@@ -341,41 +690,126 @@ export default {
       this.$refs['my-modal'].hide()
     },
 
-    currentDate() {
-      const current = new Date()
-      current.setDate(current.getDate())
-      const date = `${current.getFullYear()}-${
-        current.getMonth() + 1
-      }-${current.getDate()}`
-      return date
-    },
-
     changePage(page) {
+      const current = new Date()
+
+      // MONTH
+      let month_at = current.getMonth() + 1
+
+      try {
+        if (this.f_month_id.id === null) {
+          this.query_month_id = ''
+        } else if (this.f_month_id.id === undefined) {
+          this.query_month_id = this.$route.query.q_month_id
+        } else {
+          this.query_month_id = this.f_month_id.id ? this.f_month_id.id : ''
+        }
+      } catch (err) {}
+
+      // YEAR
+      let year_at = current.getFullYear()
+
+      try {
+        if (this.f_year_id.year_at === null) {
+          this.query_year_id = ''
+        } else if (this.f_year_id.year_at === undefined) {
+          this.query_year_id = this.$route.query.q_year_id
+        } else {
+          this.query_year_id = this.f_year_id.year_at
+            ? this.f_year_id.year_at
+            : ''
+        }
+      } catch (err) {}
+
       this.$router.push({
         path: this.$route.path,
         query: {
           q: this.$route.query.q,
           page: page,
+          q_month_id: this.query_month_id ? this.query_month_id : month_at,
+          q_year_id: this.query_year_id ? this.query_year_id : year_at,
         },
       })
     },
     //searchData
     searchData() {
+      const current = new Date()
+
+      // MONTH
+      let month_at = current.getMonth() + 1
+
+      try {
+        if (this.f_month_id.id === null) {
+          this.query_month_id = ''
+        } else if (this.f_month_id.id === undefined) {
+          this.query_month_id = this.$route.query.q_month_id
+        } else {
+          this.query_month_id = this.f_month_id.id ? this.f_month_id.id : ''
+        }
+      } catch (err) {}
+
+      // YEAR
+      let year_at = current.getFullYear()
+
+      try {
+        if (this.f_year_id.year_at === null) {
+          this.query_year_id = ''
+        } else if (this.f_year_id.year_at === undefined) {
+          this.query_year_id = this.$route.query.q_year_id
+        } else {
+          this.query_year_id = this.f_year_id.year_at
+            ? this.f_year_id.year_at
+            : ''
+        }
+      } catch (err) {}
+
       this.$router.push({
         path: this.$route.path,
         query: {
           q: this.search,
+          q_month_id: this.query_month_id ? this.query_month_id : month_at,
+          q_year_id: this.query_year_id ? this.query_year_id : year_at,
         },
       })
     },
 
     exportData() {
+      const current = new Date()
+
+      // MONTH
+      let month_at = current.getMonth() + 1
+
+      try {
+        if (this.f_month_id.id === null) {
+          this.query_month_id = ''
+        } else if (this.f_month_id.id === undefined) {
+          this.query_month_id = this.$route.query.q_month_id
+        } else {
+          this.query_month_id = this.f_month_id.id ? this.f_month_id.id : ''
+        }
+      } catch (err) {}
+
+      // YEAR
+      let year_at = current.getFullYear()
+
+      try {
+        if (this.f_year_id.year_at === null) {
+          this.query_year_id = ''
+        } else if (this.f_year_id.year_at === undefined) {
+          this.query_year_id = this.$route.query.q_year_id
+        } else {
+          this.query_year_id = this.f_year_id.year_at
+            ? this.f_year_id.year_at
+            : ''
+        }
+      } catch (err) {}
+
       const headers = {
         'Content-Type': 'application/json',
       }
 
       this.$axios({
-        url: `/api/admin/employee/export?q=${this.search}`,
+        url: `/api/admin/oil_content/export?q=${this.search}&q_month_id=${this.query_month_id}&q_year_id=${this.query_year_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -384,53 +818,33 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Employee.xlsx'
+        var fileName = 'Oil Content.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
       })
     },
 
-    //deletePost method
-    deletePost(id) {
-      this.$swal
-        .fire({
-          title: 'APAKAH ANDA YAKIN ?',
-          text: 'INGIN MENGHAPUS DATA INI !',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'YA, HAPUS!',
-          cancelButtonText: 'TIDAK',
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            //delete tag from server
+    exportDataTemplate() {
+      const headers = {
+        'Content-Type': 'application/json',
+      }
 
-            this.$axios.delete(`/api/admin/employee/${id}`).then((response) => {
-              //feresh data
-              this.$nuxt.refresh()
-
-              if (response.data.success == true) {
-                this.sweet_alert.title = 'BERHASIL!'
-                this.sweet_alert.icon = 'success'
-              } else {
-                this.sweet_alert.title = 'GAGAL!'
-                this.sweet_alert.icon = 'error'
-              }
-
-              //alert
-              this.$swal.fire({
-                title: this.sweet_alert.title,
-                text: response.data.message,
-                icon: this.sweet_alert.icon,
-                showConfirmButton: false,
-                timer: 2000,
-              })
-            })
-          }
-        })
+      this.$axios({
+        url: `/api/admin/template_oil_content/export?q=${this.search}`,
+        method: 'GET',
+        responseType: 'blob',
+        headers: headers, // important
+      }).then((response) => {
+        this.isLoading = false
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        var fileName = 'Template Oil Content.xlsx'
+        link.setAttribute('download', fileName) //or any other extension
+        document.body.appendChild(link)
+        link.click()
+      })
     },
 
     upload(e) {
@@ -463,7 +877,7 @@ export default {
 
       await this.$axios
         .post(
-          `/api/admin/oil_content?month_at=${month_at}&year_at=${year_at}`,
+          `/api/admin/oil_content?q_month_id=${month_at}&q_year_id=${year_at}`,
           formData
         )
         .then(() => {
@@ -489,21 +903,57 @@ export default {
   },
 
   mounted() {
-    // Dropdown Year
-    this.$axios
-      .get('/api/admin/lov_years')
+    // // Dropdown Year
+    // this.$axios
+    //   .get('/api/admin/lov_years')
 
-      .then((response) => {
-        this.years = response.data.data
-      })
+    //   .then((response) => {
+    //     this.years = response.data.data
+    //   })
 
-    // Dropdown Months
-    this.$axios
-      .get('/api/admin/lov_months')
+    // // Dropdown Months
+    // this.$axios
+    //   .get('/api/admin/lov_months')
 
-      .then((response) => {
-        this.months = response.data.data
-      })
+    //   .then((response) => {
+    //     this.months = response.data.data
+    //   })
+
+    //GET DATA MONTH SAAT AWAL BUKA MENU
+    const current = new Date()
+
+    if (this.$route.query.q_month_id == null) {
+      this.$axios
+        .get(`/api/admin/lov_months?q_month_id=${current.getMonth() + 1}`)
+
+        .then((response) => {
+          this.f_month_id = response.data.data
+        })
+    } else {
+      this.$axios
+        .get(`/api/admin/lov_months?q_month_id=${this.$route.query.q_month_id}`)
+
+        .then((response) => {
+          this.f_month_id = response.data.data
+        })
+    }
+
+    //GET DATA YEAR SAAT AWAL BUKA MENU
+    if (this.$route.query.q_year_id == null) {
+      this.$axios
+        .get(`/api/admin/lov_years?q_year_id=${current.getFullYear()}`)
+
+        .then((response) => {
+          this.f_year_id = response.data.data
+        })
+    } else {
+      this.$axios
+        .get(`/api/admin/lov_years?q_year_id=${this.$route.query.q_year_id}`)
+
+        .then((response) => {
+          this.f_year_id = response.data.data
+        })
+    }
   },
 }
 </script>
@@ -549,5 +999,8 @@ export default {
 #file-chosen {
   margin-left: 0.3rem;
   font-family: sans-serif;
+}
+.table-oil {
+  font-size: 14px;
 }
 </style>
