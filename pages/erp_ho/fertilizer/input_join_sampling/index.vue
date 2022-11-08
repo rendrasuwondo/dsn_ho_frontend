@@ -264,7 +264,12 @@
             <div class="form-group"></div>
             <div>
               <button
-                v-if="statusPO !== 0 && detection_po == true"
+                v-if="
+                  statusPO !== 0 &&
+                  field.join_sampling_at !== '' &&
+                  field.join_sampling_at !== '' &&
+                  detection_po == true
+                "
                 class="btn btn-info mr-1 btn-submit"
                 type="submit"
               >
@@ -438,8 +443,8 @@ export default {
 
     back() {
       this.$router.push({
-        name: 'erp_ho-fertilizer-join_sampling',
-        params: { id: this.$route.params.id, r: 1 },
+        name: 'erp_ho-fertilizer-input_join_sampling',
+        params: { id: this.$route.params.id },
       })
     },
 
@@ -507,13 +512,13 @@ export default {
             //assign error validasi
             this.validation = error.response.data
 
-            this.$swal.fire({
-              title: 'Error!',
-              text: error.response.data.message,
-              icon: 'error',
-              showConfirmButton: true,
-              // timer: 2000,
-            })
+            // this.$swal.fire({
+            //   title: 'Error!',
+            //   text: error.response.data.message,
+            //   icon: 'error',
+            //   showConfirmButton: true,
+            //   // timer: 2000,
+            // })
           })
       } else {
         //INSERT
@@ -573,7 +578,7 @@ export default {
             this.$nuxt.refresh()
             this.bind()
             this.validationCelar()
-
+            // this.back()
             this.show = 1
           })
           .catch((error) => {
@@ -582,13 +587,13 @@ export default {
             //assign error to state "validation"
             this.validation = error.response.data
             // console.log(error.response.data.message)
-            this.$swal.fire({
-              title: 'Error!',
-              text: error.response.data.message,
-              icon: 'error',
-              showConfirmButton: true,
-              // timer: 2000,
-            })
+            // this.$swal.fire({
+            //   title: 'Error!',
+            //   text: error.response.data.message,
+            //   icon: 'error',
+            //   showConfirmButton: true,
+            //   // timer: 2000,
+            // })
 
             // this.show = 1
           })

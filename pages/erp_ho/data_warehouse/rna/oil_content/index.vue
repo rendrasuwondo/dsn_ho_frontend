@@ -66,7 +66,7 @@
                 </button>
 
                 <button
-                  title="Export To Template Excel"
+                  title="Download Template Excel"
                   class="btn btn-info"
                   @click="exportDataTemplate"
                 >
