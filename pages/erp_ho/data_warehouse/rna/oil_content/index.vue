@@ -4,7 +4,13 @@
       <div class="container-fluid"></div>
     </section>
 
-    <section class="content">
+    <div v-if="show === 0">
+      <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+      <p class="txt-2">Loading</p>
+      <div class="spinonediv-4"></div>
+    </div>
+
+    <section class="content" v-if="show === 1">
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
@@ -238,6 +244,8 @@ export default {
 
       years: [],
       months: [],
+
+      show: 1,
 
       fields: [
         {
@@ -733,6 +741,7 @@ export default {
     },
     //searchData
     searchData() {
+      this.show = 0
       const current = new Date()
 
       // MONTH
@@ -771,6 +780,7 @@ export default {
           q_year_id: this.query_year_id ? this.query_year_id : year_at,
         },
       })
+      // this.show = 1
     },
 
     exportData() {
@@ -854,7 +864,15 @@ export default {
       this.files = files
     },
 
+    refreshData() {
+      this.$router.push({
+        name: 'erp_ho-data_warehouse-rna-oil_content',
+        query: { q_month_id: month_at, q_year_id: year_at },
+      })
+    },
+
     async submitFileUpload() {
+      this.show = 0
       const current = new Date()
 
       // Year
@@ -881,8 +899,11 @@ export default {
           formData
         )
         .then(() => {
-          //sweet alert
+          this.$nuxt.refresh()
+          this.files = null
+          this.hideModal()
 
+          //sweet alert
           this.$swal.fire({
             title: 'BERHASIL!',
             text: 'Data Berhasil Disimpan!',
@@ -890,15 +911,14 @@ export default {
             showConfirmButton: false,
             timer: 2000,
           })
-
-          this.$nuxt.refresh()
-          this.hideModal()
-          this.files = null
         })
         .catch((error) => {
           //assign error to state "validation"
-          this.validation = error.response.data
+          // this.validation = error.response.data
+          this.files = null
         })
+
+      this.show = 1
     },
   },
 
@@ -986,5 +1006,20 @@ export default {
 }
 .table-oil {
   font-size: 14px;
+}
+.txt-2 {
+  color: #be65e2;
+  padding-top: 17%;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  font-size: 27px;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.148);
+  font-weight: bold;
+}
+
+.img-logo {
+  width: 160px;
+  padding-top: 10px;
+  padding-right: 20px;
 }
 </style>

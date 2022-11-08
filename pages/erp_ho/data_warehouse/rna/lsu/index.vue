@@ -14,8 +14,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-vector-square"></i>
-            <b>Tanah dan Lereng</b>
+            <i class="nav-icon fas fa-paste"></i>
+            <b>LSU</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -193,7 +193,7 @@
             :items="posts"
             :fields="fields"
             show-empty
-            class="table-soil"
+            class="table-lsu"
           >
           </b-table>
 
@@ -225,7 +225,7 @@ export default {
 
   head() {
     return {
-      title: 'Tanah & Lereng',
+      title: 'LSU',
     }
   },
 
@@ -251,19 +251,19 @@ export default {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'PT',
           key: 'COMPANY_CODE',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Estate',
           key: 'DEPARTMENT_CODE',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'KDAF',
           key: 'AFDELING_CODE',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
@@ -297,7 +297,7 @@ export default {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
           },
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
@@ -307,7 +307,7 @@ export default {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
           },
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
@@ -321,25 +321,13 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kelas Lahan',
-          key: 'SOIL_CLASS',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+          label: 'Tahun LSU',
+          key: 'SPH',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Tanah',
-          key: 'SOIL',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Lereng',
-          key: 'DOWNHILL',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'A1%',
+          label: 'N%',
           key: 'A1',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
@@ -349,7 +337,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'A2%',
+          label: 'P%',
           key: 'A2',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
@@ -359,7 +347,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'A3%',
+          label: 'K%',
           key: 'A3',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
@@ -369,7 +357,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'A3K%',
+          label: 'Mg%',
           key: 'A3K',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
@@ -379,7 +367,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'AL%',
+          label: 'Ca%',
           key: 'AL',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
@@ -389,7 +377,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'P%',
+          label: 'B%',
           key: 'P',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
@@ -399,63 +387,39 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Datar%',
+          label: 'N',
           key: 'FLAT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Berombak%',
+          label: 'P',
           key: 'WAVE',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Bergelombang%',
+          label: 'K',
           key: 'WAVY',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Agak Curam%',
+          label: 'Mg',
           key: 'LITTLE_STEEP',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Curam%',
+          label: 'Ca',
           key: 'STEEP',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Sangat Curam%',
+          label: 'B',
           key: 'VERY_STEEP',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
       sweet_alert: {
@@ -866,7 +830,7 @@ export default {
   margin-left: 0.3rem;
   font-family: sans-serif;
 }
-.table-soil {
+.table-lsu {
   font-size: 14px;
 }
 
