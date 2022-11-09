@@ -119,9 +119,11 @@
                   <div class="form-group">
                     <b-container class="bv-example-row">
                       <b-row>
-                        <b-col>
+                        <b-col sm="3">
+                          <label class="mr-1">Pilih File :</label>
+                        </b-col>
+                        <b-col sm="9">
                           <p class="selected float-left">
-                            <label class="mr-1">Pilih File :</label>
                             <!-- <br /> -->
                             <input
                               type="file"
@@ -135,8 +137,13 @@
                             <label for="actual-btn" class="f_upload">
                               Choose File
                             </label>
-                            {{ files ? files.name : 'No File Chosen' }}
                           </p>
+                        </b-col>
+                      </b-row>
+                      <b-row class="pb-2">
+                        <b-col sm="3"></b-col>
+                        <b-col sm="9">
+                          {{ files ? files.name : 'No File Chosen' }}
                         </b-col>
                       </b-row>
                     </b-container>
@@ -876,18 +883,34 @@ export default {
       const current = new Date()
 
       // Year
-      let year_1 = current.getFullYear()
+      let i_year_at = ''
 
-      let year_2 = this.year_id.year_at ? this.year_id.year_at : ''
+      try {
+        if (this.year_id.year_at === null) {
+          i_year_at = ''
+        } else if (this.year_id.year_at === undefined) {
+          i_year_at = current.getFullYear()
+        } else {
+          i_year_at = this.year_id.year_at ? this.year_id.year_at : ''
+        }
+      } catch (err) {}
 
-      let year_at = this.year_id.year_at === undefined ? year_1 : year_2
+      let q_year = i_year_at === '' ? current.getFullYear() : i_year_at
 
       // Month
-      let month_1 = current.getMonth()
+      let i_month_at = ''
 
-      let month_2 = this.month_id.id ? this.month_id.id : ''
+      try {
+        if (this.month_id.id === null) {
+          i_month_at = ''
+        } else if (this.month_id.id === undefined) {
+          i_month_at = current.getMonth()
+        } else {
+          i_month_at = this.month_id.id ? this.month_id.id : ''
+        }
+      } catch (err) {}
 
-      let month_at = this.month_id.id === undefined ? month_1 : month_2
+      let q_month = i_month_at === '' ? current.getMonth() : i_month_at
 
       console.log(year_at)
       let formData = new FormData()
@@ -895,13 +918,14 @@ export default {
 
       await this.$axios
         .post(
-          `/api/admin/oil_content?q_month_id=${month_at}&q_year_id=${year_at}`,
+          `/api/admin/oil_content?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
           formData
         )
-        .then(() => {
+        .then((response) => {
+          this.show = 1
+
           this.$nuxt.refresh()
           this.files = null
-          this.hideModal()
 
           //sweet alert
           this.$swal.fire({
@@ -911,14 +935,33 @@ export default {
             showConfirmButton: false,
             timer: 2000,
           })
+
+          this.$router.push({
+            name: 'erp_ho-data_warehouse-rna-oil_content',
+            query: { q_month_id: q_month, q_year_id: q_year },
+          })
         })
         .catch((error) => {
+          this.show = 1
+          this.files = null
+
+          this.$router.push({
+            name: 'erp_ho-data_warehouse-rna-oil_content',
+            query: { q_year_id: q_year },
+          })
+
+          this.$swal.fire({
+            title: 'ERROR!',
+            text: 'Data Gagal Disimpan!',
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2000,
+          })
+
           //assign error to state "validation"
           // this.validation = error.response.data
-          this.files = null
+          // this.files = null
         })
-
-      this.show = 1
     },
   },
 
@@ -966,13 +1009,16 @@ export default {
 .card-info.card-outline {
   border-top: 5px solid #504d8d;
 }
+
 .card-title {
   color: #504d8d;
 }
+
 .title-filter {
   font-size: 14px;
   margin-left: 8px;
 }
+
 .btn-modal {
   font-size: 16px;
   font-weight: bold;
@@ -1004,9 +1050,11 @@ export default {
   margin-left: 0.3rem;
   font-family: sans-serif;
 }
+
 .table-oil {
   font-size: 14px;
 }
+
 .txt-2 {
   color: #be65e2;
   padding-top: 17%;
@@ -1021,5 +1069,9 @@ export default {
   width: 160px;
   padding-top: 10px;
   padding-right: 20px;
+}
+
+p {
+  margin-bottom: 0px;
 }
 </style>

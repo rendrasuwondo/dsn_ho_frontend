@@ -20,7 +20,7 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <!-- <b-card
+          <b-card
             border-variant="primary"
             header="Filter"
             header-bg-variant="info"
@@ -28,16 +28,6 @@
           >
             <b-card-text>
               <b-row>
-                <b-col cols="1">Bulan :</b-col>
-                <b-col cols="4">
-                  <multiselect
-                    v-model="f_month_id"
-                    :options="months"
-                    label="name"
-                    track-by="id"
-                    :searchable="true"
-                  ></multiselect>
-                </b-col>
                 <b-col class="ml-4" cols="1">Tahun : </b-col>
                 <b-col cols="4">
                   <multiselect
@@ -50,7 +40,7 @@
                 </b-col>
               </b-row>
             </b-card-text>
-          </b-card> -->
+          </b-card>
 
           <div class="form-group">
             <div class="input-group mb-3">
@@ -80,13 +70,13 @@
                 </button>
 
                 <b-modal ref="my-modal" hide-footer title="Form Upload File">
-                  <!-- <div class="form-group">
+                  <div class="form-group">
                     <b-container fluid>
                       <b-row class="my-1">
-                        <b-col sm="2">
+                        <b-col sm="3">
                           <label for="input-small">Tahun :</label>
                         </b-col>
-                        <b-col sm="10">
+                        <b-col sm="9">
                           <multiselect
                             v-model="year_id"
                             :options="years"
@@ -99,29 +89,13 @@
                     </b-container>
                   </div>
                   <div class="form-group">
-                    <b-container fluid>
-                      <b-row class="my-1">
-                        <b-col sm="2">
-                          <label for="input-small">Bulan :</label>
-                        </b-col>
-                        <b-col sm="10">
-                          <multiselect
-                            v-model="month_id"
-                            :options="months"
-                            label="name"
-                            track-by="id"
-                            :searchable="true"
-                          ></multiselect>
-                        </b-col>
-                      </b-row>
-                    </b-container>
-                  </div> -->
-                  <div class="form-group">
                     <b-container class="bv-example-row">
                       <b-row>
-                        <b-col>
+                        <b-col sm="3">
+                          <label class="mr-1">Pilih File :</label>
+                        </b-col>
+                        <b-col sm="9">
                           <p class="selected float-left">
-                            <label class="mr-1">Pilih File :</label>
                             <!-- <br /> -->
                             <input
                               type="file"
@@ -135,8 +109,13 @@
                             <label for="actual-btn" class="f_upload">
                               Choose File
                             </label>
-                            {{ files ? files.name : 'No File Chosen' }}
                           </p>
+                        </b-col>
+                      </b-row>
+                      <b-row class="pb-2">
+                        <b-col sm="3"></b-col>
+                        <b-col sm="9">
+                          {{ files ? files.name : 'No File Chosen' }}
                         </b-col>
                       </b-row>
                     </b-container>
@@ -233,18 +212,14 @@ export default {
     return {
       show: 1,
       f_year_id: this.$route.query.q_year_id,
-      f_month_id: this.$route.query.q_month_id,
 
       query_year_id: '',
-      query_month_id: '',
 
       files: null,
 
       year_id: '',
-      month_id: '',
 
       years: [],
-      months: [],
 
       fields: [
         {
@@ -322,13 +297,13 @@ export default {
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Tahun LSU',
-          key: 'SPH',
+          key: 'PERIOD_LSU',
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'N%',
-          key: 'A1',
+          key: 'N_PERCENT',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -338,7 +313,7 @@ export default {
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'P%',
-          key: 'A2',
+          key: 'P_PERCENT',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -348,7 +323,7 @@ export default {
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'K%',
-          key: 'A3',
+          key: 'K_PERCENT',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -358,7 +333,7 @@ export default {
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Mg%',
-          key: 'A3K',
+          key: 'Mg_PERCENT',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -368,7 +343,7 @@ export default {
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Ca%',
-          key: 'AL',
+          key: 'Ca_PERCENT',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -378,7 +353,7 @@ export default {
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'B%',
-          key: 'P',
+          key: 'B_PERCENT',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -388,37 +363,37 @@ export default {
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'N',
-          key: 'FLAT',
+          key: 'N',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'P',
-          key: 'WAVE',
+          key: 'P',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'K',
-          key: 'WAVY',
+          key: 'K',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Mg',
-          key: 'LITTLE_STEEP',
+          key: 'Mg',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Ca',
-          key: 'STEEP',
+          key: 'Ca',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'B',
-          key: 'VERY_STEEP',
+          key: 'B',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
       ],
@@ -428,44 +403,17 @@ export default {
       },
     }
   },
-  watchQuery: ['q', 'page', 'q_year_id', 'q_month_id'],
+  watchQuery: ['q', 'page', 'q_year_id'],
 
   async asyncData({ $axios, query }) {
     // DEFAULT MONTH AND YEAR
     const current = new Date()
-    let month_at = current.getMonth() + 1
 
     let year_at = current.getFullYear()
 
     let year_list = await $axios.$get(`/api/admin/lov_years`)
 
-    let month_list = await $axios.$get(`/api/admin/lov_months`)
-
-    // console.log('daaaa')
-    // console.log(month_list.data)
     //FILTER PADA TABLE
-    //MONTH
-    let q_month_id = query.q_month_id ? query.q_month_id : month_at
-
-    let f_month_id = []
-
-    if (query.q_month_id) {
-      // console.log('rendra')
-      $axios
-        .get(`/api/admin/lov_months?q_month_id=${q_month_id}`)
-        .then((response) => {
-          f_month_id = response.data.data
-        })
-    } else {
-      f_month_id = []
-
-      q_month_id = month_at
-    }
-
-    if (q_month_id == undefined || q_month_id == '') {
-      q_month_id = month_at
-    }
-
     //YEAR
     let q_year_id = query.q_year_id ? query.q_year_id : year_at
 
@@ -495,15 +443,6 @@ export default {
       year_id = response.data.data
     })
 
-    // GET MONTH
-    let month_id = []
-
-    $axios
-      .get(`/api/admin/lov_months?q_month_id=${month_at}`)
-      .then((response) => {
-        month_id = response.data.data
-      })
-
     //page
     let page = query.page ? parseInt(query.page) : ''
 
@@ -511,7 +450,9 @@ export default {
     let search = query.q ? query.q : ''
 
     //fetching posts
-    const posts = await $axios.$get(`/api/admin/soil?q=${search}&page=${page}`)
+    const posts = await $axios.$get(
+      `/api/admin/lsu?q=${search}&page=${page}&q_year_id=${q_year_id}`
+    )
 
     return {
       posts: posts.data.data,
@@ -519,11 +460,8 @@ export default {
       search: search,
       rowcount: posts.data.total,
       year_id: year_id,
-      month_id: month_id,
-      f_month_id: f_month_id,
       f_year_id: f_year_id,
       years: year_list.data,
-      months: month_list.data,
     }
   },
   methods: {
@@ -532,24 +470,13 @@ export default {
     },
 
     hideModal() {
+      this.files = null
+
       this.$refs['my-modal'].hide()
     },
 
     changePage(page) {
       const current = new Date()
-
-      // MONTH
-      let month_at = current.getMonth() + 1
-
-      try {
-        if (this.f_month_id.id === null) {
-          this.query_month_id = ''
-        } else if (this.f_month_id.id === undefined) {
-          this.query_month_id = this.$route.query.q_month_id
-        } else {
-          this.query_month_id = this.f_month_id.id ? this.f_month_id.id : ''
-        }
-      } catch (err) {}
 
       // YEAR
       let year_at = current.getFullYear()
@@ -571,7 +498,6 @@ export default {
         query: {
           q: this.$route.query.q,
           page: page,
-          q_month_id: this.query_month_id ? this.query_month_id : month_at,
           q_year_id: this.query_year_id ? this.query_year_id : year_at,
         },
       })
@@ -580,19 +506,6 @@ export default {
     searchData() {
       this.show = 0
       const current = new Date()
-
-      // MONTH
-      let month_at = current.getMonth() + 1
-
-      try {
-        if (this.f_month_id.id === null) {
-          this.query_month_id = ''
-        } else if (this.f_month_id.id === undefined) {
-          this.query_month_id = this.$route.query.q_month_id
-        } else {
-          this.query_month_id = this.f_month_id.id ? this.f_month_id.id : ''
-        }
-      } catch (err) {}
 
       // YEAR
       let year_at = current.getFullYear()
@@ -613,7 +526,6 @@ export default {
         path: this.$route.path,
         query: {
           q: this.search,
-          q_month_id: this.query_month_id ? this.query_month_id : month_at,
           q_year_id: this.query_year_id ? this.query_year_id : year_at,
         },
       })
@@ -621,19 +533,6 @@ export default {
 
     exportData() {
       const current = new Date()
-
-      // MONTH
-      let month_at = current.getMonth() + 1
-
-      try {
-        if (this.f_month_id.id === null) {
-          this.query_month_id = ''
-        } else if (this.f_month_id.id === undefined) {
-          this.query_month_id = this.$route.query.q_month_id
-        } else {
-          this.query_month_id = this.f_month_id.id ? this.f_month_id.id : ''
-        }
-      } catch (err) {}
 
       // YEAR
       let year_at = current.getFullYear()
@@ -655,7 +554,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/soil/export?q=${this.search}`,
+        url: `/api/admin/lsu/export?q=${this.search}&q_year_id=${this.query_year_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -664,7 +563,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Tanah dan Lereng.xlsx'
+        var fileName = 'LSU.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -677,7 +576,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/template_soil/export?q=${this.search}`,
+        url: `/api/admin/template_lsu/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -686,7 +585,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Template Tanah dan Lereng.xlsx'
+        var fileName = 'Template LSU.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -705,27 +604,28 @@ export default {
 
       const current = new Date()
 
-      // Year
-      let year_1 = current.getFullYear()
+      let i_year_at = ''
 
-      let year_2 = this.year_id.year_at ? this.year_id.year_at : ''
+      try {
+        if (this.year_id.year_at === null) {
+          i_year_at = ''
+        } else if (this.year_id.year_at === undefined) {
+          i_year_at = current.getFullYear()
+        } else {
+          i_year_at = this.year_id.year_at ? this.year_id.year_at : ''
+        }
+      } catch (err) {}
 
-      let year_at = this.year_id.year_at === undefined ? year_1 : year_2
+      let q_year = i_year_at === '' ? current.getFullYear() : i_year_at
 
-      // Month
-      let month_1 = current.getMonth()
-
-      let month_2 = this.month_id.id ? this.month_id.id : ''
-
-      let month_at = this.month_id.id === undefined ? month_1 : month_2
-
-      console.log(year_at)
       let formData = new FormData()
       formData.append('upload_file', this.files)
 
       await this.$axios
-        .post(`/api/admin/soil`, formData)
-        .then(() => {
+        .post(`/api/admin/lsu?q_year_id=${i_year_at}`, formData)
+        .then((response) => {
+          this.$nuxt.refresh()
+
           this.show = 1
           this.files = null
 
@@ -738,10 +638,30 @@ export default {
             timer: 2000,
           })
 
-          this.$nuxt.refresh()
-          this.hideModal()
+          this.$router.push({
+            name: 'erp_ho-data_warehouse-rna-lsu',
+            query: { q_year_id: q_year },
+          })
         })
         .catch((error) => {
+          this.show = 1
+
+          this.$router.push({
+            name: 'erp_ho-data_warehouse-rna-lsu',
+            query: { q_year_id: q_year },
+          })
+
+          this.$swal.fire({
+            title: 'ERROR!',
+            text: 'Data Gagal Disimpan!',
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2000,
+          })
+
+          // console.log('false')
+          // console.log(error.response.data.message)
+
           //assign error to state "validation"
           // this.validation = error.response.data
         })
@@ -749,24 +669,8 @@ export default {
   },
 
   mounted() {
-    //GET DATA MONTH SAAT AWAL BUKA MENU
+    //GET DATA TANGGAL
     const current = new Date()
-
-    if (this.$route.query.q_month_id == null) {
-      this.$axios
-        .get(`/api/admin/lov_months?q_month_id=${current.getMonth() + 1}`)
-
-        .then((response) => {
-          this.f_month_id = response.data.data
-        })
-    } else {
-      this.$axios
-        .get(`/api/admin/lov_months?q_month_id=${this.$route.query.q_month_id}`)
-
-        .then((response) => {
-          this.f_month_id = response.data.data
-        })
-    }
 
     //GET DATA YEAR SAAT AWAL BUKA MENU
     if (this.$route.query.q_year_id == null) {
@@ -792,17 +696,21 @@ export default {
 .card-info.card-outline {
   border-top: 5px solid #504d8d;
 }
+
 .card-title {
   color: #504d8d;
 }
+
 .title-filter {
   font-size: 14px;
   margin-left: 8px;
 }
+
 .btn-modal {
   font-size: 16px;
   font-weight: bold;
 }
+
 .f_upload {
   background-color: rgba(82, 68, 190, 0.911);
   font-size: 14px;
@@ -848,5 +756,9 @@ export default {
   width: 160px;
   padding-top: 10px;
   padding-right: 20px;
+}
+
+p {
+  margin-bottom: 0px;
 }
 </style>
