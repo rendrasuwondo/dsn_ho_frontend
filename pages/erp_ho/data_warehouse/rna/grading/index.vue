@@ -14,7 +14,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-oil-can"></i> <b>OIL CONTENT</b>
+            <i class="nav-icon fas fa-clipboard-list"></i> <b>GRADING</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -83,10 +83,10 @@
                   <div class="form-group">
                     <b-container fluid>
                       <b-row class="my-1">
-                        <b-col sm="2">
+                        <b-col sm="3">
                           <label for="input-small">Tahun :</label>
                         </b-col>
-                        <b-col sm="10">
+                        <b-col sm="9">
                           <multiselect
                             v-model="year_id"
                             :options="years"
@@ -101,10 +101,10 @@
                   <div class="form-group">
                     <b-container fluid>
                       <b-row class="my-1">
-                        <b-col sm="2">
+                        <b-col sm="3">
                           <label for="input-small">Bulan :</label>
                         </b-col>
-                        <b-col sm="10">
+                        <b-col sm="9">
                           <multiselect
                             v-model="month_id"
                             :options="months"
@@ -232,7 +232,7 @@ export default {
 
   head() {
     return {
-      title: 'Oil Content',
+      title: 'GRADING',
     }
   },
 
@@ -257,7 +257,7 @@ export default {
       fields: [
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Hari',
+          label: 'Tanggal',
           key: 'PERIOD_DAY',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
@@ -275,44 +275,14 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'PT',
-          key: 'COMPANY_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Estate',
-          key: 'DEPARTMENT_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Afd',
-          key: 'AFDELING_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Blok',
-          key: 'BLOCK',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'PKS',
           key: 'MILL',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kode Unit',
-          key: 'UNIT_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Berat',
-          key: 'WEIGHT',
+          label: 'Buah Mentah',
+          key: 'RAW_FRUIT',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -321,8 +291,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kriteria Matang',
-          key: 'RIPE_CRITERIA',
+          label: 'Buah Mengkal',
+          key: 'MEDIUM_RIPE_FRUIT',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -331,8 +301,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Jml Brondol Setelah Panen',
-          key: 'amount_of_brondol_after_harvest',
+          label: 'Buah Matang',
+          key: 'RIPE_FRUIT',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -341,8 +311,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Berat Brondol lepas (Kg)',
-          key: 'weight_of_free_brondol',
+          label: 'Lewat Matang',
+          key: 'FRUIT_TOO_RIPE',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -351,8 +321,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Berat Brondol Jadi (Kg)',
-          key: 'weight_brondol_complete',
+          label: 'Tandan Kosong',
+          key: 'EMPTY_TANDAN',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -361,8 +331,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Mesocarp (gram)',
-          key: 'MESOCARP',
+          label: 'Tangkai Panjang',
+          key: 'LONG_STALK',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -371,8 +341,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Mesocarp dan NUT (gram)',
-          key: 'MESOCARP_AND_NUT',
+          label: 'Brondolan',
+          key: 'BRONDOLAN',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -381,8 +351,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'WET NUT',
-          key: 'WET_NUT',
+          label: 'Kotoran',
+          key: 'DIRT',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -391,198 +361,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'DRY NUT',
-          key: 'DRY_NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel',
-          key: 'KERNEL',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Cangkang',
-          key: 'SHELL',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Oil WM',
-          key: 'OIL_WM',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Buah Normal',
-          key: 'NORMAL_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Buah Tdk Normal',
-          key: 'ABNORMAL_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Moisture',
-          key: 'MOISTURE',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Total Buah',
-          key: 'TOTAL_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'NUT (gram)',
-          key: 'NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'NUT/Fruit',
-          key: 'NUT_OR_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'NUT/Bunch',
-          key: 'NUT_OR_BUNCH',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Mesocarp/Fruit',
-          key: 'MESOCARP_OR_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Fruit/TBS',
-          key: 'FRUIT_OR_TBS',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Fruit Set',
-          key: 'FRUIT_SET',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Non Oil Substance',
-          key: 'NON_OIL_SUBSTANCE',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Oil Content',
-          key: 'OIL_CONTENT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'WET NUT',
-          key: 'T_WET_NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel/WN',
-          key: 'KERNEL_OR_WN',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel/Fruit',
-          key: 'KERNEL_OR_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel/TBS',
-          key: 'KERNEL_OR_TBS',
+          label: 'TBS Sakit',
+          key: 'TBS_SICK',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-IN')
             return formatter.format(value)
@@ -680,7 +460,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/oil_content?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+      `/api/admin/grading?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
     )
 
     return {
@@ -826,7 +606,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/oil_content/export?q=${this.search}&q_month_id=${this.query_month_id}&q_year_id=${this.query_year_id}`,
+        url: `/api/admin/grading/export?q=${this.search}&q_month_id=${this.query_month_id}&q_year_id=${this.query_year_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -835,7 +615,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Oil Content.xlsx'
+        var fileName = 'GRADING.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -848,7 +628,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/template_oil_content/export?q=${this.search}`,
+        url: `/api/admin/template_grading/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -857,7 +637,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Template Oil Content.xlsx'
+        var fileName = 'Template Grading.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -918,7 +698,7 @@ export default {
 
       await this.$axios
         .post(
-          `/api/admin/oil_content?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
+          `/api/admin/grading?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
           formData
         )
         .then((response) => {
@@ -937,7 +717,7 @@ export default {
           })
 
           this.$router.push({
-            name: 'erp_ho-data_warehouse-rna-oil_content',
+            name: 'erp_ho-data_warehouse-rna-grading',
             query: { q_month_id: q_month, q_year_id: q_year },
           })
         })
@@ -946,7 +726,7 @@ export default {
           this.files = null
 
           this.$router.push({
-            name: 'erp_ho-data_warehouse-rna-oil_content',
+            name: 'erp_ho-data_warehouse-rna-grading',
             query: { q_month_id: q_month, q_year_id: q_year },
           })
 
