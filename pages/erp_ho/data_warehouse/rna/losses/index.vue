@@ -14,7 +14,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-clipboard-list"></i> <b>GRADING</b>
+            <i class="nav-icon fas fa-table"></i>
+            <b>LOSSES</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -232,7 +233,7 @@ export default {
 
   head() {
     return {
-      title: 'GRADING',
+      title: 'LOSSES',
     }
   },
 
@@ -281,8 +282,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Buah Mentah',
-          key: 'RAW_FRUIT',
+          label: 'EB',
+          key: 'EB',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -291,8 +292,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Buah Mengkal',
-          key: 'MEDIUM_RIPE_FRUIT',
+          label: 'Fruit Loss In EB',
+          key: 'FRUIT_LOSS_IN_EB',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -301,8 +302,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Buah Matang',
-          key: 'RIPE_FRUIT',
+          label: 'USB',
+          key: 'USB',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -311,8 +312,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Lewat Matang',
-          key: 'FRUIT_TOO_RIPE',
+          label: 'Press Cake Fibre',
+          key: 'PRESS_CAKE_FIBRE',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -321,8 +322,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Tandan Kosong',
-          key: 'EMPTY_TANDAN',
+          label: 'Nuts',
+          key: 'NUTS',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -331,8 +332,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Tangkai Panjang',
-          key: 'LONG_STALK',
+          label: 'Wet Solid',
+          key: 'WET_SOLID',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -341,8 +342,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Brondolan',
-          key: 'BRONDOLAN',
+          label: 'Liquid Slude',
+          key: 'LIQUID_SLUDE',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -351,8 +352,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kotoran',
-          key: 'DIRT',
+          label: 'Effluent',
+          key: 'EFFLUENT',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -361,8 +362,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'TBS Sakit',
-          key: 'TBS_SICK',
+          label: 'Total Losses',
+          key: 'TOTAL_LOSSES',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -460,7 +461,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/grading?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+      `/api/admin/losses?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
     )
 
     return {
@@ -612,7 +613,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/grading/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}`,
+        url: `/api/admin/losses/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -621,7 +622,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'GRADING.xlsx'
+        var fileName = 'Losses.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -634,7 +635,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/template_grading/export?q=${this.search}`,
+        url: `/api/admin/template_losses/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -643,7 +644,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Template Grading.xlsx'
+        var fileName = 'Template Losses.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -659,7 +660,7 @@ export default {
 
     refreshData() {
       this.$router.push({
-        name: 'erp_ho-data_warehouse-rna-oil_content',
+        name: 'erp_ho-data_warehouse-rna-losses',
         query: { q_month_id: month_at, q_year_id: year_at },
       })
     },
@@ -704,7 +705,7 @@ export default {
 
       await this.$axios
         .post(
-          `/api/admin/grading?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
+          `/api/admin/losses?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
           formData
         )
         .then((response) => {
@@ -723,7 +724,7 @@ export default {
           })
 
           this.$router.push({
-            name: 'erp_ho-data_warehouse-rna-grading',
+            name: 'erp_ho-data_warehouse-rna-losses',
             query: { q_month_id: q_month, q_year_id: q_year },
           })
         })
@@ -732,7 +733,7 @@ export default {
           this.files = null
 
           this.$router.push({
-            name: 'erp_ho-data_warehouse-rna-grading',
+            name: 'erp_ho-data_warehouse-rna-losses',
             query: { q_month_id: q_month, q_year_id: q_year },
           })
 

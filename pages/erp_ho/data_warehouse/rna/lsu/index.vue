@@ -269,7 +269,7 @@ export default {
           label: 'Luas',
           key: 'WIDE',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -279,7 +279,7 @@ export default {
           label: 'Pokok',
           key: 'POINT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -289,7 +289,7 @@ export default {
           label: 'SPH',
           key: 'SPH',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -305,7 +305,7 @@ export default {
           label: 'N%',
           key: 'N_PERCENT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -315,7 +315,7 @@ export default {
           label: 'P%',
           key: 'P_PERCENT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -325,7 +325,7 @@ export default {
           label: 'K%',
           key: 'K_PERCENT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -335,7 +335,7 @@ export default {
           label: 'Mg%',
           key: 'Mg_PERCENT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -345,7 +345,7 @@ export default {
           label: 'Ca%',
           key: 'Ca_PERCENT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -355,7 +355,7 @@ export default {
           label: 'B%',
           key: 'B_PERCENT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -549,12 +549,15 @@ export default {
         }
       } catch (err) {}
 
+      let i_year =
+        this.query_year_id === undefined ? year_at : this.query_year_id
+
       const headers = {
         'Content-Type': 'application/json',
       }
 
       this.$axios({
-        url: `/api/admin/lsu/export?q=${this.search}&q_year_id=${this.query_year_id}`,
+        url: `/api/admin/lsu/export?q=${this.search}&q_year_id=${i_year}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

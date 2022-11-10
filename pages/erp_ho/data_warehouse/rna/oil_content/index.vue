@@ -314,7 +314,7 @@ export default {
           label: 'Berat',
           key: 'WEIGHT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -324,7 +324,7 @@ export default {
           label: 'Kriteria Matang',
           key: 'RIPE_CRITERIA',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -334,7 +334,7 @@ export default {
           label: 'Jml Brondol Setelah Panen',
           key: 'amount_of_brondol_after_harvest',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -344,7 +344,7 @@ export default {
           label: 'Berat Brondol lepas (Kg)',
           key: 'weight_of_free_brondol',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -354,7 +354,7 @@ export default {
           label: 'Berat Brondol Jadi (Kg)',
           key: 'weight_brondol_complete',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -364,7 +364,7 @@ export default {
           label: 'Mesocarp (gram)',
           key: 'MESOCARP',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -374,7 +374,7 @@ export default {
           label: 'Mesocarp dan NUT (gram)',
           key: 'MESOCARP_AND_NUT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -384,7 +384,7 @@ export default {
           label: 'WET NUT',
           key: 'WET_NUT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -394,7 +394,7 @@ export default {
           label: 'DRY NUT',
           key: 'DRY_NUT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -404,7 +404,7 @@ export default {
           label: 'Kernel',
           key: 'KERNEL',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -414,7 +414,7 @@ export default {
           label: 'Cangkang',
           key: 'SHELL',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -424,7 +424,7 @@ export default {
           label: 'Oil WM',
           key: 'OIL_WM',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -434,7 +434,7 @@ export default {
           label: 'Buah Normal',
           key: 'NORMAL_FRUIT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -444,7 +444,7 @@ export default {
           label: 'Buah Tdk Normal',
           key: 'ABNORMAL_FRUIT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -454,7 +454,7 @@ export default {
           label: 'Moisture',
           key: 'MOISTURE',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -464,7 +464,7 @@ export default {
           label: 'Total Buah',
           key: 'TOTAL_FRUIT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -474,7 +474,7 @@ export default {
           label: 'NUT (gram)',
           key: 'NUT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -484,7 +484,7 @@ export default {
           label: 'NUT/Fruit',
           key: 'NUT_OR_FRUIT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -494,7 +494,7 @@ export default {
           label: 'NUT/Bunch',
           key: 'NUT_OR_BUNCH',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -504,7 +504,7 @@ export default {
           label: 'Mesocarp/Fruit',
           key: 'MESOCARP_OR_FRUIT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -514,7 +514,7 @@ export default {
           label: 'Fruit/TBS',
           key: 'FRUIT_OR_TBS',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -524,7 +524,7 @@ export default {
           label: 'Fruit Set',
           key: 'FRUIT_SET',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -534,7 +534,7 @@ export default {
           label: 'Non Oil Substance',
           key: 'NON_OIL_SUBSTANCE',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -544,7 +544,7 @@ export default {
           label: 'Oil Content',
           key: 'OIL_CONTENT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -554,7 +554,7 @@ export default {
           label: 'WET NUT',
           key: 'T_WET_NUT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -564,7 +564,7 @@ export default {
           label: 'Kernel/WN',
           key: 'KERNEL_OR_WN',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -574,7 +574,7 @@ export default {
           label: 'Kernel/Fruit',
           key: 'KERNEL_OR_FRUIT',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -584,7 +584,7 @@ export default {
           label: 'Kernel/TBS',
           key: 'KERNEL_OR_TBS',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
+            let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
@@ -821,12 +821,18 @@ export default {
         }
       } catch (err) {}
 
+      let i_year =
+        this.query_year_id === undefined ? year_at : this.query_year_id
+
+      let i_month =
+        this.query_month_id === undefined ? month_at : this.query_month_id
+
       const headers = {
         'Content-Type': 'application/json',
       }
 
       this.$axios({
-        url: `/api/admin/oil_content/export?q=${this.search}&q_month_id=${this.query_month_id}&q_year_id=${this.query_year_id}`,
+        url: `/api/admin/oil_content/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
