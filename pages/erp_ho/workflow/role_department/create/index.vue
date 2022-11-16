@@ -14,18 +14,18 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-clipboard-list"></i>
-            <b>TAMBAH TASK</b>
+            <i class="nav-icon fas fa-sitemap"></i>
+            <b>TAMBAH ROLE DEPARTEMEN</b>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
           <form @submit.prevent="storePost">
             <div class="form-group">
-              <label>Proses</label>
+              <label>Departemen</label>
               <multiselect
                 v-model="field.P_WF_PROC_ID"
-                :options="process"
+                :options="department"
                 label="PROC_NAME"
                 track-by="P_WF_PROC_ID"
                 :searchable="true"
@@ -39,10 +39,10 @@
             </div>
 
             <div class="form-group">
-              <label>Status</label>
+              <label>Role</label>
               <multiselect
                 v-model="field.DOC_STATUS"
-                :options="status"
+                :options="role"
                 :custom-label="customLabel"
                 track-by="CODE"
                 :searchable="true"
@@ -56,13 +56,15 @@
             </div>
 
             <div class="form-group">
-              <label>Task</label>
-              <input
-                type="text"
-                v-model="field.TASK"
-                placeholder="Masukkan Task"
-                class="form-control"
-              />
+              <label>Dokumen</label>
+              <multiselect
+                v-model="field.DOC_STATUS"
+                :options="document_type"
+                :custom-label="customLabel"
+                track-by="CODE"
+                :searchable="true"
+              >
+              </multiselect>
               <div v-if="validation.TASK" class="mt-2">
                 <b-alert show variant="danger">{{
                   validation.TASK[0]
@@ -193,7 +195,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah Task',
+      title: 'Tambah Role Departemen',
     }
   },
 
@@ -204,20 +206,12 @@ export default {
         { value: 'N', text: 'Tidak' },
       ],
 
-      second_options: [
-        { value: 'Y', text: 'Ya' },
-        { value: 'N', text: 'Tidak' },
-      ],
-
       state: 'disabled',
 
       field: {
-        P_WF_PROC_ID: '',
+        P_DEPARTMENT_ID: '',
         P_WF_DOC_TYPE_ID: '',
-        TASK: '',
-        LISTING_NO: '',
-        DOC_STATUS: '',
-        IS_YES_NO: 'Y',
+        P_ROLE_ID: '',
         IS_ACTIVE: 'Y',
         DESCRIPTION: '',
         CREATE_DATE: '',
@@ -226,8 +220,9 @@ export default {
         UPDATE_BY: '',
       },
 
-      status: [],
-      process: [],
+      role: [],
+      document_type: [],
+      department: [],
 
       //state validation
       validation: [],
@@ -260,7 +255,7 @@ export default {
       .get('/api/admin/lov_status_workflow')
 
       .then((response) => {
-        this.status = response.data.data
+        this.document_type = response.data.data
       })
 
     //Data Process
@@ -268,7 +263,15 @@ export default {
       .get('/api/admin/lov_process_workflow')
 
       .then((response) => {
-        this.process = response.data.data
+        this.department = response.data.data
+      })
+
+    //Data Role
+    this.$axios
+      .get('/api/admin/lov_role_workflow')
+
+      .then((response) => {
+        this.role = response.data.data
       })
   },
 

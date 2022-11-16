@@ -8,7 +8,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-clipboard-list"></i> <b> TASK</b>
+            <i class="nav-icon fas fa-sitemap"></i> <b> ROLE DEPARTEMEN</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -17,7 +17,7 @@
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <nuxt-link
-                  :to="{ name: 'erp_ho-workflow-task-create' }"
+                  :to="{ name: 'erp_ho-workflow-role_department-create' }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
                   title="Tambah"
@@ -60,7 +60,7 @@
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-workflow-task-edit-id',
+                  name: 'erp_ho-workflow-role_department-edit-id',
                   params: { id: row.item.P_WF_TASK_ID },
                 }"
                 variant="link"
@@ -106,7 +106,7 @@ export default {
 
   head() {
     return {
-      title: 'Task',
+      title: 'Role Departemen',
     }
   },
 
@@ -119,23 +119,18 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Proses',
-          key: 'PROC_NAME',
+          label: 'Departemen',
+          key: 'DEPARTMENT_CODE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Status',
-          key: 'DOC_STATUS',
+          label: 'Role',
+          key: 'ROLE_CODE',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Task',
-          key: 'TASK',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          label: 'No',
-          key: 'LISTING_NO',
+          label: 'Dokumen',
+          key: 'DOC_NAME',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -161,7 +156,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/task_workflow?q=${search}&page=${page}`
+      `/api/admin/role_department?q=${search}&page=${page}`
     )
 
     return {
@@ -197,7 +192,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/task/export?q=${this.search}`,
+        url: `/api/admin/role_departemen/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -206,7 +201,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Task.xlsx'
+        var fileName = 'Role Departemen.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -231,7 +226,7 @@ export default {
             //delete tag from server
 
             this.$axios
-              .delete(`/api/admin/task_workflow/${id}`)
+              .delete(`/api/admin/role_department/${id}`)
               .then((response) => {
                 //feresh data
                 this.$nuxt.refresh()

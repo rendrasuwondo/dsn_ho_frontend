@@ -83,10 +83,10 @@
                   <div class="form-group">
                     <b-container fluid>
                       <b-row class="my-1">
-                        <b-col sm="2">
+                        <b-col sm="3">
                           <label for="input-small">Tahun :</label>
                         </b-col>
-                        <b-col sm="10">
+                        <b-col sm="9">
                           <multiselect
                             v-model="year_id"
                             :options="years"
@@ -101,10 +101,10 @@
                   <div class="form-group">
                     <b-container fluid>
                       <b-row class="my-1">
-                        <b-col sm="2">
+                        <b-col sm="3">
                           <label for="input-small">Bulan :</label>
                         </b-col>
-                        <b-col sm="10">
+                        <b-col sm="9">
                           <multiselect
                             v-model="month_id"
                             :options="months"
@@ -863,7 +863,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Template Oil Content.xlsx'
+        var fileName = 'Oil_Content_(bulan)_(tahun).xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
