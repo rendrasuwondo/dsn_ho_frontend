@@ -112,9 +112,12 @@
                 }"
                 variant="link"
                 size=""
-                title="Hasil"
+                title="Input Hasil Analisa"
               >
-                <i class="fa fa-file-alt"></i>
+                <span v-if="row.item.status !== null">
+                  {{ row.item.status }}
+                </span>
+                <span v-else>Data belum Terinput</span>
               </b-button>
             </template>
 
@@ -313,12 +316,12 @@ export default {
           key: 'request_status_name',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
-        {
-          thClass: 'align-middle text-left text-nowrap nameOfTheClass',
-          label: 'Hasil',
-          key: 'detail_hap',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
+        // {
+        //   thClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        //   label: 'Hasil',
+        //   key: 'detail_hap',
+        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        // },
         {
           label: 'PO',
           key: 'po',
