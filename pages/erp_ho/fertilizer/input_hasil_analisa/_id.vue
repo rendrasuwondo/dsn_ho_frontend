@@ -172,7 +172,7 @@
             <b-row class="ml-1 mr-1 mb-2">
               <b-col cols="8">
                 <p class="selected float-left">
-                  <label class="btn-upload">
+                  <label class="btn-upload pl-3">
                     Enter Your File
                     <input type="file" name="file" @change="upload" />
                   </label>
