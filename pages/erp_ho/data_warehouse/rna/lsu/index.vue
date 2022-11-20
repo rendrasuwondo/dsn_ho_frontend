@@ -69,6 +69,22 @@
                   <i class="fa fa-file-alt"></i>
                 </button>
 
+                <nuxt-link
+                  title="Detail Upload File"
+                  class="btn btn-info"
+                  :to="{
+                    name: 'erp_ho-data_warehouse-rna-detail_upload',
+                    query: {
+                      url: 'erp_ho-data_warehouse-rna-lsu',
+                      tab_header: 'LSU',
+                      account: 'LSU',
+                      q_year_id: this.period_year,
+                    },
+                  }"
+                >
+                  <i class="fa fa-info-circle"></i>
+                </nuxt-link>
+
                 <b-modal ref="my-modal" hide-footer title="Form Upload File">
                   <div class="form-group">
                     <b-container fluid>
@@ -218,6 +234,10 @@ export default {
       files: null,
 
       year_id: '',
+
+      period_year: this.$route.query.q_year_id
+        ? this.$route.query.q_year_id
+        : this.currentYear(),
 
       years: [],
 
@@ -465,6 +485,12 @@ export default {
     }
   },
   methods: {
+    currentYear() {
+      const current = new Date()
+      const date = `${current.getFullYear()}`
+      return date
+    },
+
     showModal() {
       this.$refs['my-modal'].show()
     },
