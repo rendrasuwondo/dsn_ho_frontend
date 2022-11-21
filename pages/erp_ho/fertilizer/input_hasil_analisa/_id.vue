@@ -519,37 +519,49 @@ export default {
     },
 
     async submitFileUpload() {
-      let formData = new FormData()
-      formData.append('upload_file', this.files)
-      formData.append('input_sample_id', this.$route.params.id)
+      if (this.files.size <= 2097152) {
+        let formData = new FormData()
+        formData.append('upload_file', this.files)
+        formData.append('input_sample_id', this.$route.params.id)
 
-      await this.$axios
-        .post('/api/admin/upload_file', formData)
-        .then(() => {
-          //sweet alert
+        await this.$axios
+          .post('/api/admin/upload_file', formData)
+          .then(() => {
+            //sweet alert
 
-          this.$swal.fire({
-            title: 'BERHASIL!',
-            text: 'Data Berhasil Disimpan!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 2000,
-          })
-
-          this.$nuxt.refresh()
-          const upload_files = this.$axios
-            .get(`/api/admin/master/upload_file/${this.$route.params.id}`)
-            .then((response) => {
-              //data yang diambil
-
-              this.upload_files = response.data.data.upload_file
+            this.$swal.fire({
+              title: 'BERHASIL!',
+              text: 'Data Berhasil Disimpan!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
             })
-          this.files = null
+
+            this.$nuxt.refresh()
+            const upload_files = this.$axios
+              .get(`/api/admin/master/upload_file/${this.$route.params.id}`)
+              .then((response) => {
+                //data yang diambil
+
+                this.upload_files = response.data.data.upload_file
+              })
+            this.files = null
+          })
+          .catch((error) => {
+            //assign error to state "validation"
+            this.validation = error.response.data
+          })
+      } else {
+        this.$swal.fire({
+          title: 'GAGAL!',
+          text: 'Ukuran File Anda Melebihi Dari 2MB. Silahkan lakukan konpresi pada file terlebih dahulu!',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 3500,
         })
-        .catch((error) => {
-          //assign error to state "validation"
-          this.validation = error.response.data
-        })
+
+        this.files = null
+      }
     },
 
     //deletePost method
