@@ -70,7 +70,7 @@
                 </button>
 
                 <nuxt-link
-                  title="Detail Upload File"
+                  title="History Upload File"
                   class="btn btn-info"
                   :to="{
                     name: 'erp_ho-data_warehouse-rna-detail_upload',

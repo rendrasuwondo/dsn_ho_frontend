@@ -25,7 +25,7 @@
                     <b>{{ this.$route.query.tab_header }}</b>
                   </nuxt-link>
                 </td>
-                <td>/ Detail Upload</td>
+                <td>/ History Upload File</td>
               </tr>
             </table>
           </h3>
