@@ -554,7 +554,7 @@ export default {
       } else {
         this.$swal.fire({
           title: 'GAGAL!',
-          text: 'Ukuran File Anda Melebihi Dari 2MB. Silahkan lakukan konpresi pada file terlebih dahulu!',
+          text: 'Ukuran file anda melebihi dari 2MB. Silahkan lakukan konpresi pada file anda terlebih dahulu!',
           icon: 'error',
           showConfirmButton: false,
           timer: 3500,
