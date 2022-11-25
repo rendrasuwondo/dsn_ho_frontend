@@ -324,6 +324,10 @@ export default {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Kelas Lahan',
           key: 'SOIL_CLASS',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-IN')
+            return formatter.format(value)
+          },
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -653,7 +657,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Tanah dan Lereng_(tahun).xlsx'
+        var fileName = 'Tanah_dan_Lereng_(tahun).xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -686,53 +690,75 @@ export default {
 
       let q_year = i_year_at === '' ? current.getFullYear() : i_year_at
 
-      let formData = new FormData()
-      formData.append('upload_file', this.files)
+      let checkFile = 'Tanah_dan_Lereng_' + i_year_at + '.xlsx'
 
-      await this.$axios
-        .post(`/api/admin/soil?q_year_id=${i_year_at}`, formData)
-        .then((response) => {
-          this.$nuxt.refresh()
+      // jika bulan dan tahun terisi
+      if (this.files.name === checkFile) {
+        let formData = new FormData()
+        formData.append('upload_file', this.files)
 
-          this.show = 1
-          this.files = null
+        await this.$axios
+          .post(`/api/admin/soil?q_year_id=${i_year_at}`, formData)
+          .then((response) => {
+            this.$nuxt.refresh()
 
-          //sweet alert
-          this.$swal.fire({
-            title: 'BERHASIL!',
-            text: 'Data Berhasil Disimpan!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 2000,
+            this.show = 1
+            this.files = null
+
+            //sweet alert
+            this.$swal.fire({
+              title: 'BERHASIL!',
+              text: 'Data Berhasil Disimpan!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
+            })
+
+            this.$router.push({
+              name: 'erp_ho-data_warehouse-rna-soil',
+              query: { q_year_id: q_year },
+            })
           })
+          .catch((error) => {
+            this.show = 1
+            this.files = null
 
-          this.$router.push({
-            name: 'erp_ho-data_warehouse-rna-soil',
-            query: { q_year_id: q_year },
+            this.$router.push({
+              name: 'erp_ho-data_warehouse-rna-soil',
+              query: { q_year_id: q_year },
+            })
+
+            this.$swal.fire({
+              title: 'ERROR!',
+              text: 'Data Gagal Disimpan!',
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 2000,
+            })
+            // console.log('false')
+            // console.log(error.response.data.message)
+
+            //   //assign error to state "validation"
+            // this.validation = error.response.message
           })
+      } else {
+        this.show = 1
+        // this.hideModal()
+        this.files = null
+
+        this.$router.push({
+          name: 'erp_ho-data_warehouse-rna-soil',
+          query: { q_year_id: q_year },
         })
-        .catch((error) => {
-          this.show = 1
-          this.files = null
 
-          this.$router.push({
-            name: 'erp_ho-data_warehouse-rna-soil',
-            query: { q_year_id: q_year },
-          })
-
-          this.$swal.fire({
-            title: 'ERROR!',
-            text: 'Data Gagal Disimpan!',
-            icon: 'error',
-            showConfirmButton: false,
-            timer: 2000,
-          })
-          // console.log('false')
-          // console.log(error.response.data.message)
-
-          //   //assign error to state "validation"
-          // this.validation = error.response.message
+        this.$swal.fire({
+          title: 'ERROR!',
+          text: 'Data Yang Anda Upload Tidak Sesuai Dengan Bulan Yang ditentukan. Harap Cek Kembali!',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 3500,
         })
+      }
     },
   },
 

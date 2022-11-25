@@ -195,6 +195,8 @@ export default {
           account: this.$route.query.account,
           url: this.$route.query.url,
           tab_header: this.$route.query.tab_header,
+          q_month_id: this.$route.query.q_month_id,
+          q_year_id: this.$route.query.q_year_id,
         },
       })
     },
@@ -208,6 +210,8 @@ export default {
           account: this.$route.query.account,
           url: this.$route.query.url,
           tab_header: this.$route.query.tab_header,
+          q_month_id: this.$route.query.q_month_id,
+          q_year_id: this.$route.query.q_year_id,
         },
       })
     },

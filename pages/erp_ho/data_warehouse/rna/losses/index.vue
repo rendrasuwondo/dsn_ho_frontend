@@ -267,6 +267,8 @@ export default {
       year_id: '',
       month_id: '',
 
+      month_code: '',
+
       period_year: this.$route.query.q_year_id
         ? this.$route.query.q_year_id
         : this.currentYear(),
@@ -735,56 +737,89 @@ export default {
 
       let q_month = i_month_at === '' ? current.getMonth() + 1 : i_month_at
 
-      // console.log(year_at)
-      let formData = new FormData()
-      formData.append('upload_file', this.files)
-
       await this.$axios
-        .post(
-          `/api/admin/losses?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
-          formData
-        )
+        .get(`/api/admin/lov_months?q_month_id=${i_month_at}`)
         .then((response) => {
-          this.show = 1
-
-          this.$nuxt.refresh()
-          this.files = null
-
-          //sweet alert
-          this.$swal.fire({
-            title: 'BERHASIL!',
-            text: 'Data Berhasil Disimpan!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 2000,
-          })
-
-          this.$router.push({
-            name: 'erp_ho-data_warehouse-rna-losses',
-            query: { q_month_id: q_month, q_year_id: q_year },
-          })
+          this.month_code = response.data.data
         })
-        .catch((error) => {
-          this.show = 1
-          this.files = null
 
-          this.$router.push({
-            name: 'erp_ho-data_warehouse-rna-losses',
-            query: { q_month_id: q_month, q_year_id: q_year },
+      let monthCode =
+        this.month_id !== null && this.month_id !== ''
+          ? this.month_id.name
+          : this.month_code[0].name
+
+      let checkFile = 'Losses_' + monthCode + '_' + i_year_at + '.xlsx'
+
+      // jika bulan dan tahun terisi
+      if (this.files.name === checkFile) {
+        // console.log(year_at)
+        let formData = new FormData()
+        formData.append('upload_file', this.files)
+
+        await this.$axios
+          .post(
+            `/api/admin/losses?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
+            formData
+          )
+          .then((response) => {
+            this.show = 1
+
+            this.$nuxt.refresh()
+            this.files = null
+
+            //sweet alert
+            this.$swal.fire({
+              title: 'BERHASIL!',
+              text: 'Data Berhasil Disimpan!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
+            })
+
+            this.$router.push({
+              name: 'erp_ho-data_warehouse-rna-losses',
+              query: { q_month_id: i_month_at, q_year_id: i_year_at },
+            })
           })
+          .catch((error) => {
+            this.show = 1
+            this.files = null
 
-          this.$swal.fire({
-            title: 'ERROR!',
-            text: 'Data Gagal Disimpan!',
-            icon: 'error',
-            showConfirmButton: false,
-            timer: 2000,
+            this.$router.push({
+              name: 'erp_ho-data_warehouse-rna-losses',
+              query: { q_month_id: i_month_at, q_year_id: i_year_at },
+            })
+
+            this.$swal.fire({
+              title: 'ERROR!',
+              text: 'Data Gagal Disimpan!',
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 2000,
+            })
+
+            //assign error to state "validation"
+            // this.validation = error.response.data
+            // this.files = null
           })
+      } else {
+        this.show = 1
+        // this.hideModal()
+        this.files = null
 
-          //assign error to state "validation"
-          // this.validation = error.response.data
-          // this.files = null
+        this.$router.push({
+          name: 'erp_ho-data_warehouse-rna-losses',
+          query: { q_month_id: q_month, q_year_id: q_year },
         })
+
+        this.$swal.fire({
+          title: 'ERROR!',
+          text: 'Data Yang Anda Upload Tidak Sesuai Dengan Bulan Yang ditentukan. Harap Cek Kembali!',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 3500,
+        })
+      }
     },
   },
 
