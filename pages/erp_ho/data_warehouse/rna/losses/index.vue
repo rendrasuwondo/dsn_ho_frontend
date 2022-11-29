@@ -667,7 +667,51 @@ export default {
       })
     },
 
-    exportDataTemplate() {
+    async exportDataTemplate() {
+      const current = new Date()
+
+      // MONTH
+      let month_at = current.getMonth() + 1
+
+      try {
+        if (this.f_month_id.id === null) {
+          this.query_month_id = ''
+        } else if (this.f_month_id.id === undefined) {
+          this.query_month_id = this.$route.query.q_month_id
+        } else {
+          this.query_month_id = this.f_month_id.id ? this.f_month_id.id : ''
+        }
+      } catch (err) {}
+
+      // YEAR
+      let year_at = current.getFullYear()
+
+      try {
+        if (this.f_year_id.year_at === null) {
+          this.query_year_id = ''
+        } else if (this.f_year_id.year_at === undefined) {
+          this.query_year_id = this.$route.query.q_year_id
+        } else {
+          this.query_year_id = this.f_year_id.year_at
+            ? this.f_year_id.year_at
+            : ''
+        }
+      } catch (err) {}
+
+      let i_year =
+        this.query_year_id === undefined ? year_at : this.query_year_id
+
+      let i_month =
+        this.query_month_id === undefined ? month_at : this.query_month_id
+
+      await this.$axios
+        .get(`/api/admin/lov_months?q_month_id=${i_month}`)
+        .then((response) => {
+          this.month_code = response.data.data
+        })
+
+      let month_code = this.month_code[0].name
+
       const headers = {
         'Content-Type': 'application/json',
       }
@@ -682,7 +726,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Losses_(bulan)_(tahun).xlsx'
+        var fileName = 'Losses_' + month_code + '_' + i_year + '.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -814,7 +858,7 @@ export default {
 
         this.$swal.fire({
           title: 'ERROR!',
-          text: 'Data Yang Anda Upload Tidak Sesuai Dengan Bulan Yang ditentukan. Harap Cek Kembali!',
+          text: 'Data Yang Anda Upload Tidak Sesuai Dengan Bulan Yang Ditentukan. Harap Cek Kembali!',
           icon: 'error',
           showConfirmButton: false,
           timer: 3500,

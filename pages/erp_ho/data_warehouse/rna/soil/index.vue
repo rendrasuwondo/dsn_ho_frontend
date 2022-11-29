@@ -643,6 +643,26 @@ export default {
     },
 
     exportDataTemplate() {
+      const current = new Date()
+
+      // YEAR
+      let year_at = current.getFullYear()
+
+      try {
+        if (this.f_year_id.year_at === null) {
+          this.query_year_id = ''
+        } else if (this.f_year_id.year_at === undefined) {
+          this.query_year_id = this.$route.query.q_year_id
+        } else {
+          this.query_year_id = this.f_year_id.year_at
+            ? this.f_year_id.year_at
+            : ''
+        }
+      } catch (err) {}
+
+      let i_year =
+        this.query_year_id === undefined ? year_at : this.query_year_id
+
       const headers = {
         'Content-Type': 'application/json',
       }
@@ -657,7 +677,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Tanah_dan_Lereng_(tahun).xlsx'
+        var fileName = 'Tanah_dan_Lereng_' + i_year + '.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -753,7 +773,7 @@ export default {
 
         this.$swal.fire({
           title: 'ERROR!',
-          text: 'Data Yang Anda Upload Tidak Sesuai Dengan Bulan Yang ditentukan. Harap Cek Kembali!',
+          text: 'Data Yang Anda Upload Tidak Sesuai Dengan Tahun Yang Ditentukan. Harap Cek Kembali!',
           icon: 'error',
           showConfirmButton: false,
           timer: 3500,
