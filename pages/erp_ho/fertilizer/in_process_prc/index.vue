@@ -472,6 +472,10 @@ export default {
                 })
               })
 
+            this.$router.push({
+              name: 'erp_ho-fertilizer-in_process_prc',
+            })
+
             this.$nuxt.refresh()
             // alert(result.value)
             //  this.$swal.fire('Changes are not saved', '', 'info')
