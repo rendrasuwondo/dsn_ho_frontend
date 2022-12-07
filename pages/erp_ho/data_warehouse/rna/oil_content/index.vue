@@ -947,7 +947,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'OilContent_' + month_code + '_' + i_year + '.xlsx'
+        var fileName = 'Oil_Content_' + month_code + '_' + i_year + '.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -1013,7 +1013,7 @@ export default {
           ? this.month_id.name
           : this.month_code[0].name
 
-      let checkFile = 'OilContent_' + monthCode + '_' + i_year_at + '.xlsx'
+      let checkFile = 'Oil_Content_' + monthCode + '_' + i_year_at + '.xlsx'
 
       // jika bulan dan tahun terisi
       if (this.files.name === checkFile) {
