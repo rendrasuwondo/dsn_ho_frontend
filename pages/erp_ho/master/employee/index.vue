@@ -93,6 +93,21 @@
                 <i class="fa fa-file-alt"></i>
               </b-button>
             </template>
+            <template v-slot:cell(employee_department)="row">
+              <b-button
+                :to="{
+                  name: 'erp_ho-master-employee_department-id',
+                  params: {
+                    id: row.item.id,
+                  },
+                }"
+                variant="link"
+                size=""
+                title="Employee Department"
+              >
+                {{ row.item.department_code }}
+              </b-button>
+            </template>
           </b-table>
           <b-tooltip
             target="myAfdeling"
@@ -186,7 +201,7 @@ export default {
         },
         {
           label: 'Dept.',
-          key: 'department_code',
+          key: 'employee_department',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
