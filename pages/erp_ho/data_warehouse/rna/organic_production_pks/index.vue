@@ -14,7 +14,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-oil-can"></i> <b>OIL CONTENT</b>
+            <i class="nav-icon fas fa-leaf"></i>
+            <b>PRODUKSI ORGANIK</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -44,6 +45,19 @@
                     v-model="f_year_id"
                     :options="years"
                     label="year_at"
+                    track-by="id"
+                    :searchable="true"
+                  ></multiselect>
+                </b-col>
+              </b-row>
+
+              <b-row class="mt-3">
+                <b-col cols="1">PKS : </b-col>
+                <b-col cols="4">
+                  <multiselect
+                    v-model="f_department_id"
+                    :options="department"
+                    label="d_code"
                     track-by="id"
                     :searchable="true"
                   ></multiselect>
@@ -85,11 +99,12 @@
                   :to="{
                     name: 'erp_ho-data_warehouse-rna-detail_upload',
                     query: {
-                      url: 'erp_ho-data_warehouse-rna-oil_content',
-                      tab_header: 'OIL CONTENT',
-                      account: 'Oil Content',
+                      url: 'erp_ho-data_warehouse-rna-organic_production_pks',
+                      tab_header: 'PRODUKSI ORGANIK',
+                      account: 'Organic Production',
                       q_month_id: this.period_month,
                       q_year_id: this.period_year,
+                      q_department_id: this.f_department_id,
                     },
                   }"
                 >
@@ -249,7 +264,7 @@ export default {
 
   head() {
     return {
-      title: 'Oil Content',
+      title: 'Produksi Organik',
     }
   },
 
@@ -257,9 +272,11 @@ export default {
     return {
       f_year_id: this.$route.query.q_year_id,
       f_month_id: this.$route.query.q_month_id,
+      f_department_id: this.$route.query.q_department_id,
 
       query_year_id: '',
       query_month_id: '',
+      query_department_id: '',
 
       files: null,
 
@@ -277,13 +294,14 @@ export default {
 
       years: [],
       months: [],
+      department: [],
 
       show: 1,
 
       fields: [
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Hari',
+          label: 'Tanggal',
           key: 'PERIOD_DAY',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
@@ -301,44 +319,20 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'PT',
-          key: 'COMPANY_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Estate',
-          key: 'DEPARTMENT_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Afd',
-          key: 'AFDELING_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Blok',
-          key: 'BLOCK',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'PKS',
           key: 'MILL',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kode Unit',
-          key: 'UNIT_CODE',
+          label: 'Organik',
+          key: 'ORGANIC',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Berat',
-          key: 'WEIGHT',
+          label: 'Produksi',
+          key: 'PRODUCTION',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -347,268 +341,8 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kriteria Matang',
-          key: 'RIPE_CRITERIA',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Jml Brondol Setelah Panen',
-          key: 'amount_of_brondol_after_harvest',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Berat Brondol lepas (Kg)',
-          key: 'weight_of_free_brondol',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Berat Brondol Jadi (Kg)',
-          key: 'weight_brondol_complete',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Mesocarp (gram)',
-          key: 'MESOCARP',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Mesocarp dan NUT (gram)',
-          key: 'MESOCARP_AND_NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'WET NUT',
-          key: 'WET_NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'DRY NUT',
-          key: 'DRY_NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel',
-          key: 'KERNEL',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Cangkang',
-          key: 'SHELL',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Oil WM',
-          key: 'OIL_WM',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Buah Normal',
-          key: 'NORMAL_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Buah Tdk Normal',
-          key: 'ABNORMAL_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Moisture',
-          key: 'MOISTURE',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Total Buah',
-          key: 'TOTAL_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'NUT (gram)',
-          key: 'NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'NUT/Fruit',
-          key: 'NUT_OR_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'NUT/Bunch',
-          key: 'NUT_OR_BUNCH',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Mesocarp/Fruit',
-          key: 'MESOCARP_OR_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Fruit/TBS',
-          key: 'FRUIT_OR_TBS',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Fruit Set',
-          key: 'FRUIT_SET',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Non Oil Substance',
-          key: 'NON_OIL_SUBSTANCE',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Oil Content',
-          key: 'OIL_CONTENT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'WET NUT',
-          key: 'T_WET_NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel/WN',
-          key: 'KERNEL_OR_WN',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel/Fruit',
-          key: 'KERNEL_OR_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel/TBS',
-          key: 'KERNEL_OR_TBS',
+          label: 'Kirim Kebun',
+          key: 'SEND_GARDEN',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -622,7 +356,7 @@ export default {
       },
     }
   },
-  watchQuery: ['q', 'page', 'q_year_id', 'q_month_id'],
+  watchQuery: ['q', 'page', 'q_year_id', 'q_month_id', 'q_department_id'],
 
   async asyncData({ $axios, query }) {
     // DEFAULT MONTH AND YEAR
@@ -635,8 +369,6 @@ export default {
 
     let month_list = await $axios.$get(`/api/admin/lov_months`)
 
-    // console.log('daaaa')
-    // console.log(month_list.data)
     //FILTER PADA TABLE
     //MONTH
     let q_month_id = query.q_month_id ? query.q_month_id : month_at
@@ -681,6 +413,30 @@ export default {
       q_year_id = year_at
     }
 
+    // department list
+    const department_list = await $axios.$get(`/api/admin/lov_pks_list`)
+
+    let q_department_id = query.q_department_id ? query.q_department_id : ''
+
+    let f_department_id = []
+
+    if (query.q_department_id) {
+      //Mandor
+      $axios
+        .get(`/api/admin/lov_pks_list?department_id=${q_department_id}`)
+        .then((response) => {
+          f_department_id = response.data.data
+        })
+    } else {
+      f_department_id = []
+
+      q_department_id = f_department_id.id
+    }
+
+    if (q_department_id == undefined) {
+      q_department_id = ''
+    }
+
     //MODAL
     //GET YEAR
     let year_id = []
@@ -704,11 +460,9 @@ export default {
     //search
     let search = query.q ? query.q : ''
 
-    console.log('daaa')
-    console.log(month_id)
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/oil_content?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+      `/api/admin/organic_production?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}&q_department_id=${q_department_id}`
     )
 
     return {
@@ -722,9 +476,10 @@ export default {
       f_year_id: f_year_id,
       years: year_list.data,
       months: month_list.data,
+      department: department_list.data,
+      f_department_id: f_department_id,
     }
   },
-
   methods: {
     currentMonth() {
       const current = new Date()
@@ -735,7 +490,6 @@ export default {
     currentYear() {
       const current = new Date()
       const date = `${current.getFullYear()}`
-
       return date
     },
 
@@ -778,6 +532,19 @@ export default {
         }
       } catch (err) {}
 
+      // DEPARTMENT
+      try {
+        if (this.f_department_id.id === null) {
+          this.query_department_id = ''
+        } else if (this.f_department_id.id === undefined) {
+          this.query_department_id = this.$route.query.q_department_id
+        } else {
+          this.query_department_id = this.f_department_id.id
+            ? this.f_department_id.id
+            : ''
+        }
+      } catch (err) {}
+
       this.$router.push({
         path: this.$route.path,
         query: {
@@ -785,9 +552,13 @@ export default {
           page: page,
           q_month_id: this.query_month_id ? this.query_month_id : month_at,
           q_year_id: this.query_year_id ? this.query_year_id : year_at,
+          q_department_id: this.$route.query.q_department_id
+            ? this.$route.query.q_department_id
+            : this.id_department,
         },
       })
     },
+
     //searchData
     searchData() {
       this.show = 0
@@ -821,12 +592,28 @@ export default {
         }
       } catch (err) {}
 
+      // DEPARTMENT
+      try {
+        if (this.f_department_id.id === null) {
+          this.query_department_id = ''
+        } else if (this.f_department_id.id === undefined) {
+          this.query_department_id = this.$route.query.q_department_id
+        } else {
+          this.query_department_id = this.f_department_id.id
+            ? this.f_department_id.id
+            : ''
+        }
+      } catch (err) {}
+
       this.$router.push({
         path: this.$route.path,
         query: {
           q: this.search,
           q_month_id: this.query_month_id ? this.query_month_id : month_at,
           q_year_id: this.query_year_id ? this.query_year_id : year_at,
+          q_department_id: this.query_department_id
+            ? this.query_department_id
+            : '',
         },
       })
       // this.show = 1
@@ -863,6 +650,19 @@ export default {
         }
       } catch (err) {}
 
+      // DEPARTMENT
+      try {
+        if (this.f_department_id.id === null) {
+          this.query_department_id = ''
+        } else if (this.f_department_id.id === undefined) {
+          this.query_department_id = this.$route.query.q_department_id
+        } else {
+          this.query_department_id = this.f_department_id.id
+            ? this.f_department_id.id
+            : ''
+        }
+      } catch (err) {}
+
       let i_year =
         this.query_year_id === undefined ? year_at : this.query_year_id
 
@@ -874,7 +674,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/oil_content/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}`,
+        url: `/api/admin/organic_production/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}&department_id=${this.query_department_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -883,7 +683,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Oil Content.xlsx'
+        var fileName = 'Produksi Organik.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -940,7 +740,7 @@ export default {
       }
 
       await this.$axios({
-        url: `/api/admin/template_oil_content/export?q=${this.search}`,
+        url: `/api/admin/template_organic_production/export?q=${this.search}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -949,7 +749,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Oil_Content_' + month_code + '_' + i_year + '.xlsx'
+        var fileName = 'Produksi_Organik_' + month_code + '_' + i_year + '.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -965,7 +765,7 @@ export default {
 
     refreshData() {
       this.$router.push({
-        name: 'erp_ho-data_warehouse-rna-oil_content',
+        name: 'erp_ho-data_warehouse-rna-organic_production_pks',
         query: { q_month_id: month_at, q_year_id: year_at },
       })
     },
@@ -1011,13 +811,12 @@ export default {
         })
 
       let monthCode =
-        this.month_id.name !== null &&
-        this.month_id.name !== '' &&
-        this.month_id.name !== undefined
+        this.month_id !== null && this.month_id !== ''
           ? this.month_id.name
           : this.month_code[0].name
 
-      let checkFile = 'Oil_Content_' + monthCode + '_' + i_year_at + '.xlsx'
+      let checkFile =
+        'Produksi_Organik_' + monthCode + '_' + i_year_at + '.xlsx'
 
       // jika bulan dan tahun terisi
       if (this.files.name === checkFile) {
@@ -1027,7 +826,7 @@ export default {
 
         await this.$axios
           .post(
-            `/api/admin/oil_content?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
+            `/api/admin/organic_production?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
             formData
           )
           .then((response) => {
@@ -1046,7 +845,7 @@ export default {
             })
 
             this.$router.push({
-              name: 'erp_ho-data_warehouse-rna-oil_content',
+              name: 'erp_ho-data_warehouse-rna-organic_production_pks',
               query: { q_month_id: i_month_at, q_year_id: i_year_at },
             })
           })
@@ -1055,7 +854,7 @@ export default {
             this.files = null
 
             this.$router.push({
-              name: 'erp_ho-data_warehouse-rna-oil_content',
+              name: 'erp_ho-data_warehouse-rna-organic_production_pks',
               query: { q_month_id: i_month_at, q_year_id: i_year_at },
             })
 
@@ -1077,7 +876,7 @@ export default {
         this.files = null
 
         this.$router.push({
-          name: 'erp_ho-data_warehouse-rna-oil_content',
+          name: 'erp_ho-data_warehouse-rna-organic_production_pks',
           query: { q_month_id: q_month, q_year_id: q_year },
         })
 
@@ -1128,6 +927,15 @@ export default {
           this.f_year_id = response.data.data
         })
     }
+
+    //GET PKS
+    this.$axios
+      .get(`/api/admin/lov_pks_list`)
+
+      .then((response) => {
+        // console.log(response.data.data[0])
+        this.f_department_id = response.data.data[0]
+      })
   },
 }
 </script>

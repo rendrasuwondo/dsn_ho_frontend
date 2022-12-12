@@ -56,13 +56,13 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <button
+                <!-- <button
                   title="Upload File"
                   class="btn btn-info"
                   @click="showModal"
                 >
                   <i class="fa fa-file-upload"></i>
-                </button>
+                </button> -->
 
                 <button
                   title="Export To Excel"

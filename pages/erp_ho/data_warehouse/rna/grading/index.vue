@@ -67,13 +67,13 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <button
+                <!-- <button
                   title="Upload File"
                   class="btn btn-info"
                   @click="showModal"
                 >
                   <i class="fa fa-file-upload"></i>
-                </button>
+                </button> -->
 
                 <button
                   title="Export To Excel"
@@ -529,11 +529,6 @@ export default {
       `/api/admin/grading?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}&q_department_id=${q_department_id}`
     )
 
-    console.log('daaa')
-    console.log(
-      `/api/admin/grading?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}&q_department_id=${q_department_id}`
-    )
-
     return {
       posts: posts.data.data,
       pagination: posts.data,
@@ -597,6 +592,19 @@ export default {
         } else {
           this.query_year_id = this.f_year_id.year_at
             ? this.f_year_id.year_at
+            : ''
+        }
+      } catch (err) {}
+
+      // DEPARTMENT
+      try {
+        if (this.f_department_id.id === null) {
+          this.query_department_id = ''
+        } else if (this.f_department_id.id === undefined) {
+          this.query_department_id = this.$route.query.q_department_id
+        } else {
+          this.query_department_id = this.f_department_id.id
+            ? this.f_department_id.id
             : ''
         }
       } catch (err) {}
@@ -820,7 +828,7 @@ export default {
 
     refreshData() {
       this.$router.push({
-        name: 'erp_ho-data_warehouse-rna-oil_content',
+        name: 'erp_ho-data_warehouse-rna-grading',
         query: { q_month_id: month_at, q_year_id: year_at },
       })
     },
