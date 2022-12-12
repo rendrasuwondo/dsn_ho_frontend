@@ -1016,9 +1016,9 @@ export default {
         this.month_id.name !== undefined
           ? this.month_id.name
           : this.month_code[0].name
-
+      console.log(this.files.name)
       let checkFile = 'Oil_Content_' + monthCode + '_' + i_year_at + '.xlsx'
-
+      console.log(checkFile)
       // jika bulan dan tahun terisi
       if (this.files.name === checkFile) {
         // console.log(year_at)
