@@ -36,6 +36,7 @@
                     label="year_at"
                     track-by="id"
                     :searchable="true"
+                    @input="onChangeFiler"
                   ></multiselect>
                 </b-col>
               </b-row>
@@ -531,6 +532,10 @@ export default {
     }
   },
   methods: {
+    onChangeFiler() {
+      this.searchData()
+    },
+
     currentYear() {
       const current = new Date()
       const date = `${current.getFullYear()}`

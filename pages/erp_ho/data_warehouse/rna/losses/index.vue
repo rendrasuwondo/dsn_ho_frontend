@@ -37,6 +37,7 @@
                     label="name"
                     track-by="id"
                     :searchable="true"
+                    @input="onChangeFiler"
                   ></multiselect>
                 </b-col>
                 <b-col class="ml-4" cols="1">Tahun : </b-col>
@@ -47,9 +48,24 @@
                     label="year_at"
                     track-by="id"
                     :searchable="true"
+                    @input="onChangeFiler"
                   ></multiselect>
                 </b-col>
               </b-row>
+              <b-row class="mt-3">
+                <b-col cols="1">PKS : </b-col>
+                <b-col cols="4">
+                  <multiselect
+                    v-model="f_department_id"
+                    :options="department"
+                    label="code"
+                    track-by="code"
+                    :searchable="true"
+                    @input="onChangeFiler"
+                  ></multiselect>
+                </b-col>
+              </b-row>
+
               <!-- </b-container> -->
             </b-card-text>
           </b-card>
@@ -91,6 +107,7 @@
                       account: 'Losses',
                       q_month_id: this.period_month,
                       q_year_id: this.period_year,
+                      q_department_id: this.$route.query.q_department_id,
                     },
                   }"
                 >
@@ -258,9 +275,11 @@ export default {
     return {
       f_year_id: this.$route.query.q_year_id,
       f_month_id: this.$route.query.q_month_id,
+      f_department_id: this.$route.query.q_department_id,
 
       query_year_id: '',
       query_month_id: '',
+      query_department_id: '',
 
       files: null,
 
@@ -278,6 +297,7 @@ export default {
 
       years: [],
       months: [],
+      department: [],
 
       show: 1,
 
@@ -403,7 +423,7 @@ export default {
       },
     }
   },
-  watchQuery: ['q', 'page', 'q_year_id', 'q_month_id'],
+  watchQuery: ['q', 'page', 'q_year_id', 'q_month_id', 'q_department_id'],
 
   async asyncData({ $axios, query }) {
     // DEFAULT MONTH AND YEAR
@@ -462,6 +482,30 @@ export default {
       q_year_id = year_at
     }
 
+    // department list
+    const department_list = await $axios.$get(`/api/admin/lov_pks_list`)
+
+    let q_department_id = query.q_department_id ? query.q_department_id : ''
+
+    let f_department_id = []
+
+    if (query.q_department_id) {
+      //Mandor
+      $axios
+        .get(`/api/admin/lov_pks_list?department_id=${q_department_id}`)
+        .then((response) => {
+          f_department_id = response.data.data
+        })
+    } else {
+      f_department_id = []
+
+      q_department_id = f_department_id.id
+    }
+
+    if (q_department_id == undefined) {
+      q_department_id = ''
+    }
+
     //MODAL
     //GET YEAR
     let year_id = []
@@ -487,7 +531,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/losses?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+      `/api/admin/losses?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}&q_department_id=${q_department_id}`
     )
 
     return {
@@ -501,9 +545,15 @@ export default {
       f_year_id: f_year_id,
       years: year_list.data,
       months: month_list.data,
+      department: department_list.data,
+      f_department_id: f_department_id,
     }
   },
   methods: {
+    onChangeFiler() {
+      this.searchData()
+    },
+
     currentMonth() {
       const current = new Date()
       const date = `${current.getMonth() + 1}`
@@ -555,6 +605,19 @@ export default {
         }
       } catch (err) {}
 
+      // DEPARTMENT
+      try {
+        if (this.f_department_id.code === null) {
+          this.query_department_id = ''
+        } else if (this.f_department_id.code === undefined) {
+          this.query_department_id = this.$route.query.q_department_id
+        } else {
+          this.query_department_id = this.f_department_id.code
+            ? this.f_department_id.code
+            : ''
+        }
+      } catch (err) {}
+
       this.$router.push({
         path: this.$route.path,
         query: {
@@ -562,6 +625,9 @@ export default {
           page: page,
           q_month_id: this.query_month_id ? this.query_month_id : month_at,
           q_year_id: this.query_year_id ? this.query_year_id : year_at,
+          q_department_id: this.$route.query.q_department_id
+            ? this.$route.query.q_department_id
+            : this.id_department,
         },
       })
     },
@@ -598,12 +664,28 @@ export default {
         }
       } catch (err) {}
 
+      // DEPARTMENT
+      try {
+        if (this.f_department_id.code === null) {
+          this.query_department_id = ''
+        } else if (this.f_department_id.code === undefined) {
+          this.query_department_id = this.$route.query.q_department_id
+        } else {
+          this.query_department_id = this.f_department_id.code
+            ? this.f_department_id.code
+            : ''
+        }
+      } catch (err) {}
+
       this.$router.push({
         path: this.$route.path,
         query: {
           q: this.search,
           q_month_id: this.query_month_id ? this.query_month_id : month_at,
           q_year_id: this.query_year_id ? this.query_year_id : year_at,
+          q_department_id: this.query_department_id
+            ? this.query_department_id
+            : '',
         },
       })
       // this.show = 1
@@ -640,6 +722,19 @@ export default {
         }
       } catch (err) {}
 
+      // DEPARTMENT
+      try {
+        if (this.f_department_id.code === null) {
+          this.query_department_id = ''
+        } else if (this.f_department_id.code === undefined) {
+          this.query_department_id = this.$route.query.q_department_id
+        } else {
+          this.query_department_id = this.f_department_id.code
+            ? this.f_department_id.code
+            : ''
+        }
+      } catch (err) {}
+
       let i_year =
         this.query_year_id === undefined ? year_at : this.query_year_id
 
@@ -651,7 +746,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/losses/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}`,
+        url: `/api/admin/losses/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}&department_id=${this.query_department_id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important

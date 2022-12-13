@@ -57,8 +57,8 @@
                   <multiselect
                     v-model="f_department_id"
                     :options="department"
-                    label="d_code"
-                    track-by="id"
+                    label="code"
+                    track-by="code"
                     :searchable="true"
                     @input="onChangeFiler"
                   ></multiselect>
@@ -105,7 +105,7 @@
                       account: 'Grading',
                       q_month_id: this.period_month,
                       q_year_id: this.period_year,
-                      q_department_id: this.f_department_id,
+                      q_department_id: this.$route.query.q_department_id,
                     },
                   }"
                 >
@@ -113,6 +113,24 @@
                 </nuxt-link>
 
                 <b-modal ref="my-modal" hide-footer title="Form Upload File">
+                  <div class="form-group">
+                    <b-container fluid>
+                      <b-row class="my-1">
+                        <b-col cols="3">
+                          <label for="input-small">PKS :</label>
+                        </b-col>
+                        <b-col cols="9">
+                          <multiselect
+                            v-model="m_department_id"
+                            :options="department"
+                            label="code"
+                            track-by="id"
+                            :searchable="true"
+                          ></multiselect>
+                        </b-col>
+                      </b-row>
+                    </b-container>
+                  </div>
                   <div class="form-group">
                     <b-container fluid>
                       <b-row class="my-1">
@@ -274,6 +292,8 @@ export default {
       f_year_id: this.$route.query.q_year_id,
       f_month_id: this.$route.query.q_month_id,
       f_department_id: this.$route.query.q_department_id,
+
+      m_department_id: '',
 
       query_year_id: '',
       query_month_id: '',
@@ -483,6 +503,7 @@ export default {
     let q_department_id = query.q_department_id ? query.q_department_id : ''
 
     let f_department_id = []
+    let m_department_id = []
 
     if (query.q_department_id) {
       //Mandor
@@ -490,11 +511,13 @@ export default {
         .get(`/api/admin/lov_pks_list?department_id=${q_department_id}`)
         .then((response) => {
           f_department_id = response.data.data
+          m_department_id = response.data.data
         })
     } else {
       f_department_id = []
+      m_department_id = []
 
-      q_department_id = f_department_id.id
+      q_department_id = ''
     }
 
     if (q_department_id == undefined) {
@@ -542,6 +565,7 @@ export default {
       months: month_list.data,
       department: department_list.data,
       f_department_id: f_department_id,
+      m_department_id: m_department_id,
     }
   },
 
@@ -603,13 +627,13 @@ export default {
 
       // DEPARTMENT
       try {
-        if (this.f_department_id.id === null) {
+        if (this.f_department_id.code === null) {
           this.query_department_id = ''
-        } else if (this.f_department_id.id === undefined) {
+        } else if (this.f_department_id.code === undefined) {
           this.query_department_id = this.$route.query.q_department_id
         } else {
-          this.query_department_id = this.f_department_id.id
-            ? this.f_department_id.id
+          this.query_department_id = this.f_department_id.code
+            ? this.f_department_id.code
             : ''
         }
       } catch (err) {}
@@ -662,13 +686,13 @@ export default {
 
       // DEPARTMENT
       try {
-        if (this.f_department_id.id === null) {
+        if (this.f_department_id.code === null) {
           this.query_department_id = ''
-        } else if (this.f_department_id.id === undefined) {
+        } else if (this.f_department_id.code === undefined) {
           this.query_department_id = this.$route.query.q_department_id
         } else {
-          this.query_department_id = this.f_department_id.id
-            ? this.f_department_id.id
+          this.query_department_id = this.f_department_id.code
+            ? this.f_department_id.code
             : ''
         }
       } catch (err) {}
@@ -720,13 +744,13 @@ export default {
 
       // DEPARTMENT
       try {
-        if (this.f_department_id.id === null) {
+        if (this.f_department_id.code === null) {
           this.query_department_id = ''
-        } else if (this.f_department_id.id === undefined) {
+        } else if (this.f_department_id.code === undefined) {
           this.query_department_id = this.$route.query.q_department_id
         } else {
-          this.query_department_id = this.f_department_id.id
-            ? this.f_department_id.id
+          this.query_department_id = this.f_department_id.code
+            ? this.f_department_id.code
             : ''
         }
       } catch (err) {}
@@ -873,19 +897,19 @@ export default {
       let q_month = i_month_at === '' ? current.getMonth() + 1 : i_month_at
 
       // Department
+      let i_pks = ''
       try {
-        if (this.f_department_id.id === null) {
-          this.query_department_id = ''
-        } else if (this.f_department_id.id === undefined) {
-          this.query_department_id = this.$route.query.q_department_id
+        if (this.m_department_id.code === null) {
+          i_pks = ''
+        } else if (this.m_department_id.code === undefined) {
+          i_pks = this.$route.query.q_department_id
         } else {
-          this.query_department_id = this.f_department_id.id
-            ? this.f_department_id.id
-            : ''
+          i_pks = this.m_department_id.code ? this.m_department_id.code : ''
         }
       } catch (err) {}
 
-      // console.log()
+      // console.log(i_pks)
+      // console.log(m_department_id)
 
       await this.$axios
         .get(`/api/admin/lov_months?q_month_id=${i_month_at}`)
@@ -908,13 +932,14 @@ export default {
 
         await this.$axios
           .post(
-            `/api/admin/grading?q_month_id=${i_month_at}&q_year_id=${i_year_at}&q_department_id=${this.query_department_id}`,
+            `/api/admin/grading?q_month_id=${i_month_at}&q_year_id=${i_year_at}&q_department_id=${i_pks}`,
             formData
           )
           .then((response) => {
+            this.$nuxt.refresh()
+
             this.show = 1
 
-            this.$nuxt.refresh()
             this.files = null
 
             //sweet alert
@@ -928,24 +953,40 @@ export default {
 
             this.$router.push({
               name: 'erp_ho-data_warehouse-rna-grading_pks',
-              query: { q_month_id: i_month_at, q_year_id: i_year_at },
+              query: {
+                q_month_id: i_month_at,
+                q_year_id: i_year_at,
+                q_department_id: i_pks,
+              },
             })
           })
           .catch((error) => {
+            this.$nuxt.refresh()
+
             this.show = 1
             this.files = null
 
-            this.$router.push({
-              name: 'erp_ho-data_warehouse-rna-grading_pks',
-              query: { q_month_id: i_month_at, q_year_id: i_year_at },
-            })
+            let error_message = error.response.data
+              ? 'Data Excel Tidak Sesuai. Harap Periksa Kembali!'
+              : 'Data Gagal Disimpan!'
+
+            console.log(error)
 
             this.$swal.fire({
               title: 'ERROR!',
-              text: 'Data Gagal Disimpan!',
+              text: error_message,
               icon: 'error',
               showConfirmButton: false,
               timer: 2000,
+            })
+
+            this.$router.push({
+              name: 'erp_ho-data_warehouse-rna-grading_pks',
+              query: {
+                q_month_id: i_month_at,
+                q_year_id: i_year_at,
+                q_department_id: i_pks,
+              },
             })
 
             //assign error to state "validation"
@@ -953,13 +994,19 @@ export default {
             // this.files = null
           })
       } else {
+        this.$nuxt.refresh()
+
         this.show = 1
         // this.hideModal()
         this.files = null
 
         this.$router.push({
           name: 'erp_ho-data_warehouse-rna-grading_pks',
-          query: { q_month_id: q_month, q_year_id: q_year },
+          query: {
+            q_month_id: i_month_at,
+            q_year_id: i_year_at,
+            q_department_id: i_pks,
+          },
         })
 
         this.$swal.fire({
@@ -1017,6 +1064,7 @@ export default {
       .then((response) => {
         // console.log(response.data.data[0])
         this.f_department_id = response.data.data[0]
+        this.m_department_id = response.data.data[0]
       })
   },
 }

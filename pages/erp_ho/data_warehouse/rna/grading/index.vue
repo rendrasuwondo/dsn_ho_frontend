@@ -36,6 +36,7 @@
                     label="name"
                     track-by="id"
                     :searchable="true"
+                    @input="onChangeFiler"
                   ></multiselect>
                 </b-col>
                 <b-col class="ml-4" cols="1">Tahun : </b-col>
@@ -46,6 +47,7 @@
                     label="year_at"
                     track-by="id"
                     :searchable="true"
+                    @input="onChangeFiler"
                   ></multiselect>
                 </b-col>
               </b-row>
@@ -55,9 +57,10 @@
                   <multiselect
                     v-model="f_department_id"
                     :options="department"
-                    label="d_code"
-                    track-by="id"
+                    label="code"
+                    track-by="code"
                     :searchable="true"
+                    @input="onChangeFiler"
                   ></multiselect>
                 </b-col>
               </b-row>
@@ -102,7 +105,7 @@
                       account: 'Grading',
                       q_month_id: this.period_month,
                       q_year_id: this.period_year,
-                      q_department_id: this.f_department_id,
+                      q_department_id: this.$route.query.q_department_id,
                     },
                   }"
                 >
@@ -545,6 +548,10 @@ export default {
     }
   },
   methods: {
+    onChangeFiler() {
+      this.searchData()
+    },
+
     currentMonth() {
       const current = new Date()
       const date = `${current.getMonth() + 1}`
@@ -598,13 +605,13 @@ export default {
 
       // DEPARTMENT
       try {
-        if (this.f_department_id.id === null) {
+        if (this.f_department_id.code === null) {
           this.query_department_id = ''
-        } else if (this.f_department_id.id === undefined) {
+        } else if (this.f_department_id.code === undefined) {
           this.query_department_id = this.$route.query.q_department_id
         } else {
-          this.query_department_id = this.f_department_id.id
-            ? this.f_department_id.id
+          this.query_department_id = this.f_department_id.code
+            ? this.f_department_id.code
             : ''
         }
       } catch (err) {}
@@ -657,13 +664,13 @@ export default {
 
       // DEPARTMENT
       try {
-        if (this.f_department_id.id === null) {
+        if (this.f_department_id.code === null) {
           this.query_department_id = ''
-        } else if (this.f_department_id.id === undefined) {
+        } else if (this.f_department_id.code === undefined) {
           this.query_department_id = this.$route.query.q_department_id
         } else {
-          this.query_department_id = this.f_department_id.id
-            ? this.f_department_id.id
+          this.query_department_id = this.f_department_id.code
+            ? this.f_department_id.code
             : ''
         }
       } catch (err) {}
@@ -715,13 +722,13 @@ export default {
 
       // DEPARTMENT
       try {
-        if (this.f_department_id.id === null) {
+        if (this.f_department_id.code === null) {
           this.query_department_id = ''
-        } else if (this.f_department_id.id === undefined) {
+        } else if (this.f_department_id.code === undefined) {
           this.query_department_id = this.$route.query.q_department_id
         } else {
-          this.query_department_id = this.f_department_id.id
-            ? this.f_department_id.id
+          this.query_department_id = this.f_department_id.code
+            ? this.f_department_id.code
             : ''
         }
       } catch (err) {}

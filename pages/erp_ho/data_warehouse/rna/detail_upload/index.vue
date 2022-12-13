@@ -12,6 +12,22 @@
               <tr>
                 <td>
                   <nuxt-link
+                    v-if="this.$route.query.q_department_id"
+                    :to="{
+                      name: this.$route.query.url,
+                      query: {
+                        q_month_id: this.$route.query.q_month_id,
+                        q_year_id: this.$route.query.q_year_id,
+                        q_department_id: this.$route.query.q_department_id,
+                      },
+                    }"
+                    class="nav-link"
+                  >
+                    <i class="nav-icon fas fa-file-archive"></i>
+                    <b>{{ this.$route.query.tab_header }}</b>
+                  </nuxt-link>
+                  <nuxt-link
+                    v-else
                     :to="{
                       name: this.$route.query.url,
                       query: {

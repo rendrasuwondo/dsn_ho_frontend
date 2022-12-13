@@ -36,6 +36,7 @@
                     label="name"
                     track-by="id"
                     :searchable="true"
+                    @input="onChangeFiler"
                   ></multiselect>
                 </b-col>
                 <b-col class="ml-4" cols="1">Tahun : </b-col>
@@ -46,6 +47,7 @@
                     label="year_at"
                     track-by="id"
                     :searchable="true"
+                    @input="onChangeFiler"
                   ></multiselect>
                 </b-col>
               </b-row>
@@ -726,6 +728,9 @@ export default {
   },
 
   methods: {
+    onChangeFiler() {
+      this.searchData()
+    },
     currentMonth() {
       const current = new Date()
       const date = `${current.getMonth() + 1}`
