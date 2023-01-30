@@ -325,10 +325,6 @@ export default {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Kelas Lahan',
           key: 'SOIL_CLASS',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-IN')
-            return formatter.format(value)
-          },
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
