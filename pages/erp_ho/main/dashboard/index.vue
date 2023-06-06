@@ -38,12 +38,45 @@
       </div>
       <div class="content-header">
         <div class="container-fluid">
+          
+          <div class="row">
+            <div class="col-lg-3 col-2">
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <h3>150</h3>
+
+                  <p>New Orders</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+                <a href="#" class="small-box-footer"
+                  >More info <i class="fas fa-arrow-circle-right"></i
+                ></a>
+              </div>
+            </div>
+            <div class="col-lg-9 col-2">
+              <div class="">
+              <ol class="breadcrumb">
+                <b-img
+                  center
+                  class="img-logo"
+                  src="\img/dsn_img.png"
+                  alt="logo"
+                >
+                </b-img>
+              </ol>
+            </div>
+            </div>
+            
+          </div>
+
           <div class="row mb-2">
             <div class="col-md-3 mt-3">
               <!-- Widget: user widget style 2 -->
-              <!-- <div class="card card-widget widget-user-2 shadow-sm"> -->
-              <!-- Add the bg color to the header using any of the bg-* classes -->
-              <!-- <div class="widget-user-header bg-info">
+              <div class="card card-widget widget-user-2 shadow-sm">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-info">
                   <div class="widget-user-image">
                     <p>dropdown tanggal</p>
                   </div>
@@ -63,8 +96,8 @@
                       </a>
                     </li>
                   </ul>
-                </div> 
-              </div>-->
+                </div>
+              </div>
               <!-- /.widget-user -->
             </div>
 

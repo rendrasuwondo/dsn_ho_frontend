@@ -400,7 +400,7 @@ export default {
       this.DataNull()
 
       let no_po = this.field.po
-      // console.log(no_po)
+      console.log(`/api/admin/PoFertilizer?po=${this.field.po}&id=${this.field.id}`)
       const data_po = this.$axios
         .$get(`/api/admin/PoFertilizer?po=${this.field.po}&id=${this.field.id}`)
         // return po
