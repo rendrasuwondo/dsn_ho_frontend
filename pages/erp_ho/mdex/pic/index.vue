@@ -123,11 +123,6 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Employee Id',
-          key: 'employee_id',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
           label: 'Nama',
           key: 'name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
@@ -139,14 +134,9 @@ export default {
         },
         {
           label: 'Aktif',
-          key: 'is_active',
+          key: 'is_active_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-          
         },
-      ],
-      options: [
-        { value: 'Y', text: 'Ya' },
-        { value: 'N', text: 'Tidak' },
       ],
       sweet_alert: {
         title: '',
