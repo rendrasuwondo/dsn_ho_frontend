@@ -1,0 +1,330 @@
+<template>
+  <div class="content-wrapper mb-5">
+    <section class="content-header">
+      <div class="container-fluid"></div>
+    </section>
+
+    <div v-if="show === 0">
+      <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+      <p class="txt-2">Loading</p>
+      <div class="spinonediv-4"></div>
+    </div>
+
+    <section class="content" v-if="show === 1">
+      <div class="card card-outline card-info">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="nav-icon fas fa-industry"></i> TAMBAH PIC
+          </h3>
+          <div class="card-tools"></div>
+        </div>
+        <div class="card-body">
+          <form @submit.prevent="storePost">
+            <!-- <div class="form-group">
+              <label>NIK</label>
+              <input
+                type="text"
+                v-model="field.nik"
+                placeholder="Masukkan NIK"
+                class="form-control"
+                ref="nik"
+              />
+              <div v-if="validation.nik" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.nik[0]
+                }}</b-alert>
+              </div>
+            </div> -->
+
+            <div class="form-group">
+              <label>Employee Id</label>
+              <input
+                type="text"
+                v-model="field.employee_id"
+                placeholder="Masukkan Employee Id"
+                class="form-control"
+                ref="employee_id"
+              />
+              <div v-if="validation.employee_id" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.employee_id[0]
+                }}</b-alert>
+              </div>
+            </div>
+
+            <!-- <div class="form-group">
+              <label>Nama</label>
+              <input
+                type="text"
+                v-model="field.name"
+                placeholder="Masukkan Nama PIC"
+                class="form-control"
+              />
+              <div v-if="validation.name" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.name[0]
+                }}</b-alert>
+              </div>
+            </div> -->
+
+            <!-- <div class="form-group">
+              <label>Email</label>
+              <input
+                type="text"
+                v-model="field.email"
+                placeholder="Masukkan Email"
+                class="form-control"
+              />
+            </div> -->
+
+            <div class="form-group">
+              <label>Aktif?</label>
+              <b-form-select v-model="field.is_active" :options="options">
+              </b-form-select>
+              <div v-if="validation.is_active" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.is_active[0]
+                }}</b-alert>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Keterangan</label>
+
+              <textarea
+                v-model="field.description"
+                class="form-control"
+                rows="3"
+                placeholder="Masukkan Deskripsi Singkat"
+              ></textarea>
+              <div v-if="validation.description" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.description[0]
+                }}</b-alert>
+              </div>
+            </div>
+            <div class="form-group">
+              <b-row>
+                <b-col>
+                  <label>Tanggal Buat </label>
+                  <b-form-datepicker
+                    v-model="field.created_at"
+                    :date-format-options="{
+                      year: 'numeric',
+                      month: 'short',
+                      day: '2-digit',
+                      weekday: 'short',
+                    }"
+                    :disabled="disabled"
+                  ></b-form-datepicker>
+                </b-col>
+                <b-col
+                  ><label>Pembuat</label>
+                  <input
+                    type="text"
+                    v-model="field.created_by"
+                    class="form-control"
+                    readonly
+                /></b-col>
+              </b-row>
+            </div>
+
+            <div class="form-group">
+              <b-row>
+                <b-col
+                  ><label>Tanggal Ubah </label>
+
+                  <b-form-datepicker
+                    v-model="field.updated_at"
+                    :date-format-options="{
+                      year: 'numeric',
+                      month: 'short',
+                      day: '2-digit',
+                      weekday: 'short',
+                    }"
+                    :disabled="disabled"
+                  ></b-form-datepicker
+                ></b-col>
+                <b-col>
+                  <label>Pengubah</label>
+                  <input
+                    type="text"
+                    v-model="field.updated_by"
+                    class="form-control"
+                    readonly
+                  />
+                </b-col>
+              </b-row>
+            </div>
+
+            <div class="form-group"></div>
+
+            <button class="btn btn-info mr-1 btn-submit" type="submit">
+              <i class="fa fa-paper-plane"></i> SIMPAN
+            </button>
+            <button
+              v-on:click="back()"
+              class="btn btn-warning btn-reset"
+              type="reset"
+            >
+              <i class="fa fa-redo"></i> BATAL
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script>
+/* import { VNumber  } from '@coders-tm/vue-number-format' */
+/* import { number } from '@coders-tm/vue-number-format' */
+
+export default {
+  //layout
+  layout: 'admin',
+
+  //meta
+  head() {
+    return {
+      title: 'Tambah PIC',
+    }
+  },
+
+  data() {
+    return {
+      options: [
+        { value: 'Y', text: 'Ya' },
+        { value: 'N', text: 'Tidak' },
+      ],
+      state: 'disabled',
+
+      field: {
+        description: '',
+        // nik: '',
+        employee_id: '',
+        // name: '',
+        // email: '',
+        is_active: 'Y',
+        created_at: '',
+        updated_at: '',
+        created_by: '',
+        updated_by: '',
+      },
+
+      //state validation
+      validation: [],
+      show: 1,
+    }
+  },
+
+  mounted() {
+    this.field.created_at = this.currentDate()
+    this.field.updated_at = this.currentDate()
+    this.field.created_by =
+      this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
+    this.field.updated_by =
+      this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
+
+    this.$refs.employee_id.focus()
+  },
+
+  methods: {
+    back() {
+      this.$router.push({
+        name: 'erp_ho-mdex-pic',
+        params: { id: this.$route.params.id, r: 1 },
+      })
+    },
+
+    currentDate() {
+      const current = new Date()
+      const date = `${current.getFullYear()}-${
+        current.getMonth() + 1
+      }-${current.getDate()}`
+
+      return date
+    },
+
+    async storePost() {
+      this.show = 0
+
+      //define formData
+      let formData = new FormData()
+
+      // formData.append('nik', this.field.nik)
+      formData.append('employee_id', this.field.employee_id)
+      // formData.append('name', this.field.name)
+      formData.append('is_active', this.field.is_active)
+      // formData.append('email', this.field.email)
+      formData.append('created_at', this.field.created_at)
+      formData.append('created_by', this.field.created_by)
+      formData.append('updated_at', this.field.updated_at)
+      formData.append('updated_by', this.field.updated_by)
+      formData.append('description', this.field.description)
+
+      //sending data to server
+      await this.$axios
+        .post('/api/admin/pic', formData)
+        .then(() => {
+          this.show = 1
+
+          //sweet alert
+          this.$swal.fire({
+            title: 'BERHASIL!',
+            text: 'Data Berhasil Disimpan!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 2000,
+          })
+
+          //redirect, if success store data
+          this.$router.push({
+            name: 'erp_ho-mdex-pic',
+          })
+        })
+        .catch((error) => {
+          this.show = 1
+
+          //assign error to state "validation"
+          this.validation = error.response.data
+        })
+    },
+  },
+
+  computed: {
+    disabled() {
+      return this.state === 'disabled'
+    },
+    readonly() {
+      return this.state === 'readonly'
+    },
+  },
+}
+</script>
+
+<style>
+.ck-editor__editable {
+  min-height: 200px;
+}
+.card-info.card-outline {
+  border-top: 5px solid #504d8d;
+}
+.card-title {
+  color: #504d8d;
+}
+.img-logo {
+  width: 160px;
+  padding-top: 10px;
+  padding-right: 20px;
+}
+.txt-2 {
+  color: #be65e2;
+  padding-top: 17%;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  font-size: 27px;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.148);
+  font-weight: bold;
+}
+</style>
