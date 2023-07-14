@@ -1,81 +1,33 @@
 <template>
-  <div class="container">
+  <div class="container reset-password-container">
     <div class="screen">
       <div class="screen__content">
-        <form class="login" @submit.prevent="login">
-          <div class="login__field">
+        <form class="reset_password" @submit.prevent="resetPassword">
+          <div class="reset_password__field">
             <b-img class="dsn-logo" src="/img/dsn_logo.png" alt="logo"></b-img>
           </div>
-          <div v-if="validation.message" class="mt-2 fs-valid">
-            <b-alert show variant="danger">
-              {{ validation.message }}
-            </b-alert>
-          </div>
-          <div class="login__field">
-            <i class="login__icon fas fa-user"></i>
+          <div class="reset_password__field">
+            <i class="reset_password__icon fas fa-user"></i>
             <input
               type="text"
               v-model="user.user_name"
               :class="{ 'is-invalid': validation.user_name }"
-              class="login__input"
+              class="reset_password__input"
               placeholder="User name"
               autofocus
               ref="user_name"
             />
           </div>
-          <div v-if="validation.user_name" class="">
+          <!-- <div v-if="validation.user_name" class="">
             <b-alert show variant="danger">{{
               validation.user_name[0]
             }}</b-alert>
-          </div>
-          <div class="login__field">
-            <i class="login__icon fas fa-lock"></i>
-            <input
-              type="password"
-              v-model="user.password"
-              :class="{ 'is-invalid': validation.password }"
-              class="login__input"
-              placeholder="Password"
-            />
-          </div>
-          <div v-if="validation.password" class="">
-            <b-alert show variant="danger">{{
-              validation.password[0]
-            }}</b-alert>
-          </div>
-          <p class="mt-3 mb-1">
-            <nuxt-link
-              :to="{ name: 'erp_ho-reset_password' }"
-              title="Lupa Password"
-              >Lupa Password
-            </nuxt-link>
-          </p>
-          <button class="button login__submit" type="submit">
-            <span class="button__text">Log In Now</span>
+          </div> -->
+          <button class="button reset_password__submit" type="submit">
+            <span class="button__text">Reset Password</span>
             <i class="button__icon fas fa-chevron-right"></i>
           </button>
         </form>
-        <div class="social-login">
-          <h4><b>ERP - HO</b></h4>
-          <div class="social-icons">
-            Enterprise Resource Planning Head Office
-          </div>
-          <b-button
-            variant="light"
-            class="mt-2 btn-modul"
-            target="_blank"
-            :to="{ name: 'erp_ho-modul' }"
-          >
-            <!-- <i class="nav-icon fas fa-window-restore mr-1"></i> -->
-            <b-img
-              class="logo-modul mr-1"
-              src="/img/folder.png"
-              alt="modul"
-            ></b-img>
-
-            <b> Modul ERP-HO</b>
-          </b-button>
-        </div>
       </div>
       <div class="screen__background">
         <span
@@ -94,19 +46,14 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
-  //layout
-  layout: 'auth',
-
   //meta
   head() {
     return {
-      title: 'Login - ERP-HO',
+      title: 'Reset Password',
     }
   },
-
   data() {
     return {
       //state user
@@ -118,44 +65,43 @@ export default {
       validation: [],
     }
   },
-
-  mounted() {
-    this.$refs.user_name.focus()
-  },
-
+  setup() {},
   methods: {
-    async login() {
-      await this.$auth
-        .loginWith('local', {
-          data: {
-            user_name: this.user.user_name,
-            password: this.user.password,
-          },
-        })
+    async resetPassword() {
+      let formData = new FormData()
 
-        .then(() => {
-          //remove cookies
-          this.$cookies.removeAll()
-          //profile
-          this.$axios.get('/api/admin/profile').then((response) => {
-            response.data.data.forEach((dt) => {
-              this.$cookies.set('department_code', dt.department_code, {})
-              this.$cookies.set('company_code', dt.company_code, {})
-              this.$cookies.set('activity_group_id', dt.activity_group_id, {})
-              this.$cookies.set(
-                'activity_group_code',
-                dt.activity_group_code,
-                {}
-              )
+      formData.append('username', this.user.user_name)
+
+      //profile
+      this.$axios
+        .post(
+          this.$config.grievanceBaseURL + '/api/erp-ho/forgot-password',
+          formData
+        )
+        .then((response) => {
+          if (response.data.status == 'Success') {
+            this.$swal.fire({
+              title: 'BERHASIL!',
+              text: response.data.message,
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000,
             })
-          })
 
-          //redirect
-          this.$router.push({
-            name: 'erp_ho-main-dashboard',
-          })
+            //redirect
+            // this.$router.push({
+            //   name: 'erp_ho-login',
+            // })
+          } else {
+            this.$swal.fire({
+              title: 'GAGAL!',
+              text: response.data.message,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 2000,
+            })
+          }
         })
-
         .catch((error) => {
           //assign validation
           this.validation = error.response.data
@@ -164,7 +110,6 @@ export default {
   },
 }
 </script>
-
 <style>
 @import url('https://fonts.googleapis.com/css?family=Raleway:400,700');
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&display=swap');
@@ -188,6 +133,10 @@ body {
   padding-bottom: 0px;
   margin-top: -50px;
   width: 400px;
+}
+
+.reset-password-container {
+  min-height: 128vh;
 }
 
 .screen {
@@ -269,24 +218,24 @@ body {
   margin-left: 0px;
 }
 
-.login {
+.reset_password {
   width: 320px;
   padding: 30px;
   padding-top: 35px;
 }
 
-.login__field {
+.reset_password__field {
   padding: 17px 0px;
   position: relative;
 }
 
-.login__icon {
+.reset_password__icon {
   position: absolute;
   top: 30px;
   color: #7875b5;
 }
 
-.login__input {
+.reset_password__input {
   border: none;
   border-bottom: 2px solid #d1d1d4;
   background: none;
@@ -301,14 +250,14 @@ body {
   font-family: 'Barlow Condensed', sans-serif;
 }
 
-.login__input:active,
-.login__input:focus,
-.login__input:hover {
+.reset_password__input:active,
+.reset_password__input:focus,
+.reset_password__input:hover {
   outline: none;
   border-bottom-color: #6a679e;
 }
 
-.login__submit {
+.reset_password__submit {
   background: #fff;
   font-size: 13px;
   margin-top: 20px;
@@ -328,9 +277,9 @@ body {
   margin-bottom: 0px;
 }
 
-.login__submit:active,
-.login__submit:focus,
-.login__submit:hover {
+.reset_password__submit:active,
+.reset_password__submit:focus,
+.reset_password__submit:hover {
   border-color: #6a679e;
   outline: none;
 }
@@ -341,7 +290,7 @@ body {
   color: #7875b5;
 }
 
-.social-login {
+.social-reset_password {
   position: absolute;
   height: 145px;
   width: 160px;
@@ -360,14 +309,14 @@ body {
   color: #d4d3e8;
 }
 
-.social-login__icon {
+.social-reset_password__icon {
   padding: 20px 10px;
   color: #fff;
   text-decoration: none;
   text-shadow: 0px 0px 8px #7875b5;
 }
 
-.social-login__icon:hover {
+.social-reset_password__icon:hover {
   transform: scale(1.5);
 }
 h4 {
@@ -394,10 +343,4 @@ alert {
   border-width: 0px 2px 2px 0px;
   border-color: #cdcdf1;
 }
-
-/* .img-download {
-  width: 25px;
-  height: 25px;
-  margin-right: 3px;
-} */
 </style>

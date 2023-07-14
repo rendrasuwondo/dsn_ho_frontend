@@ -126,16 +126,21 @@ export default {
             callback: '/erp_ho/login',
             home: '/erp_ho/main/dashboard',
         },
-        
+
     },
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
-        baseURL: 'http://localhost:8000',
+        baseURL: 'http://192.168.202.118:8004',
     },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {},
+
+    publicRuntimeConfig: {
+      grievanceBaseURL: 'http://192.168.202.118:86',
+      // grievanceBaseURL: 'http://localhost/grievance',
+    },
 
     // router: {
     //     base: process.env.MODE == "DEV" ? "/elhm" : "/elhm",
