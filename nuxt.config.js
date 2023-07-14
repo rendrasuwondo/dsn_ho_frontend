@@ -138,7 +138,7 @@ export default {
     build: {},
 
     publicRuntimeConfig: {
-      grievanceBaseURL: 'http://192.168.202.119:86',
+      grievanceBaseURL: 'http://192.168.202.118:86',
       // grievanceBaseURL: 'http://localhost/grievance',
     },
 
