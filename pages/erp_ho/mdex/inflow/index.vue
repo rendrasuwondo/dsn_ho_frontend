@@ -38,13 +38,13 @@
                   title="Tambah"
                   ><i class="fa fa-plus-circle"></i>
                 </nuxt-link>
-                <!-- <button
+                <button
                   title="Export To Excel"
                   class="btn btn-info"
                   @click="exportData"
                 >
                   <i class="fa fa-file-excel"></i>
-                </button> -->
+                </button>
               </div>
               <input
                 type="text"
@@ -132,19 +132,47 @@ export default {
           key: 'actions',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
-        {
-          label: 'ID',
-          key: 'id',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
+        // {
+        //   label: 'ID',
+        //   key: 'id',
+        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        // },
         {
           label: 'Product',
           key: 'product_id',
+          formatter:(value, key, item)=>{
+            if (value == 2){
+              return ("FFB")
+            }else if (value == 3){
+              return ("CPO")
+            }else if (value == 4){
+              return ("PK")
+            }else if (value == 5){
+              return ("PKO")
+            }else{
+              return "1"
+            };
+          },
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           label: 'Inflow Date',
           key: 'inflow_date',
+          formatter: (value, key, item) => {
+            let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+            let date = new Date(value)
+            let day  = date.getDate()
+            let month = monthNames[date.getMonth()+1]
+            let year  = date.getFullYear()
+            if (day < 10) {
+              day = '0' + day;
+            }
+            let format = `${day}-${month}-${year}`;
+            return format
+            // return new Intl.DateTimeFormat('es-US',options).format(value)
+          },
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -220,6 +248,7 @@ export default {
         },
       })
     },
+
     //deletePost method
     deletePost(id) {
       this.$swal
@@ -259,6 +288,28 @@ export default {
             })
           }
         })
+    },
+
+    exportData() {
+      const headers = {
+        'Content-Type': 'application/json',
+      }
+
+      this.$axios({
+        url: `/api/admin/inflow/export`,
+        method: 'GET',
+        responseType: 'blob',
+        headers: headers, // important
+      }).then((response) => {
+        this.isLoading = false
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        var fileName = 'Inflow.xlsx'
+        link.setAttribute('download', fileName) //or any other extension
+        document.body.appendChild(link)
+        link.click()
+      })
     },
   },
 }

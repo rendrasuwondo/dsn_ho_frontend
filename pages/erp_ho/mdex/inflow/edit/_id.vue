@@ -225,7 +225,7 @@ export default {
       .get(`/api/admin/inflow/${this.$route.params.id}`)
       .then((response) => {
         this.field.id = response.data.data.id
-        this.field.product_id = response.data.data.product.code
+        this.field.product_id = response.data.data.product
         this.field.inflow_date = response.data.data.inflow_date
         this.field.account_status = response.data.data.account_status
         this.field.inflow = response.data.data.inflow
@@ -235,7 +235,6 @@ export default {
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
       })
-    this.$refs.id.focus()
     //Data Product
     this.$axios
       .get('/api/admin/lov_product')
@@ -244,6 +243,7 @@ export default {
         // console.log(response.data.data[0])
         this.product = response.data.data
       })
+      this.$refs.id.focus()
   },
 
   methods: {
