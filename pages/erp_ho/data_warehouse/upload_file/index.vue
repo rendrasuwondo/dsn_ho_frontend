@@ -14,7 +14,7 @@
         <div class="card card-outline card-info">
           <div class="card-header">
             <h3 class="card-title">
-              <i class="nav-icon fas fa-upload"></i><b> TEST UPLOAD FILE</b>
+              <i class="nav-icon fas fa-upload"></i><b> HA STATEMENT (OPS)</b>
             </h3>
             <div class="card-tools"></div>
           </div>
@@ -85,11 +85,11 @@
                     title="History Upload File"
                     class="btn btn-info"
                     :to="{
-                      name: 'erp_ho-mdex-upload_file-detail_upload',
+                      name: 'erp_ho-data_warehouse-upload_file-detail_upload',
                       query: {
-                        url: 'erp_ho-mdex-upload_file',
-                        tab_header: 'TEST UPLOAD',
-                        account: 'Test Upload',
+                        url: 'erp_ho-data_warehouse-upload_file',
+                        tab_header: 'HA STATEMENT',
+                        account: 'HA Statement',
                         q_month_id: this.period_month,
                         q_year_id: this.period_year,
                       },
@@ -219,7 +219,7 @@
               :items="posts"
               :fields="fields"
               show-empty
-              class="table-test-upload"
+              class="table-data_warehouse-upload"
             >
             </b-table>
   
@@ -235,6 +235,14 @@
                   class="mt-1"
                 ></b-pagination
               ></b-col>
+              <b-col style="margin-top: 0.5%; margin-left: 15%;">
+                <b-button
+                class="btn btn-info"
+                @click=""
+                >
+                SUBMIT
+                </b-button>
+              </b-col>
               <b-col class="text-right" align-self="center"
                 >{{ rowcount }} data</b-col
               >
@@ -251,7 +259,7 @@
   
     head() {
       return {
-        title: 'Test Upload File',
+        title: 'HA Statement (Ops)',
       }
     },
   
@@ -286,33 +294,104 @@
         {
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
             label: 'ID',
-            key: 'TEST_UPLOAD_ID',
+            key: 'id',
             tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
           },
           {
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
             label: ' Bulan',
-            key: 'PERIOD_MONTH',
+            key: 'period_month',
             tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
           },
           {
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
             label: 'Tahun',
-            key: 'PERIOD_YEAR',
+            key: 'period_year',
             tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
           },
           {
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-            label: 'A',
-            key: 'A',
+            label: 'PT',
+            key: 'company_code',
             tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
           },
           {
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-            label: 'B',
-            key: 'B',
+            label: 'Departemen',
+            key: 'department_code',
             tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
           },
+          {
+            thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+            label: 'KDAF',
+            key: 'afdeling',
+            tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          },
+          {
+            thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+            label: 'Block',
+            key: 'block',
+            tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          },
+          {
+            thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+            label: 'Plant Year',
+            key: 'plant_year',
+            tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          },
+          {
+            thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+            label: 'Plant Month',
+            key: 'plant_month',
+            tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          },
+          {
+            thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+            label: 'Plant Year',
+            key: 'plant_year',
+            tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          },
+          {
+            thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+            label: 'Status',
+            key: 'plant_status_code',
+            tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          },
+          {
+            thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+            label: 'Luas',
+            key: 'wide',
+            formatter:(value, key, item)=>{
+            let formattedNumber = Math.floor(value * 100) / 100
+
+            return formattedNumber
+          },
+            tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          },
+          {
+            thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+            label: 'Pokok',
+            key: 'point',
+            tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          },
+          {
+            thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+            label: 'SPH',
+            key: 'sph',
+            formatter:(value, key, item)=>{
+            let formattedNumber = Math.floor(value * 100) / 100
+
+            return formattedNumber
+          },
+            tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          },
+          {
+            thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+            label: 'Progeny',
+            key: 'progeny',
+            tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          },
+
         ],
         sweet_alert: {
           title: '',
@@ -406,7 +485,7 @@
       console.log(month_id)
       //fetching posts
       const posts = await $axios.$get(
-        `/api/admin/test_upload?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+        `/api/admin/ha_statement?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
       )
   
       return {
@@ -575,7 +654,7 @@
         }
   
         this.$axios({
-          url: `/api/admin/test_upload/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}`,
+          url: `/api/admin/ha_statement/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}`,
           method: 'GET',
           responseType: 'blob',
           headers: headers, // important
@@ -584,7 +663,7 @@
           const url = window.URL.createObjectURL(new Blob([response.data]))
           const link = document.createElement('a')
           link.href = url
-          var fileName = 'Test Upload.xlsx'
+          var fileName = 'HA Statement.xlsx'
           link.setAttribute('download', fileName) //or any other extension
           document.body.appendChild(link)
           link.click()
@@ -641,7 +720,7 @@
         }
   
         await this.$axios({
-          url: `/api/admin/template_test_upload/export?q=${this.search}`,
+          url: `/api/admin/template_ha_statement/export?q=${this.search}`,
           method: 'GET',
           responseType: 'blob',
           headers: headers, // important
@@ -650,7 +729,7 @@
           const url = window.URL.createObjectURL(new Blob([response.data]))
           const link = document.createElement('a')
           link.href = url
-          var fileName = 'Test_Upload_' + month_code + '_' + i_year + '.xlsx'
+          var fileName = 'ha_statement_' + month_code + '_' + i_year + '.xlsx'
           link.setAttribute('download', fileName) //or any other extension
           document.body.appendChild(link)
           link.click()
@@ -666,7 +745,7 @@
   
       refreshData() {
         this.$router.push({
-          name: 'erp_ho-mdex-upload_file',
+          name: 'erp_ho-data_warehouse-upload_file',
           query: { q_month_id: month_at, q_year_id: year_at },
         })
       },
@@ -718,7 +797,7 @@
             ? this.month_id.name
             : this.month_code[0].name
         console.log(this.files.name)
-        let checkFile = 'Test_Upload_' + monthCode + '_' + i_year_at + '.xlsx'
+        let checkFile = 'ha_statement_' + monthCode + '_' + i_year_at + '.xlsx'
         console.log(checkFile)
         // jika bulan dan tahun terisi
         if (this.files.name === checkFile) {
@@ -728,7 +807,7 @@
   
           await this.$axios
             .post(
-              `/api/admin/test_upload?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
+              `/api/admin/ha_statement?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
               formData
             )
             .then((response) => {
@@ -747,7 +826,7 @@
               })
   
               this.$router.push({
-                name: 'erp_ho-mdex-upload_file',
+                name: 'erp_ho-data_warehouse-upload_file',
                 query: { q_month_id: i_month_at, q_year_id: i_year_at },
               })
             })
@@ -756,7 +835,7 @@
               this.files = null
   
               this.$router.push({
-                name: 'erp_ho-mdex-upload_file',
+                name: 'erp_ho-data_warehouse-upload_file',
                 query: { q_month_id: i_month_at, q_year_id: i_year_at },
               })
   
@@ -778,7 +857,7 @@
           this.files = null
   
           this.$router.push({
-            name: 'erp_ho-mdex-upload_file',
+            name: 'erp_ho-data_warehouse-upload_file',
             query: { q_month_id: q_month, q_year_id: q_year },
           })
   
@@ -879,7 +958,7 @@
     font-family: sans-serif;
   }
   
-  .table-test-upload {
+  .table-data_warehouse-upload {
     font-size: 14px;
   }
   

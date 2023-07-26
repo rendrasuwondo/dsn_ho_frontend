@@ -16,16 +16,24 @@
         <b-tabs 
         style="padding: 8px;">
           <b-tab 
+          ref="ACTUAL"
           title="ACTUAL INFLOW"
           @click="changeTab('ACTUAL')" 
           active>
           </b-tab>
           <b-tab 
+          ref="PLAN"
           title="PLAN INFLOW "
           @click="changeTab('PLAN')"> 
           </b-tab>
+          <b-tab 
+          ref="GRAFIK"
+          title="GRAFIK INFLOW "
+          @click="changeTab('GRAFIK')"> 
+          </b-tab>
         </b-tabs>
-        <div class="card-body">
+        <!-- Tab Plan & Actual -->
+        <div class="card-body" ref="tabel">
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -110,6 +118,18 @@
             >
           </b-row>
         </div>
+        <!-- END Tab Plan & Actual -->
+        <!-- Tab Grafik -->
+        <div class="card-body" ref="grafik">
+          <client-only placeholder="Loading...">
+            <DoughnutChart
+              :chart-data="doughChartData"
+              :chart-options="doughChartOptions"
+              :height="430"
+            />
+          </client-only>
+        </div>
+        <!-- END Tab Grafik -->
       </div>
     </section>
   </div>
@@ -126,6 +146,13 @@ export default {
   },
   data() {
     return {
+      value1: true,
+      value2: false,
+      plugins: [
+        { src: '~/plugins/chart.js', mode: 'client' },
+        { src: '~/plugins/axios.js' }
+      ],
+
       fields: [
         {
           label: 'Actions',
@@ -191,6 +218,35 @@ export default {
         icon: '',
       },
       product:[],
+      doughChartData: {
+        labels: ['NuVue', 'VueJit', 'IftShi', 'KoinVi', 'MegsWear', 'Millgh'],
+        datasets: [
+          {
+            label: 'Visualization',
+            data: [72, 131, 12, 3, 4, 55],
+            backgroundColor: [
+              'rgba(20, 255, 0, 0.85)',
+              'rgba(200, 5, 0, 0.85)',
+              'rgba(10, 220, 0, 0.85)',
+              'rgba(2, 100, 0, 0.85)',
+              'rgba(20, 55, 0, 0.85)',
+              'rgba(120, 155, 0, 0.85)'
+            ],
+            borderColor: 'rgba(100, 155, 0, 1)',
+            borderWidth: 0
+          }
+        ]
+      },
+      doughChartOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        offset: 8,
+        radius: 160,
+        spacing: 4,
+        hoverOffset: 32,
+        hoverBorderWidth: 1,
+        weight: 0
+      },
     }
   },
   watchQuery: ['q', 'page', 'tab'],
@@ -240,13 +296,33 @@ export default {
 
     //FilterData
     changeTab(tab){
-      this.$router.push({
+      if(tab == 'GRAFIK'){
+        this.$router.push({
         path: this.$route.path,
         query: {
           q: this.$route.query.q,
           tab: tab,
-        },
-      })
+          },
+        })
+        this.$refs['tabel'].style.display = "none"
+        this.$refs['grafik'].style.display = ""
+        // this.$refs['GRAFIK'].$event.active
+      }else{
+        this.$router.push({
+        path: this.$route.path,
+        query: {
+          q: this.$route.query.q,
+          tab: tab,
+          },
+        })
+        this.$refs['tabel'].style.display = ""
+        this.$refs['grafik'].style.display = "none"
+        // if(tab == 'PLAN'){
+        //   this.$refs['PLAN'].active
+        // }else{
+        //   this.$refs['ACTUAL'].active
+        // }
+      }
     },
 
     //deletePost method
