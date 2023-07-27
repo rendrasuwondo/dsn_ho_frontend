@@ -56,9 +56,9 @@
           </button>
         </form>
         <div class="social-login">
-          <h4><b>ERP - HO</b></h4>
+          <h4><b><i>i</i> - Plant</b></h4>
           <div class="social-icons">
-            Enterprise Resource Planning Head Office
+            Integration of Information in Plantation Management
           </div>
           <b-button
             variant="light"
@@ -73,7 +73,7 @@
               alt="modul"
             ></b-img>
 
-            <b> Modul ERP-HO</b>
+            <b> Modul <i>i</i>-Plant</b>
           </b-button>
         </div>
       </div>
