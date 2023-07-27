@@ -66,6 +66,7 @@ export default {
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [{ src: '@/plugins/vue-number-format.js', ssr: true }],
+            //   { src: '@/plugins/chart.js',ssr:false}],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
     components: true,
@@ -131,14 +132,15 @@ export default {
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
-        baseURL: 'http://192.168.202.118:8004',
+        // baseURL: 'http://192.168.202.118:8004',
+        baseURL: 'http://localhost:8000',
     },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {},
 
     publicRuntimeConfig: {
-      grievanceBaseURL: 'http://192.168.202.118:86',
+      grievanceBaseURL: 'http://192.168.202.118:86/grievance',
       // grievanceBaseURL: 'http://localhost/grievance',
     },
 
