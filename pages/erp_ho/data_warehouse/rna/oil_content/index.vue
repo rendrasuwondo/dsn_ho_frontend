@@ -826,14 +826,20 @@ export default {
         }
       } catch (err) {}
 
-      this.$router.push({
-        path: this.$route.path,
-        query: {
-          q: this.search,
-          q_month_id: this.query_month_id ? this.query_month_id : month_at,
-          q_year_id: this.query_year_id ? this.query_year_id : year_at,
+      this.$router.push(
+        {
+          path: this.$route.path,
+          query: {
+            q: this.search,
+            q_month_id: this.query_month_id ? this.query_month_id : month_at,
+            q_year_id: this.query_year_id ? this.query_year_id : year_at,
+          },
         },
-      })
+        () => {
+          this.$router.go(0);
+        }
+      )
+
       // this.show = 1
     },
 
