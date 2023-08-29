@@ -135,7 +135,7 @@ export default {
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
-        baseURL: 'http://192.168.202.119:8004',
+        baseURL: 'http://192.168.202.118:8004',
         // baseURL: 'http://localhost:8000',
     },
 
@@ -143,7 +143,7 @@ export default {
     build: {},
 
     publicRuntimeConfig: {
-      grievanceBaseURL: 'http://192.168.202.119:86/grievance',
+      grievanceBaseURL: 'http://192.168.202.118:86/grievance',
       // grievanceBaseURL: 'http://localhost/grievance',
     },
 
