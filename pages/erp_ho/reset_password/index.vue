@@ -2,6 +2,9 @@
   <div class="container reset-password-container">
     <div class="screen">
       <div class="screen__content">
+        <div v-if="show === 0">
+          <div class="spinonediv-4"></div>
+        </div>
         <form class="reset_password" @submit.prevent="resetPassword">
           <div class="reset_password__field">
             <b-img class="dsn-logo" src="/img/dsn_logo.png" alt="logo"></b-img>
@@ -57,6 +60,7 @@ export default {
   data() {
     return {
       //state user
+      show: 1,
       user: {
         user_name: '',
         password: '',
@@ -71,6 +75,8 @@ export default {
       let formData = new FormData()
 
       formData.append('username', this.user.user_name)
+
+      this.show = 0
 
       //profile
       this.$axios
@@ -103,6 +109,7 @@ export default {
               timer: 2000,
             })
           }
+          this.show = 1
         })
         .catch((error) => {
           //assign validation
