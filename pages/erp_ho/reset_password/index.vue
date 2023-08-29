@@ -80,18 +80,20 @@ export default {
         )
         .then((response) => {
           if (response.data.status == 'Success') {
-            this.$swal.fire({
-              title: 'BERHASIL!',
-              text: response.data.message,
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 2000,
-            })
-
-            //redirect
-            // this.$router.push({
-            //   name: 'erp_ho-login',
-            // })
+            this.$swal
+              .fire({
+                title: 'BERHASIL!',
+                text: response.data.message,
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 2000,
+              })
+              .then(() => {
+                //redirect
+                this.$router.push({
+                  name: 'erp_ho-login',
+                })
+              })
           } else {
             this.$swal.fire({
               title: 'GAGAL!',
