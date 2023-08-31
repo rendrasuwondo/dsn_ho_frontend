@@ -50,10 +50,10 @@
           <div class="mb-2 ml-2 mr-2">
             <no-ssr>
               <b-row>
-                <b-col cols="6">
+                <b-col cols="3">
                   <div class="chart-container-janjang">
                     <div class="card card-outline card-info">
-                      <div class="card-body">
+                      <div class="card-body p-0">
                         <fusioncharts
                           :type="chart.janjang.type"
                           :width="chart.janjang.width"
@@ -66,16 +66,48 @@
                     </div>
                   </div>
                 </b-col>
-                <b-col cols="6">
+                <b-col cols="3">
+                  <div class="chart-container-janjang-stack">
+                    <div class="card card-outline card-info">
+                      <div class="card-body p-0">
+                        <fusioncharts
+                          :type="chart.janjang_stack.type"
+                          :width="chart.janjang_stack.width"
+                          :height="chart.janjang_stack.height"
+                          :dataformat="chart.janjang_stack.dataFormat"
+                          :dataSource="chart.janjang_stack.dataSource"
+                        >
+                        </fusioncharts>
+                      </div>
+                    </div>
+                  </div>
+                </b-col>
+                <b-col cols="3">
                   <div class="chart-container-tonase">
                     <div class="card card-outline card-info">
-                      <div class="card-body">
+                      <div class="card-body p-0">
                         <fusioncharts
                           :type="chart.tonase.type"
                           :width="chart.tonase.width"
                           :height="chart.tonase.height"
                           :dataformat="chart.tonase.dataFormat"
                           :dataSource="chart.tonase.dataSource"
+                        >
+                        </fusioncharts>
+                      </div>
+                    </div>
+                  </div>
+                </b-col>
+                <b-col cols="3">
+                  <div class="chart-container-tonase-stack">
+                    <div class="card card-outline card-info">
+                      <div class="card-body p-0">
+                        <fusioncharts
+                          :type="chart.tonase_stack.type"
+                          :width="chart.tonase_stack.width"
+                          :height="chart.tonase_stack.height"
+                          :dataformat="chart.tonase_stack.dataFormat"
+                          :dataSource="chart.tonase_stack.dataSource"
                         >
                         </fusioncharts>
                       </div>
@@ -105,10 +137,10 @@
           <div class="mb-2 ml-2 mr-2">
             <no-ssr>
               <b-row>
-                <b-col cols="6">
+                <b-col cols="3">
                   <div class="chart-container-detail-janjang">
                     <div class="card card-outline card-info">
-                      <div class="card-body">
+                      <div class="card-body p-0">
                         <fusioncharts
                           :type="chart.detail_janjang.type"
                           :width="chart.detail_janjang.width"
@@ -121,16 +153,48 @@
                     </div>
                   </div>
                 </b-col>
-                <b-col cols="6">
+                <b-col cols="3">
+                  <div class="chart-container-detail-janjang-stack">
+                    <div class="card card-outline card-info">
+                      <div class="card-body p-0">
+                        <fusioncharts
+                          :type="chart.detail_janjang_stack.type"
+                          :width="chart.detail_janjang_stack.width"
+                          :height="chart.detail_janjang_stack.height"
+                          :dataformat="chart.detail_janjang_stack.dataFormat"
+                          :dataSource="chart.detail_janjang_stack.dataSource"
+                        >
+                        </fusioncharts>
+                      </div>
+                    </div>
+                  </div>
+                </b-col>
+                <b-col cols="3">
                   <div class="chart-container-detail-tonase">
                     <div class="card card-outline card-info">
-                      <div class="card-body">
+                      <div class="card-body p-0">
                         <fusioncharts
                           :type="chart.detail_tonase.type"
                           :width="chart.detail_tonase.width"
                           :height="chart.detail_tonase.height"
                           :dataformat="chart.detail_tonase.dataFormat"
                           :dataSource="chart.detail_tonase.dataSource"
+                        >
+                        </fusioncharts>
+                      </div>
+                    </div>
+                  </div>
+                </b-col>
+                <b-col cols="3">
+                  <div class="chart-container-detail-tonase-stack">
+                    <div class="card card-outline card-info">
+                      <div class="card-body p-0">
+                        <fusioncharts
+                          :type="chart.detail_tonase_stack.type"
+                          :width="chart.detail_tonase_stack.width"
+                          :height="chart.detail_tonase_stack.height"
+                          :dataformat="chart.detail_tonase_stack.dataFormat"
+                          :dataSource="chart.detail_tonase_stack.dataSource"
                         >
                         </fusioncharts>
                       </div>
@@ -147,19 +211,42 @@
 </template>
 
 <script>
-let chartData = {
-  caption: 'RKH vs Unplanned Transaction vs Aktual Panen',
+let chartDataJanjang = {
+  caption: 'Pencapaian Panen (Janjang)',
   theme: 'fusion',
   xaxisname: '',
   yaxisname: '',
   formatnumberscale: '1',
-  // plottooltext:
-  //   '<b>$dataValue</b> <b>$seriesName</b> in $label',
   drawcrossline: '1',
 }
+let chartDataJanjangStack = {
+  caption: 'R1 vs R2 vs R≥3 vs R-Truk (Janjang)',
+  theme: 'fusion',
+  xaxisname: '',
+  yaxisname: '',
+  formatnumberscale: '1',
+  drawcrossline: '1',
+}
+let chartDataTonase = {
+  caption: 'Pencapaian Panen (Tonase)',
+  theme: 'fusion',
+  xaxisname: '',
+  yaxisname: '',
+  formatnumberscale: '1',
+  drawcrossline: '1',
+}
+let chartDataTonaseStack = {
+  caption: 'R1 vs R2 vs R≥3 vs R-Truk (Tonase)',
+  theme: 'fusion',
+  xaxisname: '',
+  yaxisname: '',
+  formatnumberscale: '1',
+  drawcrossline: '1',
+}
+
 async function getChartJanjangDataSource() {
   return {
-    chart: chartData,
+    chart: chartDataJanjang,
     categories: [
       {
         category: [
@@ -177,7 +264,7 @@ async function getChartJanjangDataSource() {
     ],
     dataset: [
       {
-        seriesname: 'RKH',
+        seriesname: 'Aktual Panen',
         data: [
           {
             value: '125000',
@@ -191,21 +278,214 @@ async function getChartJanjangDataSource() {
         ],
       },
       {
-        seriesname: 'Total Unplanned diterima PKS',
+        seriesname: 'Diterima PKS',
         data: [
           {
-            value: '70000',
+            value: '10000',
           },
           {
-            value: '150000',
+            value: '100000',
           },
           {
-            value: '350000',
+            value: '300000',
+          },
+        ],
+      },
+    ],
+  }
+}
+async function getChartJanjangStackDataSource() {
+  return {
+    chart: chartDataJanjangStack,
+    categories: [
+      {
+        category: [
+          {
+            label: 'Puhus 1',
+          },
+          {
+            label: 'Puhus 2',
+          },
+          {
+            label: 'Puhus 3',
+          },
+        ],
+      },
+    ],
+    dataset: [
+      {
+        seriesname: 'R1',
+        data: [
+          {
+            value: '125000',
+          },
+          {
+            value: '300000',
+          },
+          {
+            value: '480000',
+          },
+        ],
+      },
+      {
+        seriesname: 'R2',
+        data: [
+          {
+            value: '10000',
+          },
+          {
+            value: '100000',
+          },
+          {
+            value: '300000',
+          },
+        ],
+      },
+      {
+        seriesname: 'R>=3',
+        data: [
+          {
+            value: '10000',
+          },
+          {
+            value: '100000',
+          },
+          {
+            value: '300000',
+          },
+        ],
+      },
+      {
+        seriesname: 'R-Truk',
+        data: [
+          {
+            value: '10000',
+          },
+          {
+            value: '100000',
+          },
+          {
+            value: '300000',
+          },
+        ],
+      },
+    ],
+  }
+}
+
+async function getChartTonaseDataSource() {
+  return {
+    chart: chartDataTonase,
+    categories: [
+      {
+        category: [
+          {
+            label: 'Puhus 1',
+          },
+          {
+            label: 'Puhus 2',
+          },
+          {
+            label: 'Puhus 3',
+          },
+        ],
+      },
+    ],
+    dataset: [
+      {
+        seriesname: 'Aktual Panen',
+        data: [
+          {
+            value: '125000',
+          },
+          {
+            value: '300000',
+          },
+          {
+            value: '480000',
           },
         ],
       },
       {
         seriesname: 'Diterima PKS',
+        data: [
+          {
+            value: '10000',
+          },
+          {
+            value: '100000',
+          },
+          {
+            value: '300000',
+          },
+        ],
+      },
+    ],
+  }
+}
+async function getChartTonaseStackDataSource() {
+  return {
+    chart: chartDataTonaseStack,
+    categories: [
+      {
+        category: [
+          {
+            label: 'Puhus 1',
+          },
+          {
+            label: 'Puhus 2',
+          },
+          {
+            label: 'Puhus 3',
+          },
+        ],
+      },
+    ],
+    dataset: [
+      {
+        seriesname: 'R1',
+        data: [
+          {
+            value: '125000',
+          },
+          {
+            value: '300000',
+          },
+          {
+            value: '480000',
+          },
+        ],
+      },
+      {
+        seriesname: 'R2',
+        data: [
+          {
+            value: '10000',
+          },
+          {
+            value: '100000',
+          },
+          {
+            value: '300000',
+          },
+        ],
+      },
+      {
+        seriesname: 'R>=3',
+        data: [
+          {
+            value: '10000',
+          },
+          {
+            value: '100000',
+          },
+          {
+            value: '300000',
+          },
+        ],
+      },
+      {
+        seriesname: 'R-Truk',
         data: [
           {
             value: '10000',
@@ -224,7 +504,7 @@ async function getChartJanjangDataSource() {
 
 async function getChartDetailJanjangDataSource() {
   return {
-    chart: chartData,
+    chart: chartDataJanjang,
     categories: [
       {
         category: [
@@ -242,7 +522,7 @@ async function getChartDetailJanjangDataSource() {
     ],
     dataset: [
       {
-        seriesname: 'RKH',
+        seriesname: 'Aktual Panen',
         data: [
           {
             value: '125000',
@@ -252,20 +532,6 @@ async function getChartDetailJanjangDataSource() {
           },
           {
             value: '480000',
-          },
-        ],
-      },
-      {
-        seriesname: 'Total Unplanned diterima PKS',
-        data: [
-          {
-            value: '70000',
-          },
-          {
-            value: '150000',
-          },
-          {
-            value: '350000',
           },
         ],
       },
@@ -286,50 +552,115 @@ async function getChartDetailJanjangDataSource() {
     ],
   }
 }
-async function getChartDetailJanjangDataSource2() {
+async function getChartDetailJanjangStackDataSource() {
   return {
-    chart: chartData,
+    chart: chartDataJanjangStack,
     categories: [
       {
         category: [
           {
-            label: 'Afdeling 4',
+            label: 'Afdeling 1',
           },
           {
-            label: 'Afdeling 5',
+            label: 'Afdeling 2',
           },
           {
-            label: 'Afdeling 6',
+            label: 'Afdeling 3',
           },
         ],
       },
     ],
     dataset: [
       {
-        seriesname: 'RKH',
+        seriesname: 'R1',
         data: [
           {
-            value: '70000',
+            value: '125000',
           },
           {
-            value: '430000',
+            value: '300000',
           },
           {
-            value: '120000',
+            value: '480000',
           },
         ],
       },
       {
-        seriesname: 'Total Unplanned diterima PKS',
+        seriesname: 'R2',
         data: [
           {
-            value: '400000',
+            value: '10000',
           },
           {
-            value: '230000',
+            value: '100000',
           },
           {
-            value: '230000',
+            value: '300000',
+          },
+        ],
+      },
+      {
+        seriesname: 'R>=3',
+        data: [
+          {
+            value: '10000',
+          },
+          {
+            value: '100000',
+          },
+          {
+            value: '300000',
+          },
+        ],
+      },
+      {
+        seriesname: 'R-Truk',
+        data: [
+          {
+            value: '10000',
+          },
+          {
+            value: '100000',
+          },
+          {
+            value: '300000',
+          },
+        ],
+      },
+    ],
+  }
+}
+
+async function getChartDetailTonaseDataSource() {
+  return {
+    chart: chartDataTonase,
+    categories: [
+      {
+        category: [
+          {
+            label: 'Afdeling 1',
+          },
+          {
+            label: 'Afdeling 2',
+          },
+          {
+            label: 'Afdeling 3',
+          },
+        ],
+      },
+    ],
+    dataset: [
+      {
+        seriesname: 'Aktual Panen',
+        data: [
+          {
+            value: '125000',
+          },
+          {
+            value: '300000',
+          },
+          {
+            value: '480000',
           },
         ],
       },
@@ -337,19 +668,98 @@ async function getChartDetailJanjangDataSource2() {
         seriesname: 'Diterima PKS',
         data: [
           {
-            value: '30000',
+            value: '10000',
           },
           {
-            value: '500000',
+            value: '100000',
           },
           {
-            value: '800000',
+            value: '300000',
           },
         ],
       },
     ],
   }
 }
+async function getChartDetailTonaseStackDataSource() {
+  return {
+    chart: chartDataTonaseStack,
+    categories: [
+      {
+        category: [
+          {
+            label: 'Afdeling 1',
+          },
+          {
+            label: 'Afdeling 2',
+          },
+          {
+            label: 'Afdeling 3',
+          },
+        ],
+      },
+    ],
+    dataset: [
+      {
+        seriesname: 'R1',
+        data: [
+          {
+            value: '125000',
+          },
+          {
+            value: '300000',
+          },
+          {
+            value: '480000',
+          },
+        ],
+      },
+      {
+        seriesname: 'R2',
+        data: [
+          {
+            value: '10000',
+          },
+          {
+            value: '100000',
+          },
+          {
+            value: '300000',
+          },
+        ],
+      },
+      {
+        seriesname: 'R>=3',
+        data: [
+          {
+            value: '10000',
+          },
+          {
+            value: '100000',
+          },
+          {
+            value: '300000',
+          },
+        ],
+      },
+      {
+        seriesname: 'R-Truk',
+        data: [
+          {
+            value: '10000',
+          },
+          {
+            value: '100000',
+          },
+          {
+            value: '300000',
+          },
+        ],
+      },
+    ],
+  }
+}
+
 export default {
   layout: 'admin',
 
@@ -442,7 +852,7 @@ export default {
 
     return {
       chart: {
-        tonase: {
+        janjang: {
           type: 'mscolumn2d',
           renderAt: 'chart-container-janjang',
           width: '100%',
@@ -450,15 +860,31 @@ export default {
           dataFormat: 'json',
           dataSource: await getChartJanjangDataSource(),
         },
-        janjang: {
+        janjang_stack: {
+          type: 'stackedcolumn2d',
+          renderAt: 'chart-container-janjang-stack',
+          width: '100%',
+          height: '350',
+          dataFormat: 'json',
+          dataSource: await getChartJanjangStackDataSource(),
+        },
+        tonase: {
           type: 'mscolumn2d',
           renderAt: 'chart-container-tonase',
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartJanjangDataSource(),
+          dataSource: await getChartTonaseDataSource(),
         },
-        detail_tonase: {
+        tonase_stack: {
+          type: 'stackedcolumn2d',
+          renderAt: 'chart-container-tonase-stack',
+          width: '100%',
+          height: '350',
+          dataFormat: 'json',
+          dataSource: await getChartTonaseStackDataSource(),
+        },
+        detail_janjang: {
           type: 'mscolumn2d',
           renderAt: 'chart-container-detail-janjang',
           width: '100%',
@@ -466,13 +892,29 @@ export default {
           dataFormat: 'json',
           dataSource: await getChartDetailJanjangDataSource(),
         },
-        detail_janjang: {
+        detail_janjang_stack: {
+          type: 'stackedcolumn2d',
+          renderAt: 'chart-container-detail-janjang-stack',
+          width: '100%',
+          height: '350',
+          dataFormat: 'json',
+          dataSource: await getChartDetailJanjangStackDataSource(),
+        },
+        detail_tonase: {
           type: 'mscolumn2d',
           renderAt: 'chart-container-detail-tonase',
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartDetailJanjangDataSource(),
+          dataSource: await getChartDetailTonaseDataSource(),
+        },
+        detail_tonase_stack: {
+          type: 'stackedcolumn2d',
+          renderAt: 'chart-container-detail-tonase-stack',
+          width: '100%',
+          height: '350',
+          dataFormat: 'json',
+          dataSource: await getChartDetailTonaseStackDataSource(),
         },
       },
       // posts: posts.data,
@@ -489,10 +931,7 @@ export default {
   methods: {
     async changeDetail(selected) {
       this.chart.detail_janjang.dataSource =
-        await getChartDetailJanjangDataSource2()
-
-      this.chart.detail_tonase.dataSource =
-        await getChartDetailJanjangDataSource2()
+        await getChartDetailJanjangDataSource()
     },
     changePage(page) {
       this.$router.push({

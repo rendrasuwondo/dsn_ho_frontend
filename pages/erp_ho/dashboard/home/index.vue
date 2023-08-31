@@ -13,115 +13,13 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <ClientOnly>
-            <b-card
-              border-variant="primary"
-              header="Filter"
-              header-bg-variant="info"
-              header-text-variant="white"
-              class="mb-4 ml-2 mr-2"
-            >
-              <b-card-text>
-                <b-container class="bv-example-row mb-1">
-                  <b-row>
-                    <b-col cols="2">
-                      <div class="form-group">
-                        <multiselect
-                          v-model="company_id"
-                          :options="company"
-                          label="code"
-                          track-by="id"
-                          :searchable="true"
-                          placeholder="PT"
-                        ></multiselect></div
-                    ></b-col>
-                    <b-col cols="2">
-                      <div class="form-group">
-                        <multiselect
-                          v-model="department_id"
-                          :options="department"
-                          label="code"
-                          track-by="id"
-                          :searchable="true"
-                          placeholder="Estate"
-                        ></multiselect></div
-                    ></b-col>
-                    <b-col cols="2">
-                      <div class="form-group">
-                        <multiselect
-                          v-model="afdeling_id"
-                          :options="afdeling"
-                          label="id"
-                          track-by="code"
-                          :searchable="true"
-                          placeholder="Afdeling"
-                        ></multiselect></div
-                    ></b-col>
-                    <b-col cols="3">
-                      <b-input-group>
-                        <b-form-datepicker
-                          v-model="activitied_at_start"
-                          :max="activitied_at_end"
-                          :date-format-options="{
-                            year: 'numeric',
-                            month: 'short',
-                            day: '2-digit',
-                            weekday: 'short',
-                          }"
-                          placeholder="Start Date"
-                        ></b-form-datepicker>
-                        <template #append>
-                          <b-btn size="sm" @click="activitied_at_start = ''"
-                            ><i class="fa fa-trash"></i
-                          ></b-btn>
-                        </template>
-                      </b-input-group>
-                    </b-col>
-                    <b-col cols="3">
-                      <b-input-group>
-                        <b-form-datepicker
-                          v-show="true"
-                          v-model="activitied_at_end"
-                          :min="activitied_at_start"
-                          :date-format-options="{
-                            year: 'numeric',
-                            month: 'short',
-                            day: '2-digit',
-                            weekday: 'short',
-                          }"
-                          placeholder="End Date"
-                        ></b-form-datepicker>
-                        <template #append>
-                          <b-btn
-                            size="sm"
-                            @click="activitied_at_end = ''"
-                            v-show="true"
-                            ><i class="fa fa-trash"></i
-                          ></b-btn>
-                        </template>
-                      </b-input-group>
-                    </b-col>
-                  </b-row>
-                </b-container>
-
-                <b-container class="bv-example-row row justify-content-end p-0">
-                  <div class="input-group-append">
-                    <button @click="searchData" class="btn btn-info">
-                      <i class="fa fa-search"></i>
-                      CARI
-                    </button>
-                  </div>
-                </b-container>
-              </b-card-text>
-            </b-card>
-          </ClientOnly>
+          <FilterBar/>
           <div class="container">
             <div class="row d-flex justify-items-center align-items-center">
               <div class="col">
                 <nuxt-link
                   :to="{
                     name: 'erp_ho-dashboard-tbs_pks',
-                    query: getParams(),
                   }"
                   class="card-ui card color-success"
                 >
@@ -137,7 +35,6 @@
                 <nuxt-link
                   :to="{
                     name: 'erp_ho-dashboard-tbs_pks',
-                    query: getParams(),
                   }"
                   class="card-ui card color-warning"
                 >
@@ -153,7 +50,6 @@
                 <nuxt-link
                   :to="{
                     name: 'erp_ho-dashboard-tbs_pks',
-                    query: getParams(),
                   }"
                   class="card-ui card color-danger"
                 >
@@ -168,23 +64,31 @@
 
             <div class="row d-flex justify-items-center align-items-center">
               <div class="col">
-                <a href="javascript:;" class="card-ui card color-success">
+                <nuxt-link
+                  :to="{
+                    name: 'erp_ho-dashboard-restan',
+                  }"
+                  class="card-ui card color-success">
                   <div class="overlay"></div>
                   <div class="card-body">
                     <h5 class="card-title">Persentase Restan</h5>
                     <p class="card-text">15.1% | 10.3% | 3.1%</p>
                   </div>
-                </a>
+                </nuxt-link>
               </div>
 
               <div class="col">
-                <a href="javascript:;" class="card-ui card color-success">
+                <nuxt-link
+                  :to="{
+                    name: 'erp_ho-dashboard-restan',
+                  }"
+                  class="card-ui card color-success">
                   <div class="overlay"></div>
                   <div class="card-body">
                     <h5 class="card-title">Restan</h5>
                     <p class="card-text">42Jjg |0.77Ton</p>
                   </div>
-                </a>
+                </nuxt-link>
               </div>
             </div>
 
@@ -249,9 +153,14 @@
 </template>
 
 <script>
+
 export default {
   layout: 'admin',
-
+  computed: {
+    queryStringState() {
+      return this.$store.state.queryString;
+    }
+  },
   head() {
     return {
       title: 'PT',
@@ -259,12 +168,6 @@ export default {
   },
   data() {
     return {
-      afdeling: [],
-      department: [],
-      company: [],
-      afdeling_id: this.$route.query.q_afdeling_id,
-      department_id: this.$route.query.q_department_id,
-      company_id: this.$route.query.q_company_id,
     }
   },
   watchQuery: [
@@ -284,12 +187,6 @@ export default {
 
       return date
     }
-
-    //page
-    let page = query.page ? parseInt(query.page) : ''
-
-    //search
-    let search = query.q ? query.q : ''
 
     //activitied_at_prepend
     let activitied_at_start = query.activitied_at_prepend
@@ -328,11 +225,16 @@ export default {
       activitied_at_start: activitied_at_start,
       activitied_at_end: activitied_at_end,
       afdeling: afdeling,
-      // afdeling_id: afdeling_id,
       department: department,
-      // department_id: department_id_asyncData,
       company: company,
     }
+  },
+  created() {
+    this.$store.commit('updateAfdelingState', this.afdeling)
+    this.$store.commit('updateDepartmentState', this.department)
+    this.$store.commit('updateCompanyState', this.company)
+    // this.$store.commit('updateDateStartState', this.activitied_at_start)
+    // this.$store.commit('updateDateEndState', this.activitied_at_end)
   },
 
   methods: {
@@ -368,8 +270,6 @@ export default {
 </script>
 
 <style scoped>
-/* https://codepen.io/nadjmandev/pen/zVXgRr?editors=1100 */
-
 @import url('https://fonts.googleapis.com/css?family=Poppins');
 @import url('https://fonts.googleapis.com/css?family=Comfortaa');
 body {
