@@ -7,9 +7,8 @@
             <div class="title-2">
               WELCOME <br />
               <i>
-                ERP-HO <br />
-                Enterprise Resource Planning <br />
-                Head Office
+                i - Plant <br />
+                Integration of Information in Plantation Managemen
               </i>
             </div>
           </div>

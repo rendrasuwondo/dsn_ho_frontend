@@ -103,7 +103,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Login - ERP-HO',
+      title: 'Login - i - Plant',
     }
   },
 
