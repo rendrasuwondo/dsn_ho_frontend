@@ -103,7 +103,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Login - i - Plant',
+      title: 'Login - iPlant',
     }
   },
 
