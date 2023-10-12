@@ -120,6 +120,7 @@
           {
             label: 'No.Urut',
             key: 'sort',
+            sortable: true,
             tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
           },
           {
