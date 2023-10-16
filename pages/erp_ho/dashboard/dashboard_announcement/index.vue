@@ -142,7 +142,7 @@
 ];
             let date = new Date(value)
             let day  = date.getDate()
-            let month = monthNames[date.getMonth()+1]
+            let month = monthNames[date.getMonth()]
             let year  = date.getFullYear()
             if (day < 10) {
               day = '0' + day;
