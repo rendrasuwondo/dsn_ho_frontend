@@ -74,7 +74,10 @@ export default {
     async resetPassword() {
       let formData = new FormData()
 
+      const currentDomain = window.location.origin
+
       formData.append('username', this.user.user_name)
+      formData.append('redirect_to', `${currentDomain}/erp_ho/login`)
 
       this.show = 0
 
