@@ -51,13 +51,38 @@
                     ></multiselect>
                   </b-col>
                 </b-row>
+                <!-- <p>{{ JSON.stringify(company_code) }}</p> -->
+                <b-row class="mt-3">
+                <b-col cols="1">PT : </b-col>
+                <b-col cols="4">
+                  <multiselect
+                    v-model="company_code"
+                    :options="company"
+                    label="code"
+                    track-by="code"
+                    :searchable="true"
+                    @input="onChangeFiler"
+                  ></multiselect>
+                </b-col>
+                <!-- <b-col class="ml-4" cols="1">Estate : </b-col>
+                  <b-col cols="4">
+                    <multiselect
+                      v-model="f_month_id"
+                      :options="month"
+                      label=""
+                      track-by="code"
+                      :searchable="true"
+                      @input="onChangeFiler"
+                    ></multiselect>
+                  </b-col> -->
+              </b-row>
                 <!-- </b-container> -->
               </b-card-text>
             </b-card>
             <div class="form-group">
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <button
+                  <button :disabled="isButtonDisabled"
                     title="Upload File"
                     class="btn btn-info"
                     @click="showModal"
@@ -92,6 +117,7 @@
                         account: 'HA Statement',
                         q_month_id: this.period_month,
                         q_year_id: this.period_year,
+                        q_company_code: this.$route.query.q_company_code,
                       },
                     }"
                   >
@@ -236,12 +262,14 @@
                 ></b-pagination
               ></b-col>
               <b-col style="margin-top: 0.5%; margin-left: 15%;">
-                <b-button
-                class="btn btn-info"
-                @click=""
-                >
-                SUBMIT
-                </b-button>
+                <b-button :disabled="isButtonDisabled"
+                    size="sm"
+                    variant="outline-primary"
+                    @click="submit"
+                    v-if="rowcount > 0"
+                  >
+                    Submit
+                  </b-button>
               </b-col>
               <b-col class="text-right" align-self="center"
                 >{{ rowcount }} data</b-col
@@ -267,9 +295,13 @@
       return {
         f_year_id: this.$route.query.q_year_id,
         f_month_id: this.$route.query.q_month_id,
+        company_code: this.$route.query.q_company_code,
+        // departement_code: this.$route.query.q_departement_code,
   
         query_year_id: '',
         query_month_id: '',
+        query_company_code: '',
+        // query_department_code: '',
   
         files: null,
   
@@ -287,16 +319,14 @@
   
         years: [],
         months: [],
+        company:[],
+        // department:[],
   
         show: 1,
-  
+        show_submit:true,
+        isButtonDisabled: false,
+
         fields: [
-        {
-            thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-            label: 'ID',
-            key: 'id',
-            tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          },
           {
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
             label: ' Bulan',
@@ -317,13 +347,13 @@
           },
           {
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-            label: 'Departemen',
+            label: 'Estate',
             key: 'department_code',
             tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
           },
           {
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-            label: 'KDAF',
+            label: 'Afdeling',
             key: 'afdeling',
             tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
           },
@@ -335,13 +365,13 @@
           },
           {
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-            label: 'Plant Year',
+            label: 'Tahun Tanam',
             key: 'plant_year',
             tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
           },
           {
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-            label: 'Plant Month',
+            label: 'Bulan Tanam',
             key: 'plant_month',
             tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
           },
@@ -372,16 +402,39 @@
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
             label: 'Pokok',
             key: 'point',
+            formatter:(value, key, item)=>{
+            let formattedNumber = Math.floor(value * 100) / 100;
+
+            // Create an Intl.NumberFormat instance with Indian formatting
+            let numberFormatter = new Intl.NumberFormat('en-US', {
+              minimumFractionDigits: 0,
+            });
+
+            // Format the 'formattedNumber' using the numberFormatter
+            let formattedValue = numberFormatter.format(formattedNumber);
+
+            // Return the formatted number
+            return formattedValue;
+          },
             tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
           },
           {
             thClass: 'align-middle text-center text-nowrap nameOfTheClass',
             label: 'SPH',
             key: 'sph',
-            formatter:(value, key, item)=>{
-            let formattedNumber = Math.floor(value * 100) / 100
+            formatter: (value, key, item) => {
+            let formattedNumber = Math.floor(value * 100) / 100;
 
-            return formattedNumber
+            // Create an Intl.NumberFormat instance with Indian formatting
+            let numberFormatter = new Intl.NumberFormat('en-US', {
+              minimumFractionDigits: 2,
+            });
+
+            // Format the 'formattedNumber' using the numberFormatter
+            let formattedValue = numberFormatter.format(formattedNumber);
+
+            // Return the formatted number
+            return formattedValue;
           },
             tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
           },
@@ -399,7 +452,7 @@
         },
       }
     },
-    watchQuery: ['q', 'page', 'q_year_id', 'q_month_id'],
+    watchQuery: ['q', 'page', 'q_year_id', 'q_month_id', 'q_company_code',],
   
     async asyncData({ $axios, query }) {
       // DEFAULT MONTH AND YEAR
@@ -412,7 +465,7 @@
   
       let month_list = await $axios.$get(`/api/admin/lov_months`)
   
-      // console.log('daaaa')
+      console.log('daaaa')
       // console.log(month_list.data)
       //FILTER PADA TABLE
       //MONTH
@@ -457,6 +510,29 @@
       if (q_year_id == undefined || q_year_id == '') {
         q_year_id = year_at
       }
+
+      //COMPANY
+      const company_list = await $axios.$get(`/api/admin/lov_company`)
+      console.log(company_list);
+      let q_company_code = query.q_company_code ? query.q_company_code : ''
+
+      let company_code = []
+
+      if (query.q_company_code) {
+        $axios
+        .get(`/api/admin/lov_company?q_company_code=${q_company_code}`)
+        .then((response) => {
+          company_code = response.data.data[0]
+        })
+      } else {
+        company_code = []
+
+        q_company_code = company_code.code
+      }
+
+      if (q_company_code == undefined) {
+        q_company_code = ''
+      }
   
       //MODAL
       //GET YEAR
@@ -481,13 +557,20 @@
       //search
       let search = query.q ? query.q : ''
   
-      console.log('daaa')
-      console.log(month_id)
+      // console.log('daaa')
+      // console.log(month_id)
       //fetching posts
       const posts = await $axios.$get(
-        `/api/admin/ha_statement?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+        `/api/admin/ha_statement_bycompany?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}&q_company_code=${q_company_code}`
       )
-  
+      // console.log(`/api/admin/ha_statement?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}&q_company_id=${q_company_id}`)
+      console.log("========================post");
+      // console.log(posts);
+
+      const dataExist = await $axios.get(
+        `/api/admin/ha_statement_ops_exist?q_month_id=${q_month_id}&q_year_id=${q_year_id}&q_company_code=${q_company_code}`
+      )
+      
       return {
         posts: posts.data.data,
         pagination: posts.data,
@@ -499,6 +582,10 @@
         f_year_id: f_year_id,
         years: year_list.data,
         months: month_list.data,
+        company: company_list.data,
+        company_code: company_code,
+        isButtonDisabled: dataExist.data.data
+        // departement_code: departement_code,
       }
     },
   
@@ -557,6 +644,32 @@
               : ''
           }
         } catch (err) {}
+
+        //COMPANY
+        try {
+          if (this.company_code.code === null) {
+            this.query_company_code= ''
+          } else if (this.company_code.code === undefined) {
+            this.q_company_code = this.$route.query.q_company_code
+          } else {
+            this.query_company_code = this.company_code.code
+            ? this.company_code.code
+            : ''
+          }
+        } catch (err){}
+
+      //   // DEPARTMENT
+      //   try {
+      //   if (this.department_code.code === null) {
+      //     this.query_department_code = ''
+      //   } else if (this.department_code.code === undefined) {
+      //     this.query_department_code = this.$route.query.q_department_code
+      //   } else {
+      //     this.query_department_code = this.f_department_code.code
+      //       ? this.department_code.code
+      //       : ''
+      //   }
+      // } catch (err) {}
   
         this.$router.push({
           path: this.$route.path,
@@ -565,6 +678,12 @@
             page: page,
             q_month_id: this.query_month_id ? this.query_month_id : month_at,
             q_year_id: this.query_year_id ? this.query_year_id : year_at,
+            q_company_code: this.$route.query.q_company_code
+            ? this.$route.query.q_company_code
+            : this.company_code,
+            // q_department_code: this.$route.query.q_department_code
+            // ? this.$route.query.q_department_code
+            // : this.department_code,
           },
         })
       },
@@ -600,6 +719,19 @@
               : ''
           }
         } catch (err) {}
+
+        //COMPANY
+        try {
+        if (this.company_code.code === null) {
+          this.query_company_code = ''
+        } else if (this.company_code.code === undefined) {
+          this.query_company_code= this.$route.query.q_company_code
+        } else {
+          this.query_company_code = this.company_code.code
+            ? this.company_code.code
+            : ''
+        }
+      } catch (err) {}        
   
         this.$router.push({
           path: this.$route.path,
@@ -607,6 +739,9 @@
             q: this.search,
             q_month_id: this.query_month_id ? this.query_month_id : month_at,
             q_year_id: this.query_year_id ? this.query_year_id : year_at,
+            q_company_code: this.query_company_code
+            ? this.query_company_code
+            : '',
           },
         })
         // this.show = 1
@@ -642,6 +777,19 @@
               : ''
           }
         } catch (err) {}
+
+        //COMPANY
+        try {
+        if (this.company_code.code === null) {
+          this.query_company_code = ''
+        } else if (this.company_code.code === undefined) {
+          this.query_company_code = this.$route.query.q_company_code
+        } else {
+          this.query_company_code = this.company_code.code
+            ? this.company_code.code
+            : ''
+        }
+      } catch (err) {}
   
         let i_year =
           this.query_year_id === undefined ? year_at : this.query_year_id
@@ -654,7 +802,7 @@
         }
   
         this.$axios({
-          url: `/api/admin/ha_statement/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}`,
+          url: `/api/admin/ha_statement/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}&company_code=${this.query_company_code}`,
           method: 'GET',
           responseType: 'blob',
           headers: headers, // important
@@ -801,7 +949,7 @@
         console.log(checkFile)
         // jika bulan dan tahun terisi
         if (this.files.name === checkFile) {
-          // console.log(year_at)
+          console.log(year_at)
           let formData = new FormData()
           formData.append('upload_file', this.files)
   
@@ -854,8 +1002,7 @@
         } else {
           this.show = 1
           // this.hideModal()
-          this.files = null
-  
+          this.files = null  
           this.$router.push({
             name: 'erp_ho-data_warehouse-upload_file',
             query: { q_month_id: q_month, q_year_id: q_year },
@@ -870,6 +1017,152 @@
           })
         }
       },
+
+      async submit(){          
+        this.isButtonDisabled = true;
+        const current = new Date()
+
+        //MONTH
+        let month_at = current.getMonth() + 1
+  
+        try {
+          if (this.f_month_id.id === null) {
+            this.query_month_id = ''
+          } else if (this.f_month_id.id === undefined) {
+            this.query_month_id = this.$route.query.q_month_id
+          } else {
+            this.query_month_id = this.f_month_id.id ? this.f_month_id.id : ''
+          }
+        } catch (err) {}
+        
+        let i_month =
+          this.query_month_id === undefined ? month_at : this.query_month_id
+
+        // await this.$axios
+        //   .get(`/api/admin/lov_months?q_month_id=${i_month_at}`)
+        //   .then((response) => {
+        //     this.month_code = response.data.data
+        //   })
+          
+        //YEAR
+        let i_year_at = ''
+
+        try {
+          if (this.year_id.year_at === null) {
+            i_year_at = ''
+          } else if (this.year_id.year_at === undefined) {
+            i_year_at = current.getFullYear()
+          } else {
+            i_year_at = this.year_id.year_at ? this.year_id.year_at : ''
+          }
+        } catch (err) {}
+  
+        let q_year = i_year_at === '' ? current.getFullYear() : i_year_at
+
+        //COMPANY
+        try {
+        if (this.company_code.code === null) {
+          this.query_company_code = ''
+        } else if (this.company_code.code === undefined) {
+          this.query_company_code = this.$route.query.q_company_code
+        } else {
+          this.query_company_code = this.company_code.code
+            ? this.company_code.code
+            : ''
+        }
+        } catch (err) {}
+
+        // DEPARTMENT
+        // try {
+        //   if (this.department_code.code === null) {
+        //     this.query_department_code = ''
+        //   } else if (this.department_code.code === undefined) {
+        //     this.query_department_code = this.$route.query.q_department_code
+        //   } else {
+        //     this.query_department_code = this.department_code.code
+        //       ? this.department_code.code
+        //       : ''
+        //   }
+        // } catch (err) {}
+          
+          // const headers = {
+          //   'Content-Type': 'application/json',
+          // }
+          await this.$swal
+          .fire({
+            title: 'APAKAH ANDA YAKIN ?',
+            text: 'INGIN MENSUBMIT DATA INI !',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'YA',
+            cancelButtonText: 'TIDAK',
+          })
+          .then(async (result) => {
+            if (result.isConfirmed){
+              this.main = false
+
+              let formData = new FormData()
+
+              formData.append('q_month_id', i_month)
+              formData.append('q_year_id', i_year_at)
+              formData.append('MSG', 'MSG')
+              formData.append('MESSAGE', 'done')
+              formData.append('request_status', 'E')
+              formData.append('p_wf_proc_id', '20061')
+              formData.append('p_wf_doc_type_id', '10064')
+              formData.append('APPROVE', 'Y')
+              formData.append(
+                't_request_id',
+                'HA_statement_OPS' +
+                  '_' +
+                  i_month +
+                  '_' +
+                  i_year_at 
+              )
+              
+              console.log(formData)
+              this.$axios
+                .get(
+                  `/api/admin/ha_statement_ops?q_month_id=${i_month}&q_year_id=${i_year_at}`, formData
+                  )
+                .finally(() => {
+                  this.$axios
+                    .post(
+                      `/api/admin/ha_statement_ops_submit?q_month_id=${i_month}&q_year_id=${i_year_at}`, formData
+                      )
+                    .then(() => {
+                      //sweet alert
+                      this.$swal.fire({
+                        title: 'BERHASIL!',
+                        text: 'Data Berhasil Disubmit!',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 2000,
+                      })
+
+                      this.$nuxt.refresh().then(() => {
+                        // this.$nuxt.$loading.finish()
+                        this.main = true
+                      })
+                    })
+                })
+          .catch((error) => {
+            this.show = 1
+
+  
+            // this.$swal.fire({
+            //   title: 'ERROR!',
+            //   text: error.response.data.message,
+            //   icon: 'error',
+            //   showConfirmButton: true,
+            // })
+  
+            this.validation = error.response.data
+          })
+            }
+          })
+      }
     },
   
     mounted() {

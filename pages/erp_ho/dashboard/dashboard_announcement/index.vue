@@ -60,7 +60,7 @@
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-dashboard-dashboard_anouncement-edit-id',
+                  name: 'erp_ho-dashboard-dashboard_announcement-edit-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"

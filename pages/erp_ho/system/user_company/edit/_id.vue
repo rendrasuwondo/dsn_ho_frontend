@@ -14,87 +14,49 @@
         <div class="card card-outline card-info">
           <div class="card-header">
             <h3 class="card-title">
-              <i class="nav-icon fas fa-megaphone"></i> TAMBAH DATA
+              <i class="nav-icon fas fa-user"></i> <b>EDIT PT</b>
             </h3>
             <div class="card-tools"></div>
           </div>
           <div class="card-body">
-            <form @submit.prevent="storePost">
+            <form @submit.prevent="updateData">
               <div class="form-group">
-                <label>Urutan</label>
-                <input
-                  type="text"
-                  v-model="field.sort"
-                  placeholder="Masukkan Urutan "
-                  class="form-control"
-                  ref="sort"
-                />
+                <label>Nama PT</label>
+                <multiselect
+                  v-model="field.company_id"
+                  :options="company"
+                  label="code"
+                  track-by="id"
+                  :searchable="true"
+                ></multiselect>
+                <div v-if="validation.company_id" class="mt-2">
+                  <b-alert show variant="danger">{{
+                    validation.company_id[0]
+                  }}</b-alert>
+                </div>
               </div>
-  
               <div class="form-group">
                 <label>Aktif?</label>
                 <b-form-select v-model="field.is_active" :options="options">
                 </b-form-select>
               </div>
- 
+  
               <div class="form-group">
-                <label>Pengumuman</label>
+                <label>Keterangan</label>
   
                 <textarea
-                  v-model="field.pengumuman"
+                  v-model="field.description"
                   class="form-control"
                   rows="3"
                   placeholder="Masukkan Deskripsi Singkat"
                 ></textarea>
-                <div v-if="validation.pengumuman" class="mt-2">
+                <div v-if="validation.description" class="mt-2">
                   <b-alert show variant="danger">{{
-                    validation.pengumuman[0]
+                    validation.description[0]
                   }}</b-alert>
                 </div>
               </div>
-
-              <div class="form-group">
-                <label>Baru?</label>
-                <b-form-select v-model="field.is_new" :options="options">
-                </b-form-select>
-                <div v-if="validation.is_new" class="mt-2">
-                  <b-alert show variant="danger">{{
-                    validation.is_new[0]
-                  }}</b-alert>
-                </div>
-              </div>
-
-              <div class="form-group">
-              <label>Berlaku Dari</label>
-              <b-form-datepicker
-                v-model="field.date_start"
-                :date-format-options="{
-                    year: 'numeric',
-                      month: 'short',
-                      day: '2-digit',
-                      weekday: 'short',
-                    }">
-                  </b-form-datepicker>
-                  <div v-if="validation.date_start" class="mt-2">
-                  <b-alert show variant="danger">{{
-                    validation.date_start[0]
-                  }}</b-alert>
-                </div>
-            </div>
-
-              <div class="form-group">
-              <label>Sampai</label>
-              <b-form-datepicker
-                v-model="field.date_end"
-                :date-format-options="{
-                    year: 'numeric',
-                      month: 'short',
-                      day: '2-digit',
-                      weekday: 'short',
-                    }">
-                  </b-form-datepicker>
-            </div>
-
+  
               <div class="form-group">
                 <b-row>
                   <b-col>
@@ -169,8 +131,6 @@
   </template>
   
   <script>
-
-  
   export default {
     //layout
     layout: 'admin',
@@ -178,58 +138,82 @@
     //meta
     head() {
       return {
-        title: 'Tambah Data',
+        title: 'Edit PT',
       }
     },
   
     data() {
       return {
-        date_end: " ",
-        is_active: { value: 'Y', text: 'Ya' },
         options: [
           { value: 'Y', text: 'Ya' },
           { value: 'N', text: 'Tidak' },
         ],
+  
+        users_id: { id: '', name: '' },
+  
         state: 'disabled',
+        value: undefined,
   
         field: {
-          pengumuman: '',
-          sort: '',
-          is_new: '',
-          is_active: 'Y',
+          company_id: '',
+          users_id: '',
+          is_active: '',
+          description: '',
           created_at: '',
           updated_at: '',
           created_by: '',
           updated_by: '',
-          date_start: '',
-          date_end: '',
         },
+  
+        id_user: '',
+        show: 1,
+  
+        company: [],
   
         //state validation
         validation: [],
-        show: 1,
+  
       }
     },
   
     mounted() {
-      this.field.created_at = this.currentDate()
-      this.field.updated_at = this.currentDate()
-      this.field.created_by =
-        this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
-      this.field.updated_by =
-        this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
+      this.$axios
+        .get(`/api/admin/master/users/${this.$route.params.id}`)
   
-      this.$refs.sort.focus()
+        .then((response) => {
+          this.id_user = response.data.data.id
+  
+          this.$nuxt.$loading.start()
+        })
+  
+      this.$axios
+        .get(`/api/admin/user_company/${this.$route.params.id}`)
+        .then((response) => {
+          console.log('rdr')
+          console.log(response.data.data)
+          //data yang diambil
+          this.field.company_id = response.data.data.company_id
+          this.field.users_id = response.data.data.users_id
+          this.field.is_active = response.data.data.is_active
+          this.field.description = response.data.data.description
+          this.field.created_at = response.data.data.created_at
+          this.field.created_by = response.data.data.created_by
+          this.field.updated_at = response.data.data.updated_at
+          this.field.updated_by = response.data.data.updated_by
+  
+          this.$nuxt.$loading.start()
+        })
+  
+      //Data Users
+      this.$axios
+        .get('/api/admin/lov_company')
+  
+        .then((response) => {
+          this.company = response.data.data
+        })
     },
   
     methods: {
-      back() {
-        this.$router.push({
-          name: 'erp_ho-dashboard-dashboard_announcement',
-          params: { id: this.$route.params.id, r: 1 },
-        })
-      },
-  
       currentDate() {
         const current = new Date()
         const date = `${current.getFullYear()}-${
@@ -239,47 +223,57 @@
         return date
       },
   
-      async storePost() {
+      back() {
+        this.$router.push({
+          name: 'erp_ho-system-user_company-id',
+          params: { id: this.field.users_id, r: 1 },
+        })
+      },
+  
+      // update method
+      async updateData(e) {
+        e.preventDefault()
         this.show = 0
   
-        //define formData
-        let formData = new FormData()
-  
-        formData.append('sort', this.field.sort)
-        formData.append('is_new', this.field.is_new)
-        formData.append('is_active', this.field.is_active)
-        formData.append('pengumuman', this.field.pengumuman)
-        formData.append('date_start', this.field.date_start)
-        formData.append('date_end', this.field.date_end)
-        formData.append('created_at', this.field.created_at)
-        formData.append('created_by', this.field.created_by)
-        formData.append('updated_at', this.field.updated_at)
-        formData.append('updated_by', this.field.updated_by)
-  
-        //sending data to server
+        //send data ke Rest API untuk update
         await this.$axios
-          .post('/api/admin/dashboard_announcement', formData)
+          .put(`api/admin/user_company/${this.$route.params.id}`, {
+            //data yang dikirim
+            id: this.$route.params.id,
+            users_id: this.field.users_id,
+            company_id: this.field.company_id ? this.field.company_id.id : '',
+            is_active: this.field.is_active,
+            description: this.field.description,
+            created_at: this.field.created_at,
+            created_by: this.field.description,
+            updated_at: this.field.updated_at,
+            updated_by: this.field.updated_by,
+          })
           .then(() => {
             this.show = 1
   
             //sweet alert
             this.$swal.fire({
               title: 'BERHASIL!',
-              text: 'Data Berhasil Disimpan!',
+              text: 'Data Berhasil Diupdate!',
               icon: 'success',
               showConfirmButton: false,
               timer: 2000,
             })
-  
-            //redirect, if success store data
-            this.$router.push({
-              name: 'erp_ho-dashboard-dashboard_announcement',
-            })
+            //redirect ke route "location"
+            this.back()
           })
           .catch((error) => {
             this.show = 1
   
-            //assign error to state "validation"
+  
+            this.$swal.fire({
+              title: 'ERROR!',
+              text: error.response.data.message,
+              icon: 'error',
+              showConfirmButton: true,
+            })
+  
             this.validation = error.response.data
           })
       },

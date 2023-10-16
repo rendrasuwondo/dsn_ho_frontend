@@ -295,6 +295,12 @@ export default {
         .catch((error) => {
           this.show = 1
 
+          this.$swal.fire({
+              title: 'ERROR!',
+              text: error.response.data.message,
+              icon: 'error',
+              showConfirmButton: true,
+            })
           //assign error to state "validation"
           this.validation = error.response.data
         })
