@@ -94,13 +94,17 @@
 
             <div class="row d-flex justify-items-center align-items-center">
               <div class="col">
-                <a href="javascript:;" class="card-ui card color-success">
+                <nuxt-link
+                  :to="{
+                    name: 'erp_ho-dashboard-akurasi',
+                  }"
+                  class="card-ui card color-success">
                   <div class="overlay"></div>
                   <div class="card-body">
                     <h5 class="card-title">Akurasi RKH</h5>
                     <p class="card-text">96.2%</p>
                   </div>
-                </a>
+                </nuxt-link>
               </div>
 
               <div class="col">
@@ -116,13 +120,17 @@
 
             <div class="row d-flex justify-items-center align-items-center">
               <div class="col">
-                <a href="javascript:;" class="card-ui card color-success">
+                <nuxt-link
+                  :to="{
+                    name: 'erp_ho-dashboard-ripeness',
+                  }"
+                   class="card-ui card color-success">
                   <div class="overlay"></div>
                   <div class="card-body">
                     <h5 class="card-title">Ripeness</h5>
                     <p class="card-text">79.7%</p>
                   </div>
-                </a>
+                </nuxt-link>
               </div>
 
               <div class="col">

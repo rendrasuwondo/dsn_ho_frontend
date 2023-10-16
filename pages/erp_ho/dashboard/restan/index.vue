@@ -13,7 +13,7 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <FilterBar/>
+          <FilterBar />
           <div class="container mb-2">
             <div class="row d-flex justify-items-center align-items-center">
               <div class="col">
@@ -203,6 +203,34 @@
                 </b-col>
               </b-row>
             </no-ssr>
+          </div>
+          <div class="mb-2 ml-2 mr-2">
+            <b-row>
+              <b-col cols="6">
+                <b-table
+                  small
+                  responsive
+                  striped
+                  bordered
+                  hover
+                  :items="postsTPH"
+                  :fields="fieldsTPH"
+                  show-empty
+                ></b-table>
+              </b-col>
+              <b-col cols="6">
+                <b-table
+                  small
+                  responsive
+                  striped
+                  bordered
+                  hover
+                  :items="postsTRUK"
+                  :fields="fieldsTRUK"
+                  show-empty
+                ></b-table>
+              </b-col>
+            </b-row>
           </div>
         </div>
       </div>
@@ -792,6 +820,85 @@ export default {
       company_id: this.$route.query.q_company_id,
       puhus_id: null,
       puhus_tonase_id: null,
+      fieldsTPH: [
+        {
+          label: 'Estate',
+          key: 'estate',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Afdeling',
+          key: 'afdeling',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Nama SKU',
+          key: 'sku_name',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tanggal Panen',
+          key: 'panen_date',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Janjang',
+          key: 'janjang',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tonase',
+          key: 'tonase',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Blok',
+          key: 'blok',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'TPH',
+          key: 'tph',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+      ],
+      fieldsTRUK: [
+        {
+          label: 'Estate',
+          key: 'estate',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Afdeling',
+          key: 'afdeling',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Unit Angkut',
+          key: 'unit_angkut',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tanggal Angkut',
+          key: 'angkut_date',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'NPB',
+          key: 'npb',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Janjang',
+          key: 'janjang',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          label: 'Tonase',
+          key: 'tonase',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+      ],
     }
   },
   watchQuery: [
