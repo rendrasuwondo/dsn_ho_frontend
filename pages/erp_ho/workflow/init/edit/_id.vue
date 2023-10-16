@@ -279,6 +279,8 @@ export default {
           this.$router.push({
             name: 'erp_ho-workflow-init',
           })
+
+          this.back()
         })
         .catch((error) => {
           this.show = 1

@@ -91,6 +91,7 @@ sw.*
 
 .nuxt.config.js
 
+.package-lock.json
 package-lock.json
 
 

@@ -109,6 +109,22 @@
                 <i class="fa fa-file-alt"></i>
               </b-button>
             </template>
+            <template v-slot:cell(company)="row">
+              <b-button
+                :to="{
+                  name: 'erp_ho-system-user_company-id',
+                  params: { id: row.item.id },
+                  query: {
+                    menu_id: row.item.id,
+                  },
+                }"
+                variant="link"
+                size=""
+                title="Company"
+              >
+                <i class="fa fa-file-alt"></i>
+              </b-button>
+            </template>
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -152,6 +168,11 @@ export default {
         {
           label: 'Role',
           key: 'role',
+          tdClass: 'align-middle text-center',
+        },
+        {
+          label: 'PT',
+          key: 'company',
           tdClass: 'align-middle text-center',
         },
         {
