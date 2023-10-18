@@ -48,6 +48,9 @@
 <script>
 export default {
   layout: 'view',
+  mounted() {
+    this.$router.push({ query: { ...this.$route.query, pr_no: this.pr_no } });
+  },
 
   head() {
     return {
@@ -94,7 +97,7 @@ watchQuery: ['q', 'page', 'pr_no', 'q_account'],
   async asyncData({ $axios, query }) {
 
       //pr_no
-      let pr_no = query.pr_no ? query.pr_no : ''
+      let pr_no = query.pr_no ? query.pr_no : '2100009896'
 
     //fetching posts
     const posts = await $axios.get(
@@ -103,6 +106,7 @@ watchQuery: ['q', 'page', 'pr_no', 'q_account'],
 
     return {
       posts: posts.data.data,
+      pr_no: pr_no,
     }
   },
   // mounted() {
