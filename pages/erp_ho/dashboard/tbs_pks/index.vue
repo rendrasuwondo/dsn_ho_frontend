@@ -13,7 +13,7 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <FilterBar/>
+          <FilterBar />
           <div class="container mb-2">
             <div class="row d-flex justify-items-center align-items-center">
               <div class="col">
@@ -90,8 +90,8 @@
               <b-col cols="6">
                 <div class="form-group">
                   <multiselect
-                    v-model="puhus_id"
-                    :options="puhus"
+                    v-model="department_id"
+                    :options="department"
                     label="code"
                     track-by="id"
                     :searchable="true"
@@ -147,209 +147,6 @@
 </template>
 
 <script>
-let chartData = {
-  caption: 'RKH vs Unplanned Transaction vs Aktual Panen',
-  theme: 'fusion',
-  xaxisname: '',
-  yaxisname: '',
-  formatnumberscale: '1',
-  // plottooltext:
-  //   '<b>$dataValue</b> <b>$seriesName</b> in $label',
-  drawcrossline: '1',
-}
-async function getChartJanjangDataSource() {
-  return {
-    chart: chartData,
-    categories: [
-      {
-        category: [
-          {
-            label: 'Puhus 1',
-          },
-          {
-            label: 'Puhus 2',
-          },
-          {
-            label: 'Puhus 3',
-          },
-        ],
-      },
-    ],
-    dataset: [
-      {
-        seriesname: 'RKH',
-        data: [
-          {
-            value: '125000',
-          },
-          {
-            value: '300000',
-          },
-          {
-            value: '480000',
-          },
-        ],
-      },
-      {
-        seriesname: 'Total Unplanned diterima PKS',
-        data: [
-          {
-            value: '70000',
-          },
-          {
-            value: '150000',
-          },
-          {
-            value: '350000',
-          },
-        ],
-      },
-      {
-        seriesname: 'Diterima PKS',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-    ],
-  }
-}
-
-async function getChartDetailJanjangDataSource() {
-  return {
-    chart: chartData,
-    categories: [
-      {
-        category: [
-          {
-            label: 'Afdeling 1',
-          },
-          {
-            label: 'Afdeling 2',
-          },
-          {
-            label: 'Afdeling 3',
-          },
-        ],
-      },
-    ],
-    dataset: [
-      {
-        seriesname: 'RKH',
-        data: [
-          {
-            value: '125000',
-          },
-          {
-            value: '300000',
-          },
-          {
-            value: '480000',
-          },
-        ],
-      },
-      {
-        seriesname: 'Total Unplanned diterima PKS',
-        data: [
-          {
-            value: '70000',
-          },
-          {
-            value: '150000',
-          },
-          {
-            value: '350000',
-          },
-        ],
-      },
-      {
-        seriesname: 'Diterima PKS',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-    ],
-  }
-}
-async function getChartDetailJanjangDataSource2() {
-  return {
-    chart: chartData,
-    categories: [
-      {
-        category: [
-          {
-            label: 'Afdeling 4',
-          },
-          {
-            label: 'Afdeling 5',
-          },
-          {
-            label: 'Afdeling 6',
-          },
-        ],
-      },
-    ],
-    dataset: [
-      {
-        seriesname: 'RKH',
-        data: [
-          {
-            value: '70000',
-          },
-          {
-            value: '430000',
-          },
-          {
-            value: '120000',
-          },
-        ],
-      },
-      {
-        seriesname: 'Total Unplanned diterima PKS',
-        data: [
-          {
-            value: '400000',
-          },
-          {
-            value: '230000',
-          },
-          {
-            value: '230000',
-          },
-        ],
-      },
-      {
-        seriesname: 'Diterima PKS',
-        data: [
-          {
-            value: '30000',
-          },
-          {
-            value: '500000',
-          },
-          {
-            value: '800000',
-          },
-        ],
-      },
-    ],
-  }
-}
 export default {
   layout: 'admin',
 
@@ -384,14 +181,8 @@ export default {
       puhus_tonase_id: null,
     }
   },
-  watchQuery: [
-    'activitied_at_prepend',
-    'activitied_at_append',
-    'q_afdeling_id',
-    'q_department_id',
-    'q_company_id',
-  ],
-  async asyncData({ $axios, query, auth }) {
+  watchQuery: ['q_puhus_id'],
+  async asyncData({ $axios, query }) {
     function currentDate() {
       const current = new Date()
       current.setDate(current.getDate())
@@ -401,12 +192,6 @@ export default {
 
       return date
     }
-
-    //page
-    let page = query.page ? parseInt(query.page) : ''
-
-    //search
-    let search = query.q ? query.q : ''
 
     //activitied_at_prepend
     let activitied_at_start = query.activitied_at_prepend
@@ -436,9 +221,35 @@ export default {
       afdeling = response.data.data
     })
 
-    // const posts = await $axios.$get(
-    //   `/api/admin/report/lph?q=${search}&page=${page}&activitied_at_prepend=${activitied_at_start}&activitied_at_append=${activitied_at_end}&q_afdeling_id=${q_afdeling_id}&q_department_id=${q_department_id}&status=${q_elhm_status_id}`
-    // )
+    const department_id = 'XX'
+
+    let janjangData
+    await $axios
+      .get(`/api/agro-dashboard-web/tbs-pks/janjang`)
+      .then((response) => {
+        janjangData = response.data.data
+      })
+
+    let tonaseData
+    await $axios
+      .get(`/api/agro-dashboard-web/tbs-pks/tonase`)
+      .then((response) => {
+        tonaseData = response.data.data
+      })
+
+    // let janjangDetailData
+    // await $axios
+    //   .get(`/api/agro-dashboard-web/tbs-pks/janjang/detail?department=${department_id}`)
+    //   .then((response) => {
+    //     janjangDetailData = response.data.data
+    //   })
+
+    // let tonaseDetailData
+    // await $axios
+    //   .get(`/api/agro-dashboard-web/tbs-pks/tonase/detail?department=${department_id}`)
+    //   .then((response) => {
+    //     tonaseDetailData = response.data.data
+    //   })
 
     return {
       chart: {
@@ -448,7 +259,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartJanjangDataSource(),
+          dataSource: janjangData,
         },
         janjang: {
           type: 'mscolumn2d',
@@ -456,7 +267,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartJanjangDataSource(),
+          dataSource: tonaseData,
         },
         detail_tonase: {
           type: 'mscolumn2d',
@@ -464,7 +275,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartDetailJanjangDataSource(),
+          dataSource: {},
         },
         detail_janjang: {
           type: 'mscolumn2d',
@@ -472,7 +283,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartDetailJanjangDataSource(),
+          dataSource: {},
         },
       },
       // posts: posts.data,
@@ -487,13 +298,37 @@ export default {
   },
 
   methods: {
-    async changeDetail(selected) {
-      this.chart.detail_janjang.dataSource =
-        await getChartDetailJanjangDataSource2()
+    async getChartDetailJanjangClientDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(`/api/agro-dashboard-web/tbs-pks/janjang/detail?department=${department_id}`)
+        .then((response) => {
+          data = response.data.data
+        })
 
-      this.chart.detail_tonase.dataSource =
-        await getChartDetailJanjangDataSource2()
+      return data
     },
+    async getChartDetailTonaseClientDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(`/api/agro-dashboard-web/tbs-pks/tonase/detail?department=${department_id}`)
+        .then((response) => {
+          data = response.data.data
+        })
+
+      return data
+    },
+    async changeDetail(selected) {
+
+      if (selected) {
+        this.chart.detail_janjang.dataSource =
+          await this.getChartDetailJanjangClientDataSource(selected.code)
+
+        this.chart.detail_tonase.dataSource =
+          await this.getChartDetailTonaseClientDataSource(selected.code)
+      }
+    },
+
     changePage(page) {
       this.$router.push({
         path: this.$route.path,
