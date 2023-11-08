@@ -3,13 +3,13 @@
       <section class="content-header">
         <div class="container-fluid"></div>
       </section>
-  
+
       <div v-if="show === 0">
         <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
         <p class="txt-2">Loading</p>
         <div class="spinonediv-4"></div>
       </div>
-  
+
       <section class="content" v-if="show === 1">
         <div class="card card-outline card-info">
           <div class="card-header">
@@ -30,16 +30,16 @@
                   ref="sort"
                 />
               </div>
-  
+
               <div class="form-group">
                 <label>Aktif?</label>
                 <b-form-select v-model="field.is_active" :options="options">
                 </b-form-select>
               </div>
- 
+
               <div class="form-group">
                 <label>Pengumuman</label>
-  
+
                 <textarea
                   v-model="field.pengumuman"
                   class="form-control"
@@ -120,12 +120,12 @@
                   /></b-col>
                 </b-row>
               </div>
-  
+
               <div class="form-group">
                 <b-row>
                   <b-col
                     ><label>Tanggal Ubah </label>
-  
+
                     <b-form-datepicker
                       v-model="field.updated_at"
                       :date-format-options="{
@@ -148,9 +148,9 @@
                   </b-col>
                 </b-row>
               </div>
-  
+
               <div class="form-group"></div>
-  
+
               <button class="btn btn-info mr-1 btn-submit" type="submit">
                 <i class="fa fa-paper-plane"></i> SIMPAN
               </button>
@@ -167,36 +167,36 @@
       </section>
     </div>
   </template>
-  
+
   <script>
 
-  
+
   export default {
     //layout
     layout: 'admin',
-  
+
     //meta
     head() {
       return {
         title: 'Tambah Data',
       }
     },
-  
+
     data() {
       return {
         date_end: " ",
-        is_active: { value: 'Y', text: 'Ya' },
+        is_active: { value: '1', text: 'Ya' },
         options: [
-          { value: 'Y', text: 'Ya' },
-          { value: 'N', text: 'Tidak' },
+          { value: '1', text: 'Ya' },
+          { value: '0', text: 'Tidak' },
         ],
         state: 'disabled',
-  
+
         field: {
           pengumuman: '',
           sort: '',
           is_new: '',
-          is_active: 'Y',
+          is_active: '1',
           created_at: '',
           updated_at: '',
           created_by: '',
@@ -204,13 +204,13 @@
           date_start: '',
           date_end: '',
         },
-  
+
         //state validation
         validation: [],
         show: 1,
       }
     },
-  
+
     mounted() {
       this.field.created_at = this.currentDate()
       this.field.updated_at = this.currentDate()
@@ -218,10 +218,10 @@
         this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
       this.field.updated_by =
         this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
-  
+
       this.$refs.sort.focus()
     },
-  
+
     methods: {
       back() {
         this.$router.push({
@@ -229,22 +229,22 @@
           params: { id: this.$route.params.id, r: 1 },
         })
       },
-  
+
       currentDate() {
         const current = new Date()
         const date = `${current.getFullYear()}-${
           current.getMonth() + 1
         }-${current.getDate()}`
-  
+
         return date
       },
-  
+
       async storePost() {
         this.show = 0
-  
+
         //define formData
         let formData = new FormData()
-  
+
         formData.append('sort', this.field.sort)
         formData.append('is_new', this.field.is_new)
         formData.append('is_active', this.field.is_active)
@@ -255,13 +255,13 @@
         formData.append('created_by', this.field.created_by)
         formData.append('updated_at', this.field.updated_at)
         formData.append('updated_by', this.field.updated_by)
-  
+
         //sending data to server
         await this.$axios
           .post('/api/admin/dashboard_announcement', formData)
           .then(() => {
             this.show = 1
-  
+
             //sweet alert
             this.$swal.fire({
               title: 'BERHASIL!',
@@ -270,7 +270,7 @@
               showConfirmButton: false,
               timer: 2000,
             })
-  
+
             //redirect, if success store data
             this.$router.push({
               name: 'erp_ho-dashboard-dashboard_announcement',
@@ -278,13 +278,13 @@
           })
           .catch((error) => {
             this.show = 1
-  
+
             //assign error to state "validation"
             this.validation = error.response.data
           })
       },
     },
-  
+
     computed: {
       disabled() {
         return this.state === 'disabled'
@@ -295,7 +295,7 @@
     },
   }
   </script>
-  
+
   <style>
   .ck-editor__editable {
     min-height: 200px;
@@ -321,4 +321,3 @@
     font-weight: bold;
   }
   </style>
-  

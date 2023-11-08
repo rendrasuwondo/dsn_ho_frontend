@@ -3,7 +3,7 @@
       <section class="content-header">
         <div class="container-fluid"></div>
       </section>
-  
+
       <section class="content">
         <div class="card card-outline card-info">
           <div class="card-header">
@@ -99,11 +99,11 @@
       </section>
     </div>
   </template>
-  
+
   <script>
   export default {
     layout: 'admin',
-  
+
     head() {
       return {
         title: 'Announcement',
@@ -165,7 +165,7 @@
 
             let date = new Date(value)
             let day  = date.getDate()
-            let month = monthNames[date.getMonth()+1]
+            let month = monthNames[date.getMonth()]
             let year  = date.getFullYear()
             if (day < 10) {
               day = '0' + day;
@@ -288,7 +288,7 @@
   }
 }
   </script>
-  
+
   <style>
   .card-info.card-outline {
     border-top: 5px solid #504d8d;
@@ -297,4 +297,3 @@
     color: #504d8d;
   }
   </style>
-  

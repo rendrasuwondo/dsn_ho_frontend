@@ -3,13 +3,13 @@
       <section class="content-header">
         <div class="container-fluid"></div>
       </section>
-  
+
       <div v-if="show === 0">
         <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
         <p class="txt-2">Loading</p>
         <div class="spinonediv-4"></div>
       </div>
-  
+
       <section class="content" v-if="show === 1">
         <div class="card card-outline card-info">
           <div class="card-header">
@@ -30,17 +30,17 @@
                   ref="sort"
                 />
               </div>
-  
+
               <div class="form-group">
                 <label>Aktif?</label>
                 <b-form-select v-model="field.is_active" :options="options">
 
                 </b-form-select>
               </div>
-  
+
               <div class="form-group">
                 <label>Pengumuman</label>
-  
+
                 <textarea
                   v-model="field.pengumuman"
                   class="form-control"
@@ -111,12 +111,12 @@
                   /></b-col>
                 </b-row>
               </div>
-  
+
               <div class="form-group">
                 <b-row>
                   <b-col
                     ><label>Tanggal Ubah </label>
-  
+
                     <b-form-datepicker
                       v-model="field.updated_at"
                       :date-format-options="{
@@ -159,27 +159,27 @@
   export default {
     //layout
     layout: 'admin',
-  
+
     //meta
     head() {
       return {
         title: 'Edit Mobile',
       }
     },
-  
+
     data() {
       return {
-        is_active: { value: 'Y', text: 'Ya' },
+        is_active: { value: '1', text: 'Ya' },
         options: [
-          { value: 'Y', text: 'Ya' },
-          { value: 'N', text: 'Tidak' },
+          { value: '1', text: 'Ya' },
+          { value: '0', text: 'Tidak' },
         ],
         state: 'disabled',
         field: {
           sort: '',
           pengumuman: '',
           is_new: '',
-          is_active: 'Y',
+          is_active: '1',
           date_start: '',
           date_end: '',
           created_at: '',
@@ -187,13 +187,13 @@
           created_by: '',
           updated_by: '',
         },
-  
+
         //state validation
         validation: [],
         show: 1,
       }
     },
-  
+
     mounted() {
       //get data field by ID
       this.$axios
@@ -213,7 +213,7 @@
         })
       this.$refs.sort.focus()
     },
-  
+
     methods: {
       back() {
         this.$router.push({
@@ -221,12 +221,12 @@
           params: { id: this.$route.params.id, r: 1 },
         })
       },
-  
+
       // update method
       async update(e) {
         e.preventDefault()
         this.show = 0
-  
+
         //send data ke Rest API untuk update
         await this.$axios
           .put(`/api/admin/dashboard_announcement/${this.$route.params.id}`, {
@@ -244,7 +244,7 @@
           })
           .then(() => {
             this.show = 1
-  
+
             //sweet alert
             this.$swal.fire({
               title: 'BERHASIL!',
@@ -260,7 +260,7 @@
           })
           .catch((error) => {
             this.show = 1
-  
+
             //assign error validasi
             this.validation = error.response.data
           })
@@ -301,4 +301,3 @@
     font-weight: bold;
   }
   </style>
-  
