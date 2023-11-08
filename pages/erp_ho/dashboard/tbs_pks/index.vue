@@ -13,6 +13,7 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
+          <!-- <p>{{ queryStringState }}</p> -->
           <FilterBar />
           <div class="container mb-2">
             <div class="row d-flex justify-items-center align-items-center">
@@ -149,7 +150,11 @@
 <script>
 export default {
   layout: 'admin',
-
+  computed: {
+    queryStringState() {
+      return this.$store.state.queryString;
+    }
+  },
   head() {
     return {
       title: 'PT',
@@ -160,20 +165,6 @@ export default {
       afdeling: [],
       department: [],
       company: [],
-      puhus: [
-        {
-          id: 1,
-          code: 'Puhus 1',
-        },
-        {
-          id: 2,
-          code: 'Puhus 2',
-        },
-        {
-          id: 3,
-          code: 'Puhus 3',
-        },
-      ],
       afdeling_id: this.$route.query.q_afdeling_id,
       department_id: this.$route.query.q_department_id,
       company_id: this.$route.query.q_company_id,
@@ -181,8 +172,8 @@ export default {
       puhus_tonase_id: null,
     }
   },
-  watchQuery: ['q_puhus_id'],
-  async asyncData({ $axios, query }) {
+  watchQuery: [],
+  async asyncData({ $axios, query, store }) {
     function currentDate() {
       const current = new Date()
       current.setDate(current.getDate())
@@ -192,6 +183,9 @@ export default {
 
       return date
     }
+
+    // query params
+    let queryParams = store.state.queryString
 
     //activitied_at_prepend
     let activitied_at_start = query.activitied_at_prepend
@@ -221,18 +215,16 @@ export default {
       afdeling = response.data.data
     })
 
-    const department_id = 'XX'
-
     let janjangData
     await $axios
-      .get(`/api/agro-dashboard-web/tbs-pks/janjang`)
+      .get(`/api/agro-dashboard-web/tbs-pks/janjang?q=${queryParams}`)
       .then((response) => {
         janjangData = response.data.data
       })
 
     let tonaseData
     await $axios
-      .get(`/api/agro-dashboard-web/tbs-pks/tonase`)
+      .get(`/api/agro-dashboard-web/tbs-pks/tonase?q=${queryParams}`)
       .then((response) => {
         tonaseData = response.data.data
       })
@@ -294,6 +286,7 @@ export default {
       department: department,
       // department_id: department_id_asyncData,
       company: company,
+      queryParams: queryParams,
     }
   },
 
@@ -301,7 +294,7 @@ export default {
     async getChartDetailJanjangClientDataSource(department_id) {
       let data
       await this.$axios
-        .get(`/api/agro-dashboard-web/tbs-pks/janjang/detail?department=${department_id}`)
+        .get(`/api/agro-dashboard-web/tbs-pks/janjang/detail?q=${this.queryParams}&department=${department_id}`)
         .then((response) => {
           data = response.data.data
         })
@@ -311,7 +304,7 @@ export default {
     async getChartDetailTonaseClientDataSource(department_id) {
       let data
       await this.$axios
-        .get(`/api/agro-dashboard-web/tbs-pks/tonase/detail?department=${department_id}`)
+        .get(`/api/agro-dashboard-web/tbs-pks/tonase/detail?q=${this.queryParams}&department=${department_id}`)
         .then((response) => {
           data = response.data.data
         })
@@ -319,16 +312,13 @@ export default {
       return data
     },
     async changeDetail(selected) {
-
       if (selected) {
         this.chart.detail_janjang.dataSource =
           await this.getChartDetailJanjangClientDataSource(selected.code)
-
         this.chart.detail_tonase.dataSource =
           await this.getChartDetailTonaseClientDataSource(selected.code)
       }
     },
-
     changePage(page) {
       this.$router.push({
         path: this.$route.path,

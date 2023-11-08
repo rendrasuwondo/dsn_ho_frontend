@@ -13,6 +13,7 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
+          <!-- <p>{{ queryStringState }}</p> -->
           <FilterBar/>
           <div class="container">
             <div class="row d-flex justify-items-center align-items-center">

@@ -1,5 +1,5 @@
 export const state = () => ({
-  queryString: 'default',
+  queryString: '',
   afdeling: [],
   department: [],
   company: [],

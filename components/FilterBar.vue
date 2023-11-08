@@ -107,10 +107,16 @@
 export default {
   methods: {
     updateDashboardState() {
-      this.$store.commit('updateDashboardState', { query: 'New state' })
+      let company = this.companyId ? this.companyId.code : ""
+      let department = this.departmentId ? this.departmentId.code : ""
+      let afdeling = this.afdelingId ? this.afdelingId.id : ""
+      this.$store.commit('updateDashboardState', {
+        query: `&company=${company}&department=${department}&afdeling=${afdeling}&date_start=${this.dateStart ?? ''}&date_end=${this.dateEnd ?? ''}`
+      })
     },
     //searchData
     searchData() {
+      this.updateDashboardState()
       this.$router.push({
         path: this.$route.path,
         query: {
