@@ -190,7 +190,6 @@ export default {
         //  console.log(response.data.data.afdeling_id)
         this.menu_id = response.data.data.id
 
-        this.$nuxt.$loading.start()
       })
 
     //Data Users

@@ -213,7 +213,6 @@ export default {
         //  console.log(response.data.data.afdeling_id)
         this.fertilizer_type_id = response.data.data.id
 
-        this.$nuxt.$loading.start()
       })
 
     //Data Users

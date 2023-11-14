@@ -236,7 +236,6 @@ export default {
         //  console.log(response.data.data.afdeling_id)
         this.site_id = response.data.data.id
 
-        this.$nuxt.$loading.start()
       }) //.get(`/api/admin/master/activity_plan/${this.$route.params.id}`)
 
     //fetching data categories

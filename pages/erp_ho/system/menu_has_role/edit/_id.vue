@@ -199,7 +199,6 @@ export default {
         //  console.log(response.data.data.afdeling_id)
         this.menu_id = response.data.data.id
 
-        this.$nuxt.$loading.start()
       })
 
     this.$axios
@@ -217,7 +216,6 @@ export default {
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
 
-        this.$nuxt.$loading.start()
       })
 
     //Data Users

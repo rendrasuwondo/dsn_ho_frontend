@@ -3,13 +3,13 @@
       <section class="content-header">
         <div class="container-fluid"></div>
       </section>
-  
+
       <div v-if="show === 0">
         <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
         <p class="txt-2">Loading</p>
         <div class="spinonediv-4"></div>
       </div>
-  
+
       <section class="content" v-if="show === 1">
         <div class="card card-outline card-info">
           <div class="card-header">
@@ -40,10 +40,10 @@
                 <b-form-select v-model="field.is_active" :options="options">
                 </b-form-select>
               </div>
-  
+
               <div class="form-group">
                 <label>Keterangan</label>
-  
+
                 <textarea
                   v-model="field.description"
                   class="form-control"
@@ -56,7 +56,7 @@
                   }}</b-alert>
                 </div>
               </div>
-  
+
               <div class="form-group">
                 <b-row>
                   <b-col>
@@ -82,12 +82,12 @@
                   /></b-col>
                 </b-row>
               </div>
-  
+
               <div class="form-group">
                 <b-row>
                   <b-col
                     ><label>Tanggal Ubah </label>
-  
+
                     <b-form-datepicker
                       v-model="field.updated_at"
                       :date-format-options="{
@@ -110,9 +110,9 @@
                   </b-col>
                 </b-row>
               </div>
-  
+
               <div class="form-group"></div>
-  
+
               <button class="btn btn-info mr-1 btn-submit" type="submit">
                 <i class="fa fa-paper-plane"></i> SIMPAN
               </button>
@@ -129,31 +129,31 @@
       </section>
     </div>
   </template>
-  
+
   <script>
   export default {
     //layout
     layout: 'admin',
-  
+
     //meta
     head() {
       return {
         title: 'Edit PT',
       }
     },
-  
+
     data() {
       return {
         options: [
           { value: 'Y', text: 'Ya' },
           { value: 'N', text: 'Tidak' },
         ],
-  
+
         users_id: { id: '', name: '' },
-  
+
         state: 'disabled',
         value: undefined,
-  
+
         field: {
           company_id: '',
           users_id: '',
@@ -164,28 +164,27 @@
           created_by: '',
           updated_by: '',
         },
-  
+
         id_user: '',
         show: 1,
-  
+
         company: [],
-  
+
         //state validation
         validation: [],
-  
+
       }
     },
-  
+
     mounted() {
       this.$axios
         .get(`/api/admin/master/users/${this.$route.params.id}`)
-  
+
         .then((response) => {
           this.id_user = response.data.data.id
-  
-          this.$nuxt.$loading.start()
+
         })
-  
+
       this.$axios
         .get(`/api/admin/user_company/${this.$route.params.id}`)
         .then((response) => {
@@ -200,41 +199,40 @@
           this.field.created_by = response.data.data.created_by
           this.field.updated_at = response.data.data.updated_at
           this.field.updated_by = response.data.data.updated_by
-  
-          this.$nuxt.$loading.start()
+
         })
-  
+
       //Data Users
       this.$axios
         .get('/api/admin/lov_company')
-  
+
         .then((response) => {
           this.company = response.data.data
         })
     },
-  
+
     methods: {
       currentDate() {
         const current = new Date()
         const date = `${current.getFullYear()}-${
           current.getMonth() + 1
         }-${current.getDate()}`
-  
+
         return date
       },
-  
+
       back() {
         this.$router.push({
           name: 'erp_ho-system-user_company-id',
           params: { id: this.field.users_id, r: 1 },
         })
       },
-  
+
       // update method
       async updateData(e) {
         e.preventDefault()
         this.show = 0
-  
+
         //send data ke Rest API untuk update
         await this.$axios
           .put(`api/admin/user_company/${this.$route.params.id}`, {
@@ -251,7 +249,7 @@
           })
           .then(() => {
             this.show = 1
-  
+
             //sweet alert
             this.$swal.fire({
               title: 'BERHASIL!',
@@ -265,20 +263,20 @@
           })
           .catch((error) => {
             this.show = 1
-  
-  
+
+
             this.$swal.fire({
               title: 'ERROR!',
               text: error.response.data.message,
               icon: 'error',
               showConfirmButton: true,
             })
-  
+
             this.validation = error.response.data
           })
       },
     },
-  
+
     computed: {
       disabled() {
         return this.state === 'disabled'
@@ -289,7 +287,7 @@
     },
   }
   </script>
-  
+
   <style>
   .ck-editor__editable {
     min-height: 200px;
@@ -315,4 +313,3 @@
     font-weight: bold;
   }
   </style>
-  
