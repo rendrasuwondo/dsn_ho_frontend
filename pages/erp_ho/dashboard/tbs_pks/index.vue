@@ -13,7 +13,7 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <!-- <p>{{ queryStringState }}</p> -->
+          <p>{{ queryStringState }}</p>
           <FilterBar />
           <div class="container mb-2">
             <div class="row d-flex justify-items-center align-items-center">
@@ -152,8 +152,8 @@ export default {
   layout: 'admin',
   computed: {
     queryStringState() {
-      return this.$store.state.queryString;
-    }
+      return this.$store.state.queryString
+    },
   },
   head() {
     return {
@@ -162,12 +162,12 @@ export default {
   },
   data() {
     return {
-      afdeling: [],
-      department: [],
-      company: [],
-      afdeling_id: this.$route.query.q_afdeling_id,
-      department_id: this.$route.query.q_department_id,
-      company_id: this.$route.query.q_company_id,
+      afdeling: this.$store.state.afdeling,
+      department: this.$store.state.department,
+      company: this.$store.state.company,
+      afdeling_id: this.$store.state.afdeling_id,
+      department_id: this.$store.state.department_id,
+      company_id: this.$store.state.company_id,
       puhus_id: null,
       puhus_tonase_id: null,
     }
@@ -197,23 +197,23 @@ export default {
       ? query.activitied_at_append
       : currentDate()
 
-    // Company
-    let company
-    await $axios.get('/api/admin/lov_company_table').then((response) => {
-      company = response.data.data
-    })
+    // // Company
+    // let company
+    // await $axios.get('/api/admin/lov_company_table').then((response) => {
+    //   company = response.data.data
+    // })
 
-    //Data department
-    let department
-    await $axios.get('/api/admin/lov_department').then((response) => {
-      department = response.data.data
-    })
+    // //Data department
+    // let department
+    // await $axios.get('/api/admin/lov_department').then((response) => {
+    //   department = response.data.data
+    // })
 
-    // Data afdeling
-    let afdeling
-    await $axios.get('/api/admin/lov_afdeling_table').then((response) => {
-      afdeling = response.data.data
-    })
+    // // Data afdeling
+    // let afdeling
+    // await $axios.get('/api/admin/lov_afdeling_table').then((response) => {
+    //   afdeling = response.data.data
+    // })
 
     let janjangData
     await $axios
@@ -281,11 +281,11 @@ export default {
       // posts: posts.data,
       activitied_at_start: activitied_at_start,
       activitied_at_end: activitied_at_end,
-      afdeling: afdeling,
       // afdeling_id: afdeling_id,
-      department: department,
       // department_id: department_id_asyncData,
-      company: company,
+      // afdeling: afdeling,
+      // department: department,
+      // company: company,
       queryParams: queryParams,
     }
   },
@@ -294,7 +294,9 @@ export default {
     async getChartDetailJanjangClientDataSource(department_id) {
       let data
       await this.$axios
-        .get(`/api/agro-dashboard-web/tbs-pks/janjang/detail?q=${this.queryParams}&department=${department_id}`)
+        .get(
+          `/api/agro-dashboard-web/tbs-pks/janjang/detail?q=${this.queryParams}&department=${department_id}`
+        )
         .then((response) => {
           data = response.data.data
         })
@@ -304,7 +306,9 @@ export default {
     async getChartDetailTonaseClientDataSource(department_id) {
       let data
       await this.$axios
-        .get(`/api/agro-dashboard-web/tbs-pks/tonase/detail?q=${this.queryParams}&department=${department_id}`)
+        .get(
+          `/api/agro-dashboard-web/tbs-pks/tonase/detail?q=${this.queryParams}&department=${department_id}`
+        )
         .then((response) => {
           data = response.data.data
         })
@@ -313,10 +317,12 @@ export default {
     },
     async changeDetail(selected) {
       if (selected) {
+        this.$nuxt.$loading.start()
         this.chart.detail_janjang.dataSource =
           await this.getChartDetailJanjangClientDataSource(selected.code)
         this.chart.detail_tonase.dataSource =
           await this.getChartDetailTonaseClientDataSource(selected.code)
+        this.$nuxt.$loading.finish()
       }
     },
     changePage(page) {

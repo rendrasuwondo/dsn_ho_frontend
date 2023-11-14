@@ -9,7 +9,7 @@
         class="mb-4 ml-2 mr-2"
       >
         <b-card-text>
-          <b-container class="bv-example-row mb-1">
+          <div class="bv-example-row mb-1">
             <b-row>
               <b-col cols="2">
                 <div class="form-group">
@@ -31,6 +31,7 @@
                     track-by="id"
                     :searchable="true"
                     placeholder="Estate"
+                    @input="onChangeDepartment"
                   ></multiselect></div
               ></b-col>
               <b-col cols="2">
@@ -86,16 +87,16 @@
                 </b-input-group>
               </b-col>
             </b-row>
-          </b-container>
+          </div>
 
-          <b-container class="bv-example-row row justify-content-end p-0">
+          <div class="row justify-content-end">
             <div class="input-group-append">
               <button @click="searchData" class="btn btn-info">
                 <i class="fa fa-search"></i>
                 CARI
               </button>
             </div>
-          </b-container>
+          </div>
         </b-card-text>
       </b-card>
     </ClientOnly>
@@ -105,7 +106,27 @@
 <script>
 
 export default {
+  mounted() {
+    this.updateDashboardState()
+  },
   methods: {
+    async onChangeDepartment(id) {
+      if (id) {
+        // Data afdeling
+       let afdeling, afdelingId
+       await this.$axios.get(`/api/admin/lov_afdeling_department?department_id=${id.id}`).then((response) => {
+         afdeling = response.data.data
+         afdelingId = response.data.data[0]
+       })
+
+       this.$store.commit('updateAfdelingState', afdeling)
+       this.$store.commit('updateAfdelingIdState', afdelingId)
+      } else {
+       this.$store.commit('updateAfdelingState', [])
+       this.$store.commit('updateAfdelingIdState', null)
+      }
+    },
+
     updateDashboardState() {
       let company = this.companyId ? this.companyId.code : ""
       let department = this.departmentId ? this.departmentId.code : ""
@@ -116,13 +137,10 @@ export default {
     },
     //searchData
     searchData() {
+      this.$nuxt.$loading.start()
       this.updateDashboardState()
-      this.$router.push({
-        path: this.$route.path,
-        query: {
-          q: this.search,
-        },
-      })
+      this.$nuxt.refresh();
+      // this.$nuxt.$loading.finish()
     },
   },
   computed: {

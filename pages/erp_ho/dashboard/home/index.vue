@@ -13,7 +13,7 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <!-- <p>{{ queryStringState }}</p> -->
+          <p>{{ queryStringState }}</p>
           <FilterBar/>
           <div class="container">
             <div class="row d-flex justify-items-center align-items-center">
@@ -208,21 +208,24 @@ export default {
       : currentDate()
 
     // Company
-    let company
-    await $axios.get('/api/admin/lov_company_table').then((response) => {
+    let company, companyId
+    await $axios.get('/api/admin/lov_user_company').then((response) => {
       company = response.data.data
+      companyId = response.data.data[0]
     })
 
     //Data department
-    let department
-    await $axios.get('/api/admin/lov_department').then((response) => {
+    let department, departmentId
+    await $axios.get('/api/admin/lov_user_department').then((response) => {
       department = response.data.data
+      departmentId = response.data.data[0]
     })
 
     // Data afdeling
-    let afdeling
-    await $axios.get('/api/admin/lov_afdeling_table').then((response) => {
+    let afdeling, afdelingId
+    await $axios.get(`/api/admin/lov_afdeling_department?department_id=${departmentId.id}`).then((response) => {
       afdeling = response.data.data
+      afdelingId = response.data.data[0]
     })
 
     // const posts = await $axios.$get(
@@ -234,14 +237,20 @@ export default {
       activitied_at_start: activitied_at_start,
       activitied_at_end: activitied_at_end,
       afdeling: afdeling,
+      afdelingId: afdelingId,
       department: department,
+      departmentId: departmentId,
       company: company,
+      companyId: companyId,
     }
   },
   created() {
     this.$store.commit('updateAfdelingState', this.afdeling)
     this.$store.commit('updateDepartmentState', this.department)
     this.$store.commit('updateCompanyState', this.company)
+    this.$store.commit('updateAfdelingIdState', this.afdelingId)
+    this.$store.commit('updateDepartmentIdState', this.departmentId)
+    this.$store.commit('updateCompanyIdState', this.companyId)
     // this.$store.commit('updateDateStartState', this.activitied_at_start)
     // this.$store.commit('updateDateEndState', this.activitied_at_end)
   },
