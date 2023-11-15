@@ -239,553 +239,110 @@
 </template>
 
 <script>
-let chartDataJanjang = {
-  caption: 'Pencapaian Panen (Janjang)',
-  theme: 'fusion',
-  xaxisname: '',
-  yaxisname: '',
-  formatnumberscale: '1',
-  drawcrossline: '1',
-}
-let chartDataJanjangStack = {
-  caption: 'R1 vs R2 vs R≥3 vs R-Truk (Janjang)',
-  theme: 'fusion',
-  xaxisname: '',
-  yaxisname: '',
-  formatnumberscale: '1',
-  drawcrossline: '1',
-}
-let chartDataTonase = {
-  caption: 'Pencapaian Panen (Tonase)',
-  theme: 'fusion',
-  xaxisname: '',
-  yaxisname: '',
-  formatnumberscale: '1',
-  drawcrossline: '1',
-}
-let chartDataTonaseStack = {
-  caption: 'R1 vs R2 vs R≥3 vs R-Truk (Tonase)',
-  theme: 'fusion',
-  xaxisname: '',
-  yaxisname: '',
-  formatnumberscale: '1',
-  drawcrossline: '1',
-}
+// let chartDataJanjang = {
+//   caption: 'Pencapaian Panen (Janjang)',
+//   theme: 'fusion',
+//   xaxisname: '',
+//   yaxisname: '',
+//   formatnumberscale: '1',
+//   drawcrossline: '1',
+// }
+// let chartDataJanjangStack = {
+//   caption: 'R1 vs R2 vs R≥3 vs R-Truk (Janjang)',
+//   theme: 'fusion',
+//   xaxisname: '',
+//   yaxisname: '',
+//   formatnumberscale: '1',
+//   drawcrossline: '1',
+// }
+// let chartDataTonase = {
+//   caption: 'Pencapaian Panen (Tonase)',
+//   theme: 'fusion',
+//   xaxisname: '',
+//   yaxisname: '',
+//   formatnumberscale: '1',
+//   drawcrossline: '1',
+// }
+// let chartDataTonaseStack = {
+//   caption: 'R1 vs R2 vs R≥3 vs R-Truk (Tonase)',
+//   theme: 'fusion',
+//   xaxisname: '',
+//   yaxisname: '',
+//   formatnumberscale: '1',
+//   drawcrossline: '1',
+// }
 
-async function getChartJanjangDataSource() {
-  return {
-    chart: chartDataJanjang,
-    categories: [
-      {
-        category: [
-          {
-            label: 'Puhus 1',
-          },
-          {
-            label: 'Puhus 2',
-          },
-          {
-            label: 'Puhus 3',
-          },
-        ],
-      },
-    ],
-    dataset: [
-      {
-        seriesname: 'Aktual Panen',
-        data: [
-          {
-            value: '125000',
-          },
-          {
-            value: '300000',
-          },
-          {
-            value: '480000',
-          },
-        ],
-      },
-      {
-        seriesname: 'Diterima PKS',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-    ],
-  }
+async function getChartJanjangDataSource(axios, afdeling_id) {
+  let data
+  await axios
+    .get(`/api/agro-dashboard-web/restan/janjang?afdeling=${afdeling_id}`)
+    .then((response) => {
+      data = response.data.data
+    })
+
+  return data
 }
 async function getChartJanjangStackDataSource() {
-  return {
-    chart: chartDataJanjangStack,
-    categories: [
-      {
-        category: [
-          {
-            label: 'Puhus 1',
-          },
-          {
-            label: 'Puhus 2',
-          },
-          {
-            label: 'Puhus 3',
-          },
-        ],
-      },
-    ],
-    dataset: [
-      {
-        seriesname: 'R1',
-        data: [
-          {
-            value: '125000',
-          },
-          {
-            value: '300000',
-          },
-          {
-            value: '480000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R2',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R>=3',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R-Truk',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-    ],
-  }
+  let data
+  await axios
+    .get(`/api/agro-dashboard-web/restan/janjang-stack?afdeling=${afdeling_id}`)
+    .then((response) => {
+      data = response.data.data
+    })
+  return data
 }
 
-async function getChartTonaseDataSource() {
-  return {
-    chart: chartDataTonase,
-    categories: [
-      {
-        category: [
-          {
-            label: 'Puhus 1',
-          },
-          {
-            label: 'Puhus 2',
-          },
-          {
-            label: 'Puhus 3',
-          },
-        ],
-      },
-    ],
-    dataset: [
-      {
-        seriesname: 'Aktual Panen',
-        data: [
-          {
-            value: '125000',
-          },
-          {
-            value: '300000',
-          },
-          {
-            value: '480000',
-          },
-        ],
-      },
-      {
-        seriesname: 'Diterima PKS',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-    ],
-  }
+async function getChartTonaseDataSource(axios, afdeling_id) {
+  let data
+  await axios
+    .get(`/api/agro-dashboard-web/restan/tonase?afdeling=${afdeling_id}`)
+    .then((response) => {
+      data = response.data.data
+    })
+
+  return data
 }
 async function getChartTonaseStackDataSource() {
-  return {
-    chart: chartDataTonaseStack,
-    categories: [
-      {
-        category: [
-          {
-            label: 'Puhus 1',
-          },
-          {
-            label: 'Puhus 2',
-          },
-          {
-            label: 'Puhus 3',
-          },
-        ],
-      },
-    ],
-    dataset: [
-      {
-        seriesname: 'R1',
-        data: [
-          {
-            value: '125000',
-          },
-          {
-            value: '300000',
-          },
-          {
-            value: '480000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R2',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R>=3',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R-Truk',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-    ],
-  }
+  let data
+  await axios
+    .get(`/api/agro-dashboard-web/restan/tonase-stack?afdeling=${afdeling_id}`)
+    .then((response) => {
+      data = response.data.data
+    })
 }
 
 async function getChartDetailJanjangDataSource() {
-  return {
-    chart: chartDataJanjang,
-    categories: [
-      {
-        category: [
-          {
-            label: 'Afdeling 1',
-          },
-          {
-            label: 'Afdeling 2',
-          },
-          {
-            label: 'Afdeling 3',
-          },
-        ],
-      },
-    ],
-    dataset: [
-      {
-        seriesname: 'Aktual Panen',
-        data: [
-          {
-            value: '125000',
-          },
-          {
-            value: '300000',
-          },
-          {
-            value: '480000',
-          },
-        ],
-      },
-      {
-        seriesname: 'Diterima PKS',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-    ],
-  }
+  let data
+  await axios
+    .get(`/api/agro-dashboard-web/restan/janjang/detail?afdeling=${afdeling_id}`)
+    .then((response) => {
+      data = response.data.data
+    })
 }
 async function getChartDetailJanjangStackDataSource() {
-  return {
-    chart: chartDataJanjangStack,
-    categories: [
-      {
-        category: [
-          {
-            label: 'Afdeling 1',
-          },
-          {
-            label: 'Afdeling 2',
-          },
-          {
-            label: 'Afdeling 3',
-          },
-        ],
-      },
-    ],
-    dataset: [
-      {
-        seriesname: 'R1',
-        data: [
-          {
-            value: '125000',
-          },
-          {
-            value: '300000',
-          },
-          {
-            value: '480000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R2',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R>=3',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R-Truk',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-    ],
-  }
+  let data
+  await axios
+    .get(`/api/agro-dashboard-web/restan/janjang-stack/detail?afdeling=${afdeling_id}`)
+    .then((response) => {
+      data = response.data.data
+    })
 }
 
 async function getChartDetailTonaseDataSource() {
-  return {
-    chart: chartDataTonase,
-    categories: [
-      {
-        category: [
-          {
-            label: 'Afdeling 1',
-          },
-          {
-            label: 'Afdeling 2',
-          },
-          {
-            label: 'Afdeling 3',
-          },
-        ],
-      },
-    ],
-    dataset: [
-      {
-        seriesname: 'Aktual Panen',
-        data: [
-          {
-            value: '125000',
-          },
-          {
-            value: '300000',
-          },
-          {
-            value: '480000',
-          },
-        ],
-      },
-      {
-        seriesname: 'Diterima PKS',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-    ],
-  }
+  let data
+  await axios
+    .get(`/api/agro-dashboard-web/restan/tonase/detail?afdeling=${afdeling_id}`)
+    .then((response) => {
+      data = response.data.data
+    })
 }
 async function getChartDetailTonaseStackDataSource() {
-  return {
-    chart: chartDataTonaseStack,
-    categories: [
-      {
-        category: [
-          {
-            label: 'Afdeling 1',
-          },
-          {
-            label: 'Afdeling 2',
-          },
-          {
-            label: 'Afdeling 3',
-          },
-        ],
-      },
-    ],
-    dataset: [
-      {
-        seriesname: 'R1',
-        data: [
-          {
-            value: '125000',
-          },
-          {
-            value: '300000',
-          },
-          {
-            value: '480000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R2',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R>=3',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-      {
-        seriesname: 'R-Truk',
-        data: [
-          {
-            value: '10000',
-          },
-          {
-            value: '100000',
-          },
-          {
-            value: '300000',
-          },
-        ],
-      },
-    ],
-  }
+  let data
+  await axios
+    .get(`/api/agro-dashboard-web/restan/tonase-stack/detail?afdeling=${afdeling_id}`)
+    .then((response) => {
+      data = response.data.data
+    })
 }
 
 export default {
@@ -798,26 +355,12 @@ export default {
   },
   data() {
     return {
-      afdeling: [],
-      department: [],
-      company: [],
-      puhus: [
-        {
-          id: 1,
-          code: 'Puhus 1',
-        },
-        {
-          id: 2,
-          code: 'Puhus 2',
-        },
-        {
-          id: 3,
-          code: 'Puhus 3',
-        },
-      ],
-      afdeling_id: this.$route.query.q_afdeling_id,
-      department_id: this.$route.query.q_department_id,
-      company_id: this.$route.query.q_company_id,
+      afdeling: this.$store.state.afdeling,
+      department: this.$store.state.department,
+      company: this.$store.state.company,
+      afdeling_id: this.$store.state.afdeling_id,
+      department_id: this.$store.state.department_id,
+      company_id: this.$store.state.company_id,
       puhus_id: null,
       puhus_tonase_id: null,
       fieldsTPH: [
