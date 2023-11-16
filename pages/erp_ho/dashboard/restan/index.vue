@@ -122,8 +122,8 @@
               <b-col cols="6">
                 <div class="form-group">
                   <multiselect
-                    v-model="puhus_id"
-                    :options="puhus"
+                    v-model="department_id"
+                    :options="department"
                     label="code"
                     track-by="id"
                     :searchable="true"
@@ -239,112 +239,6 @@
 </template>
 
 <script>
-// let chartDataJanjang = {
-//   caption: 'Pencapaian Panen (Janjang)',
-//   theme: 'fusion',
-//   xaxisname: '',
-//   yaxisname: '',
-//   formatnumberscale: '1',
-//   drawcrossline: '1',
-// }
-// let chartDataJanjangStack = {
-//   caption: 'R1 vs R2 vs R≥3 vs R-Truk (Janjang)',
-//   theme: 'fusion',
-//   xaxisname: '',
-//   yaxisname: '',
-//   formatnumberscale: '1',
-//   drawcrossline: '1',
-// }
-// let chartDataTonase = {
-//   caption: 'Pencapaian Panen (Tonase)',
-//   theme: 'fusion',
-//   xaxisname: '',
-//   yaxisname: '',
-//   formatnumberscale: '1',
-//   drawcrossline: '1',
-// }
-// let chartDataTonaseStack = {
-//   caption: 'R1 vs R2 vs R≥3 vs R-Truk (Tonase)',
-//   theme: 'fusion',
-//   xaxisname: '',
-//   yaxisname: '',
-//   formatnumberscale: '1',
-//   drawcrossline: '1',
-// }
-
-async function getChartJanjangDataSource(axios, afdeling_id) {
-  let data
-  await axios
-    .get(`/api/agro-dashboard-web/restan/janjang?afdeling=${afdeling_id}`)
-    .then((response) => {
-      data = response.data.data
-    })
-
-  return data
-}
-async function getChartJanjangStackDataSource() {
-  let data
-  await axios
-    .get(`/api/agro-dashboard-web/restan/janjang-stack?afdeling=${afdeling_id}`)
-    .then((response) => {
-      data = response.data.data
-    })
-  return data
-}
-
-async function getChartTonaseDataSource(axios, afdeling_id) {
-  let data
-  await axios
-    .get(`/api/agro-dashboard-web/restan/tonase?afdeling=${afdeling_id}`)
-    .then((response) => {
-      data = response.data.data
-    })
-
-  return data
-}
-async function getChartTonaseStackDataSource() {
-  let data
-  await axios
-    .get(`/api/agro-dashboard-web/restan/tonase-stack?afdeling=${afdeling_id}`)
-    .then((response) => {
-      data = response.data.data
-    })
-}
-
-async function getChartDetailJanjangDataSource() {
-  let data
-  await axios
-    .get(`/api/agro-dashboard-web/restan/janjang/detail?afdeling=${afdeling_id}`)
-    .then((response) => {
-      data = response.data.data
-    })
-}
-async function getChartDetailJanjangStackDataSource() {
-  let data
-  await axios
-    .get(`/api/agro-dashboard-web/restan/janjang-stack/detail?afdeling=${afdeling_id}`)
-    .then((response) => {
-      data = response.data.data
-    })
-}
-
-async function getChartDetailTonaseDataSource() {
-  let data
-  await axios
-    .get(`/api/agro-dashboard-web/restan/tonase/detail?afdeling=${afdeling_id}`)
-    .then((response) => {
-      data = response.data.data
-    })
-}
-async function getChartDetailTonaseStackDataSource() {
-  let data
-  await axios
-    .get(`/api/agro-dashboard-web/restan/tonase-stack/detail?afdeling=${afdeling_id}`)
-    .then((response) => {
-      data = response.data.data
-    })
-}
-
 export default {
   layout: 'admin',
 
@@ -451,7 +345,7 @@ export default {
     'q_department_id',
     'q_company_id',
   ],
-  async asyncData({ $axios, query, auth }) {
+  async asyncData({ $axios, query, store }) {
     function currentDate() {
       const current = new Date()
       current.setDate(current.getDate())
@@ -462,11 +356,8 @@ export default {
       return date
     }
 
-    //page
-    let page = query.page ? parseInt(query.page) : ''
-
-    //search
-    let search = query.q ? query.q : ''
+    // query params
+    let queryParams = store.state.queryString
 
     //activitied_at_prepend
     let activitied_at_start = query.activitied_at_prepend
@@ -477,28 +368,38 @@ export default {
     let activitied_at_end = query.activitied_at_append
       ? query.activitied_at_append
       : currentDate()
+    console.log(1, `/api/agro-dashboard-web/restan/janjang?q=${queryParams}`)
+    let janjangData
+    await $axios
+      .get(`/api/agro-dashboard-web/restan/janjang?q=${queryParams}`)
+      .then((response) => {
+        janjangData = response.data.data
+      })
+      console.log(2, `/api/agro-dashboard-web/restan/janjang-stack?q=${queryParams}`)
 
-    // Company
-    let company
-    await $axios.get('/api/admin/lov_company_table').then((response) => {
-      company = response.data.data
-    })
+    let janjangStackData
+    await $axios
+      .get(`/api/agro-dashboard-web/restan/janjang-stack?q=${queryParams}`)
+      .then((response) => {
+        janjangStackData = response.data.data
+      })
+      console.log(3, `/api/agro-dashboard-web/restan/tonase?q=${queryParams}`)
 
-    //Data department
-    let department
-    await $axios.get('/api/admin/lov_department').then((response) => {
-      department = response.data.data
-    })
+    let tonaseData
+    await $axios
+      .get(`/api/agro-dashboard-web/restan/tonase?q=${queryParams}`)
+      .then((response) => {
+        tonaseData = response.data.data
+      })
+      console.log(4, `/api/agro-dashboard-web/restan/tonase-stack?q=${queryParams}`)
 
-    // Data afdeling
-    let afdeling
-    await $axios.get('/api/admin/lov_afdeling_table').then((response) => {
-      afdeling = response.data.data
-    })
-
-    // const posts = await $axios.$get(
-    //   `/api/admin/report/lph?q=${search}&page=${page}&activitied_at_prepend=${activitied_at_start}&activitied_at_append=${activitied_at_end}&q_afdeling_id=${q_afdeling_id}&q_department_id=${q_department_id}&status=${q_elhm_status_id}`
-    // )
+    let tonaseStackData
+    await $axios
+      .get(`/api/agro-dashboard-web/restan/tonase-stack?q=${queryParams}`)
+      .then((response) => {
+        tonaseStackData = response.data.data
+      })
+      console.log(5)
 
     return {
       chart: {
@@ -508,7 +409,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartJanjangDataSource(),
+          dataSource: janjangData,
         },
         janjang_stack: {
           type: 'stackedcolumn2d',
@@ -516,7 +417,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartJanjangStackDataSource(),
+          dataSource: janjangStackData,
         },
         tonase: {
           type: 'mscolumn2d',
@@ -524,7 +425,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartTonaseDataSource(),
+          dataSource: tonaseData,
         },
         tonase_stack: {
           type: 'stackedcolumn2d',
@@ -532,7 +433,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartTonaseStackDataSource(),
+          dataSource: tonaseStackData,
         },
         detail_janjang: {
           type: 'mscolumn2d',
@@ -540,7 +441,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartDetailJanjangDataSource(),
+          dataSource: {},
         },
         detail_janjang_stack: {
           type: 'stackedcolumn2d',
@@ -548,7 +449,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartDetailJanjangStackDataSource(),
+          dataSource: {},
         },
         detail_tonase: {
           type: 'mscolumn2d',
@@ -556,7 +457,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartDetailTonaseDataSource(),
+          dataSource: {},
         },
         detail_tonase_stack: {
           type: 'stackedcolumn2d',
@@ -564,24 +465,83 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartDetailTonaseStackDataSource(),
+          dataSource: {},
         },
       },
       // posts: posts.data,
       activitied_at_start: activitied_at_start,
       activitied_at_end: activitied_at_end,
-      afdeling: afdeling,
+      // afdeling: afdeling,
       // afdeling_id: afdeling_id,
-      department: department,
+      // department: department,
       // department_id: department_id_asyncData,
-      company: company,
+      // company: company,
+      queryParams: queryParams,
     }
   },
 
   methods: {
+    async getChartDetailJanjangDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(
+          `/api/agro-dashboard-web/restan/janjang/detail?q=${this.queryParams}&department=${department_id}`
+        )
+        .then((response) => {
+          data = response.data.data
+        })
+
+      return data
+    },
+    async getChartDetailJanjangStackDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(
+          `/api/agro-dashboard-web/restan/janjang-stack/detail?q=${this.queryParams}&department=${department_id}`
+        )
+        .then((response) => {
+          data = response.data.data
+        })
+
+      return data
+    },
+    async getChartDetailTonaseDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(
+          `/api/agro-dashboard-web/restan/tonase/detail?q=${this.queryParams}&department=${department_id}`
+        )
+        .then((response) => {
+          data = response.data.data
+        })
+
+      return data
+    },
+    async getChartDetailTonaseStackDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(
+          `/api/agro-dashboard-web/restan/tonase-stack/detail?q=${this.queryParams}&department=${department_id}`
+        )
+        .then((response) => {
+          data = response.data.data
+        })
+
+      return data
+    },
     async changeDetail(selected) {
-      this.chart.detail_janjang.dataSource =
-        await getChartDetailJanjangDataSource()
+        if (selected) {
+        this.$nuxt.$loading.start()
+        this.chart.detail_janjang.dataSource =
+          await this.getChartDetailJanjangDataSource(selected.code)
+        this.chart.detail_janjang_stack.dataSource =
+          await this.getChartDetailJanjangStackDataSource(selected.code)
+        this.chart.detail_tonase.dataSource =
+          await this.getChartDetailTonaseDataSource(selected.code)
+        this.chart.detail_tonase_stack.dataSource =
+          await this.getChartDetailTonaseStackDataSource(selected.code)
+        this.$nuxt.$loading.finish()
+      }
     },
     changePage(page) {
       this.$router.push({
