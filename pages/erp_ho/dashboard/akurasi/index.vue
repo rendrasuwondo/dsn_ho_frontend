@@ -15,9 +15,10 @@
         <div class="card-body">
           <FilterBar />
           <div class="container mb-2">
-            <div class="row d-flex justify-content-center align-items-center">
-              <div class="col-4">
-                <a href="javascript:;" class="card-ui card color-success">
+            <div class="row d-flex justify-items-center align-items-center">
+              <div class="col">
+                <a href="javascript:;"
+                  class="card-ui card color-success">
                   <div class="overlay"></div>
                   <div class="card-body">
                     <h5 class="card-title">Akurasi RKH</h5>
@@ -70,8 +71,8 @@
               <b-col cols="6">
                 <div class="form-group">
                   <multiselect
-                    v-model="puhus_id"
-                    :options="puhus"
+                    v-model="department_id"
+                    :options="department"
                     label="code"
                     track-by="id"
                     :searchable="true"
@@ -127,134 +128,13 @@
 </template>
 
 <script>
-let chartDataJanjang = {
-  caption: 'Akurasi AKP RKH vs AKP Aktual (Jjg)',
-  theme: 'fusion',
-  xaxisname: '',
-  yaxisname: '',
-  numberSuffix: "%",
-  formatnumberscale: '1',
-  // plottooltext:
-  //   '<b>$dataValue</b> <b>$seriesName</b> in $label',
-  drawcrossline: '1',
-}
-let chartDataTon = {
-  caption: 'Akurasi AKP RKH vs AKP Aktual (Ton)',
-  theme: 'fusion',
-  xaxisname: '',
-  yaxisname: '',
-  numberSuffix: "%",
-  formatnumberscale: '1',
-  // plottooltext:
-  //   '<b>$dataValue</b> <b>$seriesName</b> in $label',
-  drawcrossline: '1',
-}
-
-async function getChartJanjangDataSource() {
-  return {
-    chart: chartDataJanjang,
-    data: [
-      {
-        label: 'Puhus 1',
-        value: '80'
-      },
-      {
-        label: 'Puhus 2',
-        value: '90'
-      },
-      {
-        label: 'Puhus 3',
-        value: '100'
-      },
-    ],
-  }
-}
-
-async function getChartDetailJanjangDataSource() {
-  return {
-    chart: chartDataJanjang,
-    data: [
-      {
-        label: 'Puhus 1',
-        value: '80'
-      },
-      {
-        label: 'Puhus 2',
-        value: '90'
-      },
-      {
-        label: 'Puhus 3',
-        value: '100'
-      },
-    ],
-  }
-}
-
-async function getChartTonDataSource() {
-  return {
-    chart: chartDataTon,
-    data: [
-      {
-        label: 'Puhus 1',
-        value: '80'
-      },
-      {
-        label: 'Puhus 2',
-        value: '90'
-      },
-      {
-        label: 'Puhus 3',
-        value: '100'
-      },
-    ],
-  }
-}
-
-async function getChartDetailTonDataSource() {
-  return {
-    chart: chartDataTon,
-    data: [
-      {
-        label: 'Puhus 1',
-        value: '80'
-      },
-      {
-        label: 'Puhus 2',
-        value: '90'
-      },
-      {
-        label: 'Puhus 3',
-        value: '100'
-      },
-    ],
-  }
-}
-
-
-async function getChartDetailJanjangDataSource2() {
-  return {
-    chart: chartDataJanjang,
-    data: [
-      {
-        label: 'Puhus 1',
-        value: '70'
-      },
-      {
-        label: 'Puhus 2',
-        value: '10'
-      },
-      {
-        label: 'Puhus 3',
-        value: '20'
-      },
-    ],
-  }
-}
-
-
 export default {
   layout: 'admin',
-
+  computed: {
+    queryStringState() {
+      return this.$store.state.queryString
+    },
+  },
   head() {
     return {
       title: 'PT',
@@ -262,38 +142,18 @@ export default {
   },
   data() {
     return {
-      afdeling: [],
-      department: [],
-      company: [],
-      puhus: [
-        {
-          id: 1,
-          code: 'Puhus 1',
-        },
-        {
-          id: 2,
-          code: 'Puhus 2',
-        },
-        {
-          id: 3,
-          code: 'Puhus 3',
-        },
-      ],
-      afdeling_id: this.$route.query.q_afdeling_id,
-      department_id: this.$route.query.q_department_id,
-      company_id: this.$route.query.q_company_id,
+      afdeling: this.$store.state.afdeling,
+      department: this.$store.state.department,
+      company: this.$store.state.company,
+      afdeling_id: this.$store.state.afdeling_id,
+      department_id: this.$store.state.department_id,
+      company_id: this.$store.state.company_id,
       puhus_id: null,
       puhus_tonase_id: null,
     }
   },
-  watchQuery: [
-    'activitied_at_prepend',
-    'activitied_at_append',
-    'q_afdeling_id',
-    'q_department_id',
-    'q_company_id',
-  ],
-  async asyncData({ $axios, query, auth }) {
+  watchQuery: [],
+  async asyncData({ $axios, query, store }) {
     function currentDate() {
       const current = new Date()
       current.setDate(current.getDate())
@@ -304,11 +164,8 @@ export default {
       return date
     }
 
-    //page
-    let page = query.page ? parseInt(query.page) : ''
-
-    //search
-    let search = query.q ? query.q : ''
+    // query params
+    let queryParams = store.state.queryString
 
     //activitied_at_prepend
     let activitied_at_start = query.activitied_at_prepend
@@ -320,27 +177,57 @@ export default {
       ? query.activitied_at_append
       : currentDate()
 
-    // Company
-    let company
-    await $axios.get('/api/admin/lov_company_table').then((response) => {
-      company = response.data.data
-    })
+    // // Company
+    // let company
+    // await $axios.get('/api/admin/lov_company_table').then((response) => {
+    //   company = response.data.data
+    // })
 
-    //Data department
-    let department
-    await $axios.get('/api/admin/lov_department').then((response) => {
-      department = response.data.data
-    })
+    // //Data department
+    // let department
+    // await $axios.get('/api/admin/lov_department').then((response) => {
+    //   department = response.data.data
+    // })
 
-    // Data afdeling
-    let afdeling
-    await $axios.get('/api/admin/lov_afdeling_table').then((response) => {
-      afdeling = response.data.data
-    })
+    // // Data afdeling
+    // let afdeling
+    // await $axios.get('/api/admin/lov_afdeling_table').then((response) => {
+    //   afdeling = response.data.data
+    // })
 
-    // const posts = await $axios.$get(
-    //   `/api/admin/report/lph?q=${search}&page=${page}&activitied_at_prepend=${activitied_at_start}&activitied_at_append=${activitied_at_end}&q_afdeling_id=${q_afdeling_id}&q_department_id=${q_department_id}&status=${q_elhm_status_id}`
-    // )
+    let janjangData
+    await $axios
+      .get(`/api/agro-dashboard-web/akurasi/janjang?q=${queryParams}`)
+      .then((response) => {
+        janjangData = response.data.data
+      })
+
+    let tonaseData
+    await $axios
+      .get(`/api/agro-dashboard-web/akurasi/tonase?q=${queryParams}`)
+      .then((response) => {
+        tonaseData = response.data.data
+      })
+
+    // let janjangDetailData
+    // await $axios
+    //   .get(`/api/agro-dashboard-web/akurasi/janjang/detail?department=${department_id}`)
+    //   .then((response) => {
+    //     janjangDetailData = response.data.data
+    //   })
+
+    // let tonaseDetailData
+    // await $axios
+    //   .get(`/api/agro-dashboard-web/akurasi/tonase/detail?department=${department_id}`)
+    //   .then((response) => {
+    //     tonaseDetailData = response.data.data
+    //   })
+
+    // Status
+    let status
+    await $axios.get(`/api/agro-dashboard-web/status?q=${queryParams}`).then((response) => {
+      status = response.data.data
+    })
 
     return {
       chart: {
@@ -350,7 +237,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartTonDataSource(),
+          dataSource: janjangData,
         },
         janjang: {
           type: 'column2d',
@@ -358,7 +245,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartJanjangDataSource(),
+          dataSource: tonaseData,
         },
         detail_tonase: {
           type: 'column2d',
@@ -366,7 +253,7 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartDetailTonDataSource(),
+          dataSource: {},
         },
         detail_janjang: {
           type: 'column2d',
@@ -374,27 +261,65 @@ export default {
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartDetailJanjangDataSource(),
+          dataSource: {},
         },
       },
       // posts: posts.data,
       activitied_at_start: activitied_at_start,
       activitied_at_end: activitied_at_end,
-      afdeling: afdeling,
       // afdeling_id: afdeling_id,
-      department: department,
       // department_id: department_id_asyncData,
-      company: company,
+      // afdeling: afdeling,
+      // department: department,
+      // company: company,
+      queryParams: queryParams,
+      status: {
+        planTbs: {
+          janjang: status.plan_tbs.janjang ?? '',
+          tonase: status.plan_tbs.tonase ?? '',
+        },
+        tbsDiterimaPks: {
+          janjang: status.tbs_diterima_pks.janjang ?? '',
+          tonase: status.tbs_diterima_pks.tonase ?? '',
+        },
+      }
     }
   },
 
   methods: {
-    async changeDetail(selected) {
-      this.chart.detail_janjang.dataSource =
-        await getChartDetailJanjangDataSource2()
+    async getChartDetailJanjangClientDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(
+          `/api/agro-dashboard-web/akurasi/janjang/detail?q=${this.queryParams}&department=${department_id}`
+        )
+        .then((response) => {
+          data = response.data.data
+        })
 
-      this.chart.detail_tonase.dataSource =
-        await getChartDetailJanjangDataSource2()
+      return data
+    },
+    async getChartDetailTonaseClientDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(
+          `/api/agro-dashboard-web/akurasi/tonase/detail?q=${this.queryParams}&department=${department_id}`
+        )
+        .then((response) => {
+          data = response.data.data
+        })
+
+      return data
+    },
+    async changeDetail(selected) {
+      if (selected) {
+        this.$nuxt.$loading.start()
+        this.chart.detail_janjang.dataSource =
+          await this.getChartDetailJanjangClientDataSource(selected.code)
+        this.chart.detail_tonase.dataSource =
+          await this.getChartDetailTonaseClientDataSource(selected.code)
+        this.$nuxt.$loading.finish()
+      }
     },
     changePage(page) {
       this.$router.push({
