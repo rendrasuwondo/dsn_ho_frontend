@@ -27,7 +27,7 @@
                   <div class="overlay"></div>
                   <div class="card-body">
                     <h5 class="card-title">Total Plan TBS</h5>
-                    <p class="card-text">41287 Jjg | 763.8 Ton</p>
+                    <p class="card-text">{{ this.status.planTbs.janjang }} Jjg | {{ this.status.planTbs.tonase }} Ton</p>
                   </div>
                 </nuxt-link>
               </div>
@@ -42,7 +42,7 @@
                   <div class="overlay"></div>
                   <div class="card-body">
                     <h5 class="card-title">Total TBS diterima PKS</h5>
-                    <p class="card-text">31280 Jjg | 578.6 Ton</p>
+                    <p class="card-text">{{ this.status.tbsDiterimaPks.janjang }} Jjg | {{ this.status.tbsDiterimaPks.tonase }} Ton</p>
                   </div>
                 </nuxt-link>
               </div>
@@ -186,7 +186,7 @@ export default {
     'q_department_id',
     'q_company_id',
   ],
-  async asyncData({ $axios, query, auth }) {
+  async asyncData({ $axios, query, store }) {
     function currentDate() {
       const current = new Date()
       current.setDate(current.getDate())
@@ -228,9 +228,33 @@ export default {
       afdelingId = response.data.data[0]
     })
 
-    // const posts = await $axios.$get(
-    //   `/api/admin/report/lph?q=${search}&page=${page}&activitied_at_prepend=${activitied_at_start}&activitied_at_append=${activitied_at_end}&q_afdeling_id=${q_afdeling_id}&q_department_id=${q_department_id}&status=${q_elhm_status_id}`
-    // )
+
+    if (store.state.initState) {
+      const currentDateFilter = new Date();
+      const startOfMonth = new Date(currentDateFilter.getFullYear(), currentDateFilter.getMonth(), 1);
+      const previousDate = new Date(currentDateFilter.getFullYear(), currentDateFilter.getMonth(), currentDateFilter.getDate() - 1);
+      const formattedStartOfMonth = `${startOfMonth.getFullYear()}-${startOfMonth.getMonth() + 1}-${startOfMonth.getDate()}`;
+      const formattedPreviousDate = `${previousDate.getFullYear()}-${previousDate.getMonth() + 1}-${previousDate.getDate()}`;
+
+      store.commit('updateDashboardState', {
+        query: `&company=${companyId ? companyId.code : ""}&department=${departmentId ? departmentId.code : ""}&afdeling=${afdelingId ? afdelingId.id : ""}&date_start=${formattedStartOfMonth ?? ''}&date_end=${formattedPreviousDate ?? ''}`
+      })
+    }
+
+    // query params
+    let queryParams = store.state.queryString
+
+    // console.log("recalllllllllllllllllllllllllllllllllllll")
+    // console.log(store.state.initState)
+    // console.log(queryParams)
+
+    // Status
+    let status
+    await $axios.get(`/api/agro-dashboard-web/status?q=${queryParams}`).then((response) => {
+      status = response.data.data
+    })
+
+    console.log(JSON.stringify(status))
 
     return {
       // posts: posts.data,
@@ -242,15 +266,51 @@ export default {
       departmentId: departmentId,
       company: company,
       companyId: companyId,
+      queryParams: queryParams,
+      status: {
+        planTbs: {
+          janjang: status.plan_tbs.janjang ?? '',
+          tonase: status.plan_tbs.tonase ?? '',
+        },
+        tbsDiterimaPks: {
+          janjang: status.tbs_diterima_pks.janjang ?? '',
+          tonase: status.tbs_diterima_pks.tonase ?? '',
+        },
+      }
+    }
+  },
+  watch: {
+    async '$store.state.search'(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        await this.$nuxt.refresh()
+      }
     }
   },
   created() {
+
     this.$store.commit('updateAfdelingState', this.afdeling)
     this.$store.commit('updateDepartmentState', this.department)
     this.$store.commit('updateCompanyState', this.company)
-    this.$store.commit('updateAfdelingIdState', this.afdelingId)
-    this.$store.commit('updateDepartmentIdState', this.departmentId)
-    this.$store.commit('updateCompanyIdState', this.companyId)
+
+    if (this.$store.state.initState) {
+      this.$store.commit('updateAfdelingIdState', this.afdelingId)
+      this.$store.commit('updateDepartmentIdState', this.departmentId)
+      this.$store.commit('updateCompanyIdState', this.companyId)
+
+      const currentDate = new Date();
+
+      const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      const previousDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
+
+      const formattedStartOfMonth = `${startOfMonth.getFullYear()}-${startOfMonth.getMonth() + 1}-${startOfMonth.getDate()}`;
+      const formattedPreviousDate = `${previousDate.getFullYear()}-${previousDate.getMonth() + 1}-${previousDate.getDate()}`;
+
+      this.$store.commit('updateDateStartState', formattedStartOfMonth)
+      this.$store.commit('updateDateEndState', formattedPreviousDate)
+
+      // Set init state to false
+      this.$store.state.initState = false
+    }
     // this.$store.commit('updateDateStartState', this.activitied_at_start)
     // this.$store.commit('updateDateEndState', this.activitied_at_end)
   },

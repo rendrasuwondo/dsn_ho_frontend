@@ -368,14 +368,13 @@ export default {
     let activitied_at_end = query.activitied_at_append
       ? query.activitied_at_append
       : currentDate()
-    console.log(1, `/api/agro-dashboard-web/restan/janjang?q=${queryParams}`)
+
     let janjangData
     await $axios
       .get(`/api/agro-dashboard-web/restan/janjang?q=${queryParams}`)
       .then((response) => {
         janjangData = response.data.data
       })
-      console.log(2, `/api/agro-dashboard-web/restan/janjang-stack?q=${queryParams}`)
 
     let janjangStackData
     await $axios
@@ -383,7 +382,6 @@ export default {
       .then((response) => {
         janjangStackData = response.data.data
       })
-      console.log(3, `/api/agro-dashboard-web/restan/tonase?q=${queryParams}`)
 
     let tonaseData
     await $axios
@@ -391,7 +389,6 @@ export default {
       .then((response) => {
         tonaseData = response.data.data
       })
-      console.log(4, `/api/agro-dashboard-web/restan/tonase-stack?q=${queryParams}`)
 
     let tonaseStackData
     await $axios
@@ -399,7 +396,6 @@ export default {
       .then((response) => {
         tonaseStackData = response.data.data
       })
-      console.log(5)
 
     return {
       chart: {

@@ -1,5 +1,7 @@
 export const state = () => ({
   queryString: '',
+  search: 0,
+  initState: true,
   afdeling: [],
   department: [],
   company: [],
@@ -37,6 +39,9 @@ export const mutations = {
   },
   updateDateEndState(state, payload) {
     state.dateEnd = payload;
+  },
+  updateSearchState(state, payload) {
+    state.search = payload;
   },
 };
 

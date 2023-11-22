@@ -89,7 +89,7 @@
             </b-row>
           </div>
 
-          <div class="row justify-content-end">
+          <div class="row justify-content-end pr-2">
             <div class="input-group-append">
               <button @click="searchData" class="btn btn-info">
                 <i class="fa fa-search"></i>
@@ -128,15 +128,16 @@ export default {
     },
 
     updateDashboardState() {
-      let company = this.companyId ? this.companyId.code : ""
-      let department = this.departmentId ? this.departmentId.code : ""
-      let afdeling = this.afdelingId ? this.afdelingId.id : ""
+      let company = this.$store.state.companyId ? this.$store.state.companyId.code : ""
+      let department = this.$store.state.departmentId ? this.$store.state.departmentId.code : ""
+      let afdeling = this.$store.state.afdelingId ? this.$store.state.afdelingId.id : ""
       this.$store.commit('updateDashboardState', {
         query: `&company=${company}&department=${department}&afdeling=${afdeling}&date_start=${this.dateStart ?? ''}&date_end=${this.dateEnd ?? ''}`
       })
     },
     //searchData
     searchData() {
+      this.$store.commit('updateSearchState', this.$store.state.search + 1);
       this.$nuxt.$loading.start()
       this.updateDashboardState()
       this.$nuxt.refresh();
@@ -173,6 +174,7 @@ export default {
         return this.$store.state.dateStart
       },
       set(value) {
+        alert(value)
         this.$store.commit('updateDateStartState', value)
       },
     },
