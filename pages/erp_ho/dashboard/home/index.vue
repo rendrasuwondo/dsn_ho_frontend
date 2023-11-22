@@ -254,8 +254,6 @@ export default {
       status = response.data.data
     })
 
-    console.log(JSON.stringify(status))
-
     return {
       // posts: posts.data,
       activitied_at_start: activitied_at_start,

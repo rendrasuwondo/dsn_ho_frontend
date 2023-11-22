@@ -22,7 +22,7 @@
                   <div class="overlay"></div>
                   <div class="card-body">
                     <h5 class="card-title">Total Plan TBS</h5>
-                    <p class="card-text">41287 Jjg | 763.8 Ton</p>
+                    <p class="card-text">{{ this.status.planTbs.janjang }} Jjg | {{ this.status.planTbs.tonase }} Ton</p>
                   </div>
                 </a>
               </div>
@@ -32,7 +32,7 @@
                   <div class="overlay"></div>
                   <div class="card-body">
                     <h5 class="card-title">Total TBS diterima PKS</h5>
-                    <p class="card-text">31280 Jjg | 578.6 Ton</p>
+                    <p class="card-text">{{ this.status.tbsDiterimaPks.janjang }} Jjg | {{ this.status.tbsDiterimaPks.tonase }} Ton</p>
                   </div>
                 </a>
               </div>
@@ -243,6 +243,12 @@ export default {
     //     tonaseDetailData = response.data.data
     //   })
 
+    // Status
+    let status
+    await $axios.get(`/api/agro-dashboard-web/status?q=${queryParams}`).then((response) => {
+      status = response.data.data
+    })
+
     return {
       chart: {
         tonase: {
@@ -287,6 +293,16 @@ export default {
       // department: department,
       // company: company,
       queryParams: queryParams,
+      status: {
+        planTbs: {
+          janjang: status.plan_tbs.janjang ?? '',
+          tonase: status.plan_tbs.tonase ?? '',
+        },
+        tbsDiterimaPks: {
+          janjang: status.tbs_diterima_pks.janjang ?? '',
+          tonase: status.tbs_diterima_pks.tonase ?? '',
+        },
+      }
     }
   },
 

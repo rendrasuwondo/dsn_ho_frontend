@@ -17,31 +17,23 @@
           <div class="container mb-2">
             <div class="row d-flex justify-items-center align-items-center">
               <div class="col">
-                <a href="javascript:;" class="card-ui card color-success">
+                <a href="javascript:;"
+                  class="card-ui card color-success">
                   <div class="overlay"></div>
                   <div class="card-body">
-                    <h5 class="card-title">Total Plan TBS</h5>
-                    <p class="card-text">41287 Jjg | 763.8 Ton</p>
+                    <h5 class="card-title">Persentase Restan</h5>
+                    <p class="card-text">15.1% | 10.3% | 3.1%</p>
                   </div>
                 </a>
               </div>
 
               <div class="col">
-                <a href="javascript:;" class="card-ui card color-warning">
+                <a href="javascript:;"
+                  class="card-ui card color-success">
                   <div class="overlay"></div>
                   <div class="card-body">
-                    <h5 class="card-title">Total TBS diterima PKS</h5>
-                    <p class="card-text">31280 Jjg | 578.6 Ton</p>
-                  </div>
-                </a>
-              </div>
-
-              <div class="col">
-                <a href="javascript:;" class="card-ui card color-danger">
-                  <div class="overlay"></div>
-                  <div class="card-body">
-                    <h5 class="card-title">Persentase Brondol</h5>
-                    <p class="card-text">22.5 Ton | 2.3 %</p>
+                    <h5 class="card-title">Restan</h5>
+                    <p class="card-text">42Jjg |0.77Ton</p>
                   </div>
                 </a>
               </div>
