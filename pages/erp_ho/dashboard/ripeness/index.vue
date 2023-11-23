@@ -31,100 +31,6 @@
             <no-ssr>
               <b-row>
                 <b-col cols="6">
-                  <div class="chart-container-ripeness">
-                    <div class="card card-outline card-info">
-                      <div class="card-body">
-                        <fusioncharts
-                          :type="chart.ripeness.type"
-                          :width="chart.ripeness.width"
-                          :height="chart.ripeness.height"
-                          :dataformat="chart.ripeness.dataFormat"
-                          :dataSource="chart.ripeness.dataSource"
-                        >
-                        </fusioncharts>
-                      </div>
-                    </div>
-                  </div>
-                </b-col>
-                <b-col cols="6">
-                  <div class="chart-container-ripeness2">
-                    <div class="card card-outline card-info">
-                      <div class="card-body">
-                        <fusioncharts
-                          :type="chart.ripeness2.type"
-                          :width="chart.ripeness2.width"
-                          :height="chart.ripeness2.height"
-                          :dataformat="chart.ripeness2.dataFormat"
-                          :dataSource="chart.ripeness2.dataSource"
-                        >
-                        </fusioncharts>
-                      </div>
-                    </div>
-                  </div>
-                </b-col>
-              </b-row>
-            </no-ssr>
-          </div>
-          <div class="mb-2 ml-2 mr-2">
-            <b-row class="justify-content-center">
-              <b-col cols="6">
-                <div class="form-group">
-                  <multiselect
-                    v-model="puhus_id"
-                    :options="puhus"
-                    label="code"
-                    track-by="id"
-                    :searchable="true"
-                    placeholder="Detail"
-                    @input="changeDetail"
-                  ></multiselect>
-                </div>
-              </b-col>
-            </b-row>
-          </div>
-          <div class="mb-2 ml-2 mr-2">
-            <no-ssr>
-              <b-row>
-                <b-col cols="6">
-                  <div class="chart-container-detail-ripeness">
-                    <div class="card card-outline card-info">
-                      <div class="card-body">
-                        <fusioncharts
-                          :type="chart.detail_ripeness.type"
-                          :width="chart.detail_ripeness.width"
-                          :height="chart.detail_ripeness.height"
-                          :dataformat="chart.detail_ripeness.dataFormat"
-                          :dataSource="chart.detail_ripeness.dataSource"
-                        >
-                        </fusioncharts>
-                      </div>
-                    </div>
-                  </div>
-                </b-col>
-                <b-col cols="6">
-                  <div class="chart-container-detail-ripeness2">
-                    <div class="card card-outline card-info">
-                      <div class="card-body">
-                        <fusioncharts
-                          :type="chart.detail_ripeness2.type"
-                          :width="chart.detail_ripeness2.width"
-                          :height="chart.detail_ripeness2.height"
-                          :dataformat="chart.detail_ripeness2.dataFormat"
-                          :dataSource="chart.detail_ripeness2.dataSource"
-                        >
-                        </fusioncharts>
-                      </div>
-                    </div>
-                  </div>
-                </b-col>
-              </b-row>
-            </no-ssr>
-          </div>
-
-          <div class="mb-2 ml-2 mr-2">
-            <no-ssr>
-              <b-row>
-                <b-col cols="6">
                   <div class="chart-container-janjang">
                     <div class="card card-outline card-info">
                       <div class="card-body">
@@ -164,8 +70,8 @@
               <b-col cols="6">
                 <div class="form-group">
                   <multiselect
-                    v-model="puhus_id"
-                    :options="puhus"
+                    v-model="department_id"
+                    :options="department"
                     label="code"
                     track-by="id"
                     :searchable="true"
@@ -214,6 +120,100 @@
               </b-row>
             </no-ssr>
           </div>
+
+          <div class="mt-5 mb-2 ml-2 mr-2">
+            <no-ssr>
+              <b-row>
+                <b-col cols="6">
+                  <div class="chart-container-janjangRKH">
+                    <div class="card card-outline card-info">
+                      <div class="card-body">
+                        <fusioncharts
+                          :type="chart.janjangRKH.type"
+                          :width="chart.janjangRKH.width"
+                          :height="chart.janjangRKH.height"
+                          :dataformat="chart.janjangRKH.dataFormat"
+                          :dataSource="chart.janjangRKH.dataSource"
+                        >
+                        </fusioncharts>
+                      </div>
+                    </div>
+                  </div>
+                </b-col>
+                <b-col cols="6">
+                  <div class="chart-container-tonaseRKH">
+                    <div class="card card-outline card-info">
+                      <div class="card-body">
+                        <fusioncharts
+                          :type="chart.tonaseRKH.type"
+                          :width="chart.tonaseRKH.width"
+                          :height="chart.tonaseRKH.height"
+                          :dataformat="chart.tonaseRKH.dataFormat"
+                          :dataSource="chart.tonaseRKH.dataSource"
+                        >
+                        </fusioncharts>
+                      </div>
+                    </div>
+                  </div>
+                </b-col>
+              </b-row>
+            </no-ssr>
+          </div>
+          <div class="mb-2 ml-2 mr-2">
+            <b-row class="justify-content-center">
+              <b-col cols="6">
+                <div class="form-group">
+                  <multiselect
+                    v-model="department_id"
+                    :options="department"
+                    label="code"
+                    track-by="id"
+                    :searchable="true"
+                    placeholder="Detail"
+                    @input="changeDetailRKH"
+                  ></multiselect>
+                </div>
+              </b-col>
+            </b-row>
+          </div>
+          <div class="mb-2 ml-2 mr-2">
+            <no-ssr>
+              <b-row>
+                <b-col cols="6">
+                  <div class="chart-container-detail-janjangRKH">
+                    <div class="card card-outline card-info">
+                      <div class="card-body">
+                        <fusioncharts
+                          :type="chart.detail_janjangRKH.type"
+                          :width="chart.detail_janjangRKH.width"
+                          :height="chart.detail_janjangRKH.height"
+                          :dataformat="chart.detail_janjangRKH.dataFormat"
+                          :dataSource="chart.detail_janjangRKH.dataSource"
+                        >
+                        </fusioncharts>
+                      </div>
+                    </div>
+                  </div>
+                </b-col>
+                <b-col cols="6">
+                  <div class="chart-container-detail-tonaseRKH">
+                    <div class="card card-outline card-info">
+                      <div class="card-body">
+                        <fusioncharts
+                          :type="chart.detail_tonaseRKH.type"
+                          :width="chart.detail_tonaseRKH.width"
+                          :height="chart.detail_tonaseRKH.height"
+                          :dataformat="chart.detail_tonaseRKH.dataFormat"
+                          :dataSource="chart.detail_tonaseRKH.dataSource"
+                        >
+                        </fusioncharts>
+                      </div>
+                    </div>
+                  </div>
+                </b-col>
+              </b-row>
+            </no-ssr>
+          </div>
         </div>
       </div>
     </section>
@@ -221,175 +221,13 @@
 </template>
 
 <script>
-let chartDataRipeness = {
-  caption: 'Ripeness',
-  theme: 'fusion',
-  xaxisname: '',
-  yaxisname: '',
-  numberSuffix: "%",
-  formatnumberscale: '1',
-  // plottooltext:
-  //   '<b>$dataValue</b> <b>$seriesName</b> in $label',
-  drawcrossline: '1',
-}
-let chartDataRipeness2 = {
-  caption: 'Akurasi AKP RKH vs AKP Aktual (Ton)',
-  theme: 'fusion',
-  xaxisname: '',
-  yaxisname: '',
-  numberSuffix: "%",
-  formatnumberscale: '1',
-  // plottooltext:
-  //   '<b>$dataValue</b> <b>$seriesName</b> in $label',
-  drawcrossline: '1',
-}
-
-let chartDataJanjang = {
-  caption: 'Akurasi AKP RKH vs AKP Aktual (Jjg)',
-  theme: 'fusion',
-  xaxisname: '',
-  yaxisname: '',
-  numberSuffix: "%",
-  formatnumberscale: '1',
-  // plottooltext:
-  //   '<b>$dataValue</b> <b>$seriesName</b> in $label',
-  drawcrossline: '1',
-}
-let chartDataTon = {
-  caption: 'Akurasi AKP RKH vs AKP Aktual (Ton)',
-  theme: 'fusion',
-  xaxisname: '',
-  yaxisname: '',
-  numberSuffix: "%",
-  formatnumberscale: '1',
-  // plottooltext:
-  //   '<b>$dataValue</b> <b>$seriesName</b> in $label',
-  drawcrossline: '1',
-}
-
-async function getChartRipenessDataSource() {
-  return {
-    chart: chartDataRipeness,
-    data: [
-      {
-        label: 'Puhus 1',
-        value: '80'
-      },
-      {
-        label: 'Puhus 2',
-        value: '90'
-      },
-      {
-        label: 'Puhus 3',
-        value: '100'
-      },
-    ],
-  }
-}
-
-async function getChartRipeness2DataSource() {
-  return {
-    chart: chartDataRipeness2,
-    data: [
-      {
-        label: 'Puhus 1',
-        value: '80'
-      },
-      {
-        label: 'Puhus 2',
-        value: '90'
-      },
-      {
-        label: 'Puhus 3',
-        value: '100'
-      },
-    ],
-  }
-}
-
-async function getChartJanjangDataSource() {
-  return {
-    chart: chartDataJanjang,
-    data: [
-      {
-        label: 'Puhus 1',
-        value: '80'
-      },
-      {
-        label: 'Puhus 2',
-        value: '90'
-      },
-      {
-        label: 'Puhus 3',
-        value: '100'
-      },
-    ],
-  }
-}
-
-async function getChartTonDataSource() {
-  return {
-    chart: chartDataTon,
-    data: [
-      {
-        label: 'Puhus 1',
-        value: '80'
-      },
-      {
-        label: 'Puhus 2',
-        value: '90'
-      },
-      {
-        label: 'Puhus 3',
-        value: '100'
-      },
-    ],
-  }
-}
-
-async function getChartDetailTonDataSource() {
-  return {
-    chart: chartDataTon,
-    data: [
-      {
-        label: 'Busuk',
-        value: '10'
-      },
-      {
-        label: 'Mentah',
-        value: '0'
-      },
-      {
-        label: 'Matang',
-        value: '90'
-      },
-    ],
-  }
-}
-
-async function getChartDetailJanjangDataSource() {
-  return {
-    chart: chartDataJanjang,
-    data: [
-      {
-        label: 'Busuk',
-        value: '10'
-      },
-      {
-        label: 'Mentah',
-        value: '0'
-      },
-      {
-        label: 'Matang',
-        value: '90'
-      },
-    ],
-  }
-}
-
 export default {
   layout: 'admin',
-
+  computed: {
+    queryStringState() {
+      return this.$store.state.queryString
+    },
+  },
   head() {
     return {
       title: 'PT',
@@ -397,38 +235,18 @@ export default {
   },
   data() {
     return {
-      afdeling: [],
-      department: [],
-      company: [],
-      puhus: [
-        {
-          id: 1,
-          code: 'Puhus 1',
-        },
-        {
-          id: 2,
-          code: 'Puhus 2',
-        },
-        {
-          id: 3,
-          code: 'Puhus 3',
-        },
-      ],
-      afdeling_id: this.$route.query.q_afdeling_id,
-      department_id: this.$route.query.q_department_id,
-      company_id: this.$route.query.q_company_id,
+      afdeling: this.$store.state.afdeling,
+      department: this.$store.state.department,
+      company: this.$store.state.company,
+      afdeling_id: this.$store.state.afdeling_id,
+      department_id: this.$store.state.department_id,
+      company_id: this.$store.state.company_id,
       puhus_id: null,
       puhus_tonase_id: null,
     }
   },
-  watchQuery: [
-    'activitied_at_prepend',
-    'activitied_at_append',
-    'q_afdeling_id',
-    'q_department_id',
-    'q_company_id',
-  ],
-  async asyncData({ $axios, query, auth }) {
+  watchQuery: [],
+  async asyncData({ $axios, query, store }) {
     function currentDate() {
       const current = new Date()
       current.setDate(current.getDate())
@@ -439,11 +257,8 @@ export default {
       return date
     }
 
-    //page
-    let page = query.page ? parseInt(query.page) : ''
-
-    //search
-    let search = query.q ? query.q : ''
+    // query params
+    let queryParams = store.state.queryString
 
     //activitied_at_prepend
     let activitied_at_start = query.activitied_at_prepend
@@ -455,113 +270,229 @@ export default {
       ? query.activitied_at_append
       : currentDate()
 
-    // Company
-    let company
-    await $axios.get('/api/admin/lov_company_table').then((response) => {
-      company = response.data.data
-    })
+    // // Company
+    // let company
+    // await $axios.get('/api/admin/lov_company_table').then((response) => {
+    //   company = response.data.data
+    // })
 
-    //Data department
-    let department
-    await $axios.get('/api/admin/lov_department').then((response) => {
-      department = response.data.data
-    })
+    // //Data department
+    // let department
+    // await $axios.get('/api/admin/lov_department').then((response) => {
+    //   department = response.data.data
+    // })
 
-    // Data afdeling
-    let afdeling
-    await $axios.get('/api/admin/lov_afdeling_table').then((response) => {
-      afdeling = response.data.data
-    })
+    // // Data afdeling
+    // let afdeling
+    // await $axios.get('/api/admin/lov_afdeling_table').then((response) => {
+    //   afdeling = response.data.data
+    // })
 
-    // const posts = await $axios.$get(
-    //   `/api/admin/report/lph?q=${search}&page=${page}&activitied_at_prepend=${activitied_at_start}&activitied_at_append=${activitied_at_end}&q_afdeling_id=${q_afdeling_id}&q_department_id=${q_department_id}&status=${q_elhm_status_id}`
-    // )
+    let janjangData
+    await $axios
+      .get(`/api/agro-dashboard-web/ripeness/janjang?q=${queryParams}`)
+      .then((response) => {
+        janjangData = response.data.data
+      })
+
+    let tonaseData
+    await $axios
+      .get(`/api/agro-dashboard-web/ripeness/tonase?q=${queryParams}`)
+      .then((response) => {
+        tonaseData = response.data.data
+      })
+
+    let janjangDataRKH
+    await $axios
+      .get(`/api/agro-dashboard-web/ripeness-rkh/janjang?q=${queryParams}`)
+      .then((response) => {
+        janjangDataRKH = response.data.data
+      })
+
+    let tonaseDataRKH
+    await $axios
+      .get(`/api/agro-dashboard-web/ripeness-rkh/tonase?q=${queryParams}`)
+      .then((response) => {
+        tonaseDataRKH = response.data.data
+      })
+
+    // let janjangDetailData
+    // await $axios
+    //   .get(`/api/agro-dashboard-web/ripeness/janjang/detail?department=${department_id}`)
+    //   .then((response) => {
+    //     janjangDetailData = response.data.data
+    //   })
+
+    // let tonaseDetailData
+    // await $axios
+    //   .get(`/api/agro-dashboard-web/ripeness/tonase/detail?department=${department_id}`)
+    //   .then((response) => {
+    //     tonaseDetailData = response.data.data
+    //   })
+
+    // Status
+    let status
+    await $axios.get(`/api/agro-dashboard-web/status?q=${queryParams}`).then((response) => {
+      status = response.data.data
+    })
 
     return {
       chart: {
-        ripeness: {
-          type: 'column2d',
-          renderAt: 'chart-container-ripeness',
-          width: '100%',
-          height: '350',
-          dataFormat: 'json',
-          dataSource: await getChartRipenessDataSource(),
-        },
-        ripeness2: {
-          type: 'column2d',
-          renderAt: 'chart-container-ripeness2',
-          width: '100%',
-          height: '350',
-          dataFormat: 'json',
-          dataSource: await getChartRipeness2DataSource(),
-        },
-        detail_ripeness: {
-          type: 'pie2d',
-          renderAt: 'chart-container-detail-ripeness',
-          width: '100%',
-          height: '350',
-          dataFormat: 'json',
-          dataSource: await getChartDetailJanjangDataSource(),
-        },
-        detail_ripeness2: {
-          type: 'pie2d',
-          renderAt: 'chart-container-detail-ripeness2',
-          width: '100%',
-          height: '350',
-          dataFormat: 'json',
-          dataSource: await getChartDetailTonDataSource(),
-        },
-        tonase: {
+        janjang: {
           type: 'column2d',
           renderAt: 'chart-container-janjang',
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartJanjangDataSource(),
+          dataSource: janjangData,
         },
-        janjang: {
+        tonase: {
           type: 'column2d',
           renderAt: 'chart-container-tonase',
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartTonDataSource(),
+          dataSource: tonaseData,
         },
-        detail_tonase: {
+        detail_janjang: {
           type: 'pie2d',
           renderAt: 'chart-container-detail-janjang',
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartDetailTonDataSource(),
+          dataSource: {},
         },
-        detail_janjang: {
+        detail_tonase: {
           type: 'pie2d',
           renderAt: 'chart-container-detail-tonase',
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: await getChartDetailJanjangDataSource(),
+          dataSource: {},
+        },
+        janjangRKH: {
+          type: 'column2d',
+          renderAt: 'chart-container-janjangRKH',
+          width: '100%',
+          height: '350',
+          dataFormat: 'json',
+          dataSource: janjangDataRKH,
+        },
+        tonaseRKH: {
+          type: 'column2d',
+          renderAt: 'chart-container-tonaseRKH',
+          width: '100%',
+          height: '350',
+          dataFormat: 'json',
+          dataSource: tonaseDataRKH,
+        },
+        detail_janjangRKH: {
+          type: 'pie2d',
+          renderAt: 'chart-container-detail-janjangRKH',
+          width: '100%',
+          height: '350',
+          dataFormat: 'json',
+          dataSource: {},
+        },
+        detail_tonaseRKH: {
+          type: 'pie2d',
+          renderAt: 'chart-container-detail-tonaseRKH',
+          width: '100%',
+          height: '350',
+          dataFormat: 'json',
+          dataSource: {},
         },
       },
       // posts: posts.data,
       activitied_at_start: activitied_at_start,
       activitied_at_end: activitied_at_end,
-      afdeling: afdeling,
       // afdeling_id: afdeling_id,
-      department: department,
       // department_id: department_id_asyncData,
-      company: company,
+      // afdeling: afdeling,
+      // department: department,
+      // company: company,
+      queryParams: queryParams,
+      status: {
+        planTbs: {
+          janjang: status.plan_tbs.janjang ?? '',
+          tonase: status.plan_tbs.tonase ?? '',
+        },
+        tbsDiterimaPks: {
+          janjang: status.tbs_diterima_pks.janjang ?? '',
+          tonase: status.tbs_diterima_pks.tonase ?? '',
+        },
+      }
     }
   },
 
   methods: {
-    async changeDetail(selected) {
-      this.chart.detail_janjang.dataSource =
-        await getChartDetailJanjangDataSource2()
+    async getChartDetailJanjangClientDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(
+          `/api/agro-dashboard-web/ripeness/janjang/detail?q=${this.queryParams}&department=${department_id}`
+        )
+        .then((response) => {
+          data = response.data.data
+        })
 
-      this.chart.detail_tonase.dataSource =
-        await getChartDetailJanjangDataSource2()
+      return data
+    },
+    async getChartDetailTonaseClientDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(
+          `/api/agro-dashboard-web/ripeness/tonase/detail?q=${this.queryParams}&department=${department_id}`
+        )
+        .then((response) => {
+          data = response.data.data
+        })
+
+      return data
+    },
+    async getChartRKHDetailJanjangClientDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(
+          `/api/agro-dashboard-web/ripeness-rkh/janjang/detail?q=${this.queryParams}&department=${department_id}`
+        )
+        .then((response) => {
+          data = response.data.data
+        })
+
+      return data
+    },
+    async getChartRKHDetailTonaseClientDataSource(department_id) {
+      let data
+      await this.$axios
+        .get(
+          `/api/agro-dashboard-web/ripeness-rkh/tonase/detail?q=${this.queryParams}&department=${department_id}`
+        )
+        .then((response) => {
+          data = response.data.data
+        })
+
+      return data
+    },
+    async changeDetail(selected) {
+      if (selected) {
+        this.$nuxt.$loading.start()
+        this.chart.detail_janjang.dataSource =
+          await this.getChartDetailJanjangClientDataSource(selected.code)
+        this.chart.detail_tonase.dataSource =
+          await this.getChartDetailTonaseClientDataSource(selected.code)
+        this.$nuxt.$loading.finish()
+      }
+    },
+    async changeDetailRKH(selected) {
+      if (selected) {
+        this.$nuxt.$loading.start()
+        this.chart.detail_janjangRKH.dataSource =
+          await this.getChartRKHDetailJanjangClientDataSource(selected.code)
+        this.chart.detail_tonaseRKH.dataSource =
+          await this.getChartRKHDetailTonaseClientDataSource(selected.code)
+        this.$nuxt.$loading.finish()
+      }
     },
     changePage(page) {
       this.$router.push({
