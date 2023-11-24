@@ -21,8 +21,8 @@
                   class="card-ui card color-success">
                   <div class="overlay"></div>
                   <div class="card-body">
-                    <h5 class="card-title">Akurasi RKH</h5>
-                    <p class="card-text">96.2%</p>
+                    <h5 class="card-title">Avg. BJR</h5>
+                    <p class="card-text">17.3Kg</p>
                   </div>
                 </a>
               </div>
@@ -31,78 +31,7 @@
           <div class="mb-2 ml-2 mr-2">
             <no-ssr>
               <b-row>
-                <b-col cols="6">
-                  <div class="chart-container-janjang">
-                    <div class="card card-outline card-info">
-                      <div class="card-body">
-                        <fusioncharts
-                          :type="chart.janjang.type"
-                          :width="chart.janjang.width"
-                          :height="chart.janjang.height"
-                          :dataformat="chart.janjang.dataFormat"
-                          :dataSource="chart.janjang.dataSource"
-                        >
-                        </fusioncharts>
-                      </div>
-                    </div>
-                  </div>
-                </b-col>
-                <b-col cols="6">
-                  <div class="chart-container-tonase">
-                    <div class="card card-outline card-info">
-                      <div class="card-body">
-                        <fusioncharts
-                          :type="chart.tonase.type"
-                          :width="chart.tonase.width"
-                          :height="chart.tonase.height"
-                          :dataformat="chart.tonase.dataFormat"
-                          :dataSource="chart.tonase.dataSource"
-                        >
-                        </fusioncharts>
-                      </div>
-                    </div>
-                  </div>
-                </b-col>
-              </b-row>
-            </no-ssr>
-          </div>
-          <div class="mb-2 ml-2 mr-2">
-            <b-row class="justify-content-center">
-              <b-col cols="6">
-                <div class="form-group">
-                  <multiselect
-                    v-model="department_id"
-                    :options="department"
-                    label="code"
-                    track-by="id"
-                    :searchable="true"
-                    placeholder="Detail"
-                    @input="changeDetail"
-                  ></multiselect>
-                </div>
-              </b-col>
-            </b-row>
-          </div>
-          <div class="mb-2 ml-2 mr-2">
-            <no-ssr>
-              <b-row>
-                <b-col cols="6">
-                  <div class="chart-container-detail-janjang">
-                    <div class="card card-outline card-info">
-                      <div class="card-body">
-                        <fusioncharts
-                          :type="chart.detail_janjang.type"
-                          :width="chart.detail_janjang.width"
-                          :height="chart.detail_janjang.height"
-                          :dataformat="chart.detail_janjang.dataFormat"
-                          :dataSource="chart.detail_janjang.dataSource"
-                        >
-                        </fusioncharts>
-                      </div>
-                    </div>
-                  </div>
-                </b-col>
-                <b-col cols="6">
+                <b-col cols="12">
                   <div class="chart-container-detail-tonase">
                     <div class="card card-outline card-info">
                       <div class="card-body">
@@ -195,33 +124,12 @@ export default {
     //   afdeling = response.data.data
     // })
 
-    let janjangData
+    let tonaseDetailData
     await $axios
-      .get(`/api/agro-dashboard-web/akurasi/janjang?q=${queryParams}`)
+      .get(`/api/agro-dashboard-web/avg-bjr/tonase/detail?q=${queryParams}`)
       .then((response) => {
-        janjangData = response.data.data
+        tonaseDetailData = response.data.data
       })
-
-    let tonaseData
-    await $axios
-      .get(`/api/agro-dashboard-web/akurasi/tonase?q=${queryParams}`)
-      .then((response) => {
-        tonaseData = response.data.data
-      })
-
-    // let janjangDetailData
-    // await $axios
-    //   .get(`/api/agro-dashboard-web/akurasi/janjang/detail?department=${department_id}`)
-    //   .then((response) => {
-    //     janjangDetailData = response.data.data
-    //   })
-
-    // let tonaseDetailData
-    // await $axios
-    //   .get(`/api/agro-dashboard-web/akurasi/tonase/detail?department=${department_id}`)
-    //   .then((response) => {
-    //     tonaseDetailData = response.data.data
-    //   })
 
     // Status
     let status
@@ -231,37 +139,13 @@ export default {
 
     return {
       chart: {
-        janjang: {
-          type: 'column2d',
-          renderAt: 'chart-container-janjang',
-          width: '100%',
-          height: '350',
-          dataFormat: 'json',
-          dataSource: janjangData,
-        },
-        tonase: {
-          type: 'column2d',
-          renderAt: 'chart-container-tonase',
-          width: '100%',
-          height: '350',
-          dataFormat: 'json',
-          dataSource: tonaseData,
-        },
-        detail_janjang: {
-          type: 'column2d',
-          renderAt: 'chart-container-detail-janjang',
-          width: '100%',
-          height: '350',
-          dataFormat: 'json',
-          dataSource: {},
-        },
         detail_tonase: {
-          type: 'column2d',
+          type: 'msline',
           renderAt: 'chart-container-detail-tonase',
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: {},
+          dataSource: tonaseDetailData,
         },
       },
       // posts: posts.data,
@@ -310,16 +194,6 @@ export default {
         })
 
       return data
-    },
-    async changeDetail(selected) {
-      if (selected) {
-        this.$nuxt.$loading.start()
-        this.chart.detail_janjang.dataSource =
-          await this.getChartDetailJanjangClientDataSource(selected.code)
-        this.chart.detail_tonase.dataSource =
-          await this.getChartDetailTonaseClientDataSource(selected.code)
-        this.$nuxt.$loading.finish()
-      }
     },
     changePage(page) {
       this.$router.push({

@@ -21,8 +21,8 @@
                   class="card-ui card color-success">
                   <div class="overlay"></div>
                   <div class="card-body">
-                    <h5 class="card-title">Akurasi RKH</h5>
-                    <p class="card-text">96.2%</p>
+                    <h5 class="card-title">Produktivitas SKU</h5>
+                    <p class="card-text">1.1 Ton/day</p>
                   </div>
                 </a>
               </div>
@@ -31,32 +31,16 @@
           <div class="mb-2 ml-2 mr-2">
             <no-ssr>
               <b-row>
-                <b-col cols="6">
-                  <div class="chart-container-janjang">
+                <b-col cols="12">
+                  <div class="chart-container-detail-tonase">
                     <div class="card card-outline card-info">
                       <div class="card-body">
                         <fusioncharts
-                          :type="chart.janjang.type"
-                          :width="chart.janjang.width"
-                          :height="chart.janjang.height"
-                          :dataformat="chart.janjang.dataFormat"
-                          :dataSource="chart.janjang.dataSource"
-                        >
-                        </fusioncharts>
-                      </div>
-                    </div>
-                  </div>
-                </b-col>
-                <b-col cols="6">
-                  <div class="chart-container-tonase">
-                    <div class="card card-outline card-info">
-                      <div class="card-body">
-                        <fusioncharts
-                          :type="chart.tonase.type"
-                          :width="chart.tonase.width"
-                          :height="chart.tonase.height"
-                          :dataformat="chart.tonase.dataFormat"
-                          :dataSource="chart.tonase.dataSource"
+                          :type="chart.detail_tonase.type"
+                          :width="chart.detail_tonase.width"
+                          :height="chart.detail_tonase.height"
+                          :dataformat="chart.detail_tonase.dataFormat"
+                          :dataSource="chart.detail_tonase.dataSource"
                         >
                         </fusioncharts>
                       </div>
@@ -67,51 +51,18 @@
             </no-ssr>
           </div>
           <div class="mb-2 ml-2 mr-2">
-            <b-row class="justify-content-center">
-              <b-col cols="6">
-                <div class="form-group">
-                  <multiselect
-                    v-model="department_id"
-                    :options="department"
-                    label="code"
-                    track-by="id"
-                    :searchable="true"
-                    placeholder="Detail"
-                    @input="changeDetail"
-                  ></multiselect>
-                </div>
-              </b-col>
-            </b-row>
-          </div>
-          <div class="mb-2 ml-2 mr-2">
             <no-ssr>
               <b-row>
-                <b-col cols="6">
-                  <div class="chart-container-detail-janjang">
+                <b-col cols="12">
+                  <div class="chart-container-top10">
                     <div class="card card-outline card-info">
                       <div class="card-body">
                         <fusioncharts
-                          :type="chart.detail_janjang.type"
-                          :width="chart.detail_janjang.width"
-                          :height="chart.detail_janjang.height"
-                          :dataformat="chart.detail_janjang.dataFormat"
-                          :dataSource="chart.detail_janjang.dataSource"
-                        >
-                        </fusioncharts>
-                      </div>
-                    </div>
-                  </div>
-                </b-col>
-                <b-col cols="6">
-                  <div class="chart-container-detail-tonase">
-                    <div class="card card-outline card-info">
-                      <div class="card-body">
-                        <fusioncharts
-                          :type="chart.detail_tonase.type"
-                          :width="chart.detail_tonase.width"
-                          :height="chart.detail_tonase.height"
-                          :dataformat="chart.detail_tonase.dataFormat"
-                          :dataSource="chart.detail_tonase.dataSource"
+                          :type="chart.top10.type"
+                          :width="chart.top10.width"
+                          :height="chart.top10.height"
+                          :dataformat="chart.top10.dataFormat"
+                          :dataSource="chart.top10.dataSource"
                         >
                         </fusioncharts>
                       </div>
@@ -195,33 +146,19 @@ export default {
     //   afdeling = response.data.data
     // })
 
-    let janjangData
+    let top10Data
     await $axios
-      .get(`/api/agro-dashboard-web/akurasi/janjang?q=${queryParams}`)
+      .get(`/api/agro-dashboard-web/produktivitas-sku/top10?q=${queryParams}`)
       .then((response) => {
-        janjangData = response.data.data
+        top10Data = response.data.data
       })
 
-    let tonaseData
+    let tonaseDetailData
     await $axios
-      .get(`/api/agro-dashboard-web/akurasi/tonase?q=${queryParams}`)
+      .get(`/api/agro-dashboard-web/produktivitas-sku/tonase/detail?q=${queryParams}`)
       .then((response) => {
-        tonaseData = response.data.data
+        tonaseDetailData = response.data.data
       })
-
-    // let janjangDetailData
-    // await $axios
-    //   .get(`/api/agro-dashboard-web/akurasi/janjang/detail?department=${department_id}`)
-    //   .then((response) => {
-    //     janjangDetailData = response.data.data
-    //   })
-
-    // let tonaseDetailData
-    // await $axios
-    //   .get(`/api/agro-dashboard-web/akurasi/tonase/detail?department=${department_id}`)
-    //   .then((response) => {
-    //     tonaseDetailData = response.data.data
-    //   })
 
     // Status
     let status
@@ -231,37 +168,21 @@ export default {
 
     return {
       chart: {
-        janjang: {
-          type: 'column2d',
-          renderAt: 'chart-container-janjang',
+        top10: {
+          type: 'bar2d',
+          renderAt: 'chart-container-top10',
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: janjangData,
-        },
-        tonase: {
-          type: 'column2d',
-          renderAt: 'chart-container-tonase',
-          width: '100%',
-          height: '350',
-          dataFormat: 'json',
-          dataSource: tonaseData,
-        },
-        detail_janjang: {
-          type: 'column2d',
-          renderAt: 'chart-container-detail-janjang',
-          width: '100%',
-          height: '350',
-          dataFormat: 'json',
-          dataSource: {},
+          dataSource: top10Data,
         },
         detail_tonase: {
-          type: 'column2d',
+          type: 'msline',
           renderAt: 'chart-container-detail-tonase',
           width: '100%',
           height: '350',
           dataFormat: 'json',
-          dataSource: {},
+          dataSource: tonaseDetailData,
         },
       },
       // posts: posts.data,
@@ -310,16 +231,6 @@ export default {
         })
 
       return data
-    },
-    async changeDetail(selected) {
-      if (selected) {
-        this.$nuxt.$loading.start()
-        this.chart.detail_janjang.dataSource =
-          await this.getChartDetailJanjangClientDataSource(selected.code)
-        this.chart.detail_tonase.dataSource =
-          await this.getChartDetailTonaseClientDataSource(selected.code)
-        this.$nuxt.$loading.finish()
-      }
     },
     changePage(page) {
       this.$router.push({

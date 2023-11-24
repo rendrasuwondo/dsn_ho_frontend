@@ -13,7 +13,7 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <p>{{ queryStringState }}</p>
+          <!-- <p>{{ queryStringState }}</p> -->
           <FilterBar />
           <div class="container mb-2">
             <div class="row d-flex justify-items-center align-items-center">
@@ -251,7 +251,7 @@ export default {
 
     return {
       chart: {
-        tonase: {
+        janjang: {
           type: 'mscolumn2d',
           renderAt: 'chart-container-janjang',
           width: '100%',
@@ -259,7 +259,7 @@ export default {
           dataFormat: 'json',
           dataSource: janjangData,
         },
-        janjang: {
+        tonase: {
           type: 'mscolumn2d',
           renderAt: 'chart-container-tonase',
           width: '100%',
@@ -267,7 +267,7 @@ export default {
           dataFormat: 'json',
           dataSource: tonaseData,
         },
-        detail_tonase: {
+        detail_janjang: {
           type: 'mscolumn2d',
           renderAt: 'chart-container-detail-janjang',
           width: '100%',
@@ -275,7 +275,7 @@ export default {
           dataFormat: 'json',
           dataSource: {},
         },
-        detail_janjang: {
+        detail_tonase: {
           type: 'mscolumn2d',
           renderAt: 'chart-container-detail-tonase',
           width: '100%',

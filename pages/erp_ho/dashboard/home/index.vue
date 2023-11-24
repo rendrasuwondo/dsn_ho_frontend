@@ -13,7 +13,7 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <p>{{ queryStringState }}</p>
+          <!-- <p>{{ queryStringState }}</p> -->
           <FilterBar/>
           <div class="container">
             <div class="row d-flex justify-items-center align-items-center">
@@ -109,13 +109,17 @@
               </div>
 
               <div class="col">
-                <a href="javascript:;" class="card-ui card color-success">
+                <nuxt-link
+                  :to="{
+                    name: 'erp_ho-dashboard-avg_bjr',
+                  }"
+                   class="card-ui card color-success">
                   <div class="overlay"></div>
                   <div class="card-body">
                     <h5 class="card-title">Avg. BJR</h5>
                     <p class="card-text">17.3Kg</p>
                   </div>
-                </a>
+                </nuxt-link>
               </div>
             </div>
 
@@ -135,13 +139,17 @@
               </div>
 
               <div class="col">
-                <a href="javascript:;" class="card-ui card color-success">
+                <nuxt-link
+                  :to="{
+                    name: 'erp_ho-dashboard-produktivitas_sku',
+                  }"
+                  class="card-ui card color-success">
                   <div class="overlay"></div>
                   <div class="card-body">
                     <h5 class="card-title">Produktivitas SKU</h5>
                     <p class="card-text">1.1 Ton/day</p>
                   </div>
-                </a>
+                </nuxt-link>
               </div>
 
               <div class="col">
