@@ -14,7 +14,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-oil-can"></i> <b>OIL CONTENT</b>
+            <i class="nav-icon fas fa-stopwatch"></i> <b>OVERTIME</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -1020,7 +1020,7 @@ export default {
         .then((response) => {
           this.month_code = response.data.data
         })
-
+      
       let monthCode =
         this.month_id.name !== null &&
         this.month_id.name !== '' &&
@@ -1038,7 +1038,7 @@ export default {
 
         await this.$axios
           .post(
-            `/api/admin/oil_content?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
+            `/api/peoplehub/overtime?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
             formData
           )
           .then((response) => {
@@ -1057,7 +1057,7 @@ export default {
             })
 
             this.$router.push({
-              name: 'erp_ho-data_warehouse-rna-oil_content',
+              name: 'erp_ho-peoplehub-overtime',
               query: { q_month_id: i_month_at, q_year_id: i_year_at },
             })
           })
@@ -1066,7 +1066,7 @@ export default {
             this.files = null
 
             this.$router.push({
-              name: 'erp_ho-data_warehouse-rna-oil_content',
+              name: 'erp_ho-peoplehub-overtime',
               query: { q_month_id: i_month_at, q_year_id: i_year_at },
             })
 
@@ -1088,7 +1088,7 @@ export default {
         this.files = null
 
         this.$router.push({
-          name: 'erp_ho-data_warehouse-rna-oil_content',
+          name: 'erp_ho-peoplehub-overtime',
           query: { q_month_id: q_month, q_year_id: q_year },
         })
 
