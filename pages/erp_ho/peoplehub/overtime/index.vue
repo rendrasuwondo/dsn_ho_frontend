@@ -251,7 +251,7 @@ export default {
 
   head() {
     return {
-      title: 'Oil Content',
+      title: 'Overtime',
     }
   },
 
@@ -285,338 +285,343 @@ export default {
       fields: [
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Hari',
-          key: 'PERIOD_DAY',
+          label: 'Departemen',
+          key: 'location_code',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Bulan',
-          key: 'PERIOD_MONTH',
+          label: 'Tanggal',
+          key: 'ot_date',
+          formatter: 'formatDateAssigned',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Tahun',
-          key: 'PERIOD_YEAR',
+          label: 'NPK',
+          key: 'employee_id',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'PT',
-          key: 'COMPANY_CODE',
+          label: 'Nama',
+          key: 'employee_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Estate',
-          key: 'DEPARTMENT_CODE',
+          label: 'Jabatan',
+          key: 'job_title_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Afd',
-          key: 'AFDELING_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Blok',
-          key: 'BLOCK',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'PKS',
-          key: 'MILL',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kode Unit',
-          key: 'UNIT_CODE',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Berat',
-          key: 'WEIGHT',
+          label: 'Lembur',
+          key: 'total_weight_hour',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kriteria Matang',
-          key: 'RIPE_CRITERIA',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Jml Brondol Setelah Panen',
-          key: 'amount_of_brondol_after_harvest',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Berat Brondol lepas (Kg)',
-          key: 'weight_of_free_brondol',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Berat Brondol Jadi (Kg)',
-          key: 'weight_brondol_complete',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Mesocarp (gram)',
-          key: 'MESOCARP',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Mesocarp dan NUT (gram)',
-          key: 'MESOCARP_AND_NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'WET NUT',
-          key: 'WET_NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'DRY NUT',
-          key: 'DRY_NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel',
-          key: 'KERNEL',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Cangkang',
-          key: 'SHELL',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Oil WM',
-          key: 'OIL_WM',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Buah Normal',
-          key: 'NORMAL_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Buah Tdk Normal',
-          key: 'ABNORMAL_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Moisture',
-          key: 'MOISTURE',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Total Buah',
-          key: 'TOTAL_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'NUT (gram)',
-          key: 'NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'NUT/Fruit',
-          key: 'NUT_OR_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'NUT/Bunch',
-          key: 'NUT_OR_BUNCH',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Mesocarp/Fruit',
-          key: 'MESOCARP_OR_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Fruit/TBS',
-          key: 'FRUIT_OR_TBS',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Fruit Set',
-          key: 'FRUIT_SET',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Non Oil Substance',
-          key: 'NON_OIL_SUBSTANCE',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Oil Content',
-          key: 'OIL_CONTENT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'WET NUT',
-          key: 'T_WET_NUT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel/WN',
-          key: 'KERNEL_OR_WN',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel/Fruit',
-          key: 'KERNEL_OR_FRUIT',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Kernel/TBS',
-          key: 'KERNEL_OR_TBS',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Blok',
+        //   key: 'BLOCK',
+        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'PKS',
+        //   key: 'MILL',
+        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Kode Unit',
+        //   key: 'UNIT_CODE',
+        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Berat',
+        //   key: 'WEIGHT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Kriteria Matang',
+        //   key: 'RIPE_CRITERIA',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Jml Brondol Setelah Panen',
+        //   key: 'amount_of_brondol_after_harvest',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Berat Brondol lepas (Kg)',
+        //   key: 'weight_of_free_brondol',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Berat Brondol Jadi (Kg)',
+        //   key: 'weight_brondol_complete',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Mesocarp (gram)',
+        //   key: 'MESOCARP',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Mesocarp dan NUT (gram)',
+        //   key: 'MESOCARP_AND_NUT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'WET NUT',
+        //   key: 'WET_NUT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'DRY NUT',
+        //   key: 'DRY_NUT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Kernel',
+        //   key: 'KERNEL',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Cangkang',
+        //   key: 'SHELL',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Oil WM',
+        //   key: 'OIL_WM',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Buah Normal',
+        //   key: 'NORMAL_FRUIT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Buah Tdk Normal',
+        //   key: 'ABNORMAL_FRUIT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Moisture',
+        //   key: 'MOISTURE',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Total Buah',
+        //   key: 'TOTAL_FRUIT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'NUT (gram)',
+        //   key: 'NUT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'NUT/Fruit',
+        //   key: 'NUT_OR_FRUIT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'NUT/Bunch',
+        //   key: 'NUT_OR_BUNCH',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Mesocarp/Fruit',
+        //   key: 'MESOCARP_OR_FRUIT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Fruit/TBS',
+        //   key: 'FRUIT_OR_TBS',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Fruit Set',
+        //   key: 'FRUIT_SET',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Non Oil Substance',
+        //   key: 'NON_OIL_SUBSTANCE',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Oil Content',
+        //   key: 'OIL_CONTENT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'WET NUT',
+        //   key: 'T_WET_NUT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Kernel/WN',
+        //   key: 'KERNEL_OR_WN',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Kernel/Fruit',
+        //   key: 'KERNEL_OR_FRUIT',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
+        // {
+        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        //   label: 'Kernel/TBS',
+        //   key: 'KERNEL_OR_TBS',
+        //   formatter: (value, key, item) => {
+        //     let formatter = new Intl.NumberFormat('es-US')
+        //     return formatter.format(value)
+        //   },
+        //   tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        // },
       ],
       sweet_alert: {
         title: '',
@@ -709,8 +714,12 @@ export default {
     console.log('daaa')
     console.log(month_id)
     //fetching posts
+    // const posts = await $axios.$get(
+    //   `/api/admin/oil_content?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+    // )
+
     const posts = await $axios.$get(
-      `/api/admin/oil_content?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+      `/api/peoplehub/overtime?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
     )
 
     return {
@@ -836,7 +845,7 @@ export default {
           },
         },
         () => {
-          this.$router.go(0);
+          this.$router.go(0)
         }
       )
 
@@ -1020,16 +1029,16 @@ export default {
         .then((response) => {
           this.month_code = response.data.data
         })
-      
+
       let monthCode =
         this.month_id.name !== null &&
         this.month_id.name !== '' &&
         this.month_id.name !== undefined
           ? this.month_id.name
           : this.month_code[0].name
-      console.log(this.files.name)
-      let checkFile = 'Oil_Content_' + monthCode + '_' + i_year_at + '.xlsx'
-      console.log(checkFile)
+      // console.log(this.files.name)
+      let checkFile = 'Overtime_' + monthCode + '_' + i_year_at + '.xlsx'
+      // console.log(checkFile)
       // jika bulan dan tahun terisi
       if (this.files.name === checkFile) {
         // console.log(year_at)
@@ -1101,7 +1110,17 @@ export default {
         })
       }
     },
-  },
+    formatDateAssigned(value) {
+      const date = new Date(value)
+
+      // Get year, month, and day part from the date
+      const year = date.toLocaleString('default', { year: 'numeric' })
+      const month = date.toLocaleString('default', { month: 'short' })
+      const day = date.toLocaleString('default', { day: '2-digit' })
+
+      return `${day}-${month}-${year}`
+    },
+  }, //Method
 
   mounted() {
     //GET DATA MONTH SAAT AWAL BUKA MENU
