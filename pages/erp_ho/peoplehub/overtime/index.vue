@@ -77,6 +77,7 @@
                   title="Download Template Excel"
                   class="btn btn-info"
                   @click="exportDataTemplate"
+                  v-if="show === 0"
                 >
                   <i class="fa fa-file-alt"></i>
                 </button>
@@ -94,6 +95,7 @@
                       q_year_id: this.period_year,
                     },
                   }"
+                  v-if="show === 0"
                 >
                   <i class="fa fa-info-circle"></i>
                 </nuxt-link>
@@ -316,6 +318,42 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Masuk',
+          key: 'actual_in',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+         {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Pulang',
+          key: 'actual_out',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+         {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Jam (Lembur)',
+          key: 'ot_after_hour',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+         {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Menit (Lembur)',
+          key: 'ot_after_minute',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Shift Masuk',
+          key: 'shift_in',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Shift Pulang',
+          key: 'shift_out',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
           label: 'Lembur',
           key: 'total_weight_hour',
           formatter: (value, key, item) => {
@@ -324,18 +362,19 @@ export default {
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
-        // {
-        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-        //   label: 'Blok',
-        //   key: 'BLOCK',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
-        // {
-        //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-        //   label: 'PKS',
-        //   key: 'MILL',
-        //   tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        // },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Tgl Upload',
+          key: 'upload_date',
+          formatter: 'formatDateAssigned',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Diupload Oleh',
+          key: 'upload_by',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
         // {
         //   thClass: 'align-middle text-center text-nowrap nameOfTheClass',
         //   label: 'Kode Unit',
@@ -894,7 +933,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/oil_content/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}`,
+        url: `/api/peoplehub/overtime2/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -903,7 +942,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Oil Content.xlsx'
+        var fileName = 'Overtime.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()
@@ -1037,79 +1076,58 @@ export default {
           ? this.month_id.name
           : this.month_code[0].name
       // console.log(this.files.name)
-      let checkFile = 'Overtime_' + monthCode + '_' + i_year_at + '.xlsx'
-      // console.log(checkFile)
-      // jika bulan dan tahun terisi
-      if (this.files.name === checkFile) {
-        // console.log(year_at)
-        let formData = new FormData()
-        formData.append('upload_file', this.files)
 
-        await this.$axios
-          .post(
-            `/api/peoplehub/overtime?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
-            formData
-          )
-          .then((response) => {
-            this.show = 1
+      let formData = new FormData()
+      formData.append('upload_file', this.files)
 
-            this.$nuxt.refresh()
-            this.files = null
+      await this.$axios
+        .post(
+          `/api/peoplehub/overtime?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
+          formData
+        )
+        .then((response) => {
+          this.show = 1
 
-            //sweet alert
-            this.$swal.fire({
-              title: 'BERHASIL!',
-              text: 'Data Berhasil Disimpan!',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 2000,
-            })
+          this.$nuxt.refresh()
+          this.files = null
 
-            this.$router.push({
-              name: 'erp_ho-peoplehub-overtime',
-              query: { q_month_id: i_month_at, q_year_id: i_year_at },
-            })
+          //sweet alert
+          this.$swal.fire({
+            title: 'BERHASIL!',
+            text: 'Data Berhasil Disimpan!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 2000,
           })
-          .catch((error) => {
-            this.show = 1
-            this.files = null
 
-            this.$router.push({
-              name: 'erp_ho-peoplehub-overtime',
-              query: { q_month_id: i_month_at, q_year_id: i_year_at },
-            })
-
-            this.$swal.fire({
-              title: 'ERROR!',
-              text: 'Data Gagal Disimpan!',
-              icon: 'error',
-              showConfirmButton: false,
-              timer: 2000,
-            })
-
-            //assign error to state "validation"
-            // this.validation = error.response.data
-            // this.files = null
+          this.$router.push({
+            name: 'erp_ho-peoplehub-overtime',
+            query: { q_month_id: i_month_at, q_year_id: i_year_at },
           })
-      } else {
-        this.show = 1
-        // this.hideModal()
-        this.files = null
-
-        this.$router.push({
-          name: 'erp_ho-peoplehub-overtime',
-          query: { q_month_id: q_month, q_year_id: q_year },
         })
+        .catch((error) => {
+          this.show = 1
+          this.files = null
 
-        this.$swal.fire({
-          title: 'ERROR!',
-          text: 'Data Yang Anda Upload Tidak Sesuai Dengan Bulan Yang Ditentukan. Harap Cek Kembali!',
-          icon: 'error',
-          showConfirmButton: false,
-          timer: 3500,
+          this.$router.push({
+            name: 'erp_ho-peoplehub-overtime',
+            query: { q_month_id: i_month_at, q_year_id: i_year_at },
+          })
+
+          this.$swal.fire({
+            title: 'ERROR!',
+            text: 'Data Gagal Disimpan!',
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2000,
+          })
+
+          //assign error to state "validation"
+          // this.validation = error.response.data
+          // this.files = null
         })
-      }
     },
+
     formatDateAssigned(value) {
       const date = new Date(value)
 
