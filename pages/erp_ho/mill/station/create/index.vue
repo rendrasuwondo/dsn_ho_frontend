@@ -23,7 +23,6 @@
           
             <div class="form-group">
               <label>Kode Mill Type</label>
-
               <multiselect
                 v-model="field.mill_type_id"
                 :options="mill_type"
@@ -38,6 +37,15 @@
               </div>
             </div>
 
+             <div class="form-group">
+              <label>Kode</label>
+              <input
+                type="code"
+                v-model="field.code"
+                placeholder="Masukkan Kode"
+                class="form-control"
+              />
+            </div>
 
             <div class="form-group">
               <label>Nama</label>
@@ -155,7 +163,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Tambah Employee',
+      title: 'Tambah Mill Station',
     }
   },
 
@@ -169,8 +177,8 @@ export default {
       state: 'disabled',
 
       field: {
-        id: '',
-        company_id: '',
+        mill_type_id: '',
+        code:'',
         name: '',
         is_active: 'Y',
         description: '',
@@ -196,20 +204,15 @@ export default {
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
     this.field.updated_by =
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
-
-    this.$refs.nik.focus()
-
-    console.log('cek data')
     console.log(this.field.created_at)
     console.log(this.field.updated_at)
 
     //Data Mill Type
-    this.$axios
-      .get('/api/admin/milltype_table')
+    this.$axios.get('/api/admin/milltype_table')
 
       .then((response) => {
         // console.log(response.data.data[0])
-        this.milltype_table = response.data.data
+        this.mill_type = response.data.data
       })
   },
 
@@ -230,18 +233,19 @@ export default {
       return date
     },
 
+
+    //STORE DATA
+
     async storePost() {
       this.show = 0
-
-      //define formData
       let formData = new FormData()
+
       formData.append(
-        'company_id',
+        'mill_type_id',
+        this.field.mill_type_id ? this.field.mill_type_id.id : ''
       )
-     
-      
-     
-      formData.append('mill_type_id', this.field.mill_type_id)
+
+      formData.append('mill_type_id', this.field.mill_type_id.id)
       formData.append('code', this.field.code)
       formData.append('name', this.field.name)
       formData.append('is_active', this.field.is_active)
@@ -251,7 +255,10 @@ export default {
       formData.append('updated_at', this.field.update_at)
       formData.append('udpated_by', this.field.udpate_by)
 
+     
+
       //sending data to server
+      
       await this.$axios
         .post('/api/admin/station', formData)
         .then(() => {
@@ -277,7 +284,9 @@ export default {
           //assign error to state "validation"
           this.validation = error.response.data
         })
+        
     },
+    
   },
 
   computed: {
