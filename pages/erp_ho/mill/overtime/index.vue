@@ -580,19 +580,21 @@ export default {
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Jan (jam)',
           key: 'ot_jan',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Feb (jam)',
-          key: 'running_hour_standard',
+          key: 'ot_feb',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -602,9 +604,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Mar (Jam)',
-          key: 'man_power_standard',
+          key: 'ot_mar',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -614,9 +616,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Apr (jam)',
-          key: 'ffb_process_standard',
+          key: 'ot_apr',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -626,9 +628,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Jan (Unit Cost)',
-          key: 'throughput',
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'May (jam)',
+          key: 'ot_may',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -638,9 +640,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Feb (Unit Cost)',
-          key: 'running_hour',
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jan Konversi (jam)',
+          key: 'ot_conversion_jan',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -650,9 +652,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Mar (Unit Cost)',
-          key: 'ffb_process',
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Feb Konversi (jam)',
+          key: 'ot_conversion_feb',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -662,9 +664,33 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Apr (Unit Cost)',
-          key: 'ffb_process',
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Mar Konversi (jam)',
+          key: 'ot_conversion_mar',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Apr Konversi (jam)',
+          key: 'ot_conversion_apr',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'May Konversi (jam)',
+          key: 'ot_conversion_may',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -699,6 +725,9 @@ export default {
     // console.log(month_list.data)
     //FILTER PADA TABLE
     //MONTH
+
+    let q_mill_code = query.q_mill_code? query.q_mill_code : ''
+
     let q_month_id = query.q_month_id ? query.q_month_id : month_at
 
     let f_month_id = []
@@ -764,28 +793,27 @@ export default {
     //search
     let search = query.q ? query.q : ''
 
- 
     //fetching posts
     // const posts = await $axios.$get(
     //   `/api/admin/oil_content?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
     // )
-
+    console.log('test')
     const posts = await $axios.$get(
       // `/api/peoplehub/overtime?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
-      `/api/admin/OvertimePerformance?department_code=PKS6&year=2024`
+      `/api/admin/OvertimePerformance?department_code=${q_mill_code}&year=2024`
     )
 
     const posts_throughput = await $axios.$get(
-      `/api/admin/ThroughputPerformance?department_code=PKS6&year=2024`
+      `/api/admin/ThroughputPerformance?department_code=${q_mill_code}&year=2024`
     )
-console.log('test')
+
     const posts_station = await $axios.$get(
-      `/api/admin/OvertimeStationPerformance?department_code=PKS6&year=2024`
+      `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
       // `/api/admin/ThroughputPerformance?department_code=PKS6&year=2024`
     )
-    console.log('test')
-    console.log('posts_station',posts_station.data)
 
+    // console.log('posts_station',posts_station.data)
+    
     return {
       posts: posts.data.data,
       posts_throughput: posts_throughput.data.data,
@@ -808,7 +836,8 @@ console.log('test')
       //   this.searchData()
       //alert(this.mill_select)
       // console.log('mill_select', this.mill_select.id)
-
+      let vthroughput = 'fsf'
+     this.isLoading = true
       this.$axios
         .get(`api/admin/MillProfile?department_id=${this.mill_select.id}`)
         .then((response) => {
@@ -816,9 +845,26 @@ console.log('test')
           this.mill_pm = response.data.data.data[0].mill_pm
           this.mill_head = response.data.data.data[0].mill_head
           this.man_power = response.data.data.data[0].man_power
+          vthroughput = response.data.data.data[0].throughput
 
-          // console.log(response.data.data.data[0].throughput)
-        })
+          this.$router.push(
+            {
+              path: this.$route.path,
+              query: {
+                q: this.search,
+                q_mill_id: this.mill_select.id,
+                q_mill_code: this.mill_select.code,
+                q_throughput: vthroughput,
+                q_mill_pm : response.data.data.data[0].mill_pm,
+                q_mill_head : response.data.data.data[0].mill_head,
+                q_man_power : response.data.data.data[0].man_power,
+              },
+            },
+            () => {
+              this.$router.go(0)
+            }
+          )
+        }) // this.$axios
     },
     currentMonth() {
       const current = new Date()
@@ -1182,6 +1228,21 @@ console.log('test')
   }, //Method
 
   mounted() {
+    if (this.$route.query.q_mill_id != null) {
+      this.$axios
+        .get(`/api/admin/lov_pks_list?id=${this.$route.query.q_mill_id}`)
+
+        .then((response) => {
+          this.mill_select = response.data.data
+        })
+    }
+
+   
+    this.throughput = this.$route.query.q_throughput
+    this.mill_pm = this.$route.query.q_mill_pm
+    this.mill_head = this.$route.query.q_mill_head
+    this.man_power = this.$route.query.q_man_power
+
     //GET DATA MONTH SAAT AWAL BUKA MENU
     const current = new Date()
 
