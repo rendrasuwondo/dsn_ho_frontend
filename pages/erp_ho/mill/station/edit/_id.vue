@@ -20,6 +20,24 @@
         </div>
         <div class="card-body">
           <form @submit.prevent="update">
+
+            <div class="form-group">
+              <label>Kode Mill Type</label>
+              <multiselect
+                v-model="field.mill_type_id"
+                :options="mill_type"
+                label="code"
+                track-by="id"
+                :searchable="true"
+              ></multiselect>
+              <div v-if="validation.mill_type_id" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.mill_type_id[0]
+                }}</b-alert>
+              </div>
+            </div>
+
+
             <div class="form-group">
               <label>Kode</label>
               <input
@@ -149,7 +167,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit Global Param',
+      title: 'Edit Station',
     }
   },
 
@@ -157,6 +175,7 @@ export default {
     return {
       state: 'disabled',
       field: {
+        mill_type_id: '',
         code: '',
         name: '',
         is_active: '',
@@ -167,9 +186,10 @@ export default {
         updated_by: '',
       },
 
-      //state validation
       validation: [],
-      show: 1,
+      
+      mill_type: [],
+      show: 1
     }
   },
 
@@ -179,6 +199,8 @@ export default {
       .get(`/api/admin/station/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
+
+         this.field.code = response.data.data.mill_type_id
         this.field.code = response.data.data.code
         this.field.name = response.data.data.name
         this.field.is_active = response.data.data.is_active
@@ -188,9 +210,18 @@ export default {
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
       })
+
+
+  this.$axios
+  .get('/api/admin/milltype_table')
+
+  .then((response) => {
+    this.mill_type = response.data.data
+  })
+
+
     this.$refs.code.focus()
   },
-
   methods: {
     back() {
       this.$router.push({
@@ -207,6 +238,8 @@ export default {
       //send data ke Rest API untuk update
       await this.$axios.put(`/api/admin/station/${this.$route.params.id}`, {
           //data yang dikirim
+
+          mill_type_id : this.field.mill_type_id ? this.field.mill_type_id.id: '',
           code: this.field.code,
           name : this.field.name,
           is_active: this.field.is_active,
