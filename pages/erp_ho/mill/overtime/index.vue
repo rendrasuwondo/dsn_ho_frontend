@@ -31,6 +31,21 @@
                 <b-card-text>
                   <!-- <b-container class="bv-example-row mb-3"> -->
                   <b-form-group
+                    label="Tahun"
+                    label-for="nested-street"
+                    label-cols-sm="6"
+                    label-align-sm="left"
+                  >
+                    <multiselect
+                      v-model="f_year_id"
+                      :options="years"
+                      label="year_at"
+                      track-by="id"
+                      :searchable="true"
+                      @input="onChangeFilterYear"
+                    ></multiselect>
+                  </b-form-group>
+                  <b-form-group
                     label="PKS"
                     label-for="nested-street"
                     label-cols-sm="6"
@@ -341,6 +356,44 @@
                       show-empty
                       class="table-oil"
                     >
+                      <template v-slot:cell(station_code)="row">
+                        <b-button
+                        @click="test(row.item.station_code )"
+                          variant="link"
+                          size="sm"
+                          title="Edit"
+                        >
+                          {{ row.item.station_code }}
+                        </b-button>
+                      </template>
+                    </b-table></b-card-text
+                  >
+                </b-tab>
+              </b-tabs>
+            </b-card>
+          </div>
+
+          <!-- Overtime Per Personal -->
+          <div>
+            <b-card no-body no-border>
+              <b-tabs card>
+                <b-tab
+                  title="OVERTIME PERSONAL PERFORMANCE"
+                  bg-variant="primary"
+                  active
+                >
+                  <b-card-text
+                    ><b-table
+                      small
+                      responsive
+                      striped
+                      bordered
+                      hover
+                      :items="posts_personal"
+                      :fields="fields_personal"
+                      show-empty
+                      class="table-oil"
+                    >
                     </b-table
                   ></b-card-text>
                 </b-tab>
@@ -580,19 +633,21 @@ export default {
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Jan (jam)',
           key: 'ot_jan',
           formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
             return formatter.format(value)
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Feb (jam)',
-          key: 'running_hour_standard',
+          key: 'ot_feb',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -602,9 +657,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Mar (Jam)',
-          key: 'man_power_standard',
+          key: 'ot_mar',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -614,9 +669,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Apr (jam)',
-          key: 'ffb_process_standard',
+          key: 'ot_apr',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -626,9 +681,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Jan (Unit Cost)',
-          key: 'throughput',
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'May (jam)',
+          key: 'ot_may',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -638,9 +693,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Feb (Unit Cost)',
-          key: 'running_hour',
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jan Konversi (jam)',
+          key: 'ot_conversion_jan',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -650,9 +705,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Mar (Unit Cost)',
-          key: 'ffb_process',
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Feb Konversi (jam)',
+          key: 'ot_conversion_feb',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -662,9 +717,191 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Mar Konversi (jam)',
+          key: 'ot_conversion_mar',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Apr Konversi (jam)',
+          key: 'ot_conversion_apr',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'May Konversi (jam)',
+          key: 'ot_conversion_may',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+      ],
+      fields_personal: [
+        {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Apr (Unit Cost)',
-          key: 'ffb_process',
+          label: 'nama',
+          key: 'employee_name',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Station',
+          key: 'station_code',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jan (jam)',
+          key: 'ot_jan',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Feb (jam)',
+          key: 'ot_feb',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Mar (Jam)',
+          key: 'ot_mar',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Apr (jam)',
+          key: 'ot_apr',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'May (jam)',
+          key: 'ot_may',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jan Konversi (jam)',
+          key: 'ot_conversion_jan',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Feb Konversi (jam)',
+          key: 'ot_conversion_feb',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Mar Konversi (jam)',
+          key: 'ot_conversion_mar',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Apr Konversi (jam)',
+          key: 'ot_conversion_apr',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'May Konversi (jam)',
+          key: 'ot_conversion_may',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Total (jam)',
+          key: 'ot_total',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Total Konversi (jam)',
+          key: 'ot_conversion_total',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -699,6 +936,9 @@ export default {
     // console.log(month_list.data)
     //FILTER PADA TABLE
     //MONTH
+
+    let q_mill_code = query.q_mill_code ? query.q_mill_code : 'PKS99'
+
     let q_month_id = query.q_month_id ? query.q_month_id : month_at
 
     let f_month_id = []
@@ -764,32 +1004,37 @@ export default {
     //search
     let search = query.q ? query.q : ''
 
- 
     //fetching posts
     // const posts = await $axios.$get(
     //   `/api/admin/oil_content?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
     // )
-
+    // console.log('test')
     const posts = await $axios.$get(
       // `/api/peoplehub/overtime?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
-      `/api/admin/OvertimePerformance?department_code=PKS6&year=2024`
+      `/api/admin/OvertimePerformance?department_code=${q_mill_code}&year=2024`
     )
 
     const posts_throughput = await $axios.$get(
-      `/api/admin/ThroughputPerformance?department_code=PKS6&year=2024`
+      `/api/admin/ThroughputPerformance?department_code=${q_mill_code}&year=2024`
     )
-console.log('test')
+
     const posts_station = await $axios.$get(
-      `/api/admin/OvertimeStationPerformance?department_code=PKS6&year=2024`
+      `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
       // `/api/admin/ThroughputPerformance?department_code=PKS6&year=2024`
     )
-    console.log('test')
-    console.log('posts_station',posts_station.data)
+
+    const posts_personal = await $axios.$get(
+      `/api/admin/OvertimeEmployeePerformance?department_code=${q_mill_code}&year=2024&station_code=`
+      // `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
+    )
+
+    // console.log('posts_station',posts_station.data)
 
     return {
       posts: posts.data.data,
       posts_throughput: posts_throughput.data.data,
       posts_station: posts_station.data,
+      posts_personal: posts_personal.data,
       pagination: posts.data,
       search: search,
       rowcount: posts.data.total,
@@ -797,18 +1042,96 @@ console.log('test')
       month_id: month_id,
       f_month_id: f_month_id,
       f_year_id: f_year_id,
-      years: lov_mill.data,
+      years: year_list.data,
       months: month_list.data,
       mill: lov_mill.data,
     }
   },
 
   methods: {
+    onChangeFilterYear() {
+      let vmill_id, vmill_code, vthroughput, vmill_pm, vmill_head, vman_power
+
+      try {
+        vmill_id = this.mill_select[0].id
+        vmill_code = this.mill_select[0].code
+        vthroughput = this.throughput
+        vmill_pm = this.mill_pm
+        vmill_head = this.mill_head
+        vman_power = this.man_power
+      } catch (err) {
+        vmill_id = -99
+        vmill_code = ''
+        vthroughput = ''
+        vmill_pm = ''
+        vmill_head = ''
+        vman_power = ''
+      }
+      console.log(
+        vmill_id,
+        vmill_code,
+        vthroughput,
+        vmill_pm,
+        vmill_head,
+        vman_power
+      )
+
+      const current = new Date()
+      let year_at = current.getFullYear()
+
+      try {
+        if (this.f_year_id.year_at === null) {
+          this.query_year_id = ''
+        } else if (this.f_year_id.year_at === undefined) {
+          this.query_year_id = this.$route.query.q_year_id
+        } else {
+          this.query_year_id = this.f_year_id.year_at
+            ? this.f_year_id.year_at
+            : ''
+        }
+      } catch (err) {}
+
+      this.$router.push(
+        {
+          path: this.$route.path,
+          query: {
+            q: this.search,
+            q_mill_id: vmill_id,
+            q_mill_code: vmill_code,
+            q_throughput: vthroughput,
+            q_mill_pm: vmill_pm,
+            q_mill_head: vmill_head,
+            q_man_power: vman_power,
+            q_year_id: this.query_year_id ? this.query_year_id : year_at,
+          },
+        },
+        () => {
+          this.$router.go(0)
+        }
+      )
+    },
     onChangeFilter() {
       //   this.searchData()
       //alert(this.mill_select)
       // console.log('mill_select', this.mill_select.id)
+      const current = new Date()
+      let vthroughput = ''
 
+      let year_at = current.getFullYear()
+
+      try {
+        if (this.f_year_id.year_at === null) {
+          this.query_year_id = ''
+        } else if (this.f_year_id.year_at === undefined) {
+          this.query_year_id = this.$route.query.q_year_id
+        } else {
+          this.query_year_id = this.f_year_id.year_at
+            ? this.f_year_id.year_at
+            : ''
+        }
+      } catch (err) {}
+
+      // this.isLoading = true
       this.$axios
         .get(`api/admin/MillProfile?department_id=${this.mill_select.id}`)
         .then((response) => {
@@ -816,9 +1139,27 @@ console.log('test')
           this.mill_pm = response.data.data.data[0].mill_pm
           this.mill_head = response.data.data.data[0].mill_head
           this.man_power = response.data.data.data[0].man_power
+          vthroughput = response.data.data.data[0].throughput
 
-          // console.log(response.data.data.data[0].throughput)
-        })
+          this.$router.push(
+            {
+              path: this.$route.path,
+              query: {
+                q: this.search,
+                q_mill_id: this.mill_select.id,
+                q_mill_code: this.mill_select.code,
+                q_throughput: vthroughput,
+                q_mill_pm: response.data.data.data[0].mill_pm,
+                q_mill_head: response.data.data.data[0].mill_head,
+                q_man_power: response.data.data.data[0].man_power,
+                q_year_id: this.query_year_id ? this.query_year_id : year_at,
+              },
+            },
+            () => {
+              this.$router.go(0)
+            }
+          )
+        }) // this.$axios
     },
     currentMonth() {
       const current = new Date()
@@ -1179,9 +1520,64 @@ console.log('test')
 
       return `${day}-${month}-${year}`
     },
+
+    test(X) {
+      // alert(X)
+      // console.log(X, this.$route.query.q_mill_id)
+
+      const current = new Date()
+      let year_at = current.getFullYear()
+
+      try {
+        if (this.f_year_id.year_at === null) {
+          this.query_year_id = ''
+        } else if (this.f_year_id.year_at === undefined) {
+          this.query_year_id = this.$route.query.q_year_id
+        } else {
+          this.query_year_id = this.f_year_id.year_at
+            ? this.f_year_id.year_at
+            : ''
+        }
+      } catch (err) {}
+
+      this.$router.push(
+        {
+          path: this.$route.path,
+          query: {
+            q: this.search,
+            q_mill_id: this.$route.query.q_mill_id,
+            q_mill_code: this.$route.query.q_mill_code,
+            q_throughput: this.$route.query.q_throughput,
+            q_mill_pm: this.$route.query.q_mill_pm,
+            q_mill_head: this.$route.query.q_mill_head,
+            q_man_power: this.$route.query.q_man_power,
+            q_year_id: this.query_year_id ? this.query_year_id : year_at,
+            q_station_code : X,
+          },
+        },
+        () => {
+          this.$router.go(0)
+        }
+      )
+    }
   }, //Method
 
   mounted() {
+    console.log('mounted')
+    if (this.$route.query.q_mill_id != null) {
+      this.$axios
+        .get(`/api/admin/lov_pks_list?id=${this.$route.query.q_mill_id}`)
+
+        .then((response) => {
+          this.mill_select = response.data.data
+        })
+    }
+
+    this.throughput = this.$route.query.q_throughput
+    this.mill_pm = this.$route.query.q_mill_pm
+    this.mill_head = this.$route.query.q_mill_head
+    this.man_power = this.$route.query.q_man_power
+
     //GET DATA MONTH SAAT AWAL BUKA MENU
     const current = new Date()
 
