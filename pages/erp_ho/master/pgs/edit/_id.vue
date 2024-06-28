@@ -14,49 +14,27 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-folder"></i> <b>EDIT DATA MILL TYPE</b>
+            <i class="nav-icon fas fa-folder"></i> <b>EDIT DATA PGS</b>
           </h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
           <form @submit.prevent="update">
+         
             <div class="form-group">
-              <label>Kode</label>
-              <input
-                type="text"
-                v-model="field.code"
-                placeholder=""
-                class="form-control"
-                ref="code"
-              />
-              <div v-if="validation.code" class="mt-2">
+              <label>Department</label>
+              <multiselect
+                v-model="field.department_id"
+                :options="department"
+                label="code"
+                track-by="id"
+                :searchable="true"
+              ></multiselect>
+              <div v-if="validation.department_id" class="mt-2">
                 <b-alert show variant="danger">{{
-                  validation.code[0]
+                  validation.department_id[0]
                 }}</b-alert>
               </div>
-            </div>
-
-            <div class="form-group">
-              <label>Nama</label>
-              <input
-                type="text"
-                v-model="field.name"
-                placeholder=""
-                class="form-control"
-              />
-              <div v-if="validation.value_1" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.value_1[0]
-                }}</b-alert>
-              </div>
-            </div>
-
-           <div class="form-group">
-              <label>Aktif?</label>
-              <b-form-select v-model="field.is_active">
-                <b-form-select-option value="Y">Ya</b-form-select-option>
-                <b-form-select-option value="N">Tidak</b-form-select-option>
-              </b-form-select>
             </div>
 
             <div class="form-group">
@@ -149,7 +127,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit Global Param',
+      title: 'Edit PGS',
     }
   },
 
@@ -157,9 +135,9 @@ export default {
     return {
       state: 'disabled',
       field: {
-        code: '',
-        name: '',
-        is_active: '',
+
+        department_id: '',
+        code:'',
         description: '',
         created_at: '',
         updated_at: '',
@@ -167,36 +145,43 @@ export default {
         updated_by: '',
       },
 
-      //state validation
       validation: [],
-      show: 1,
+      
+      department: [],
+      show: 1
     }
   },
 
   mounted() {
     //get data field by ID
     this.$axios
-      .get(`/api/admin/milltype/${this.$route.params.id}`)
+      .get(`/api/admin/t_department/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
-        this.field.code = response.data.data.code
-        this.field.name = response.data.data.name
-        this.field.is_active = response.data.data.is_active
+
+        this.field.department_id = response.data.data.department_id
+        this.field.code          = response.data.data.code
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
-      
-        
       })
-    this.$refs.code.focus()
+
+
+  this.$axios
+  .get('/api/admin/t_department')
+
+  .then((response) => {
+    this.department = response.data.data
+  })
   },
+
 
   methods: {
     back() {
       this.$router.push({
-        name: 'erp_ho-mill-mill_type',
+        name: 'erp_ho-master-pgs',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -206,12 +191,12 @@ export default {
       e.preventDefault()
       this.show = 0
 
+    
       //send data ke Rest API untuk update
-      await this.$axios.put(`/api/admin/milltype/${this.$route.params.id}`, {
+      await this.$axios.put(`/api/admin/pgs/${this.$route.params.id}`, {
           //data yang dikirim
-          code: this.field.code,
-          name : this.field.name,
-          is_active: this.field.is_active,
+
+          department_id : this.field.department_id ? this.field.department_id.id: '',
           description: this.field.description,
           created_at: this.field.created_at,
           updated_at: this.field.updated_at,
@@ -231,7 +216,7 @@ export default {
           })
           //redirect ke route "post"
           this.$router.push({
-            name: 'erp_ho-mill-mill_type',
+            name: 'erp_ho-master-pgs',
           })
         })
         .catch((error) => {
