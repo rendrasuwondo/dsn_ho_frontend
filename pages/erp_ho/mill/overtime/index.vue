@@ -583,16 +583,10 @@
                             May
                           </th>
                           <th
-                            rowspan="2"
+                            colspan="2"
                             style="text-align: center; vertical-align: middle"
                           >
-                            Total Lembur Jam Dunia
-                          </th>
-                          <th
-                            rowspan="2"
-                            style="text-align: center; vertical-align: middle"
-                          >
-                            Total Lembur Jam Konversi
+                            Total
                           </th>
                         </tr>
                       </template>
@@ -1114,7 +1108,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Total Lembur Jam Dunia',
+          label: 'Lembur Jam Dunia',
           key: 'ot_total',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -1126,7 +1120,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Total Lembur Jam Konversi',
+          label: 'Lembur Jam Konversi',
           key: 'ot_conversion_total',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
