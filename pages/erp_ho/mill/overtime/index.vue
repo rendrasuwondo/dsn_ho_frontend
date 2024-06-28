@@ -268,6 +268,75 @@
               </div>
             </div>
           </div>
+          <!-- Cost Overtime -->
+          <div>
+            <b-card no-body no-border>
+              <b-tabs card>
+                <b-tab
+                  title="COST OVERTIME PERFORMANCE"
+                  bg-variant="primary"
+                  active
+                >
+                  <b-card-text
+                    ><b-table
+                      small
+                      responsive
+                      striped
+                      bordered
+                      hover
+                      :items="posts_cost"
+                      :fields="fields_cost"
+                      show-empty
+                      class="table-oil"
+                    >
+                      <!-- First row of headers -->
+                      <template #thead-top>
+                        <tr>
+                          <th
+                            rowspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Bulan
+                          </th>
+                          <th
+                            colspan="3"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Cost Overtime
+                          </th>
+                          <th
+                            colspan="3"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Ton TBS Olah (Ton)
+                          </th>
+                          <th
+                            colspan="3"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Ton CPO Production (Ton)
+                          </th>
+                          <th
+                            colspan="3"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Cost/Ton TBS Olah (Rp/Ton)
+                          </th>
+                          <th
+                            colspan="3"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Cost/Ton CPO Production (Rp /Ton)
+                          </th>
+                        </tr>
+                      </template>
+                    </b-table></b-card-text
+                  >
+                </b-tab>
+              </b-tabs>
+            </b-card>
+          </div>
+          <!-- Cost Overtime End -->
           <!-- table -->
           <div>
             <b-card no-body no-border>
@@ -285,6 +354,35 @@
                       show-empty
                       class="table-oil"
                     >
+                      <!-- First row of headers -->
+                      <template #thead-top>
+                        <tr>
+                          <th
+                            rowspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Bulan
+                          </th>
+                          <th
+                            rowspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Jumlah HK
+                          </th>
+                          <th
+                            colspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Jam Dunia
+                          </th>
+                          <th
+                            rowspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Aktual Jam Lembur Konversi
+                          </th>
+                        </tr>
+                      </template>
                     </b-table>
                   </b-card-text>
                 </b-tab>
@@ -328,8 +426,31 @@
                       show-empty
                       class="table-oil"
                     >
-                    </b-table
-                  ></b-card-text>
+                      <!-- First row of headers -->
+                      <template #thead-top>
+                        <tr>
+                          <th
+                            rowspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Bulan
+                          </th>
+                          <th
+                            colspan="4"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Standard
+                          </th>
+                          <th
+                            colspan="3"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Actual
+                          </th>
+                        </tr>
+                      </template>
+                    </b-table></b-card-text
+                  >
                 </b-tab>
               </b-tabs>
             </b-card>
@@ -358,13 +479,35 @@
                     >
                       <template v-slot:cell(station_code)="row">
                         <b-button
-                        @click="test(row.item.station_code )"
+                          @click="test(row.item.station_code)"
                           variant="link"
                           size="sm"
                           title="Edit"
                         >
                           {{ row.item.station_code }}
                         </b-button>
+                      </template>
+                      <template #thead-top>
+                        <tr>
+                          <th
+                            rowspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Station
+                          </th>
+                          <th
+                            colspan="6"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Jam Dunia
+                          </th>
+                          <th
+                            colspan="6"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Jam Konversi
+                          </th>
+                        </tr>
                       </template>
                     </b-table></b-card-text
                   >
@@ -394,8 +537,67 @@
                       show-empty
                       class="table-oil"
                     >
-                    </b-table
-                  ></b-card-text>
+                      <!-- First row of headers -->
+                      <template #thead-top>
+                        <tr>
+                          <th
+                            rowspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Nama
+                          </th>
+                          <th
+                            rowspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Station
+                          </th>
+                          <th
+                            colspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Jan
+                          </th>
+                          <th
+                            colspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Feb
+                          </th>
+                          <th
+                            colspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Mar
+                          </th>
+                          <th
+                            colspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Apr
+                          </th>
+                          <th
+                            colspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            May
+                          </th>
+                          <th
+                            rowspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Total Lembur Jam Dunia
+                          </th>
+                          <th
+                            rowspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Total Lembur Jam Konversi
+                          </th>
+                        </tr>
+                      </template>
+                    </b-table></b-card-text
+                  >
                 </b-tab>
               </b-tabs>
             </b-card>
@@ -449,25 +651,15 @@ export default {
 
       fields: [
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
           label: 'Bulan',
           key: 'period',
-          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass ',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
           label: 'Jumlah HK',
           key: 'man_power',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US')
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Jam Kerja Standard',
-          key: 'hour_standard',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
             return formatter.format(value)
@@ -499,7 +691,7 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
           label: 'Jam Lembur Konversi',
           key: 'ot_conversion',
           formatter: (value, key, item) => {
@@ -511,7 +703,7 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
           label: 'Estimasi Rp Lembur Standard',
           key: 'ot_estimation_standard',
           formatter: (value, key, item) => {
@@ -520,10 +712,10 @@ export default {
             })
             return formatter.format(value)
           },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass d-none',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
           label: 'EStimasi Rp Lembur',
           key: 'ot_estimation',
           formatter: (value, key, item) => {
@@ -532,19 +724,29 @@ export default {
             })
             return formatter.format(value)
           },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass d-none',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
+          label: 'Jam Kerja Standard',
+          key: 'hour_standard',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US')
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass d-none',
         },
       ],
       fields_throughput: [
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
           label: 'Bulan',
           key: 'period',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Throughput STD',
+          label: 'Throughput',
           key: 'throughput_standard',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US')
@@ -554,7 +756,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Jam Olah / Hari STD',
+          label: 'Jam Olah / Hari',
           key: 'running_hour_standard',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -566,7 +768,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'Man Power STD',
+          label: 'Man Power',
           key: 'man_power_standard',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -578,7 +780,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
-          label: 'TBS Proses (Ton) STD',
+          label: 'TBS Proses (Ton)',
           key: 'ffb_process_standard',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -627,14 +829,14 @@ export default {
       ],
       fields_station: [
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
           label: 'Station',
           key: 'station_code',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jan (jam)',
+          label: 'Jan',
           key: 'ot_jan',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -646,7 +848,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Feb (jam)',
+          label: 'Feb',
           key: 'ot_feb',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -658,7 +860,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Mar (Jam)',
+          label: 'Mar',
           key: 'ot_mar',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -670,7 +872,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Apr (jam)',
+          label: 'Apr',
           key: 'ot_apr',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -682,7 +884,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'May (jam)',
+          label: 'May',
           key: 'ot_may',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -694,7 +896,19 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jan Konversi (jam)',
+          label: 'Total',
+          key: 'ot_total',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jan',
           key: 'ot_conversion_jan',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -706,7 +920,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Feb Konversi (jam)',
+          label: 'Feb',
           key: 'ot_conversion_feb',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -718,7 +932,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Mar Konversi (jam)',
+          label: 'Mar',
           key: 'ot_conversion_mar',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -730,7 +944,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Apr Konversi (jam)',
+          label: 'Apr',
           key: 'ot_conversion_apr',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -742,8 +956,20 @@ export default {
         },
         {
           thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'May Konversi (jam)',
+          label: 'May',
           key: 'ot_conversion_may',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Total',
+          key: 'ot_conversion_total',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -755,20 +981,20 @@ export default {
       ],
       fields_personal: [
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
           label: 'nama',
           key: 'employee_name',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
           label: 'Station',
           key: 'station_code',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jan (jam)',
+          label: 'Jam Lembur Dunia',
           key: 'ot_jan',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -780,55 +1006,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Feb (jam)',
-          key: 'ot_feb',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Mar (Jam)',
-          key: 'ot_mar',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Apr (jam)',
-          key: 'ot_apr',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'May (jam)',
-          key: 'ot_may',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jan Konversi (jam)',
+          label: 'Jam Lembur Konversi',
           key: 'ot_conversion_jan',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -840,7 +1018,19 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Feb Konversi (jam)',
+          label: 'Jam Lembur Dunia',
+          key: 'ot_feb',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Konversi',
           key: 'ot_conversion_feb',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -851,8 +1041,20 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Dunia',
+          key: 'ot_mar',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
           thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Mar Konversi (jam)',
+          label: 'Jam Lembur Konversi',
           key: 'ot_conversion_mar',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -863,9 +1065,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Apr Konversi (jam)',
-          key: 'ot_conversion_apr',
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Dunia',
+          key: 'ot_apr',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -876,7 +1078,31 @@ export default {
         },
         {
           thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'May Konversi (jam)',
+          label: 'Jam Lembur Konversi',
+          key: 'ot_conversion_apr',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Dunia',
+          key: 'ot_may',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Jam Lembur Konversi',
           key: 'ot_conversion_may',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -888,7 +1114,7 @@ export default {
         },
         {
           thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Total (jam)',
+          label: 'Total Lembur Jam Dunia',
           key: 'ot_total',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
@@ -900,13 +1126,201 @@ export default {
         },
         {
           thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Total Konversi (jam)',
+          label: 'Total Lembur Jam Konversi',
           key: 'ot_conversion_total',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
             })
             return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+      ],
+      fields_cost: [
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
+          label: '',
+          key: 'period_month_code',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Plan',
+          key: 'cost_plan',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Actual',
+          key: 'cost_actual',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center text-nowrap nameOfTheClass',
+          label: 'Var',
+          key: 'cost_var',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value) + '%'
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Plan',
+          key: 'ffb_process_plan',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Actual',
+          key: 'ffb_process_actual',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Var',
+          key: 'ffb_process_var',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value) + '%'
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Plan',
+          key: 'cpo_production_plan',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Actual',
+          key: 'cpo_production_actual',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right  nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Var',
+          key: 'cpo_production_var',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value) + '%'
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Plan',
+          key: 'cost_ffb_plan',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Actual',
+          key: 'cost_ffb_actual',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Var',
+          key: 'cost_ffb_var',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value) + '%'
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Plan',
+          key: 'cost_cpo_plan',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Actual',
+          key: 'cost_cpo_actual',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Var',
+          key: 'cost_cpo_var',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value) + '%'
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
@@ -1028,6 +1442,11 @@ export default {
       // `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
     )
 
+    const posts_cost = await $axios.$get(
+      `/api/admin/OvertimeCostPerformance?department_code=${q_mill_code}&year=2024&station_code=`
+      // `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
+    )
+
     // console.log('posts_station',posts_station.data)
 
     return {
@@ -1035,6 +1454,7 @@ export default {
       posts_throughput: posts_throughput.data.data,
       posts_station: posts_station.data,
       posts_personal: posts_personal.data,
+      posts_cost: posts_cost.data.data,
       pagination: posts.data,
       search: search,
       rowcount: posts.data.total,
@@ -1552,14 +1972,14 @@ export default {
             q_mill_head: this.$route.query.q_mill_head,
             q_man_power: this.$route.query.q_man_power,
             q_year_id: this.query_year_id ? this.query_year_id : year_at,
-            q_station_code : X,
+            q_station_code: X,
           },
         },
         () => {
           this.$router.go(0)
         }
       )
-    }
+    },
   }, //Method
 
   mounted() {
