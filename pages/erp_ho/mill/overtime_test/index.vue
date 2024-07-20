@@ -511,13 +511,13 @@
                             Station
                           </th>
                           <th
-                            colspan="7"
+                            colspan="6"
                             style="text-align: center; vertical-align: middle"
                           >
                             Jam Dunia
                           </th>
                           <th
-                            colspan="7"
+                            colspan="6"
                             style="text-align: center; vertical-align: middle"
                           >
                             Jam Konversi
@@ -596,12 +596,6 @@
                             style="text-align: center; vertical-align: middle"
                           >
                             May
-                          </th>
-                          <th
-                            colspan="2"
-                            style="text-align: center; vertical-align: middle"
-                          >
-                            Jun
                           </th>
                           <th
                             colspan="2"
@@ -911,18 +905,6 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jun',
-          key: 'ot_jun',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Total',
           key: 'ot_total',
           formatter: (value, key, item) => {
@@ -985,18 +967,6 @@ export default {
           thClass: 'align-middle text-center  nameOfTheClass',
           label: 'May',
           key: 'ot_conversion_may',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Jun',
-          key: 'ot_conversion_jun',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -1143,30 +1113,6 @@ export default {
           thClass: 'align-middle text-center  nameOfTheClass',
           label: 'Jam Lembur Konversi',
           key: 'ot_conversion_may',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jam Lembur Dunia',
-          key: 'ot_jun',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Jam Lembur Konversi',
-          key: 'ot_conversion_jun',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -1394,9 +1340,11 @@ export default {
       },
     }
   },
-  watchQuery: ['q', 'page', 'q_year_id', 'q_month_id', 'q_mill_code'],
+  watchQuery: ['q', 'page', 'q_year_id', 'q_month_id','q_mill_code'],
 
   async asyncData({ $axios, query, store }) {
+
+
     // DEFAULT MONTH AND YEAR
     const current = new Date()
     let month_at = current.getMonth() + 1
@@ -1517,19 +1465,17 @@ export default {
 
     let janjangData
     await $axios
-      .get(
-        `/api/agro-dashboard-web/mill/overtime?q_mill_code=${q_mill_code}&q_year_id=${q_year_id}`
-      )
+      .get(`/api/agro-dashboard-web/mill/overtime?q_mill_code=${q_mill_code}&q_year_id=${q_year_id}`)
       .then((response) => {
         janjangData = response.data.data
         // console.log('janjangData:',response.data.data)
       })
 
-    // console.log('janjangData:',q_mill_code)
+  // console.log('janjangData:',q_mill_code)
 
-    //   const janjangDataRow = await $axios.$get(
-    //    `/api/agro-dashboard-web/mill/overtime?q=${queryParams}`
-    //   )
+  //   const janjangDataRow = await $axios.$get(
+  //    `/api/agro-dashboard-web/mill/overtime?q=${queryParams}`
+  //   )
 
     // console.log('janjangDataRow',janjangDataRow.data)
     //Chart End
@@ -1629,7 +1575,7 @@ export default {
     },
     onChangeFilter() {
       this.show = 0
-
+      
       const current = new Date()
       let vthroughput = ''
 
@@ -1676,6 +1622,7 @@ export default {
             }
           )
         }) // this.$axios
+      
     },
     currentMonth() {
       const current = new Date()
@@ -2040,7 +1987,7 @@ export default {
     test(X) {
       // alert(X)
       // console.log(X, this.$route.query.q_mill_id)
-      this.show = 0
+
       const current = new Date()
       let year_at = current.getFullYear()
 
