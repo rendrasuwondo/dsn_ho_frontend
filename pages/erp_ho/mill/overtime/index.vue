@@ -1420,22 +1420,22 @@ export default {
 
     let f_month_id = []
 
-    if (query.q_month_id) {
-      // console.log('rendra')
-      $axios
-        .get(`/api/admin/lov_months?q_month_id=${q_month_id}`)
-        .then((response) => {
-          f_month_id = response.data.data
-        })
-    } else {
-      f_month_id = []
+    // if (query.q_month_id) {
+    //   // console.log('rendra')
+    //   $axios
+    //     .get(`/api/admin/lov_months?q_month_id=${q_month_id}`)
+    //     .then((response) => {
+    //       f_month_id = response.data.data
+    //     })
+    // } else {
+    //   f_month_id = []
 
-      q_month_id = month_at
-    }
+    //   q_month_id = month_at
+    // }
 
-    if (q_month_id == undefined || q_month_id == '') {
-      q_month_id = month_at
-    }
+    // if (q_month_id == undefined || q_month_id == '') {
+    //   q_month_id = month_at
+    // }
 
     //YEAR
     let q_year_id = query.q_year_id ? query.q_year_id : year_at
