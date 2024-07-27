@@ -352,6 +352,60 @@
             </b-card>
           </div>
           <!-- Cost Overtime End -->
+
+<div>
+            <b-card no-body no-border>
+              <b-tabs card>
+                <b-tab
+                  title="THROUGHPUT PERFORMANCE"
+                  bg-variant="primary"
+                  active
+                >
+                  <b-card-text
+                    >
+                    <b-table
+                      small
+                      responsive
+                      striped
+                      bordered
+                      hover
+                      :items="posts_throughput"
+                      :fields="fields_throughput"
+                      show-empty
+                      class="table-oil"
+                    >
+                      <!-- First row of headers -->
+                      <template #thead-top>
+                        <tr>
+                          <th
+                            rowspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Bulan
+                          </th>
+                          <th
+                            colspan="4"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Standard
+                          </th>
+                          <th
+                            colspan="3"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Actual
+                          </th>
+                        </tr>
+                      </template>
+                    </b-table>
+                    </b-card-text
+                  >
+                </b-tab>
+              </b-tabs>
+            </b-card>
+          </div>
+
+
           <!-- table -->
           <div>
             <b-card no-body no-border>
@@ -398,14 +452,15 @@
                           </th>
                         </tr>
                       </template>
-                    </b-table>
+                    </b-table> 
+                   
                   </b-card-text>
                 </b-tab>
               </b-tabs>
             </b-card>
           </div>
           <!-- pagination -->
-          <b-row v-show="">
+          <!-- <b-row v-show="">
             <b-col
               ><b-pagination
                 v-model="pagination.current_page"
@@ -419,57 +474,9 @@
             <b-col class="text-right" align-self="center"
               >{{ rowcount }} data</b-col
             >
-          </b-row>
+          </b-row> -->
 
-          <div>
-            <b-card no-body no-border>
-              <b-tabs card>
-                <b-tab
-                  title="THROUGHPUT PERFORMANCE"
-                  bg-variant="primary"
-                  active
-                >
-                  <b-card-text
-                    ><b-table
-                      small
-                      responsive
-                      striped
-                      bordered
-                      hover
-                      :items="posts_throughput"
-                      :fields="fields_throughput"
-                      show-empty
-                      class="table-oil"
-                    >
-                      <!-- First row of headers -->
-                      <template #thead-top>
-                        <tr>
-                          <th
-                            rowspan="2"
-                            style="text-align: center; vertical-align: middle"
-                          >
-                            Bulan
-                          </th>
-                          <th
-                            colspan="4"
-                            style="text-align: center; vertical-align: middle"
-                          >
-                            Standard
-                          </th>
-                          <th
-                            colspan="3"
-                            style="text-align: center; vertical-align: middle"
-                          >
-                            Actual
-                          </th>
-                        </tr>
-                      </template>
-                    </b-table></b-card-text
-                  >
-                </b-tab>
-              </b-tabs>
-            </b-card>
-          </div>
+          
 
           <!-- Overtime Per Station -->
           <div>
@@ -481,7 +488,8 @@
                   active
                 >
                   <b-card-text
-                    ><b-table
+                    >
+                    <b-table
                       small
                       responsive
                       striped
@@ -494,7 +502,7 @@
                     >
                       <template v-slot:cell(station_code)="row">
                         <b-button
-                          @click="test(row.item.station_code)"
+                          @click="overtime_employee(row.item.station_code)"
                           variant="link"
                           size="sm"
                           title="Edit"
@@ -524,7 +532,8 @@
                           </th>
                         </tr>
                       </template>
-                    </b-table></b-card-text
+                    </b-table>
+                    </b-card-text
                   >
                 </b-tab>
               </b-tabs>
@@ -532,7 +541,7 @@
           </div>
 
           <!-- Overtime Per Personal -->
-          <div>
+          <!-- <div>
             <b-card no-body no-border>
               <b-tabs card>
                 <b-tab
@@ -541,7 +550,8 @@
                   active
                 >
                   <b-card-text
-                    ><b-table
+                    >
+                    <b-table
                       small
                       responsive
                       striped
@@ -551,9 +561,9 @@
                       :fields="fields_personal"
                       show-empty
                       class="table-oil"
-                    >
+                    > -->
                       <!-- First row of headers -->
-                      <template #thead-top>
+                      <!-- <template #thead-top>
                         <tr>
                           <th
                             rowspan="2"
@@ -611,12 +621,15 @@
                           </th>
                         </tr>
                       </template>
-                    </b-table></b-card-text
+                    </b-table>
+                    
+                    </b-card-text
                   >
                 </b-tab>
               </b-tabs>
             </b-card>
-          </div>
+          </div> -->
+          
         </div>
       </div>
     </section>
@@ -1500,30 +1513,31 @@ export default {
       // `/api/admin/ThroughputPerformance?department_code=PKS6&year=2024`
     )
 
-    const posts_personal = await $axios.$get(
-      `/api/admin/OvertimeEmployeePerformance?department_code=${q_mill_code}&year=2024&station_code=`
-      // `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
-    )
+    // const posts_personal = await $axios.$get(
+    //   `/api/admin/OvertimeEmployeePerformance?department_code=${q_mill_code}&year=2024&station_code=`
+    //   // `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
+    // )
 
     const posts_cost = await $axios.$get(
       `/api/admin/OvertimeCostPerformance?department_code=${q_mill_code}&year=2024&station_code=`
       // `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
     )
 
-    console.log('posts_station', posts_station.data)
+    // console.log('posts_station', posts_station.data)
 
     //Chart
     let queryParams = store.state.queryString
 
     let janjangData
-    await $axios
-      .get(
-        `/api/agro-dashboard-web/mill/overtime?q_mill_code=${q_mill_code}&q_year_id=${q_year_id}`
-      )
-      .then((response) => {
-        janjangData = response.data.data
-        // console.log('janjangData:',response.data.data)
-      })
+    
+     await $axios
+       .get(
+         `/api/agro-dashboard-web/mill/overtime?q_mill_code=${q_mill_code}&q_year_id=${q_year_id}`
+       )
+       .then((response) => {
+         janjangData = response.data.data
+         // console.log('janjangData:',response.data.data)
+       })
 
     // console.log('janjangData:',q_mill_code)
 
@@ -1538,9 +1552,9 @@ export default {
       posts: posts.data.data,
       posts_throughput: posts_throughput.data.data,
       posts_station: posts_station.data,
-      posts_personal: posts_personal.data,
+      // posts_personal: posts_personal.data,
       posts_cost: posts_cost.data.data,
-      pagination: posts.data,
+      // pagination: posts.data,
       search: search,
       rowcount: posts.data.total,
       year_id: year_id,
@@ -1550,17 +1564,17 @@ export default {
       years: year_list.data,
       // months: month_list.data,
       mill: lov_mill.data,
-      chart: {
-        janjang: {
-          type: 'mscolumn2d',
-          renderAt: 'chart-container-janjang',
-          width: '100%',
-          height: '350',
-          dataFormat: 'json',
-          dataSource: janjangData,
-          // dataSource: janjangDataRow.data
-        },
-      },
+       chart: {
+         janjang: {
+           type: 'mscolumn2d',
+           renderAt: 'chart-container-janjang',
+           width: '100%',
+           height: '350',
+           dataFormat: 'json',
+           dataSource: janjangData,
+           // dataSource: janjangDataRow.data
+         },
+       },
     }
   },
 
@@ -2037,44 +2051,48 @@ export default {
       return `${day}-${month}-${year}`
     },
 
-    test(X) {
-      // alert(X)
+    overtime_employee(X) {
+      // alert(this.$route.query)
+      // console.log(this.$query)
+      // console.log(this.$route.fullPath.replace("mill/overtime_test?", "master/employee?") + "&q_station_code=" + X )
+      // window.open("https://www.w3schools.com?q_station_code=" + X); 
+      window.open(this.$route.fullPath.replace("mill/overtime?", "mill/overtime_employee?") + "&q_station_code=" + X )
       // console.log(X, this.$route.query.q_mill_id)
-      this.show = 0
-      const current = new Date()
-      let year_at = current.getFullYear()
+      // this.show = 0
+      // const current = new Date()
+      // let year_at = current.getFullYear()
 
-      try {
-        if (this.f_year_id.year_at === null) {
-          this.query_year_id = ''
-        } else if (this.f_year_id.year_at === undefined) {
-          this.query_year_id = this.$route.query.q_year_id
-        } else {
-          this.query_year_id = this.f_year_id.year_at
-            ? this.f_year_id.year_at
-            : ''
-        }
-      } catch (err) {}
+      // try {
+      //   if (this.f_year_id.year_at === null) {
+      //     this.query_year_id = ''
+      //   } else if (this.f_year_id.year_at === undefined) {
+      //     this.query_year_id = this.$route.query.q_year_id
+      //   } else {
+      //     this.query_year_id = this.f_year_id.year_at
+      //       ? this.f_year_id.year_at
+      //       : ''
+      //   }
+      // } catch (err) {}
 
-      this.$router.push(
-        {
-          path: this.$route.path,
-          query: {
-            q: this.search,
-            q_mill_id: this.$route.query.q_mill_id,
-            q_mill_code: this.$route.query.q_mill_code,
-            q_throughput: this.$route.query.q_throughput,
-            q_mill_pm: this.$route.query.q_mill_pm,
-            q_mill_head: this.$route.query.q_mill_head,
-            q_man_power: this.$route.query.q_man_power,
-            q_year_id: this.query_year_id ? this.query_year_id : year_at,
-            q_station_code: X,
-          },
-        },
-        () => {
-          this.$router.go(0)
-        }
-      )
+      // this.$router.push(
+      //   {
+      //     path: this.$route.path,
+      //     query: {
+      //       q: this.search,
+      //       q_mill_id: this.$route.query.q_mill_id,
+      //       q_mill_code: this.$route.query.q_mill_code,
+      //       q_throughput: this.$route.query.q_throughput,
+      //       q_mill_pm: this.$route.query.q_mill_pm,
+      //       q_mill_head: this.$route.query.q_mill_head,
+      //       q_man_power: this.$route.query.q_man_power,
+      //       q_year_id: this.query_year_id ? this.query_year_id : year_at,
+      //       q_station_code: X,
+      //     },
+      //   },
+      //   () => {
+      //     this.$router.go(0)
+      //   }
+      // )
     },
   }, //Method
 
