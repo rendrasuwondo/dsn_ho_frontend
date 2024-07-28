@@ -179,7 +179,7 @@ export default {
 
     //fetching posts
     const posts = await $axios.$get(
-      `/api/admin/MillProfile/?q=${search}&page=${page}`
+      `/api/admin/MillProfile?q=${search}&page=${page}`
     )
     console.log('posts',posts)
 
