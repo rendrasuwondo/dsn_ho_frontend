@@ -864,6 +864,18 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Total',
+          key: 'ot_total',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Jan',
           key: 'ot_jan',
           formatter: (value, key, item) => {
@@ -935,9 +947,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center nameOfTheClass',
+          thClass: 'align-middle text-center  nameOfTheClass',
           label: 'Total',
-          key: 'ot_total',
+          key: 'ot_conversion_total',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -1018,18 +1030,7 @@ export default {
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Total',
-          key: 'ot_conversion_total',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
+        
       ],
       fields_personal: [
         {
