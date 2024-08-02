@@ -14,7 +14,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-stopwatch"></i> <b>OVERTIME PERSONAL</b>
+            <i class="nav-icon fas fa-stopwatch"></i> <b>OVERTIME PERSONAL {{this.$route.query.q_mill_code}} - {{this.$route.query.q_station_code}}</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -471,7 +471,13 @@
                             rowspan="2"
                             style="text-align: center; vertical-align: middle"
                           >
-                            Station
+                            Jabatan
+                          </th>
+                          <th
+                            colspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Total
                           </th>
                           <th
                             colspan="2"
@@ -509,12 +515,7 @@
                           >
                             Jun
                           </th>
-                          <th
-                            colspan="2"
-                            style="text-align: center; vertical-align: middle"
-                          >
-                            Total
-                          </th>
+                          
                         </tr>
                       </template>
                     </b-table>
@@ -936,9 +937,33 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
-          label: 'Station',
-          key: 'station_code',
+          label: 'Jabatan',
+          key: 'job_title_name',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Lembur Jam Dunia',
+          key: 'ot_total',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Lembur Jam Konversi',
+          key: 'ot_conversion_total',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
@@ -1084,30 +1109,7 @@ export default {
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Lembur Jam Dunia',
-          key: 'ot_total',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Lembur Jam Konversi',
-          key: 'ot_conversion_total',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
+        
       ],
       fields_cost: [
         {
