@@ -39,7 +39,7 @@
       <div class="content-header">
         <div class="container-fluid">
           
-          <div class="row">
+          <div class="row" v-show=false>
             <div class="col-lg-3 col-2">
               <div class="small-box bg-info">
                 <div class="inner">
@@ -72,7 +72,7 @@
           </div>
 
           <div class="row mb-2">
-            <div class="col-md-3 mt-3">
+            <div class="col-md-3 mt-3" v-show=false>
               <!-- Widget: user widget style 2 -->
               <div class="card card-widget widget-user-2 shadow-sm">
                 <!-- Add the bg color to the header using any of the bg-* classes -->

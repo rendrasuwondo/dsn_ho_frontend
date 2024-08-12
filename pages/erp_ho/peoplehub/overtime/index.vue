@@ -138,6 +138,24 @@
                     </b-container>
                   </div>
                   <div class="form-group">
+                    <b-container fluid>
+                      <b-row class="my-1">
+                        <b-col sm="3">
+                          <label for="input-small">PKS :</label>
+                        </b-col>
+                        <b-col sm="9">
+                          <multiselect
+                            v-model="mill_select"
+                            :options="mill"
+                            label="code"
+                            track-by="id"
+                            :searchable="true"
+                          ></multiselect>
+                        </b-col>
+                      </b-row>
+                    </b-container>
+                  </div>
+                  <div class="form-group">
                     <b-container class="bv-example-row">
                       <b-row>
                         <b-col sm="3">
@@ -281,9 +299,9 @@ export default {
 
       years: [],
       months: [],
-
       show: 1,
-
+      mill_select: '',
+      mill: [],
       fields: [
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass',
@@ -757,6 +775,8 @@ export default {
     //   `/api/admin/oil_content?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
     // )
 
+    let lov_mill = await $axios.$get(`/api/admin/lov_pks_list`)
+
     const posts = await $axios.$get(
       `/api/peoplehub/overtime?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
     )
@@ -772,6 +792,7 @@ export default {
       f_year_id: f_year_id,
       years: year_list.data,
       months: month_list.data,
+      mill: lov_mill.data,
     }
   },
 
@@ -1033,6 +1054,8 @@ export default {
       this.show = 0
       const current = new Date()
 
+      // console.log('mill_select',this.mill_select.code)
+
       // Year
       let i_year_at = ''
 
@@ -1082,7 +1105,7 @@ export default {
 
       await this.$axios
         .post(
-          `/api/peoplehub/overtime?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
+          `/api/peoplehub/overtime?q_month_id=${i_month_at}&q_year_id=${i_year_at}&department_code=${this.mill_select.code}`,
           formData
         )
         .then((response) => {

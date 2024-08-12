@@ -14,117 +14,13 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-stopwatch"></i> <b>OVERTIME</b>
+            <i class="nav-icon fas fa-stopwatch"></i> <b>OVERTIME PERSONAL {{this.$route.query.q_mill_code}} - {{this.$route.query.q_station_code}}</b>
           </h3>
           <div class="card-tools"></div>
         </div>
 
         <div class="card-body">
-          <b-row>
-            <b-col cols="6"
-              ><b-card
-                border-variant="primary"
-                header="Filter"
-                header-bg-variant="info"
-                header-text-variant="white"
-              >
-                <b-card-text>
-                  <!-- <b-container class="bv-example-row mb-3"> -->
-                  <b-form-group
-                    label="Tahun"
-                    label-for="nested-street"
-                    label-cols-sm="6"
-                    label-align-sm="left"
-                  >
-                    <multiselect
-                      v-model="f_year_id"
-                      :options="years"
-                      label="year_at"
-                      track-by="id"
-                      :searchable="true"
-                      @input="onChangeFilterYear"
-                    ></multiselect>
-                  </b-form-group>
-                  <b-form-group
-                    label="PKS"
-                    label-for="nested-street"
-                    label-cols-sm="6"
-                    label-align-sm="left"
-                  >
-                    <multiselect
-                      v-model="mill_select"
-                      :options="mill"
-                      label="code"
-                      track-by="id"
-                      :searchable="true"
-                      @input="onChangeFilter"
-                    ></multiselect>
-                  </b-form-group>
-                  <b-form-group
-                    label="Kapasitas"
-                    label-for="nested-street"
-                    label-cols-sm="6"
-                    label-align-sm="left"
-                  >
-                    <b-form-input
-                      id="nested-street"
-                      v-model="throughput"
-                    ></b-form-input>
-                  </b-form-group>
-                  <b-form-group
-                    label="Mill Performance & Maintenance"
-                    label-for="nested-street"
-                    label-cols-sm="6"
-                    label-align-sm="left"
-                  >
-                    <b-form-input
-                      id="nested-street"
-                      v-model="mill_pm"
-                    ></b-form-input>
-                  </b-form-group>
-                  <b-form-group
-                    label="Mill Head"
-                    label-for="nested-street"
-                    label-cols-sm="6"
-                    label-align-sm="left"
-                  >
-                    <b-form-input
-                      id="nested-street"
-                      v-model="mill_head"
-                    ></b-form-input>
-                  </b-form-group>
-                  <b-form-group
-                    label="Jumlah Man Power"
-                    label-for="nested-street"
-                    label-cols-sm="6"
-                    label-align-sm="left"
-                  >
-                    <b-form-input
-                      id="nested-street"
-                      v-model="man_power"
-                    ></b-form-input>
-                  </b-form-group>
-                  <!-- </b-container> -->
-                </b-card-text>
-              </b-card></b-col
-            >
-            <b-col cols="6">
-              <div class="chart-container-janjang">
-                <div class="card card-outline card-info">
-                  <div class="card-body">
-                    <fusioncharts
-                      :type="chart.janjang.type"
-                      :width="chart.janjang.width"
-                      :height="chart.janjang.height"
-                      :dataformat="chart.janjang.dataFormat"
-                      :dataSource="chart.janjang.dataSource"
-                    >
-                    </fusioncharts>
-                  </div>
-                </div>
-              </div>
-            </b-col>
-          </b-row>
+         
 
           <div class="form-group" v-show="false">
             <div class="input-group mb-3">
@@ -284,7 +180,7 @@
             </div>
           </div>
           <!-- Cost Overtime -->
-          <div>
+          <!-- <div>
             <b-card no-body no-border>
               <b-tabs card>
                 <b-tab
@@ -303,9 +199,9 @@
                       :fields="fields_cost"
                       show-empty
                       class="table-oil"
-                    >
+                    > -->
                       <!-- First row of headers -->
-                      <template #thead-top>
+                      <!-- <template #thead-top>
                         <tr>
                           <th
                             rowspan="2"
@@ -350,10 +246,10 @@
                 </b-tab>
               </b-tabs>
             </b-card>
-          </div>
+          </div> -->
           <!-- Cost Overtime End -->
 
-<div>
+<!-- <div>
             <b-card no-body no-border>
               <b-tabs card>
                 <b-tab
@@ -373,9 +269,9 @@
                       :fields="fields_throughput"
                       show-empty
                       class="table-oil"
-                    >
+                    > -->
                       <!-- First row of headers -->
-                      <template #thead-top>
+                      <!-- <template #thead-top>
                         <tr>
                           <th
                             rowspan="2"
@@ -404,10 +300,10 @@
               </b-tabs>
             </b-card>
           </div>
-
+ -->
 
           <!-- table -->
-          <div>
+          <!-- <div>
             <b-card no-body no-border>
               <b-tabs card>
                 <b-tab title="OVERTIME PERFORMANCE" bg-variant="primary" active>
@@ -422,9 +318,9 @@
                       :fields="fields"
                       show-empty
                       class="table-oil"
-                    >
+                    > -->
                       <!-- First row of headers -->
-                      <template #thead-top>
+                      <!-- <template #thead-top>
                         <tr>
                           <th
                             rowspan="2"
@@ -458,7 +354,7 @@
                 </b-tab>
               </b-tabs>
             </b-card>
-          </div>
+          </div> -->
           <!-- pagination -->
           <!-- <b-row v-show="">
             <b-col
@@ -479,7 +375,7 @@
           
 
           <!-- Overtime Per Station -->
-          <div>
+          <!-- <div>
             <b-card no-body no-border>
               <b-tabs card>
                 <b-tab
@@ -502,7 +398,7 @@
                     >
                       <template v-slot:cell(station_code)="row">
                         <b-button
-                          @click="overtime_employee(row.item.station_code)"
+                          @click="test(row.item.station_code)"
                           variant="link"
                           size="sm"
                           title="Edit"
@@ -538,10 +434,10 @@
                 </b-tab>
               </b-tabs>
             </b-card>
-          </div>
+          </div> -->
 
           <!-- Overtime Per Personal -->
-          <!-- <div>
+          <div>
             <b-card no-body no-border>
               <b-tabs card>
                 <b-tab
@@ -561,9 +457,9 @@
                       :fields="fields_personal"
                       show-empty
                       class="table-oil"
-                    > -->
+                    >
                       <!-- First row of headers -->
-                      <!-- <template #thead-top>
+                      <template #thead-top>
                         <tr>
                           <th
                             rowspan="2"
@@ -575,7 +471,13 @@
                             rowspan="2"
                             style="text-align: center; vertical-align: middle"
                           >
-                            Station
+                            Jabatan
+                          </th>
+                          <th
+                            colspan="2"
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Total
                           </th>
                           <th
                             colspan="2"
@@ -613,12 +515,7 @@
                           >
                             Jun
                           </th>
-                          <th
-                            colspan="2"
-                            style="text-align: center; vertical-align: middle"
-                          >
-                            Total
-                          </th>
+                          
                         </tr>
                       </template>
                     </b-table>
@@ -628,7 +525,7 @@
                 </b-tab>
               </b-tabs>
             </b-card>
-          </div> -->
+          </div>
           
         </div>
       </div>
@@ -642,7 +539,7 @@ export default {
 
   head() {
     return {
-      title: 'Overtime',
+      title: 'Overtime Personal',
     }
   },
 
@@ -864,18 +761,6 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Total',
-          key: 'ot_total',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Jan',
           key: 'ot_jan',
           formatter: (value, key, item) => {
@@ -938,6 +823,90 @@ export default {
           thClass: 'align-middle text-center nameOfTheClass',
           label: 'Jun',
           key: 'ot_jun',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Total',
+          key: 'ot_total',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jan',
+          key: 'ot_conversion_jan',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Feb',
+          key: 'ot_conversion_feb',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Mar',
+          key: 'ot_conversion_mar',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Apr',
+          key: 'ot_conversion_apr',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'May',
+          key: 'ot_conversion_may',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Jun',
+          key: 'ot_conversion_jun',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -958,79 +927,6 @@ export default {
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jan',
-          key: 'ot_conversion_jan',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Feb',
-          key: 'ot_conversion_feb',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Mar',
-          key: 'ot_conversion_mar',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Apr',
-          key: 'ot_conversion_apr',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'May',
-          key: 'ot_conversion_may',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Jun',
-          key: 'ot_conversion_jun',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        
       ],
       fields_personal: [
         {
@@ -1041,153 +937,9 @@ export default {
         },
         {
           thClass: 'align-middle text-center text-nowrap nameOfTheClass d-none',
-          label: 'Station',
-          key: 'station_code',
+          label: 'Jabatan',
+          key: 'job_title_name',
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jam Lembur Dunia',
-          key: 'ot_jan',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jam Lembur Konversi',
-          key: 'ot_conversion_jan',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jam Lembur Dunia',
-          key: 'ot_feb',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jam Lembur Konversi',
-          key: 'ot_conversion_feb',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jam Lembur Dunia',
-          key: 'ot_mar',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Jam Lembur Konversi',
-          key: 'ot_conversion_mar',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jam Lembur Dunia',
-          key: 'ot_apr',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Jam Lembur Konversi',
-          key: 'ot_conversion_apr',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jam Lembur Dunia',
-          key: 'ot_may',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Jam Lembur Konversi',
-          key: 'ot_conversion_may',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Jam Lembur Dunia',
-          key: 'ot_jun',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center  nameOfTheClass',
-          label: 'Jam Lembur Konversi',
-          key: 'ot_conversion_jun',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
           thClass: 'align-middle text-center  nameOfTheClass',
@@ -1213,6 +965,151 @@ export default {
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Dunia',
+          key: 'ot_jan',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Konversi',
+          key: 'ot_conversion_jan',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Dunia',
+          key: 'ot_feb',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Konversi',
+          key: 'ot_conversion_feb',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Dunia',
+          key: 'ot_mar',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Jam Lembur Konversi',
+          key: 'ot_conversion_mar',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Dunia',
+          key: 'ot_apr',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Jam Lembur Konversi',
+          key: 'ot_conversion_apr',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Dunia',
+          key: 'ot_may',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Jam Lembur Konversi',
+          key: 'ot_conversion_may',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center nameOfTheClass',
+          label: 'Jam Lembur Dunia',
+          key: 'ot_jun',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Jam Lembur Konversi',
+          key: 'ot_conversion_jun',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
+        
       ],
       fields_cost: [
         {
@@ -1412,16 +1309,16 @@ export default {
 
   async asyncData({ $axios, query, store }) {
     // DEFAULT MONTH AND YEAR
-    const current = new Date()
-    let month_at = current.getMonth() + 1
+    // const current = new Date()
+    // let month_at = current.getMonth() + 1
 
-    let year_at = current.getFullYear()
+    // let year_at = current.getFullYear()
 
-    let year_list = await $axios.$get(`/api/admin/lov_years`)
+    // let year_list = await $axios.$get(`/api/admin/lov_years`)
 
-    // let month_list = await $axios.$get(`/api/admin/lov_months`)
+    // // let month_list = await $axios.$get(`/api/admin/lov_months`)
 
-    let lov_mill = await $axios.$get(`/api/admin/lov_pks_list`)
+    // let lov_mill = await $axios.$get(`/api/admin/lov_pks_list`)
 
     // console.log('daaaa')
     // console.log(month_list.data)
@@ -1430,7 +1327,7 @@ export default {
 
     let q_mill_code = query.q_mill_code ? query.q_mill_code : 'PKS99'
 
-    let q_month_id = query.q_month_id ? query.q_month_id : month_at
+    let q_month_id = query.q_month_id ? query.q_month_id : 13
 
     let f_month_id = []
 
@@ -1456,17 +1353,17 @@ export default {
 
     let f_year_id = []
 
-    if (query.q_year_id) {
-      $axios
-        .get(`/api/admin/lov_years?q_year_id=${q_year_id}`)
-        .then((response) => {
-          f_year_id = response.data.data
-        })
-    } else {
-      f_year_id = []
+    // if (query.q_year_id) {
+    //   $axios
+    //     .get(`/api/admin/lov_years?q_year_id=${q_year_id}`)
+    //     .then((response) => {
+    //       f_year_id = response.data.data
+    //     })
+    // } else {
+    //   f_year_id = []
 
-      q_year_id = year_at
-    }
+    //   q_year_id = year_at
+    // }
 
     if (q_year_id == undefined || q_year_id == '') {
       q_year_id = year_at
@@ -1476,9 +1373,11 @@ export default {
     //GET YEAR
     let year_id = []
 
-    $axios.get(`/api/admin/lov_years?q_year_id=${year_at}`).then((response) => {
-      year_id = response.data.data
-    })
+    // $axios.get(`/api/admin/lov_years?q_year_id=${year_at}`).then((response) => {
+    //   year_id = response.data.data
+    // })
+
+    let q_station_code = query.q_station_code ? query.q_station_code : 'PKS99'
 
     // GET MONTH
     // let month_id = []
@@ -1500,45 +1399,45 @@ export default {
     //   `/api/admin/oil_content?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
     // )
     // console.log('test')
-    const posts = await $axios.$get(
-      // `/api/peoplehub/overtime?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
-      `/api/admin/OvertimePerformance?department_code=${q_mill_code}&year=2024`
-    )
-
-    const posts_throughput = await $axios.$get(
-      `/api/admin/ThroughputPerformance?department_code=${q_mill_code}&year=2024`
-    )
-
-    const posts_station = await $axios.$get(
-      `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
-      // `/api/admin/ThroughputPerformance?department_code=PKS6&year=2024`
-    )
-
-    // const posts_personal = await $axios.$get(
-    //   `/api/admin/OvertimeEmployeePerformance?department_code=${q_mill_code}&year=2024&station_code=`
-    //   // `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
+    // const posts = await $axios.$get(
+    //   // `/api/peoplehub/overtime?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+    //   `/api/admin/OvertimePerformance?department_code=${q_mill_code}&year=2024`
     // )
 
-    const posts_cost = await $axios.$get(
-      `/api/admin/OvertimeCostPerformance?department_code=${q_mill_code}&year=2024&station_code=`
+    // const posts_throughput = await $axios.$get(
+    //   `/api/admin/ThroughputPerformance?department_code=${q_mill_code}&year=2024`
+    // )
+
+    // const posts_station = await $axios.$get(
+    //   `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
+    //   // `/api/admin/ThroughputPerformance?department_code=PKS6&year=2024`
+    // )
+
+    const posts_personal = await $axios.$get(
+      `/api/admin/OvertimeEmployeePerformance?department_code=${q_mill_code}&year=${q_year_id}&station_code=${q_station_code}`
       // `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
     )
+
+    // const posts_cost = await $axios.$get(
+    //   `/api/admin/OvertimeCostPerformance?department_code=${q_mill_code}&year=2024&station_code=`
+    //   // `/api/admin/OvertimeStationPerformance?department_code=${q_mill_code}&year=2024`
+    // )
 
     // console.log('posts_station', posts_station.data)
 
     //Chart
     let queryParams = store.state.queryString
 
-    let janjangData
+    // let janjangData
     
-     await $axios
-       .get(
-         `/api/agro-dashboard-web/mill/overtime?q_mill_code=${q_mill_code}&q_year_id=${q_year_id}`
-       )
-       .then((response) => {
-         janjangData = response.data.data
-         // console.log('janjangData:',response.data.data)
-       })
+    //  await $axios
+    //    .get(
+    //      `/api/agro-dashboard-web/mill/overtime?q_mill_code=${q_mill_code}&q_year_id=${q_year_id}`
+    //    )
+    //    .then((response) => {
+    //      janjangData = response.data.data
+    //      // console.log('janjangData:',response.data.data)
+    //    })
 
     // console.log('janjangData:',q_mill_code)
 
@@ -1550,32 +1449,32 @@ export default {
     //Chart End
 
     return {
-      posts: posts.data.data,
-      posts_throughput: posts_throughput.data.data,
-      posts_station: posts_station.data,
-      // posts_personal: posts_personal.data,
-      posts_cost: posts_cost.data.data,
+      // posts: posts.data.data,
+      // posts_throughput: posts_throughput.data.data,
+      // posts_station: posts_station.data,
+      posts_personal: posts_personal.data,
+      // posts_cost: posts_cost.data.data,
       // pagination: posts.data,
-      search: search,
-      rowcount: posts.data.total,
-      year_id: year_id,
+      // search: search,
+      // rowcount: posts.data.total,
+      // year_id: year_id,
       // month_id: month_id,
-      f_month_id: f_month_id,
-      f_year_id: f_year_id,
-      years: year_list.data,
+      // f_month_id: f_month_id,
+      // f_year_id: f_year_id,
+      // years: year_list.data,
       // months: month_list.data,
-      mill: lov_mill.data,
-       chart: {
-         janjang: {
-           type: 'mscolumn2d',
-           renderAt: 'chart-container-janjang',
-           width: '100%',
-           height: '350',
-           dataFormat: 'json',
-           dataSource: janjangData,
-           // dataSource: janjangDataRow.data
-         },
-       },
+      // mill: lov_mill.data,
+      //  chart: {
+      //    janjang: {
+      //      type: 'mscolumn2d',
+      //      renderAt: 'chart-container-janjang',
+      //      width: '100%',
+      //      height: '350',
+      //      dataFormat: 'json',
+      //      dataSource: janjangData,
+      //      // dataSource: janjangDataRow.data
+      //    },
+      //  },
     }
   },
 
@@ -2052,12 +1951,11 @@ export default {
       return `${day}-${month}-${year}`
     },
 
-    overtime_employee(X) {
+    test(X) {
       // alert(this.$route.query)
-      // console.log(this.$query)
-      // console.log(this.$route.fullPath.replace("mill/overtime_test?", "master/employee?") + "&q_station_code=" + X )
+      console.log(this.$route.fullPath.replace("mill/overtime_test?", "master/employee?") + "&q_station_code=" + X )
       // window.open("https://www.w3schools.com?q_station_code=" + X); 
-      window.open(this.$route.fullPath.replace("mill/overtime?", "mill/overtime_employee?") + "&q_station_code=" + X )
+      window.open(this.$route.fullPath.replace("mill/overtime_test?", "mill/overtime_employee?") + "&q_station_code=" + X )
       // console.log(X, this.$route.query.q_mill_id)
       // this.show = 0
       // const current = new Date()

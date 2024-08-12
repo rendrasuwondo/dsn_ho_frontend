@@ -864,18 +864,6 @@ export default {
         },
         {
           thClass: 'align-middle text-center nameOfTheClass',
-          label: 'Total',
-          key: 'ot_total',
-          formatter: (value, key, item) => {
-            let formatter = new Intl.NumberFormat('es-US', {
-              maximumFractionDigits: 0,
-            })
-            return formatter.format(value)
-          },
-          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
-        },
-        {
-          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Jan',
           key: 'ot_jan',
           formatter: (value, key, item) => {
@@ -947,9 +935,9 @@ export default {
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
         {
-          thClass: 'align-middle text-center  nameOfTheClass',
+          thClass: 'align-middle text-center nameOfTheClass',
           label: 'Total',
-          key: 'ot_conversion_total',
+          key: 'ot_total',
           formatter: (value, key, item) => {
             let formatter = new Intl.NumberFormat('es-US', {
               maximumFractionDigits: 0,
@@ -1030,7 +1018,18 @@ export default {
           },
           tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
         },
-        
+        {
+          thClass: 'align-middle text-center  nameOfTheClass',
+          label: 'Total',
+          key: 'ot_conversion_total',
+          formatter: (value, key, item) => {
+            let formatter = new Intl.NumberFormat('es-US', {
+              maximumFractionDigits: 0,
+            })
+            return formatter.format(value)
+          },
+          tdClass: 'align-middle text-right text-nowrap nameOfTheClass',
+        },
       ],
       fields_personal: [
         {
@@ -2057,7 +2056,7 @@ export default {
       // console.log(this.$query)
       // console.log(this.$route.fullPath.replace("mill/overtime_test?", "master/employee?") + "&q_station_code=" + X )
       // window.open("https://www.w3schools.com?q_station_code=" + X); 
-      window.open(this.$route.fullPath.replace("mill/overtime?", "mill/overtime_employee?") + "&q_station_code=" + X )
+      window.open(this.$route.fullPath.replace("mill/overtime_test?", "mill/overtime_employee?") + "&q_station_code=" + X )
       // console.log(X, this.$route.query.q_mill_id)
       // this.show = 0
       // const current = new Date()
