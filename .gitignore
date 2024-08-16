@@ -94,4 +94,5 @@ sw.*
 .package-lock.json
 package-lock.json
 
+/storage/*
 
