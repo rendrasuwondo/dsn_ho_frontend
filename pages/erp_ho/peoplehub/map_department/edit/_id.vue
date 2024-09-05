@@ -60,11 +60,6 @@
                 placeholder=""
                 class="form-control"
               />
-              <div v-if="validation.organization_name_peoplehub" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.organization_name_peoplehub[0]
-                }}</b-alert>
-              </div>
             </div>
 
             <div class="form-group">
@@ -75,11 +70,6 @@
                 placeholder=""
                 class="form-control"
               />
-              <div v-if="validation.department_code" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.department_code[0]
-                }}</b-alert>
-              </div>
             </div>
 
            <div class="form-group">

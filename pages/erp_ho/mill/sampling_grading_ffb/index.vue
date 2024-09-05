@@ -45,6 +45,7 @@
                 </button>
               </div>
             </div>
+ 
           </div>
           <!-- table -->
           <b-table
@@ -57,27 +58,6 @@
             :fields="fields"
             show-empty
           >
-            <!-- <template v-slot:cell(actions)="row">
-              <b-button
-                :to="{
-                  name: 'erp_ho-mill-mill_type-edit-id',
-                  params: { id: row.item.id },
-                }"
-                variant="link"
-                size="sm"
-                title="Edit"
-              >
-                <i class="fa fa-pencil-alt"></i>
-              </b-button>
-              <b-button
-                variant="link"
-                size="sm"
-                @click="deleteRole(row.item.id)"
-                title="Hapus"
-                ><i class="fa fa-trash"></i
-              ></b-button>
-            
-            </template> -->
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -115,6 +95,10 @@ export default {
     data() {
       return {
         //header table  
+          field : {
+            department_code : ''
+          },
+
         fields: [
         {
           label: 'No',
@@ -194,6 +178,7 @@ export default {
       ],
         //posts data
         posts: [],
+        
       }
     },
 
@@ -206,19 +191,23 @@ export default {
 
     //search
     let search = query.q ? query.q : ''
-
+  
     //fetching posts
     const posts = await $axios.$get(
       `/api/agro-dashboard/sampling_grading_ffb?q=${search}&page=${page}`
     )
     console.log('posts',posts)
-
+    
     return {
       posts: posts.data.data,
       pagination: posts.data,
       search: search,
       rowcount: posts.data.total,
     }
+  },
+
+  mounted() {
+    
   },
 
   methods: {
@@ -231,6 +220,7 @@ export default {
         },
       })
     },
+    
     //searchData
     searchData() {
       this.$router.push({
