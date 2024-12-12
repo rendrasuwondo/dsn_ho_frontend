@@ -604,5 +604,12 @@
   .card-title {
     color: #504d8d;
   }
+  .b-table td:nth-child(3),
+  .b-table th:nth-child(3) {
+    min-width: 120px;
+    max-width: 200px;
+    text-align: center;
+    white-space: nowrap;
+  }
   </style>
   
