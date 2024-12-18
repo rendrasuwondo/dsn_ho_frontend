@@ -3,8 +3,14 @@
       <section class="content-header">
         <div class="container-fluid"></div>
       </section>
+
+      <div v-if="show === 0">
+        <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+        <p class="txt-2">Loading</p>
+        <div class="spinonediv-4"></div>
+      </div>
   
-      <section class="content">
+      <section class="content" v-if="show === 1">
         <div class="card card-outline card-info">
           <div class="card-header">
             <h3 class="card-title">
@@ -148,6 +154,7 @@
                         <th rowspan="2">
                             <input type="checkbox" @change="toggleSelectAll" v-model="selectAll" />
                         </th>
+                        <th rowspan="2">Actions</th>
                         <th rowspan="2">Status</th>
                         <th rowspan="2">Tanggal</th>
                         <th rowspan="2">PT</th>
@@ -193,6 +200,27 @@
                     :check="row.item.status === 'approved'"
                     @change="handleSelectionChange"
                   />
+                </template>
+
+                <template v-slot:cell(actions)="row">
+                  <b-button
+                    :to="{
+                      name: 'erp_ho-mill-approve_sampling_grading-edit-id',
+                      params: { id: row.item.id },
+                    }"
+                    variant="link"
+                    size="sm"
+                    title="Edit"
+                  >
+                    <i class="fa fa-pencil-alt"></i>
+                  </b-button>
+                  <!-- <b-button
+                    variant="link"
+                    size="sm"
+                    @click="deletePost(row.item.id)"
+                    title="Hapus"
+                    ><i class="fa fa-trash"></i
+                  ></b-button> -->
                 </template>
             </b-table>
             <button
@@ -247,7 +275,12 @@
               selectedItems: [],
               fields: [
                   // { key: 'no', label: '' }, // No label as custom header is used
-                  { key: 'check', label: '', sortable: false },
+                  { key: 'check', label: '', sortable: false},
+                  {
+                    label: 'Actions',
+                    key: 'actions',
+                    tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+                  },
                   { key: 'status', label: ''},
                   { key: 'transaction_date', label: '', formatter: this.formatDate },
                   { key: 'company_code_plantation', label: '' },
@@ -259,23 +292,23 @@
                   { key: 'qty_npb', label: '' },
                   { key: 'total_qty', label: '' },
                   { key: 'var_qty', label: '' },
-                  { key: 'percentage_qty', label: '' },
+                  { key: 'percentage_qty', label: '', formatter: this.formatToTwoDecimals },
                   { key: 'tonase', label: '' },
                   { key: 'loose_fruit', label: '' },
-                  { key: 'percentage_fruit', label: '' },
+                  { key: 'percentage_fruit', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_unripe', label: '' },
-                  { key: 'percentage_unripe', label: '' },
+                  { key: 'percentage_unripe', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_underripe', label: '' },
-                  { key: 'percentage_underripe', label: '' },
+                  { key: 'percentage_underripe', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_ripe', label: '' },
-                  { key: 'percentage_ripe', label: '' },
-                  { key: 'qty_over', label: '' },
-                  { key: 'percentage_over', label: '' },
+                  { key: 'percentage_ripe', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'qty_overripe', label: '' },
+                  { key: 'percentage_overripe', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_empty_bunch', label: '' },
-                  { key: 'percentage_empty_bunch', label: '' },
+                  { key: 'percentage_empty_bunch', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_abnormal', label: '' },
-                  { key: 'percentage_abnormal', label: '' },
-                  { key: 'bjr', label: '' },
+                  { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'bjr', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'image', label: '' },
               ],
               dateStart: formatDate(yesterday), // Default to yesterday
@@ -295,6 +328,7 @@
                 title: '',
                 icon: '',
               },
+              show: 1,
             };
 
         },
@@ -313,7 +347,6 @@
         // },
 
         async asyncData({ $axios, query }) {
-          console.log("hggwgpwpg")
           const today = new Date();
           const yesterday = new Date();
           yesterday.setDate(today.getDate() - 1);
@@ -387,6 +420,10 @@
         },
 
         methods: {
+          formatToTwoDecimals(value) {
+            if (!value) return '0.00'; // Return 0.00 for empty values
+            return parseFloat(value).toFixed(2);
+          },
           toggleSelectAll() {
               this.posts.forEach(post => {
                   post.selected = this.selectAll;
@@ -395,7 +432,7 @@
           },
 
           handleSelectionChange() {
-            this.selectedItems = this.posts.filter(item => item.selected);
+            this.selectedItems = this.posts.filter(item => item.selected  && item.status !== 'approved');
           },
 
           approveSelected() {
@@ -503,96 +540,99 @@
           },
 
             //searchData
-            searchData() {
-                this.$router.push({
-                    path: this.$route.path,
-                    query: {
-                    q: this.search,
-                    },
-                })
-            },
+          searchData() {
+              this.$router.push({
+                  path: this.$route.path,
+                  query: {
+                  q: this.search,
+                  },
+              })
+          },
 
-            async applyFilters() {
-              try {
-                const query = {};
+          async applyFilters() {
+            this.show = 0
+            try {
+              const query = {};
 
-                // Dynamically add non-empty filters to the query
-                if (this.dateStart) query.dateStart = this.dateStart;
-                if (this.dateEnd) query.dateEnd = this.dateEnd;
-                if (this.pt_id && this.pt_id.length > 0) {
-                  query.company_code_plantation = this.pt_id.map((pt) => pt.company_code_plantation).join(',');
-                }
-                if (this.estate_id && this.estate_id.length > 0) {
-                  query.department_code_plantation = this.estate_id.map((estate) => estate.department_code_plantation).join(',');
-                }
-                if (this.afdeling_id && this.afdeling_id.length > 0) {
-                  query.afdeling_code = this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(',');
-                }
-                if (this.search) query.search = this.search;
-
-                query.page = this.pagination.current_page || 1;
-
-                // Update the URL query dynamically
-                this.$router.push({ path: this.$route.path, query });
-
-                // Fetch the filtered data
-                const response = await this.$axios.$get('/api/admin/spot-cek', { params: query });
-
-                const postsFilter = response.data.data.map((item) => ({
-                  ...item,
-                  selected: item.status === 'approved', // Check the checkbox if status is approved
-                }));
-
-                // Update table and pagination data
-                this.posts = postsFilter;
-                this.pagination = response.data;
-                this.rowcount = response.data.total;
-              } catch (error) {
-                console.error('Error applying filters:', error);
+              // Dynamically add non-empty filters to the query
+              if (this.dateStart) query.dateStart = this.dateStart;
+              if (this.dateEnd) query.dateEnd = this.dateEnd;
+              if (this.pt_id && this.pt_id.length > 0) {
+                query.company_code_plantation = this.pt_id.map((pt) => pt.company_code_plantation).join(',');
               }
-            },
-
-            exportData() {
-              try {
-                const queryParams = new URLSearchParams();
-
-                // Add filters dynamically if they exist
-                if (this.dateStart) queryParams.append('dateStart', this.dateStart);
-                if (this.dateEnd) queryParams.append('dateEnd', this.dateEnd);
-                if (this.pt_id && this.pt_id.length > 0) {
-                  queryParams.append('company_code_plantation', this.pt_id.map((pt) => pt.company_code_plantation).join(','));
-                }
-                if (this.estate_id && this.estate_id.length > 0) {
-                  queryParams.append('department_code_plantation', this.estate_id.map((estate) => estate.department_code_plantation).join(','));
-                }
-                if (this.afdeling_id && this.afdeling_id.length > 0) {
-                  queryParams.append('afdeling_code', this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(','));
-                }
-                if (this.search) queryParams.append('search', this.search);
-
-                // Perform the export request
-                this.$axios({
-                  url: `/api/admin/spot-cek-export?${queryParams.toString()}`,
-                  method: 'GET',
-                  responseType: 'blob', // Ensures the response is treated as a binary file
-                })
-                  .then((response) => {
-                    const url = window.URL.createObjectURL(new Blob([response.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    const fileName = 'SpotCek.xlsx'; // You can customize the filename
-                    link.setAttribute('download', fileName); // Set the file name
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link); // Clean up the DOM
-                  })
-                  .catch((error) => {
-                    console.error('Error exporting data:', error);
-                  });
-              } catch (error) {
-                console.error('Error constructing export URL:', error);
+              if (this.estate_id && this.estate_id.length > 0) {
+                query.department_code_plantation = this.estate_id.map((estate) => estate.department_code_plantation).join(',');
               }
-            },
+              if (this.afdeling_id && this.afdeling_id.length > 0) {
+                query.afdeling_code = this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(',');
+              }
+              if (this.search) query.search = this.search;
+
+              query.page = this.pagination.current_page || 1;
+
+              // Update the URL query dynamically
+              this.$router.push({ path: this.$route.path, query });
+
+              // Fetch the filtered data
+              const response = await this.$axios.$get('/api/admin/spot-cek', { params: query });
+
+              const postsFilter = response.data.data.map((item) => ({
+                ...item,
+                selected: item.status === 'approved', // Check the checkbox if status is approved
+              }));
+
+              // Update table and pagination data
+              this.posts = postsFilter;
+              this.pagination = response.data;
+              this.rowcount = response.data.total;
+              this.show = 1
+            } catch (error) {
+              console.error('Error applying filters:', error);
+              this.show = 1
+            }
+          },
+
+          exportData() {
+            try {
+              const queryParams = new URLSearchParams();
+
+              // Add filters dynamically if they exist
+              if (this.dateStart) queryParams.append('dateStart', this.dateStart);
+              if (this.dateEnd) queryParams.append('dateEnd', this.dateEnd);
+              if (this.pt_id && this.pt_id.length > 0) {
+                queryParams.append('company_code_plantation', this.pt_id.map((pt) => pt.company_code_plantation).join(','));
+              }
+              if (this.estate_id && this.estate_id.length > 0) {
+                queryParams.append('department_code_plantation', this.estate_id.map((estate) => estate.department_code_plantation).join(','));
+              }
+              if (this.afdeling_id && this.afdeling_id.length > 0) {
+                queryParams.append('afdeling_code', this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(','));
+              }
+              if (this.search) queryParams.append('search', this.search);
+
+              // Perform the export request
+              this.$axios({
+                url: `/api/admin/spot-cek-export?${queryParams.toString()}`,
+                method: 'GET',
+                responseType: 'blob', // Ensures the response is treated as a binary file
+              })
+                .then((response) => {
+                  const url = window.URL.createObjectURL(new Blob([response.data]));
+                  const link = document.createElement('a');
+                  link.href = url;
+                  const fileName = 'SpotCek.xlsx'; // You can customize the filename
+                  link.setAttribute('download', fileName); // Set the file name
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link); // Clean up the DOM
+                })
+                .catch((error) => {
+                  console.error('Error exporting data:', error);
+                });
+            } catch (error) {
+              console.error('Error constructing export URL:', error);
+            }
+          },
         },
     };
 </script>
@@ -611,5 +651,12 @@
     text-align: center;
     white-space: nowrap;
   }
+  </style>
+
+  <style>
+    .b-table thead tr:nth-child(3) {
+      background-color: blue !important;
+      display: none;
+    }
   </style>
   

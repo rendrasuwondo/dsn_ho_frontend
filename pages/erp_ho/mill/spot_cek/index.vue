@@ -3,8 +3,14 @@
       <section class="content-header">
         <div class="container-fluid"></div>
       </section>
+
+      <div v-if="show === 0">
+        <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+        <p class="txt-2">Loading</p>
+        <div class="spinonediv-4"></div>
+      </div>
   
-      <section class="content">
+      <section class="content" v-if="show === 1">
         <div class="card card-outline card-info">
           <div class="card-header">
             <h3 class="card-title">
@@ -267,6 +273,7 @@
               posts: [], // Data for the table
               pagination: {}, // Pagination data
               rowcount: 0,
+              show: 1,
             };
 
         },
@@ -372,92 +379,98 @@
             this.$router.push({ path: this.$route.path, query });
           },
 
-            //searchData
-            searchData() {
-                this.$router.push({
-                    path: this.$route.path,
-                    query: {
-                    q: this.search,
-                    },
-                })
-            },
+          //searchData
+          searchData() {
+              this.$router.push({
+                  path: this.$route.path,
+                  query: {
+                  q: this.search,
+                  },
+              })
+          },
 
-            async applyFilters() {
-              try {
-                const query = {};
+          async applyFilters() {
+            this.show = 0
 
-                // Dynamically add non-empty filters to the query
-                if (this.dateStart) query.dateStart = this.dateStart;
-                if (this.dateEnd) query.dateEnd = this.dateEnd;
-                if (this.pt_id && this.pt_id.length > 0) {
-                  query.company_code_plantation = this.pt_id.map((pt) => pt.company_code_plantation).join(',');
-                }
-                if (this.estate_id && this.estate_id.length > 0) {
-                  query.department_code_plantation = this.estate_id.map((estate) => estate.department_code_plantation).join(',');
-                }
-                if (this.afdeling_id && this.afdeling_id.length > 0) {
-                  query.afdeling_code = this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(',');
-                }
-                if (this.search) query.search = this.search;
+            try {
+              const query = {};
 
-                query.page = this.pagination.current_page || 1;
-
-                // Update the URL query dynamically
-                this.$router.push({ path: this.$route.path, query });
-
-                // Fetch the filtered data
-                const response = await this.$axios.$get('/api/admin/spot-cek', { params: query });
-
-                // Update table and pagination data
-                this.posts = response.data.data;
-                this.pagination = response.data;
-                this.rowcount = response.data.total;
-              } catch (error) {
-                console.error('Error applying filters:', error);
+              // Dynamically add non-empty filters to the query
+              if (this.dateStart) query.dateStart = this.dateStart;
+              if (this.dateEnd) query.dateEnd = this.dateEnd;
+              if (this.pt_id && this.pt_id.length > 0) {
+                query.company_code_plantation = this.pt_id.map((pt) => pt.company_code_plantation).join(',');
               }
-            },
-
-            exportData() {
-              try {
-                const queryParams = new URLSearchParams();
-
-                // Add filters dynamically if they exist
-                if (this.dateStart) queryParams.append('dateStart', this.dateStart);
-                if (this.dateEnd) queryParams.append('dateEnd', this.dateEnd);
-                if (this.pt_id && this.pt_id.length > 0) {
-                  queryParams.append('company_code_plantation', this.pt_id.map((pt) => pt.company_code_plantation).join(','));
-                }
-                if (this.estate_id && this.estate_id.length > 0) {
-                  queryParams.append('department_code_plantation', this.estate_id.map((estate) => estate.department_code_plantation).join(','));
-                }
-                if (this.afdeling_id && this.afdeling_id.length > 0) {
-                  queryParams.append('afdeling_code', this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(','));
-                }
-                if (this.search) queryParams.append('search', this.search);
-
-                // Perform the export request
-                this.$axios({
-                  url: `/api/admin/spot-cek-export?${queryParams.toString()}`,
-                  method: 'GET',
-                  responseType: 'blob', // Ensures the response is treated as a binary file
-                })
-                  .then((response) => {
-                    const url = window.URL.createObjectURL(new Blob([response.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    const fileName = 'SpotCek.xlsx'; // You can customize the filename
-                    link.setAttribute('download', fileName); // Set the file name
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link); // Clean up the DOM
-                  })
-                  .catch((error) => {
-                    console.error('Error exporting data:', error);
-                  });
-              } catch (error) {
-                console.error('Error constructing export URL:', error);
+              if (this.estate_id && this.estate_id.length > 0) {
+                query.department_code_plantation = this.estate_id.map((estate) => estate.department_code_plantation).join(',');
               }
-            },
+              if (this.afdeling_id && this.afdeling_id.length > 0) {
+                query.afdeling_code = this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(',');
+              }
+              if (this.search) query.search = this.search;
+
+              query.page = this.pagination.current_page || 1;
+
+              // Update the URL query dynamically
+              this.$router.push({ path: this.$route.path, query });
+
+              // Fetch the filtered data
+              const response = await this.$axios.$get('/api/admin/spot-cek', { params: query });
+
+              // Update table and pagination data
+              this.posts = response.data.data;
+              this.pagination = response.data;
+              this.rowcount = response.data.total;
+              this.show = 1
+
+            } catch (error) {
+              console.error('Error applying filters:', error);
+              this.show = 1
+
+            }
+          },
+
+          exportData() {
+            try {
+              const queryParams = new URLSearchParams();
+
+              // Add filters dynamically if they exist
+              if (this.dateStart) queryParams.append('dateStart', this.dateStart);
+              if (this.dateEnd) queryParams.append('dateEnd', this.dateEnd);
+              if (this.pt_id && this.pt_id.length > 0) {
+                queryParams.append('company_code_plantation', this.pt_id.map((pt) => pt.company_code_plantation).join(','));
+              }
+              if (this.estate_id && this.estate_id.length > 0) {
+                queryParams.append('department_code_plantation', this.estate_id.map((estate) => estate.department_code_plantation).join(','));
+              }
+              if (this.afdeling_id && this.afdeling_id.length > 0) {
+                queryParams.append('afdeling_code', this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(','));
+              }
+              if (this.search) queryParams.append('search', this.search);
+
+              // Perform the export request
+              this.$axios({
+                url: `/api/admin/spot-cek-export?${queryParams.toString()}`,
+                method: 'GET',
+                responseType: 'blob', // Ensures the response is treated as a binary file
+              })
+                .then((response) => {
+                  const url = window.URL.createObjectURL(new Blob([response.data]));
+                  const link = document.createElement('a');
+                  link.href = url;
+                  const fileName = 'SpotCek.xlsx'; // You can customize the filename
+                  link.setAttribute('download', fileName); // Set the file name
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link); // Clean up the DOM
+                })
+                .catch((error) => {
+                  console.error('Error exporting data:', error);
+                });
+            } catch (error) {
+              console.error('Error constructing export URL:', error);
+            }
+          },
         },
     };
 </script>
