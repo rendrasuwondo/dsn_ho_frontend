@@ -129,6 +129,16 @@
             </div>
 
             <div class="form-group">
+              <label>Jumlah Janjang (JJG)</label>
+              <input
+                type="text"
+                v-model="field.total_qty"
+                placeholder="Masukkan Jumlah Janjang (JJG)"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
               <label>Jumlah Janjang NPB (JJG)</label>
               <input
                 type="text"
@@ -306,6 +316,7 @@ export default {
         activity_group_id: '',
         employee_id: '',
         q_afdeling_id: '',
+        total_qty: '',
       },
 
       company: [],
@@ -351,6 +362,7 @@ export default {
         this.field.qty_garbage = response.data.data.qty_garbage
         this.field.qty_abnormal = response.data.data.qty_abnormal
         this.field.driver = response.data.data.driver
+        this.field.total_qty = response.data.data.total_qty
 
 
 
@@ -426,6 +438,7 @@ export default {
           qty_garbage: this.field.qty_garbage,
           qty_abnormal: this.field.qty_abnormal,
           driver: this.field.driver,
+          total_qty: this.field.total_qty,
         });
 
         this.show = 1;

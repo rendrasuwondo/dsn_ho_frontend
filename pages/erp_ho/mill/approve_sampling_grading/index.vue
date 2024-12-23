@@ -160,9 +160,9 @@
                         <th rowspan="2">PT</th>
                         <th rowspan="2">Estate</th>
                         <th rowspan="2">Afd</th>
-                        <th rowspan="2">Jlh Sampling</th>
+                        <th rowspan="2">Jlm Sampling</th>
                         <th rowspan="2">Driver</th>
-                        <th rowspan="2">No. NFB</th>
+                        <th rowspan="2">No. NPB</th>
                         <th colspan="2" class="text-center">Jlh Janjang</th>
                         <th rowspan="2">Selisih JJG</th>
                         <th rowspan="2">Variance JJG (%)</th>
@@ -171,7 +171,6 @@
                         <th v-if="showSickFruit" colspan="12" class="text-center">Kualitas TBS (Ripeness)</th>
                         <th v-if="!showSickFruit" colspan="10" class="text-center">Kualitas TBS (Ripeness)</th>
                         <th rowspan="2">BJR</th>
-                        <th rowspan="2">Image</th>
                     </tr>
                     <tr>
                         <th>SPB/Bontrip</th>
@@ -222,6 +221,120 @@
                     ><i class="fa fa-trash"></i
                   ></b-button> -->
                 </template>
+
+                <template #cell(qty_unripe)="row">
+                  <span v-if="row.item.qty_unripe > 0">
+                    <a
+                      :href="`http://localhost:8000${row.item.img_unripe}`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-primary"
+                    >
+                      {{ row.item.qty_unripe }}
+                    </a>
+                  </span>
+                  <span v-else>
+                    {{ row.item.qty_unripe }}
+                  </span>
+                </template>
+
+                <template #cell(qty_underripe)="row">
+                  <span v-if="row.item.qty_underripe > 0">
+                    <a
+                      :href="`http://localhost:8000${row.item.img_underripe}`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-primary"
+                    >
+                      {{ row.item.qty_underripe }}
+                    </a>
+                  </span>
+                  <span v-else>
+                    {{ row.item.qty_underripe }}
+                  </span>
+                </template>
+
+                <template #cell(qty_overripe)="row">
+                  <span v-if="row.item.qty_overripe > 0">
+                    <a
+                      :href="`http://localhost:8000${row.item.img_overripe}`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-primary"
+                    >
+                      {{ row.item.qty_overripe }}
+                    </a>
+                  </span>
+                  <span v-else>
+                    {{ row.item.qty_overripe }}
+                  </span>
+                </template>
+
+                <template #cell(qty_empty_bunch)="row">
+                  <span v-if="row.item.qty_empty_bunch > 0">
+                    <a
+                      :href="`http://localhost:8000${row.item.img_empty_bunch}`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-primary"
+                    >
+                      {{ row.item.qty_empty_bunch }}
+                    </a>
+                  </span>
+                  <span v-else>
+                    {{ row.item.qty_empty_bunch }}
+                  </span>
+                </template>
+
+                <template #cell(qty_tangkai_panjang)="row">
+                  <span v-if="row.item.qty_tangkai_panjang > 0">
+                    <a
+                      :href="`http://localhost:8000${row.item.img_tangkai_panjang}`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-primary"
+                    >
+                      {{ row.item.qty_tangkai_panjang }}
+                    </a>
+                  </span>
+                  <span v-else>
+                    {{ row.item.qty_tangkai_panjang }}
+                  </span>
+                </template>
+
+                <template #cell(qty_sampah_kotoran)="row">
+                  <span v-if="row.item.qty_sampah_kotoran > 0">
+                    <a
+                      :href="`http://localhost:8000${row.item.img_sampah_kotoran}`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-primary"
+                    >
+                      {{ row.item.qty_sampah_kotoran }}
+                    </a>
+                  </span>
+                  <span v-else>
+                    {{ row.item.qty_sampah_kotoran }}
+                  </span>
+                </template>
+
+                <template #cell(qty_tbs_sakit)="row">
+                  <span v-if="row.item.qty_tbs_sakit > 0">
+                    <a
+                      :href="`http://localhost:8000${row.item.img_tbs_sakit}`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-primary"
+                    >
+                      {{ row.item.qty_tbs_sakit }}
+                    </a>
+                  </span>
+                  <span v-else>
+                    {{ row.item.qty_tbs_sakit }}
+                  </span>
+                </template>
+
+
             </b-table>
             <button
               :disabled="selectedItems.length === 0"
@@ -309,7 +422,6 @@
                   { key: 'qty_abnormal', label: '' },
                   { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'bjr', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'image', label: '' },
               ],
               dateStart: formatDate(yesterday), // Default to yesterday
               dateEnd: formatDate(yesterday), // Default to today
@@ -644,8 +756,8 @@
   .card-title {
     color: #504d8d;
   }
-  .b-table td:nth-child(3),
-  .b-table th:nth-child(3) {
+  .b-table td:nth-child(4),
+  .b-table th:nth-child(4) {
     min-width: 120px;
     max-width: 200px;
     text-align: center;
@@ -655,8 +767,29 @@
 
   <style>
     .b-table thead tr:nth-child(3) {
-      background-color: blue !important;
       display: none;
+    }
+    .b-table td:nth-child(11),
+    .b-table td:nth-child(12),
+    .b-table td:nth-child(13),
+    .b-table td:nth-child(14),
+    .b-table td:nth-child(15),
+    .b-table td:nth-child(16),
+    .b-table td:nth-child(17),
+    .b-table td:nth-child(18),
+    .b-table td:nth-child(19),
+    .b-table td:nth-child(20),
+    .b-table td:nth-child(21),
+    .b-table td:nth-child(22),
+    .b-table td:nth-child(23),
+    .b-table td:nth-child(24),
+    .b-table td:nth-child(25),
+    .b-table td:nth-child(26),
+    .b-table td:nth-child(27),
+    .b-table td:nth-child(28),
+    .b-table td:nth-child(29),
+    .b-table td:nth-child(30) {
+      text-align: end;
     }
   </style>
   
