@@ -163,7 +163,7 @@
                         <th rowspan="2">Jlm Sampling</th>
                         <th rowspan="2">Driver</th>
                         <th rowspan="2">No. NPB</th>
-                        <th colspan="2" class="text-center">Jlh Janjang</th>
+                        <th colspan="2" class="text-center">Jlm Janjang</th>
                         <th rowspan="2">Selisih JJG</th>
                         <th rowspan="2">Variance JJG (%)</th>
                         <th rowspan="2">Tonase Timbang</th>
