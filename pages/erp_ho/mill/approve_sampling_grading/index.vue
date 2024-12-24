@@ -230,11 +230,11 @@
                       rel="noopener noreferrer"
                       class="text-primary"
                     >
-                      {{ row.item.qty_unripe }}
+                      {{ parseFloat(row.item.qty_unripe).toFixed(0) }}
                     </a>
                   </span>
                   <span v-else>
-                    {{ row.item.qty_unripe }}
+                    {{ parseFloat(row.item.qty_unripe).toFixed(0) }}
                   </span>
                 </template>
 
@@ -246,11 +246,11 @@
                       rel="noopener noreferrer"
                       class="text-primary"
                     >
-                      {{ row.item.qty_underripe }}
+                      {{ parseFloat(row.item.qty_underripe).toFixed(0) }}
                     </a>
                   </span>
                   <span v-else>
-                    {{ row.item.qty_underripe }}
+                    {{ parseFloat(row.item.qty_underripe).toFixed(0) }}
                   </span>
                 </template>
 
@@ -262,11 +262,11 @@
                       rel="noopener noreferrer"
                       class="text-primary"
                     >
-                      {{ row.item.qty_overripe }}
+                      {{ parseFloat(row.item.qty_overripe).toFixed(0) }}
                     </a>
                   </span>
                   <span v-else>
-                    {{ row.item.qty_overripe }}
+                    {{ parseFloat(row.item.qty_overripe).toFixed(0) }}
                   </span>
                 </template>
 
@@ -278,11 +278,11 @@
                       rel="noopener noreferrer"
                       class="text-primary"
                     >
-                      {{ row.item.qty_empty_bunch }}
+                      {{ parseFloat(row.item.qty_empty_bunch).toFixed(0) }}
                     </a>
                   </span>
                   <span v-else>
-                    {{ row.item.qty_empty_bunch }}
+                    {{ parseFloat(row.item.qty_empty_bunch).toFixed(0) }}
                   </span>
                 </template>
 
@@ -294,11 +294,11 @@
                       rel="noopener noreferrer"
                       class="text-primary"
                     >
-                      {{ row.item.qty_tangkai_panjang }}
+                      {{ parseFloat(row.item.qty_tangkai_panjang).toFixed(0) }}
                     </a>
                   </span>
                   <span v-else>
-                    {{ row.item.qty_tangkai_panjang }}
+                    {{ parseFloat(row.item.qty_tangkai_panjang).toFixed(0) }}
                   </span>
                 </template>
 
@@ -310,11 +310,11 @@
                       rel="noopener noreferrer"
                       class="text-primary"
                     >
-                      {{ row.item.qty_sampah_kotoran }}
+                      {{ parseFloat(row.item.qty_sampah_kotoran).toFixed(0) }}
                     </a>
                   </span>
                   <span v-else>
-                    {{ row.item.qty_sampah_kotoran }}
+                    {{ parseFloat(row.item.qty_sampah_kotoran).toFixed(0) }}
                   </span>
                 </template>
 
@@ -326,11 +326,11 @@
                       rel="noopener noreferrer"
                       class="text-primary"
                     >
-                      {{ row.item.qty_tbs_sakit }}
+                      {{ parseFloat(row.item.qty_tbs_sakit).toFixed(0) }}
                     </a>
                   </span>
                   <span v-else>
-                    {{ row.item.qty_tbs_sakit }}
+                    {{ parseFloat(row.item.qty_tbs_sakit).toFixed(0) }}
                   </span>
                 </template>
 
@@ -407,18 +407,18 @@
                   { key: 'total_qty', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'var_qty', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_qty', label: '', formatter: this.formatToTwoDecimals },
-                  { key: 'tonase', label: '' },
+                  { key: 'tonase', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'loose_fruit', label: '' },
                   { key: 'percentage_fruit', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'qty_unripe', label: '' },
+                  { key: 'qty_unripe', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_unripe', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'qty_underripe', label: '' },
+                  { key: 'qty_underripe', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_underripe', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'qty_ripe', label: '' },
+                  { key: 'qty_ripe', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_ripe', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'qty_overripe', label: '' },
+                  { key: 'qty_overripe', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_overripe', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'qty_empty_bunch', label: '' },
+                  { key: 'qty_empty_bunch', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_empty_bunch', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_abnormal', label: '' },
                   { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
