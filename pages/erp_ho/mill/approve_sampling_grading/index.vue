@@ -337,7 +337,7 @@
 
             </b-table>
             <button
-              :disabled="selectedItems.length === 0"
+              :disabled="selectedItems.length === 0 && unselectedItems.length === 0"
               @click="approveSelected"
               class="btn btn-primary"
             >
@@ -386,6 +386,7 @@
 
             return {
               selectedItems: [],
+              unselectedItems: [],
               fields: [
                   // { key: 'no', label: '' }, // No label as custom header is used
                   { key: 'check', label: '', sortable: false},
@@ -402,9 +403,9 @@
                   { key: 'jlh_sampling', label: '' },
                   { key: 'driver', label: '' },
                   { key: 'npb', label: '' },
-                  { key: 'qty_npb', label: '' },
-                  { key: 'total_qty', label: '' },
-                  { key: 'var_qty', label: '' },
+                  { key: 'qty_npb', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'total_qty', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'var_qty', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_qty', label: '', formatter: this.formatToTwoDecimals },
                   { key: 'tonase', label: '' },
                   { key: 'loose_fruit', label: '' },
@@ -536,6 +537,10 @@
             if (!value) return '0.00'; // Return 0.00 for empty values
             return parseFloat(value).toFixed(2);
           },
+          formatToZeroDecimals(value) {
+            if (!value) return '0'; // Return 0.00 for empty values
+            return parseFloat(value).toFixed(0);
+          },
           toggleSelectAll() {
               this.posts.forEach(post => {
                   post.selected = this.selectAll;
@@ -545,6 +550,7 @@
 
           handleSelectionChange() {
             this.selectedItems = this.posts.filter(item => item.selected  && item.status !== 'approved');
+            this.unselectedItems = this.posts.filter(item => !item.selected  && item.status == 'approved');
           },
 
           approveSelected() {
@@ -563,12 +569,15 @@
               .then((result) => {
                 if (result.isConfirmed) {
                   // Prepare data for the API
-                  
-                  const updatedItems = this.posts
-                    .filter(item => item.selected && item.status !== 'approved') // Send only items with changed status
-                    .map(item => item.id);
+                  const updatedItemsSelected = this.posts
+                    .filter((item) => item.selected && item.status !== 'approved') // Send only items with changed status
+                    .map((item) => item.id);
 
-                  if (updatedItems.length === 0) {
+                  const updatedItemsUnselected = this.posts
+                    .filter((item) => !item.selected && item.status === 'approved') // Send only items with changed status
+                    .map((item) => item.id);
+
+                  if (updatedItemsSelected.length === 0 && updatedItemsUnselected.length === 0) {
                     this.$swal.fire({
                       title: 'Tidak ada perubahan!',
                       text: 'Semua data sudah diapprove.',
@@ -579,34 +588,45 @@
                     return;
                   }
 
-                  // Make POST request to the API
-                  this.$axios
-                    .post('/api/admin/spot-cek-approve', { ids: updatedItems })
-                    .then((response) => {
-                      // Refresh data
-                      this.$nuxt.refresh();
+                  const apiCalls = [];
 
-                      // Determine the success or failure of the operation
-                      if (response.data.success) {
+                  if (updatedItemsSelected.length !== 0) {
+                    apiCalls.push(
+                      this.$axios.post('/api/admin/spot-cek-approve', { ids: updatedItemsSelected })
+                    );
+                  }
+
+                  if (updatedItemsUnselected.length !== 0) {
+                    apiCalls.push(
+                      this.$axios.post('/api/admin/spot-cek-unapprove', { ids: updatedItemsUnselected })
+                    );
+                  }
+
+                  Promise.all(apiCalls)
+                    .then((responses) => {
+                      const allSuccess = responses.every((response) => response.data.success);
+
+                      if (allSuccess) {
                         this.sweet_alert.title = 'BERHASIL!';
                         this.sweet_alert.icon = 'success';
                       } else {
-                        this.sweet_alert.title = 'GAGAL!';
-                        this.sweet_alert.icon = 'error';
+                        this.sweet_alert.title = 'SEBAGIAN BERHASIL!';
+                        this.sweet_alert.icon = 'warning';
                       }
 
-                      // Show feedback to the user
                       this.$swal.fire({
                         title: this.sweet_alert.title,
-                        text: response.data.message,
+                        text: 'Proses selesai!',
                         icon: this.sweet_alert.icon,
                         showConfirmButton: false,
                         timer: 2000,
                       });
+
+                      this.$nuxt.refresh();
                     })
                     .catch((error) => {
-                      // Handle API errors
                       console.error('API Error:', error);
+
                       this.$swal.fire({
                         title: 'GAGAL!',
                         text: 'Terjadi kesalahan saat memproses data.',
