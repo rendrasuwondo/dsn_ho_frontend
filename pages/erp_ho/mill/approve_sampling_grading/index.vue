@@ -225,7 +225,7 @@
                 <template #cell(qty_unripe)="row">
                   <span v-if="row.item.qty_unripe > 0">
                     <a
-                      :href="`http://localhost:8000${row.item.img_unripe}`"
+                      :href="`${$axios.defaults.baseURL}${row.item.img_unripe}`"
                       target="_blank"
                       rel="noopener noreferrer"
                       class="text-primary"
@@ -241,7 +241,7 @@
                 <template #cell(qty_underripe)="row">
                   <span v-if="row.item.qty_underripe > 0">
                     <a
-                      :href="`http://localhost:8000${row.item.img_underripe}`"
+                      :href="`${$axios.defaults.baseURL}${row.item.img_underripe}`"
                       target="_blank"
                       rel="noopener noreferrer"
                       class="text-primary"
@@ -257,7 +257,7 @@
                 <template #cell(qty_overripe)="row">
                   <span v-if="row.item.qty_overripe > 0">
                     <a
-                      :href="`http://localhost:8000${row.item.img_overripe}`"
+                      :href="`${$axios.defaults.baseURL}${row.item.img_overripe}`"
                       target="_blank"
                       rel="noopener noreferrer"
                       class="text-primary"
@@ -273,7 +273,7 @@
                 <template #cell(qty_empty_bunch)="row">
                   <span v-if="row.item.qty_empty_bunch > 0">
                     <a
-                      :href="`http://localhost:8000${row.item.img_empty_bunch}`"
+                      :href="`${$axios.defaults.baseURL}${row.item.img_empty_bunch}`"
                       target="_blank"
                       rel="noopener noreferrer"
                       class="text-primary"
@@ -289,7 +289,7 @@
                 <template #cell(qty_tangkai_panjang)="row">
                   <span v-if="row.item.qty_tangkai_panjang > 0">
                     <a
-                      :href="`http://localhost:8000${row.item.img_tangkai_panjang}`"
+                      :href="`${$axios.defaults.baseURL}${row.item.img_tangkai_panjang}`"
                       target="_blank"
                       rel="noopener noreferrer"
                       class="text-primary"
@@ -305,7 +305,7 @@
                 <template #cell(qty_sampah_kotoran)="row">
                   <span v-if="row.item.qty_sampah_kotoran > 0">
                     <a
-                      :href="`http://localhost:8000${row.item.img_sampah_kotoran}`"
+                      :href="`${$axios.defaults.baseURL}${row.item.img_sampah_kotoran}`"
                       target="_blank"
                       rel="noopener noreferrer"
                       class="text-primary"
@@ -321,7 +321,7 @@
                 <template #cell(qty_tbs_sakit)="row">
                   <span v-if="row.item.qty_tbs_sakit > 0">
                     <a
-                      :href="`http://localhost:8000${row.item.img_tbs_sakit}`"
+                      :href="`${$axios.defaults.baseURL}${row.item.img_tbs_sakit}`"
                       target="_blank"
                       rel="noopener noreferrer"
                       class="text-primary"
