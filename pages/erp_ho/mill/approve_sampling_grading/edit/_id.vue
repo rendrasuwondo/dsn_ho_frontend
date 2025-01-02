@@ -189,6 +189,16 @@
             </div>
 
             <div class="form-group">
+              <label>Hutang Brondol</label>
+              <input
+                type="text"
+                v-model="field.loose_fruit_debt"
+                placeholder="Masukkan Hutang Brondol"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
               <b-row>
                 <b-col>
                   <label>Tanggal Buat </label>
@@ -317,6 +327,7 @@ export default {
         employee_id: '',
         q_afdeling_id: '',
         total_qty: '',
+        loose_fruit_debt: '',
       },
 
       company: [],
@@ -363,6 +374,7 @@ export default {
         this.field.qty_abnormal = response.data.data.qty_abnormal
         this.field.driver = response.data.data.driver
         this.field.total_qty = response.data.data.total_qty
+        this.field.loose_fruit_debt = response.data.data.loose_fruit_debt
 
 
 
@@ -439,6 +451,7 @@ export default {
           qty_abnormal: this.field.qty_abnormal,
           driver: this.field.driver,
           total_qty: this.field.total_qty,
+          loose_fruit_debt: this.field.loose_fruit_debt,
         });
 
         this.show = 1;
