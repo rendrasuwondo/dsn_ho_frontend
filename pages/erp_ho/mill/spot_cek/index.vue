@@ -155,7 +155,6 @@
                         <th rowspan="2">PT</th>
                         <th rowspan="2">Estate</th>
                         <th rowspan="2">Afd</th>
-                        <th rowspan="2">Jlh Sampling</th>
                         <th rowspan="2">Driver</th>
                         <th rowspan="2">No. NFB</th>
                         <th colspan="2" class="text-center">Jlh Janjang</th>
@@ -166,7 +165,6 @@
                         <th v-if="showSickFruit" colspan="12" class="text-center">Kualitas TBS (Ripeness)</th>
                         <th v-if="!showSickFruit" colspan="10" class="text-center">Kualitas TBS (Ripeness)</th>
                         <th rowspan="2">BJR</th>
-                        <th rowspan="2">Image</th>
                     </tr>
                     <tr>
                         <th>SPB/Bontrip</th>
@@ -236,30 +234,28 @@
                   { key: 'company_code_plantation', label: '' },
                   { key: 'department_code_plantation', label: '' },
                   { key: 'afdeling_code', label: '' },
-                  { key: 'jlh_sampling', label: '' },
                   { key: 'driver', label: '' },
                   { key: 'npb', label: '' },
-                  { key: 'qty_npb', label: '' },
-                  { key: 'total_qty', label: '' },
-                  { key: 'var_qty', label: '' },
-                  { key: 'percentage_qty', label: '' },
-                  { key: 'tonase', label: '' },
+                  { key: 'qty_npb', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'total_qty', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'var_qty', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'percentage_qty', label: '', formatter: this.formatToTwoDecimals },
+                  { key: 'tonase', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'loose_fruit', label: '' },
-                  { key: 'percentage_fruit', label: '' },
-                  { key: 'qty_unripe', label: '' },
-                  { key: 'percentage_unripe', label: '' },
-                  { key: 'qty_underripe', label: '' },
-                  { key: 'percentage_underripe', label: '' },
-                  { key: 'qty_ripe', label: '' },
-                  { key: 'percentage_ripe', label: '' },
-                  { key: 'qty_over', label: '' },
-                  { key: 'percentage_over', label: '' },
-                  { key: 'qty_empty_bunch', label: '' },
-                  { key: 'percentage_empty_bunch', label: '' },
+                  { key: 'percentage_fruit', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'qty_unripe', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'percentage_unripe', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'qty_underripe', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'percentage_underripe', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'qty_ripe', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'percentage_ripe', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'qty_overripe', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'percentage_overripe', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'qty_empty_bunch', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'percentage_empty_bunch', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_abnormal', label: '' },
-                  { key: 'percentage_abnormal', label: '' },
-                  { key: 'bjr', label: '' },
-                  { key: 'image', label: '' },
+                  { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'bjr', label: '', formatter: this.formatToTwoDecimals  },
               ],
               dateStart: formatDate(yesterday), // Default to yesterday
               dateEnd: formatDate(yesterday), // Default to today
@@ -347,6 +343,14 @@
         },
 
         methods: {
+          formatToTwoDecimals(value) {
+            if (!value) return '0.00'; // Return 0.00 for empty values
+            return parseFloat(value).toFixed(2);
+          },
+          formatToZeroDecimals(value) {
+            if (!value) return '0'; // Return 0.00 for empty values
+            return parseFloat(value).toFixed(0);
+          },
           formatDate(value) {
             if (!value) return '';
             const date = new Date(value);
@@ -475,12 +479,47 @@
     };
 </script>
   
-  <style scoped>
-  .card-info.card-outline {
-    border-top: 5px solid #504d8d;
+<style scoped>
+.card-info.card-outline {
+  border-top: 5px solid #504d8d;
+}
+.card-title {
+  color: #504d8d;
+}
+.b-table td:nth-child(0),
+.b-table th:nth-child(1) {
+  min-width: 120px;
+  max-width: 200px;
+  text-align: center;
+  white-space: nowrap;
+}
+</style>
+
+<style>
+  .b-table thead tr:nth-child(3) {
+    display: none;
   }
-  .card-title {
-    color: #504d8d;
+  .b-table td:nth-child(11),
+  .b-table td:nth-child(12),
+  .b-table td:nth-child(13),
+  .b-table td:nth-child(14),
+  .b-table td:nth-child(15),
+  .b-table td:nth-child(16),
+  .b-table td:nth-child(17),
+  .b-table td:nth-child(18),
+  .b-table td:nth-child(19),
+  .b-table td:nth-child(20),
+  .b-table td:nth-child(21),
+  .b-table td:nth-child(22),
+  .b-table td:nth-child(23),
+  .b-table td:nth-child(24),
+  .b-table td:nth-child(25),
+  .b-table td:nth-child(26),
+  .b-table td:nth-child(27),
+  .b-table td:nth-child(28),
+  .b-table td:nth-child(29),
+  .b-table td:nth-child(30) {
+    text-align: end;
   }
-  </style>
+</style>
   

@@ -160,7 +160,6 @@
                         <th rowspan="2">PT</th>
                         <th rowspan="2">Estate</th>
                         <th rowspan="2">Afd</th>
-                        <th rowspan="2">Jlm Sampling</th>
                         <th rowspan="2">Driver</th>
                         <th rowspan="2">No. NPB</th>
                         <th colspan="2" class="text-center">Jlm Janjang</th>
@@ -213,13 +212,13 @@
                   >
                     <i class="fa fa-pencil-alt"></i>
                   </b-button>
-                  <!-- <b-button
+                  <b-button
                     variant="link"
                     size="sm"
                     @click="deletePost(row.item.id)"
                     title="Hapus"
                     ><i class="fa fa-trash"></i
-                  ></b-button> -->
+                  ></b-button>
                 </template>
 
                 <template #cell(qty_unripe)="row">
@@ -400,7 +399,6 @@
                   { key: 'company_code_plantation', label: '' },
                   { key: 'department_code_plantation', label: '' },
                   { key: 'afdeling_code', label: '' },
-                  { key: 'jlh_sampling', label: '' },
                   { key: 'driver', label: '' },
                   { key: 'npb', label: '' },
                   { key: 'qty_npb', label: '', formatter: this.formatToZeroDecimals },
@@ -744,7 +742,7 @@
 
               // Perform the export request
               this.$axios({
-                url: `/api/admin/spot-cek-export?${queryParams.toString()}`,
+                url: `/api/admin/approve-sampling-grading-export?${queryParams.toString()}`,
                 method: 'GET',
                 responseType: 'blob', // Ensures the response is treated as a binary file
               })
@@ -752,7 +750,7 @@
                   const url = window.URL.createObjectURL(new Blob([response.data]));
                   const link = document.createElement('a');
                   link.href = url;
-                  const fileName = 'SpotCek.xlsx'; // You can customize the filename
+                  const fileName = 'ApproveSamplingGrading.xlsx'; // You can customize the filename
                   link.setAttribute('download', fileName); // Set the file name
                   document.body.appendChild(link);
                   link.click();
@@ -764,6 +762,47 @@
             } catch (error) {
               console.error('Error constructing export URL:', error);
             }
+          },
+
+          //deletePost method
+          deletePost(id) {
+            this.$swal
+              .fire({
+                title: 'APAKAH ANDA YAKIN ?',
+                text: 'INGIN MENGHAPUS DATA INI !',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'YA, HAPUS!',
+                cancelButtonText: 'TIDAK',
+              })
+              .then((result) => {
+                if (result.isConfirmed) {
+                  //delete tag from server
+
+                  this.$axios.delete(`/api/admin/spot-cek/${id}`).then((response) => {
+                    //feresh data
+                    this.$nuxt.refresh()
+                    if (response.data.success == true) {
+                      this.sweet_alert.title = 'BERHASIL!'
+                      this.sweet_alert.icon = 'success'
+                    } else {
+                      this.sweet_alert.title = 'GAGAL!'
+                      this.sweet_alert.icon = 'error'
+                    }
+
+                    //alert
+                    this.$swal.fire({
+                      title: this.sweet_alert.title,
+                      text: response.data.message,
+                      icon: this.sweet_alert.icon,
+                      showConfirmButton: false,
+                      timer: 2000,
+                    })
+                  })
+                }
+              })
           },
         },
     };
