@@ -404,9 +404,9 @@
                   { key: 'qty_npb', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'total_qty', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'var_qty', label: '', formatter: this.formatToZeroDecimals },
-                  { key: 'percentage_qty', label: '', formatter: this.formatToTwoDecimals },
-                  { key: 'tonase', label: '', formatter: this.formatToZeroDecimals },
-                  { key: 'loose_fruit', label: '' },
+                  { key: 'percentage_qty', label: '', formatter: this.formatToThousand },
+                  { key: 'tonase', label: '', formatter: this.formatToThousand },
+                  { key: 'loose_fruit', label: '', formatter: this.formatToThousand  },
                   { key: 'percentage_fruit', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_unripe', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_unripe', label: '', formatter: this.formatToTwoDecimals  },
@@ -531,6 +531,10 @@
         },
 
         methods: {
+          formatToThousand(value) {
+            if (!value) return '0'; // Return 0 for empty or null values
+            return new Intl.NumberFormat('id-ID').format(value);
+          },
           formatToTwoDecimals(value) {
             if (!value) return '0.00'; // Return 0.00 for empty values
             return parseFloat(value).toFixed(2);
@@ -828,6 +832,8 @@
     .b-table thead tr:nth-child(3) {
       display: none;
     }
+    .b-table td:nth-child(7),
+    .b-table td:nth-child(10),
     .b-table td:nth-child(11),
     .b-table td:nth-child(12),
     .b-table td:nth-child(13),
