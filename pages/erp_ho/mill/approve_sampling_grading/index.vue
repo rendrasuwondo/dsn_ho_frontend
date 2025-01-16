@@ -161,7 +161,6 @@
                         <th rowspan="2">Estate</th>
                         <th rowspan="2">Afd</th>
                         <th rowspan="2">Driver</th>
-                        <th rowspan="2">No. NPB</th>
                         <th colspan="2" class="text-center">Jlm Janjang</th>
                         <th rowspan="2">Selisih JJG</th>
                         <th rowspan="2">Variance JJG (%)</th>
@@ -169,6 +168,8 @@
                         <th colspan="2" class="text-center">Brondolan</th>
                         <th v-if="showSickFruit" colspan="12" class="text-center">Kualitas TBS (Ripeness)</th>
                         <th v-if="!showSickFruit" colspan="10" class="text-center">Kualitas TBS (Ripeness)</th>
+                        <th rowspan="2">Berondolan di SPB</th>
+                        <th rowspan="2">No. NPB</th>
                         <th rowspan="2">BJR</th>
                     </tr>
                     <tr>
@@ -333,6 +334,22 @@
                   </span>
                 </template>
 
+                <template #cell(driver)="row">
+                  <span v-if="row.item.img_driver != null">
+                    <a
+                      :href="`${$axios.defaults.baseURL}${row.item.img_driver}`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-primary"
+                    >
+                      {{ row.item.driver }}
+                    </a>
+                  </span>
+                  <span v-else>
+                    {{ row.item.driver }}
+                  </span>
+                </template>
+
 
             </b-table>
             <button
@@ -400,7 +417,6 @@
                   { key: 'department_code_plantation', label: '' },
                   { key: 'afdeling_code', label: '' },
                   { key: 'driver', label: '' },
-                  { key: 'npb', label: '' },
                   { key: 'qty_npb', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'total_qty', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'var_qty', label: '', formatter: this.formatToZeroDecimals },
@@ -420,6 +436,8 @@
                   { key: 'percentage_empty_bunch', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_abnormal', label: '' },
                   { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'loose_fruit_npb', label: '', formatter: this.formatToThousand },
+                  { key: 'npb', label: '' },
                   { key: 'bjr', label: '', formatter: this.formatToTwoDecimals  },
               ],
               dateStart: formatDate(yesterday), // Default to yesterday

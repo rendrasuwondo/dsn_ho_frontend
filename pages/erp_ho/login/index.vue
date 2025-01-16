@@ -60,21 +60,36 @@
           <div class="social-icons">
             Integration of Information in Plantation Management
           </div>
-          <b-button
-            variant="light"
-            class="mt-2 btn-modul"
-            target="_blank"
-            :to="{ name: 'erp_ho-modul' }"
-          >
-            <!-- <i class="nav-icon fas fa-window-restore mr-1"></i> -->
-            <b-img
-              class="logo-modul mr-1"
-              src="/img/folder.png"
-              alt="modul"
-            ></b-img>
+          <div class="button-download">
+            <b-button
+              variant="light"
+              class="mt-2 btn-modul-mini"
+              target="_blank"
+              href="https://drive.google.com/drive/u/1/folders/1aTWf3YeSJOrKGngz3M3EcLPnPHWTOVDM"
+            >
+              <!-- <i class="nav-icon fas fa-window-restore mr-1"></i> -->
+              <b-img
+                class="logo-modul"
+                src="/img/drive_logo.png"
+                alt="modul"
+              ></b-img>
+            </b-button>
+            <b-button
+              variant="light"
+              class="mt-2 btn-modul"
+              target="_blank"
+              :to="{ name: 'erp_ho-modul' }"
+            >
+              <!-- <i class="nav-icon fas fa-window-restore mr-1"></i> -->
+              <b-img
+                class="logo-modul mr-1"
+                src="/img/folder.png"
+                alt="modul"
+              ></b-img>
 
-            <b> Modul <i>i</i>-Plant</b>
-          </b-button>
+              <b> Modul <i>i</i>-Plant</b>
+            </b-button>
+          </div>
         </div>
       </div>
       <div class="screen__background">
@@ -341,10 +356,18 @@ body {
   color: #7875b5;
 }
 
+.button-download {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 10px;
+  width: 100%;
+}
+
 .social-login {
   position: absolute;
   height: 145px;
-  width: 160px;
+  width: 250px;
   text-align: right;
   margin-right: 15px;
   bottom: 0px;
@@ -387,6 +410,20 @@ alert {
   border-radius: 3px;
   padding: 6px 0px 4px 0px;
   width: 140px;
+  border: none;
+  background-color: #ffffff;
+  box-shadow: 2px 2px #7e7f7b9f;
+  border-style: solid;
+  border-width: 0px 2px 2px 0px;
+  border-color: #cdcdf1;
+}
+
+.btn-modul-mini {
+  font-size: 12px;
+  color: #463c9c;
+  border-radius: 3px;
+  padding: 4px;
+  width: auto;
   border: none;
   background-color: #ffffff;
   box-shadow: 2px 2px #7e7f7b9f;
