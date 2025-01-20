@@ -350,7 +350,6 @@
                   </span>
                 </template>
 
-
             </b-table>
             <button
               :disabled="selectedItems.length === 0 && unselectedItems.length === 0"
@@ -746,6 +745,7 @@
 
           exportData() {
             try {
+              this.show = 0
               const queryParams = new URLSearchParams();
 
               // Add filters dynamically if they exist
@@ -777,12 +777,15 @@
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link); // Clean up the DOM
+                  this.show = 1
                 })
                 .catch((error) => {
                   console.error('Error exporting data:', error);
+                  this.show = 1
                 });
             } catch (error) {
               console.error('Error constructing export URL:', error);
+              this.show = 1
             }
           },
 
@@ -851,6 +854,7 @@
       display: none;
     }
     .b-table td:nth-child(7),
+    .b-table td:nth-child(9),
     .b-table td:nth-child(10),
     .b-table td:nth-child(11),
     .b-table td:nth-child(12),
@@ -868,7 +872,7 @@
     .b-table td:nth-child(24),
     .b-table td:nth-child(25),
     .b-table td:nth-child(26),
-    .b-table td:nth-child(27),
+    /* .b-table td:nth-child(27), */
     .b-table td:nth-child(28),
     .b-table td:nth-child(29),
     .b-table td:nth-child(30) {
