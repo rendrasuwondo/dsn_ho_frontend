@@ -161,21 +161,41 @@
                         <th rowspan="2">Estate</th>
                         <th rowspan="2">Afd</th>
                         <th rowspan="2">Driver</th>
-                        <th colspan="2" class="text-center">Jlm Janjang</th>
-                        <th rowspan="2">Selisih JJG</th>
-                        <th rowspan="2">Variance JJG (%)</th>
                         <th rowspan="2">Tonase Timbang</th>
-                        <th colspan="5" class="text-center">Berondolan</th>
-                        <th rowspan="2">Bayar Hutang Berondol</th>
-                        <th colspan="2">Setelah Bayar Hutang</th>
-                        <th v-if="showSickFruit" colspan="16" class="text-center">Kualitas TBS (Ripeness)</th>
-                        <th v-if="!showSickFruit" colspan="14" class="text-center">Kualitas TBS (Ripeness)</th>
-                        <th rowspan="2">No. NPB</th>
+                        <th colspan="4" class="text-center">Total Janjang</th>
                         <th rowspan="2">BJR</th>
+                        <th colspan="10" class="text-center">Kriteria TBS Normal</th>
+                        <th v-if="showSickFruit" colspan="6" class="text-center">Kriteria TBS Abnormal</th>
+                        <th v-if="showSickFruit" rowspan="2">Tangkai Panjang</th>
+                        <th colspan="5" class="text-center">Berondolan</th>
+                        <th colspan="2">Hutang Berondol</th>
+                        <th colspan="2">Sampah</th>
+                        <th rowspan="2">No. NPB</th>
                     </tr>
                     <tr>
                         <th>SPB/Bontrip</th>
                         <th>Aktual</th>
+                        <th>Kg</th>
+                        <th>%</th>
+
+                        <th>Unripe</th>
+                        <th>%</th>
+                        <th>Under</th>
+                        <th>%</th>
+                        <th>Ripe</th>
+                        <th>%</th>
+                        <th>Over</th>
+                        <th>%</th>
+                        <th>Jangkos</th>
+                        <th>%</th>
+
+                        <th v-if="showSickFruit">Ptherno</th>
+                        <th v-if="showSickFruit">%</th>
+                        <th v-if="showSickFruit">Hard B.</th>
+                        <th v-if="showSickFruit">%</th>
+                        <th v-if="showSickFruit">Unripe Brd</th>
+                        <th v-if="showSickFruit">%</th>
+
                         <th>SPB</th>
                         <th>Aktual</th>
                         <th>%</th>
@@ -183,22 +203,12 @@
                         <th>%</th>
                         <th>Kg</th>
                         <th>%</th>
-                        <th>Unripe</th>
+                        
+                        <th>Kg</th>
                         <th>%</th>
-                        <th>Underripe</th>
-                        <th>%</th>
-                        <th>Ripe</th>
-                        <th>%</th>
-                        <th>Over</th>
-                        <th>%</th>
-                        <th>Jankos</th>
-                        <th>%</th>
-                        <th>Sampah</th>
-                        <th>%</th>
-                        <th>Tangkai Panjang</th>
-                        <th>%</th>
-                        <th v-if="showSickFruit">Buah Sakit</th>
-                        <th v-if="showSickFruit">%</th>
+                        
+                        
+                        
                     </tr>
                 </template>
 
@@ -426,19 +436,15 @@
                   { key: 'department_code_plantation', label: '' },
                   { key: 'afdeling_code', label: '' },
                   { key: 'driver', label: '' },
+                  { key: 'tonase', label: '', formatter: this.formatToThousand },
+
                   { key: 'qty_npb', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'total_qty', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'var_qty', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_qty', label: '', formatter: this.formatToThousand },
-                  { key: 'tonase', label: '', formatter: this.formatToThousand },
-                  { key: 'loose_fruit_npb', label: '', formatter: this.formatToThousand },
-                  { key: 'loose_fruit', label: '', formatter: this.formatToThousand  },
-                  { key: 'percentage_fruit', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'var_loose_fruit', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'var_loose_fruit_percentage', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'loose_fruit_debt', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'loose_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'percentage_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
+
+                  { key: 'bjr', label: '', formatter: this.formatToTwoDecimals  },
+
                   { key: 'qty_unripe', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_unripe', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_underripe', label: '', formatter: this.formatToZeroDecimals },
@@ -449,14 +455,34 @@
                   { key: 'percentage_overripe', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_empty_bunch', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_empty_bunch', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'qty_abnormal', label: '' },
-                  { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
+
+                  { key: 'qty_parthenocarpy', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'percentage_parthenocarpy', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'qty_hard_bunch', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'percentage_hard_bunch', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'qty_unripe_fruit_fall', label: '', formatter: this.formatToZeroDecimals },
+                  { key: 'percentage_unripe_fruit_fall', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'percentage_unripe_fruit_fall', label: '', formatter: this.formatToTwoDecimals  },
+                  
+                  { key: 'qty_long_stalk', label: '', formatter: this.formatToTwoDecimals },
+
+                  { key: 'loose_fruit_npb', label: '', formatter: this.formatToThousand },
+                  { key: 'loose_fruit', label: '', formatter: this.formatToThousand  },
+                  { key: 'percentage_fruit', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'var_loose_fruit', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'var_loose_fruit_percentage', label: '', formatter: this.formatToTwoDecimals  },
+                  
+                  // { key: 'loose_fruit_debt', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'loose_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'percentage_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
+                  
+                  // { key: 'qty_abnormal', label: '' },
+                  // { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
+
                   { key: 'qty_garbage', label: '' },
                   { key: 'percentage_garbage', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'qty_long_stalk', label: '' },
-                  { key: 'percentage_long_stalk', label: '', formatter: this.formatToTwoDecimals  },
+
                   { key: 'npb', label: '' },
-                  { key: 'bjr', label: '', formatter: this.formatToTwoDecimals  },
               ],
               dateStart: formatDate(yesterday), // Default to yesterday
               dateEnd: formatDate(yesterday), // Default to today
@@ -558,7 +584,15 @@
           filteredFields() {
             return this.showSickFruit
               ? this.fields
-              : this.fields.filter((field) => field.key !== 'qty_abnormal' && field.key !== 'percentage_abnormal');
+              : this.fields.filter((field) => 
+              field.key !== 'qty_parthenocarpy' && 
+              field.key !== 'percentage_parthenocarpy'  && 
+              field.key !== 'qty_hard_bunch'  && 
+              field.key !== 'percentage_hard_bunch'  && 
+              field.key !== 'qty_unripe_fruit_fall'  && 
+              field.key !== 'percentage_unripe_fruit_fall'  && 
+              field.key !== 'qty_long_stalk'
+            );
           },
         },
 
