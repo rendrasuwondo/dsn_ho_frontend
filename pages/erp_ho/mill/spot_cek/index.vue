@@ -298,6 +298,7 @@
             ...(query.company_code_plantation && { company_code_plantation: query.company_code_plantation }),
             ...(query.department_code_plantation && { department_code_plantation: query.department_code_plantation }),
             ...(query.afdeling_code && { afdeling_code: query.afdeling_code }),
+            status: 'approved',
           };
 
           // Fetching posts with filters
@@ -419,6 +420,7 @@
               }
               if (this.search) query.search = this.search;
 
+              query.status = "approved";
               query.page = this.pagination.current_page || 1;
 
               // Update the URL query dynamically

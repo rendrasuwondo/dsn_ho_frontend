@@ -165,17 +165,23 @@
                         <th rowspan="2">Selisih JJG</th>
                         <th rowspan="2">Variance JJG (%)</th>
                         <th rowspan="2">Tonase Timbang</th>
-                        <th colspan="2" class="text-center">Brondolan</th>
-                        <th v-if="showSickFruit" colspan="12" class="text-center">Kualitas TBS (Ripeness)</th>
-                        <th v-if="!showSickFruit" colspan="10" class="text-center">Kualitas TBS (Ripeness)</th>
-                        <th rowspan="2">Berondolan di SPB</th>
+                        <th colspan="5" class="text-center">Berondolan</th>
+                        <th rowspan="2">Bayar Hutang Berondol</th>
+                        <th colspan="2">Setelah Bayar Hutang</th>
+                        <th v-if="showSickFruit" colspan="16" class="text-center">Kualitas TBS (Ripeness)</th>
+                        <th v-if="!showSickFruit" colspan="14" class="text-center">Kualitas TBS (Ripeness)</th>
                         <th rowspan="2">No. NPB</th>
                         <th rowspan="2">BJR</th>
                     </tr>
                     <tr>
                         <th>SPB/Bontrip</th>
                         <th>Aktual</th>
-                        <th>KG</th>
+                        <th>SPB</th>
+                        <th>Aktual</th>
+                        <th>%</th>
+                        <th>Var</th>
+                        <th>%</th>
+                        <th>Kg</th>
                         <th>%</th>
                         <th>Unripe</th>
                         <th>%</th>
@@ -186,6 +192,10 @@
                         <th>Over</th>
                         <th>%</th>
                         <th>Jankos</th>
+                        <th>%</th>
+                        <th>Sampah</th>
+                        <th>%</th>
+                        <th>Tangkai Panjang</th>
                         <th>%</th>
                         <th v-if="showSickFruit">Buah Sakit</th>
                         <th v-if="showSickFruit">%</th>
@@ -421,8 +431,14 @@
                   { key: 'var_qty', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_qty', label: '', formatter: this.formatToThousand },
                   { key: 'tonase', label: '', formatter: this.formatToThousand },
+                  { key: 'loose_fruit_npb', label: '', formatter: this.formatToThousand },
                   { key: 'loose_fruit', label: '', formatter: this.formatToThousand  },
                   { key: 'percentage_fruit', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'var_loose_fruit', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'var_loose_fruit_percentage', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'loose_fruit_debt', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'loose_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'percentage_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_unripe', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_unripe', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_underripe', label: '', formatter: this.formatToZeroDecimals },
@@ -435,7 +451,10 @@
                   { key: 'percentage_empty_bunch', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_abnormal', label: '' },
                   { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'loose_fruit_npb', label: '', formatter: this.formatToThousand },
+                  { key: 'qty_garbage', label: '' },
+                  { key: 'percentage_garbage', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'qty_long_stalk', label: '' },
+                  { key: 'percentage_long_stalk', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'npb', label: '' },
                   { key: 'bjr', label: '', formatter: this.formatToTwoDecimals  },
               ],

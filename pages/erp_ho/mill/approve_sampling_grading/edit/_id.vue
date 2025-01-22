@@ -179,6 +179,16 @@
             </div>
 
             <div class="form-group">
+              <label>Tonase Timbang</label>
+              <input
+                type="text"
+                v-model="field.tonase"
+                placeholder="Masukkan Tonase Timbang"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
               <label>Driver</label>
               <input
                 type="text"
@@ -189,11 +199,11 @@
             </div>
 
             <div class="form-group">
-              <label>Hutang Brondol</label>
+              <label>Bayar Utang Berondol</label>
               <input
                 type="text"
                 v-model="field.loose_fruit_debt"
-                placeholder="Masukkan Hutang Brondol"
+                placeholder="Masukkan Jumlah Bayar Utang Berondol"
                 class="form-control"
               />
             </div>
@@ -328,6 +338,7 @@ export default {
         q_afdeling_id: '',
         total_qty: '',
         loose_fruit_debt: '',
+        tonase: '',
       },
 
       company: [],
@@ -375,6 +386,7 @@ export default {
         this.field.driver = response.data.data.driver
         this.field.total_qty = response.data.data.total_qty
         this.field.loose_fruit_debt = response.data.data.loose_fruit_debt
+        this.field.tonase = response.data.data.tonase
 
 
 
@@ -452,6 +464,7 @@ export default {
           driver: this.field.driver,
           total_qty: this.field.total_qty,
           loose_fruit_debt: this.field.loose_fruit_debt,
+          tonase: this.field.tonase,
         });
 
         this.show = 1;
