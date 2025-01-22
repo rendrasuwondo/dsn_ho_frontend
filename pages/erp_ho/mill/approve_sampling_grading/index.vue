@@ -168,7 +168,8 @@
                         <th v-if="showSickFruit" colspan="6" class="text-center">Kriteria TBS Abnormal</th>
                         <th v-if="showSickFruit" rowspan="2">Tangkai Panjang</th>
                         <th colspan="5" class="text-center">Berondolan</th>
-                        <th colspan="2">Hutang Berondol</th>
+                        <th rowspan="2">Hutang Berondol</th>
+                        <th colspan="2">Bayar Berondolan</th>
                         <th colspan="2">Sampah</th>
                         <th rowspan="2">No. NPB</th>
                     </tr>
@@ -201,8 +202,10 @@
                         <th>%</th>
                         <th>Var</th>
                         <th>%</th>
-                        <th>Kg</th>
-                        <th>%</th>
+
+                        <th>Bayar</th>
+                        <th>Setelah (%)</th>
+                        
                         
                         <th>Kg</th>
                         <th>%</th>
@@ -472,8 +475,8 @@
                   { key: 'var_loose_fruit', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'var_loose_fruit_percentage', label: '', formatter: this.formatToTwoDecimals  },
                   
-                  // { key: 'loose_fruit_debt', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'loose_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'loose_fruit_debt_expectation', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'loose_fruit_debt', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'percentage_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
                   
                   // { key: 'qty_abnormal', label: '' },
