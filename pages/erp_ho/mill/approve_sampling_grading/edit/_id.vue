@@ -429,7 +429,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: 'erp_ho-master-employee',
+        name: 'erp_ho-mill-approve_sampling_grading',
         params: { id: this.$route.params.id, r: 1 },
         query: {
           q: this.$route.query.q,

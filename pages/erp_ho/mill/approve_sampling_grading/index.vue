@@ -168,16 +168,16 @@
                         <th v-if="showSickFruit" colspan="6" class="text-center">Kriteria TBS Abnormal</th>
                         <th v-if="showSickFruit" rowspan="2">Tangkai Panjang</th>
                         <th colspan="5" class="text-center">Berondolan</th>
-                        <th rowspan="2">Hutang Berondol</th>
+                        <th rowspan="2">Hutang Berondol(Kg)</th>
                         <th colspan="2">Bayar Berondolan</th>
                         <th colspan="2">Sampah</th>
                         <th rowspan="2">No. NPB</th>
                     </tr>
                     <tr>
-                        <th>SPB/Bontrip</th>
+                        <th>SPB</th>
                         <th>Aktual</th>
-                        <th>Kg</th>
-                        <th>%</th>
+                        <th>Var(Kg)</th>
+                        <th>Var(%)</th>
 
                         <th>Unripe</th>
                         <th>%</th>
@@ -199,9 +199,9 @@
 
                         <th>SPB</th>
                         <th>Aktual</th>
-                        <th>%</th>
+                        <th>Aktual(%)</th>
                         <th>Var</th>
-                        <th>%</th>
+                        <th>Var(%)</th>
 
                         <th>Bayar</th>
                         <th>Setelah (%)</th>
@@ -370,6 +370,14 @@
                   </span>
                   <span v-else>
                     {{ row.item.driver }}
+                  </span>
+                </template>
+
+                <template #cell(var_qty)="row">
+                  <span 
+                    :style="row.item.var_qty < -5 || row.item.var_qty > 5 ? 'color: green' : 'color: blue' "
+                  >
+                    {{ row.item.var_qty }}
                   </span>
                 </template>
 
