@@ -127,6 +127,13 @@
             <div class="form-group">
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
+                  <nuxt-link
+                    :to="{ name: 'erp_ho-mill-approve_sampling_grading-create' }"
+                    class="btn btn-info btn-sm"
+                    style="padding-top: 8px"
+                    title="Tambah"
+                    ><i class="fa fa-plus-circle"></i>
+                  </nuxt-link>
                   <button
                     title="Export To Excel"
                     class="btn btn-info"
@@ -472,7 +479,6 @@
                   { key: 'qty_hard_bunch', label: '', formatter: this.formatToZeroDecimals },
                   { key: 'percentage_hard_bunch', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'qty_unripe_fruit_fall', label: '', formatter: this.formatToZeroDecimals },
-                  { key: 'percentage_unripe_fruit_fall', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'percentage_unripe_fruit_fall', label: '', formatter: this.formatToTwoDecimals  },
                   
                   { key: 'qty_long_stalk', label: '', formatter: this.formatToTwoDecimals },
