@@ -465,6 +465,7 @@ export default {
           total_qty: this.field.total_qty,
           loose_fruit_debt: this.field.loose_fruit_debt,
           tonase: this.field.tonase,
+          npb: this.field.npb,
         });
 
         this.show = 1;
