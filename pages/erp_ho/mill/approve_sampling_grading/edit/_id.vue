@@ -287,7 +287,7 @@ export default {
   //meta
   head() {
     return {
-      title: 'Edit Karyawan',
+      title: 'Edit Grading',
     }
   },
 
