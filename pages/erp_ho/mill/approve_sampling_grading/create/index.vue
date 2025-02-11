@@ -477,8 +477,24 @@
             // Assign validation error if any
             if (error.response && error.response.data) {
             this.validation = error.response.data;
+            this.$swal.fire({
+              title: 'ERROR!',
+              text: error.response.data.statusText,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 3500,
+            })
+
             } else {
-            console.error('Unexpected error:', error);
+              console.error('Unexpected error:', error);
+              this.$swal.fire({
+                title: 'ERROR!',
+                text: error,
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 3500,
+              })
+
             }
         }
       },
