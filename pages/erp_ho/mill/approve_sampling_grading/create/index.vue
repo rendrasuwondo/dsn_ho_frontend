@@ -471,10 +471,8 @@
             },
             });
         } catch (error) {
-            // 5. Handle errors
             this.show = 1;
 
-            // Assign validation error if any
             if (error.response && error.response.data) {
             this.validation = error.response.data;
             this.$swal.fire({
