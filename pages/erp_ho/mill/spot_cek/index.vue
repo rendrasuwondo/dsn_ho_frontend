@@ -296,7 +296,7 @@
                   { key: 'var_loose_fruit_percentage', label: '', formatter: this.formatToTwoDecimals  },
                   
                   { key: 'loose_fruit_debt_expectation', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'loose_fruit_debt', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'loose_fruit_debt', label: '', formatter: this.formatToZeroDecimals  },
                   { key: 'percentage_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
                   
                   // { key: 'qty_abnormal', label: '' },
