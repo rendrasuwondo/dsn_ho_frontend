@@ -42,6 +42,15 @@
                             day: '2-digit',
                             weekday: 'short', }"
                         ></b-form-datepicker>
+                        <b-form-datepicker
+                          v-model="dateEnd"
+                          placeholder="Pilih tanggal akhir"
+                          :date-format-options="{ 
+                            year: 'numeric',
+                            month: 'short',
+                            day: '2-digit',
+                            weekday: 'short', }"
+                            ></b-form-datepicker>
                       </b-col>
                     </b-row>
 
@@ -57,37 +66,37 @@
 
                   <!-- Right Section -->
                   <b-col cols="6">
-                    <!-- <b-row class="mt-2">
-                      <b-col cols="3">PT</b-col>
+                    <b-row class="mt-2">
+                      <b-col cols="3">Produk</b-col>
                       <b-col cols="9">
                         <multiselect
-                          v-model="pt_id"
-                          :options="pts"
-                          label="company_code_plantation"
-                          track-by="company_code_plantation"
+                          v-model="produk_id"
+                          :options="produks"
+                          label="productName"
+                          track-by="productName"
                           :searchable="true"
                           :multiple="true"
-                          placeholder="Pilih PT"
+                          placeholder="Pilih Produk"
                         ></multiselect>
                       </b-col>
                     </b-row>
 
                     <b-row class="mt-3">
-                      <b-col cols="3">Estate</b-col>
+                      <b-col cols="3">Kebun</b-col>
                       <b-col cols="9">
                         <multiselect
-                          v-model="estate_id"
-                          :options="estates"
-                          label="department_code_plantation"
-                          track-by="department_code_plantation"
+                          v-model="kebun_id"
+                          :options="kebuns"
+                          label="kebun"
+                          track-by="kebun"
                           :searchable="true"
                           :multiple="true"
-                          placeholder="Pilih Estate"
+                          placeholder="Pilih Kebun"
                         ></multiselect>
                       </b-col>
                     </b-row>
 
-                    <b-row class="mt-3">
+                    <!-- <b-row class="mt-3">
                       <b-col cols="3">Afdeling</b-col>
                       <b-col cols="9">
                         <multiselect
@@ -102,19 +111,7 @@
                       </b-col>
                     </b-row> -->
 
-                    <b-row class="mt-2">
-                      <b-col cols="9">
-                        <b-form-datepicker
-                          v-model="dateEnd"
-                          placeholder="Pilih tanggal akhir"
-                          :date-format-options="{ 
-                            year: 'numeric',
-                            month: 'short',
-                            day: '2-digit',
-                            weekday: 'short', }"
-                            ></b-form-datepicker>
-                      </b-col>
-                    </b-row>
+                
                   </b-col>
                 </b-row>
 
@@ -225,6 +222,10 @@
               dateStart: formatDate(yesterday), // Default to yesterday
               dateEnd: formatDate(yesterday), // Default to today
               showSickFruit: false,
+              produk_id: [],
+              kebun_id: [],
+              kebuns: [],
+              produks: [],
               pt_id: [],
               pts: [],
               estate_id: [],
@@ -246,7 +247,6 @@
         watchQuery: ['q', 'page'],
 
         async asyncData({ $axios, query }) {
-          console.log('11111')
           const today = new Date();
           const yesterday = new Date();
           yesterday.setDate(today.getDate() - 1);
@@ -276,17 +276,16 @@
           }));
 
           // Fetching dropdown options
-          // const list_pt = await $axios.$get(`/api/admin/monitoring-wb-list-pt`);
-          // const list_estate = await $axios.$get(`/api/admin/monitoring-wb-list-estate`);
-          // const list_afdeling = await $axios.$get(`/api/admin/monitoring-wb-list-afdeling`);
+          const list_produk = await $axios.$get(`/api/admin/monitoring-wb-list-produk`);
+          const list_kebun = await $axios.$get(`/api/admin/monitoring-wb-list-kebun`);
 
           return {
             posts: postsFilter,
             pagination: response.data,
             search: query.search || '',
             rowcount: response.data.total,
-            // pts: list_pt.data,
-            // estates: list_estate.data,
+            produks: list_produk.data,
+            kebuns: list_kebun.data,
             // afdelings: list_afdeling.data,
             dateStart,
             dateEnd,
@@ -485,14 +484,11 @@
               // Dynamically add non-empty filters to the query
               if (this.dateStart) query.dateStart = this.dateStart;
               if (this.dateEnd) query.dateEnd = this.dateEnd;
-              if (this.pt_id && this.pt_id.length > 0) {
-                query.company_code_plantation = this.pt_id.map((pt) => pt.company_code_plantation).join(',');
+              if (this.produk_id && this.produk_id.length > 0) {
+                query.produks = this.produk_id.map((pt) => pt.productName).join(',');
               }
-              if (this.estate_id && this.estate_id.length > 0) {
-                query.department_code_plantation = this.estate_id.map((estate) => estate.department_code_plantation).join(',');
-              }
-              if (this.afdeling_id && this.afdeling_id.length > 0) {
-                query.afdeling_code = this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(',');
+              if (this.kebun_id && this.kebun_id.length > 0) {
+                query.kebuns = this.kebun_id.map((estate) => estate.kebun).join(',');
               }
               if (this.search) query.search = this.search;
 
