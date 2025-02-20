@@ -176,9 +176,9 @@
                   class="mt-1"
                 ></b-pagination
               ></b-col>
-              <b-col class="text-right" align-self="center"
-                >{{ rowcount }} data</b-col
-              >
+              <b-col class="text-right" align-self="center">
+                {{ formatToThousand(rowcount) }} data
+              </b-col>
             </b-row>
           </div>
         </div>
@@ -261,8 +261,8 @@
           // Initialize params object dynamically
           const params = {
             ...(query.page && { page: query.page }),
-            // ...(dateStart && { dateStart }),
-            // ...(dateEnd && { dateEnd }),
+            ...(dateStart && { dateStart }),
+            ...(dateEnd && { dateEnd }),
             // ...(query.company_code_plantation && { company_code_plantation: query.company_code_plantation }),
             // ...(query.department_code_plantation && { department_code_plantation: query.department_code_plantation }),
             // ...(query.afdeling_code && { afdeling_code: query.afdeling_code }),
