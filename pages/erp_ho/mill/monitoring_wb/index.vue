@@ -42,31 +42,22 @@
                             day: '2-digit',
                             weekday: 'short', }"
                         ></b-form-datepicker>
-                        <b-form-datepicker
-                          v-model="dateEnd"
-                          placeholder="Pilih tanggal akhir"
-                          :date-format-options="{ 
-                            year: 'numeric',
-                            month: 'short',
-                            day: '2-digit',
-                            weekday: 'short', }"
-                            ></b-form-datepicker>
                       </b-col>
                     </b-row>
 
-                    <b-row class="mt-3">
+                    <!-- <b-row class="mt-3">
                       <b-col cols="6">Tampilkan Buah Sakit?</b-col>
                       <b-col cols="6">
                         <b-form-checkbox v-model="showSickFruit" switch>
                           Ya
                         </b-form-checkbox>
                       </b-col>
-                    </b-row>
+                    </b-row> -->
                   </b-col>
 
                   <!-- Right Section -->
                   <b-col cols="6">
-                    <b-row class="mt-2">
+                    <!-- <b-row class="mt-2">
                       <b-col cols="3">PT</b-col>
                       <b-col cols="9">
                         <multiselect
@@ -108,6 +99,20 @@
                           :multiple="true"
                           placeholder="Pilih Afdeling"
                         ></multiselect>
+                      </b-col>
+                    </b-row> -->
+
+                    <b-row class="mt-2">
+                      <b-col cols="9">
+                        <b-form-datepicker
+                          v-model="dateEnd"
+                          placeholder="Pilih tanggal akhir"
+                          :date-format-options="{ 
+                            year: 'numeric',
+                            month: 'short',
+                            day: '2-digit',
+                            weekday: 'short', }"
+                            ></b-form-datepicker>
                       </b-col>
                     </b-row>
                   </b-col>
@@ -208,6 +213,7 @@
               unselectedItems: [],
               fields: [
                   { key: 'dtTransaction', label: 'Tanggal', formatter: this.formatDate},
+                  { key: 'originSiteName', label: 'PKS'},
                   { key: 'productName', label: 'Produk'},
                   { key: 'kebun', label: 'Estate'},
                   { key: 'npb', label: 'NPB'},
