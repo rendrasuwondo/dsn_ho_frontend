@@ -384,7 +384,7 @@
                   <span 
                     :style="row.item.var_qty < -5 || row.item.var_qty > 5 ? 'color: green' : 'color: blue' "
                   >
-                    {{ row.item.var_qty }}
+                    {{ parseFloat(row.item.var_qty).toFixed(0) }}
                   </span>
                 </template>
 
@@ -489,14 +489,14 @@
                   { key: 'var_loose_fruit', label: '', formatter: this.formatToTwoDecimals  },
                   { key: 'var_loose_fruit_percentage', label: '', formatter: this.formatToTwoDecimals  },
                   
-                  { key: 'loose_fruit_debt_expectation', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'loose_fruit_debt_expectation', label: '', formatter: this.formatToZeroDecimals  },
                   { key: 'loose_fruit_debt', label: '', formatter: this.formatToZeroDecimals  },
                   { key: 'percentage_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
                   
                   // { key: 'qty_abnormal', label: '' },
                   // { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
 
-                  { key: 'qty_garbage', label: '' },
+                  { key: 'qty_garbage', label: '', formatter: this.formatToZeroDecimals  },
                   { key: 'percentage_garbage', label: '', formatter: this.formatToTwoDecimals  },
 
                   { key: 'npb', label: '' },
@@ -541,7 +541,7 @@
           const yesterday = new Date();
           yesterday.setDate(today.getDate() - 1);
 
-          const formatDate = (date) =>
+          const formatDate = (datehu) =>
             `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
           // Set default dates
