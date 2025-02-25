@@ -212,7 +212,7 @@
                   { key: 'dtTransaction', label: 'Tanggal', formatter: this.formatDate},
                   { key: 'originSiteName', label: 'PKS'},
                   { key: 'productName', label: 'Produk'},
-                  { key: 'kebun', label: 'Estate'},
+                  { key: 'kebun', label: 'Kebun'},
                   { key: 'npb', label: 'NPB'},
                   { key: 'driverName', label: 'Driver'},
                   { key: 'transportVehiclePlateNo', label: 'Plat'},

@@ -541,7 +541,7 @@
           const yesterday = new Date();
           yesterday.setDate(today.getDate() - 1);
 
-          const formatDate = (datehu) =>
+          const formatDate = (date) =>
             `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
           // Set default dates
