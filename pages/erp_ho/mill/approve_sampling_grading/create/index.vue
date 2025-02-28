@@ -207,6 +207,19 @@
                 </div>
 
                 <div class="form-group">
+                  <label>Tanggal Transaksi</label>
+                  <b-form-datepicker
+                    v-model="field.transaction_date"
+                    :date-format-options="{
+                      year: 'numeric',
+                      month: 'short',
+                      day: '2-digit',
+                      weekday: 'short'
+                    }"
+                  ></b-form-datepicker>
+                </div>
+
+                <div class="form-group">
                     <b-row>
                         <b-col>
                             <label>Tanggal Buat </label>
@@ -341,6 +354,7 @@
             total_qty: '',
             loose_fruit_debt: '',
             tonase: '',
+            transaction_date: this.currentDate()
         },
 
         company: [],
@@ -446,7 +460,7 @@
             total_qty: this.field.total_qty,
             loose_fruit_debt: this.field.loose_fruit_debt,
             tonase: this.field.tonase,
-            transaction_date: this.field.created_at,
+            transaction_date: this.field.transaction_date,
             department_id: this.$auth.user.employee.department_id,
             created_by: this.field.created_by,
             created_at: this.field.created_at,

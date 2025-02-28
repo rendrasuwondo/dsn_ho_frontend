@@ -227,6 +227,7 @@
                     type="checkbox"
                     v-model="row.item.selected"
                     :check="row.item.status === 'approved'"
+                    :disabled="row.item.status === 'cancel'"
                     @change="handleSelectionChange"
                   />
                 </template>

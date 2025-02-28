@@ -263,10 +263,11 @@
             ...(query.page && { page: query.page }),
             ...(dateStart && { dateStart }),
             ...(dateEnd && { dateEnd }),
-            // ...(query.company_code_plantation && { company_code_plantation: query.company_code_plantation }),
-            // ...(query.department_code_plantation && { department_code_plantation: query.department_code_plantation }),
+            ...(query.kebuns && { kebuns: query.kebuns }),
+            ...(query.kebuns && { produks: query.produks }),
             // ...(query.afdeling_code && { afdeling_code: query.afdeling_code }),
           };
+
 
           const response = await $axios.$get('/api/admin/monitoring-wb', { params });
 
@@ -286,19 +287,18 @@
             rowcount: response.data.total,
             produks: list_produk.data,
             kebuns: list_kebun.data,
-            // afdelings: list_afdeling.data,
             dateStart,
             dateEnd,
             showSickFruit: query.showSickFruit === 'true',
-            pt_id: query.company_code_plantation
-              ? query.company_code_plantation.split(',').filter(Boolean).map((code) => ({ company_code_plantation: code }))
-              : [],
-            estate_id: query.department_code_plantation
-              ? query.department_code_plantation.split(',').filter(Boolean).map((code) => ({ department_code_plantation: code }))
-              : [],
-            afdeling_id: query.afdeling_code
-              ? query.afdeling_code.split(',').filter(Boolean).map((code) => ({ afdeling_code: code }))
-              : [],
+            // produk_id: query.produks
+            //   ? query.produks.split(',').filter(Boolean).map((code) => ({ produks: code }))
+            //   : [],
+            // kebun_id: query.kebuns
+            //   ? query.kebuns.split(',').filter(Boolean).map((code) => ({ kebuns: code }))
+            //   : [],
+            // afdeling_id: query.afdeling_code
+            //   ? query.afdeling_code.split(',').filter(Boolean).map((code) => ({ afdeling_code: code }))
+            //   : [],
           };
         },
 
@@ -447,31 +447,55 @@
           },
           
           changePage(page) {
+            // const query = {
+            //   page,
+            //   dateStart: this.dateStart,
+            //   dateEnd: this.dateEnd,
+            // };
+
             const query = {
-              page,
-              dateStart: this.dateStart,
-              dateEnd: this.dateEnd,
+              page
             };
 
-            if (this.pt_id && this.pt_id.length > 0) {
-              query.company_code_plantation = this.pt_id.map((pt) => pt.company_code_plantation).join(',');
+            // Dynamically add non-empty filters to the query
+            // if (this.dateStart) query.dateStart = this.dateStart;
+            // if (this.dateEnd) query.dateEnd = this.dateEnd;
+            // if (this.dateEnd) query.ddsfsd = this.dateEnd;
+
+            // if (this.produk_id && this.produk_id.length > 0) {
+            //   query.company_code_plantation = this.pt_id.map((pt) => pt.company_code_plantation).join(',');
+            // }
+            // if (this.estate_id && this.estate_id.length > 0) {
+            //   query.department_code_plantation = this.estate_id.map((estate) => estate.department_code_plantation).join(',');
+            // }
+            // if (this.afdeling_id && this.afdeling_id.length > 0) {
+            //   query.afdeling_code = this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(',');
+            // }
+            console.log('123-1')
+            console.log(this.produk_id)
+            console.log(this.produk_id.length)
+            console.log(this.kebun_id)
+            console.log(this.kebun_id.length)
+            if (this.produk_id && this.produk_id.length > 0) {
+              query.produks = this.produk_id.map((pt) => pt.productName).join(',');
             }
-            if (this.estate_id && this.estate_id.length > 0) {
-              query.department_code_plantation = this.estate_id.map((estate) => estate.department_code_plantation).join(',');
+            if (this.kebun_id && this.kebun_id.length > 0) {
+              console.log('masoookkkkkk')
+              query.kebuns = this.kebun_id.map((estate) => estate.kebun).join(',');
             }
-            if (this.afdeling_id && this.afdeling_id.length > 0) {
-              query.afdeling_code = this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(',');
-            }
+
+            console.log('111sdfs')
+            console.log(query)
 
             this.$router.push({ path: this.$route.path, query });
           },
 
-            //searchData
+          //searchData
           searchData() {
               this.$router.push({
                   path: this.$route.path,
                   query: {
-                  q: this.search,
+                    q: this.search,
                   },
               })
           },
