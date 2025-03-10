@@ -176,7 +176,7 @@
                         <th v-if="showSickFruit" rowspan="2">Tangkai Panjang</th>
                         <th colspan="5" class="text-center">Berondolan</th>
                         <th rowspan="2">Hutang Berondol(Kg)</th>
-                        <th colspan="2">Bayar Berondolan</th>
+                        <th colspan="3">Bayar Berondolan</th>
                         <th colspan="2">Sampah</th>
                         <th rowspan="2">No. NPB</th>
                     </tr>
@@ -210,6 +210,7 @@
                         <th>Var</th>
                         <th>Var(%)</th>
 
+                        <th>Input</th>
                         <th>Bayar</th>
                         <th>Setelah (%)</th>
                         
@@ -389,6 +390,24 @@
                   </span>
                 </template>
 
+                <template v-slot:cell(input_fruit_debt)="row">
+                  <b-button
+                    :to="{
+                      name: 'erp_ho-mill-approve_sampling_grading-edit-id',
+                      params: { id: row.item.id },
+                    }"
+                    variant="link"
+                    size="sm"
+                    title="Edit"
+                  >
+                    <i class="fa fa-pencil-alt"></i>
+                  </b-button>
+                  <input
+                    type="text"
+                    class="form-control"
+                  />
+                </template>
+
             </b-table>
             <button
               :disabled="selectedItems.length === 0 && unselectedItems.length === 0"
@@ -491,6 +510,8 @@
                   { key: 'var_loose_fruit_percentage', label: '', formatter: this.formatToTwoDecimals  },
                   
                   { key: 'loose_fruit_debt_expectation', label: '', formatter: this.formatToZeroDecimals  },
+
+                  { key: 'input_fruit_debt', label: '', formatter: this.formatToZeroDecimals, tdClass: 'align-middle text-left text-nowrap nameOfTheClass input-fruit-debt'  },
                   { key: 'loose_fruit_debt', label: '', formatter: this.formatToZeroDecimals  },
                   { key: 'percentage_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
                   
@@ -921,6 +942,11 @@
   </style>
 
   <style>
+  .input-fruit-debt {
+    min-width: 120px;
+    max-width: 200px;
+    display: flex;
+  }
     .b-table thead tr:nth-child(3) {
       display: none;
     }

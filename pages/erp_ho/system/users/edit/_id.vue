@@ -83,6 +83,14 @@
             </div>
 
             <div class="form-group">
+              <label>Status User</label>
+              <b-form-group>
+                <b-form-radio v-model="field.user_status" :value="true">Aktif</b-form-radio>
+                <b-form-radio v-model="field.user_status" :value="false">Tidak Aktif</b-form-radio>
+              </b-form-group>
+            </div>
+
+            <div class="form-group">
               <b-row>
                 <b-col>
                   <label>Tanggal Buat </label>
@@ -180,6 +188,7 @@ export default {
         created_by: '',
         updated_by: '',
         employee_id: '',
+        user_status: null,
       },
 
       employee: [],
@@ -220,6 +229,7 @@ export default {
         this.field.updated_at = response.data.data.updated_at
         this.field.created_by = response.data.data.created_by
         this.field.updated_by = response.data.data.updated_by
+        this.field.user_status = response.data.data.user_status === 'A'
       })
 
     this.$refs.user_name.focus()
@@ -238,6 +248,8 @@ export default {
       e.preventDefault()
       this.show = 0
 
+      console.log('23423423423423423423')
+
       //send data ke Rest API untuk update
       await this.$axios
         .put(`/api/admin/users/${this.$route.params.id}`, {
@@ -252,6 +264,7 @@ export default {
           updated_at: this.field.updated_at,
           created_by: this.field.created_by,
           updated_by: this.field.updated_by,
+          user_status: this.field.user_status ? 'A' : 'I',
         })
         .then(() => {
           this.show = 1

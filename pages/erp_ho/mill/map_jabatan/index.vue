@@ -14,12 +14,12 @@
         <div class="card card-outline card-info">
           <div class="card-header">
             <h3 class="card-title">
-              <i class="nav-icon fas fa-cog"></i> <b>Data Monitoring WB</b>
+              <i class="nav-icon fas fa-cog"></i> <b>Data Map Jabatan</b>
             </h3>
             <div class="card-tools"></div>
           </div>
           <div class="card-body">
-            <b-card
+            <!-- <b-card
               border-variant="primary"
               header="Filter"
               header-bg-variant="info"
@@ -27,7 +27,6 @@
             >
               <b-card-text>
                 <b-row>
-                  <!-- Left Section -->
                   <b-col cols="6">
                     <b-row class="mt-2">
                       <b-col cols="3">Tanggal</b-col>
@@ -53,18 +52,8 @@
                             ></b-form-datepicker>
                       </b-col>
                     </b-row>
-
-                    <!-- <b-row class="mt-3">
-                      <b-col cols="6">Tampilkan Buah Sakit?</b-col>
-                      <b-col cols="6">
-                        <b-form-checkbox v-model="showSickFruit" switch>
-                          Ya
-                        </b-form-checkbox>
-                      </b-col>
-                    </b-row> -->
                   </b-col>
 
-                  <!-- Right Section -->
                   <b-col cols="6">
                     <b-row class="mt-2">
                       <b-col cols="3">Produk</b-col>
@@ -140,27 +129,9 @@
                         ></multiselect>
                       </b-col>
                     </b-row>
-
-                    <!-- <b-row class="mt-3">
-                      <b-col cols="3">Afdeling</b-col>
-                      <b-col cols="9">
-                        <multiselect
-                          v-model="afdeling_id"
-                          :options="afdelings"
-                          label="afdeling_code"
-                          track-by="afdeling_code"
-                          :searchable="true"
-                          :multiple="true"
-                          placeholder="Pilih Afdeling"
-                        ></multiselect>
-                      </b-col>
-                    </b-row> -->
-
-                
                   </b-col>
                 </b-row>
 
-                <!-- Apply Filters Button -->
                 <b-row class="mt-3">
                   <b-col class="text-center">
                     <b-button class="btn btn-info" variant="primary" @click="applyFilters">
@@ -169,13 +140,13 @@
                   </b-col>
                 </b-row>
               </b-card-text>
-            </b-card>
+            </b-card> -->
             
             <div class="form-group">
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <nuxt-link
-                    :to="{ name: 'erp_ho-mill-monitoring_wb-create' }"
+                    :to="{ name: 'erp_ho-mill-map_jabatan-create' }"
                     class="btn btn-info btn-sm"
                     style="padding-top: 8px"
                     title="Tambah"
@@ -237,7 +208,7 @@
   
         head() {
             return {
-                title: 'Monitoring WB',
+                title: 'Map Jabatan',
             }
         },
         
@@ -254,15 +225,10 @@
               selectedItems: [],
               unselectedItems: [],
               fields: [
-                  { key: 'dtTransaction', label: 'Tanggal', formatter: this.formatDate},
-                  { key: 'originSiteName', label: 'PKS'},
-                  { key: 'productName', label: 'Produk'},
-                  { key: 'kebun', label: 'Kebun'},
-                  { key: 'npb', label: 'NPB'},
-                  { key: 'driverName', label: 'Driver'},
-                  { key: 'transportVehiclePlateNo', label: 'Plat'},
-                  { key: 'originWeighOutKg', label: 'Ton'},
-                  { key: 'janjang', label: 'Janjang'},
+                  { key: 'position_code', label: 'Posisi'},
+                  { key: 'station_code', label: 'Jabatan'},
+                  { key: 'is_active_code', label: 'Status'},
+                  { key: 'created_at', label: 'Tanggal Dibuat', formatter: this.formatDate},
               ],
               dateStart: formatDate(yesterday), // Default to yesterday
               dateEnd: formatDate(yesterday), // Default to today
@@ -323,30 +289,29 @@
           };
 
 
-          const response = await $axios.$get('/api/admin/monitoring-wb', { params });
+          const response = await $axios.$get('/api/admin/map-jabatan', { params });
 
           const postsFilter = response.data.data.map((item) => ({
             ...item,
             selected: item.status === 'approved', // Check the checkbox if status is approved
           }));
 
-          // Fetching dropdown options
-          const list_produk = await $axios.$get(`/api/admin/monitoring-wb-list-produk`);
-          const list_kebun = await $axios.$get(`/api/admin/monitoring-wb-list-kebun`);
-          const list_driver = await $axios.$get(`/api/admin/monitoring-wb-list-driver`);
-          const list_plat = await $axios.$get(`/api/admin/monitoring-wb-list-plat`);
-          const list_npb = await $axios.$get(`/api/admin/monitoring-wb-list-npb`);
+        //   const list_produk = await $axios.$get(`/api/admin/map-jabatan-list-produk`);
+        //   const list_kebun = await $axios.$get(`/api/admin/map-jabatan-list-kebun`);
+        //   const list_driver = await $axios.$get(`/api/admin/map-jabatan-list-driver`);
+        //   const list_plat = await $axios.$get(`/api/admin/map-jabatan-list-plat`);
+        //   const list_npb = await $axios.$get(`/api/admin/map-jabatan-list-npb`);
 
           return {
             posts: postsFilter,
             pagination: response.data,
             search: query.search || '',
             rowcount: response.data.total,
-            produks: list_produk.data,
-            kebuns: list_kebun.data,
-            npbs: list_npb.data,
-            drivers: list_driver.data,
-            plats: list_plat.data,
+            // produks: list_produk.data,
+            // kebuns: list_kebun.data,
+            // npbs: list_npb.data,
+            // drivers: list_driver.data,
+            // plats: list_plat.data,
             dateStart,
             dateEnd,
             showSickFruit: query.showSickFruit === 'true',
@@ -447,13 +412,13 @@
 
                   if (updatedItemsSelected.length !== 0) {
                     apiCalls.push(
-                      this.$axios.post('/api/admin/monitoring-wb-approve', { ids: updatedItemsSelected })
+                      this.$axios.post('/api/admin/map-jabatan-approve', { ids: updatedItemsSelected })
                     );
                   }
 
                   if (updatedItemsUnselected.length !== 0) {
                     apiCalls.push(
-                      this.$axios.post('/api/admin/monitoring-wb-unapprove', { ids: updatedItemsUnselected })
+                      this.$axios.post('/api/admin/map-jabatan-unapprove', { ids: updatedItemsUnselected })
                     );
                   }
 
@@ -600,7 +565,7 @@
               this.$router.push({ path: this.$route.path, query });
 
               // Fetch the filtered data
-              const response = await this.$axios.$get('/api/admin/monitoring-wb', { params: query });
+              const response = await this.$axios.$get('/api/admin/map-jabatan', { params: query });
 
               const postsFilter = response.data.data.map((item) => ({
                 ...item,
@@ -681,7 +646,7 @@
                 if (result.isConfirmed) {
                   //delete tag from server
 
-                  this.$axios.delete(`/api/admin/monitoring-wb/${id}`).then((response) => {
+                  this.$axios.delete(`/api/admin/map-jabatan/${id}`).then((response) => {
                     //feresh data
                     this.$nuxt.refresh()
                     if (response.data.success == true) {

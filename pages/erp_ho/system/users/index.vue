@@ -202,6 +202,10 @@ export default {
           label: 'Email',
           key: 'email',
         },
+        {
+          label: 'Status',
+          key: 'user_status',
+        },
       ],
       sweet_alert: {
         title: '',
