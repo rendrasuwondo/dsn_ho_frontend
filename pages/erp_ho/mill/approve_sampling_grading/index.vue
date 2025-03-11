@@ -176,7 +176,7 @@
                         <th v-if="showSickFruit" rowspan="2">Tangkai Panjang</th>
                         <th colspan="5" class="text-center">Berondolan</th>
                         <th rowspan="2">Hutang Berondol(Kg)</th>
-                        <th colspan="3">Bayar Berondolan</th>
+                        <th colspan="2">Bayar Berondolan</th>
                         <th colspan="2">Sampah</th>
                         <th rowspan="2">No. NPB</th>
                     </tr>
@@ -210,7 +210,6 @@
                         <th>Var</th>
                         <th>Var(%)</th>
 
-                        <th>Input</th>
                         <th>Bayar</th>
                         <th>Setelah (%)</th>
                         
@@ -390,22 +389,17 @@
                   </span>
                 </template>
 
-                <template v-slot:cell(input_fruit_debt)="row">
-                  <b-button
-                    :to="{
-                      name: 'erp_ho-mill-approve_sampling_grading-edit-id',
-                      params: { id: row.item.id },
-                    }"
-                    variant="link"
-                    size="sm"
-                    title="Edit"
-                  >
-                    <i class="fa fa-pencil-alt"></i>
-                  </b-button>
+                <template v-slot:cell(loose_fruit_debt)="row">
                   <input
                     type="text"
-                    class="form-control"
+                    v-model="row.item.loose_fruit_debt"
+                    class="form-control input-fruit-debt"
+                    @keyup.enter="updateLooseFruitDebt(row.item)"
                   />
+                </template>
+
+                <template v-slot:cell(percentage_fruit_after)="row">
+                  <span>{{ parseFloat(row.item.percentage_fruit_after).toFixed(2) }}</span>
                 </template>
 
             </b-table>
@@ -511,7 +505,6 @@
                   
                   { key: 'loose_fruit_debt_expectation', label: '', formatter: this.formatToZeroDecimals  },
 
-                  { key: 'input_fruit_debt', label: '', formatter: this.formatToZeroDecimals, tdClass: 'align-middle text-left text-nowrap nameOfTheClass input-fruit-debt'  },
                   { key: 'loose_fruit_debt', label: '', formatter: this.formatToZeroDecimals  },
                   { key: 'percentage_fruit_after', label: '', formatter: this.formatToTwoDecimals  },
                   
@@ -640,6 +633,63 @@
         },
 
         methods: {
+
+          updateLooseFruitDebt(item) {
+            const newValue = parseFloat(item.loose_fruit_debt);
+            const oldValue = parseFloat(item.old_loose_fruit_debt || item.loose_fruit_debt);
+
+            if (isNaN(newValue)) {
+              this.$swal.fire({
+                title: 'Error!',
+                text: 'Masukkan angka yang valid!',
+                icon: 'error',
+                timer: 2000,
+                showConfirmButton: false,
+              });
+              return;
+            }
+
+            // Calculate the difference
+            const difference = newValue - oldValue;
+
+            // Update percentage_fruit_after based on the change
+            item.percentage_fruit_after = (parseFloat(item.loose_fruit) + parseFloat(item.loose_fruit_debt))/parseFloat(item.tonase)*100;
+
+            // Store the new value as old value for future updates
+            item.old_loose_fruit_debt = newValue;
+
+            // Send update to backend
+            this.$axios
+              .post('/api/admin/spot-cek-update-bayar', {
+                id: item.id,
+                loose_fruit_debt: newValue,
+                // percentage_fruit_after: item.percentage_fruit_after,
+              })
+              .then(() => {
+                this.$swal.fire({
+                  title: 'Berhasil!',
+                  text: 'Data berhasil diperbarui.',
+                  icon: 'success',
+                  timer: 2000,
+                  showConfirmButton: false,
+                });
+              })
+              .catch((error) => {
+                console.error('Error updating loose_fruit_debt:', error);
+                this.$swal.fire({
+                  title: 'Gagal!',
+                  text: 'Terjadi kesalahan saat memperbarui data.',
+                  icon: 'error',
+                  timer: 2000,
+                  showConfirmButton: false,
+                });
+              });
+          },
+
+          calculatePercentage(looseFruitDebt) {
+            const baseValue = 1000; // Adjust this based on actual calculation logic
+            return ((looseFruitDebt / baseValue) * 100).toFixed(2);
+          },
           formatToThousand(value) {
             if (!value) return '0'; // Return 0 for empty or null values
             return new Intl.NumberFormat('id-ID').format(value);
