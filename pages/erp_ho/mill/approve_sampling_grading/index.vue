@@ -183,7 +183,7 @@
                     <tr>
                         <th>SPB</th>
                         <th>Aktual</th>
-                        <th>Var(Kg)</th>
+                        <th>Var(Jjg)</th>
                         <th>Var(%)</th>
 
                         <th>Unripe</th>
@@ -207,7 +207,7 @@
                         <th>SPB</th>
                         <th>Aktual</th>
                         <th>Aktual(%)</th>
-                        <th>Var</th>
+                        <th>Var(Kg)</th>
                         <th>Var(%)</th>
 
                         <th>Bayar</th>
