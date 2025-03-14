@@ -500,7 +500,7 @@
                   { key: 'loose_fruit_npb', label: '', formatter: this.formatToThousand },
                   { key: 'loose_fruit', label: '', formatter: this.formatToThousand  },
                   { key: 'percentage_fruit', label: '', formatter: this.formatToTwoDecimals  },
-                  { key: 'var_loose_fruit', label: '', formatter: this.formatToTwoDecimals  },
+                  { key: 'var_loose_fruit', label: '', formatter: this.formatToZeroDecimals  },
                   { key: 'var_loose_fruit_percentage', label: '', formatter: this.formatToTwoDecimals  },
                   
                   { key: 'loose_fruit_debt_expectation', label: '', formatter: this.formatToZeroDecimals  },
