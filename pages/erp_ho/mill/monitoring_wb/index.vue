@@ -29,7 +29,7 @@
                 <b-row>
                   <!-- Left Section -->
                   <b-col cols="6">
-                    <b-row class="mt-2">
+                    <b-row class="mt-3">
                       <b-col cols="3">Tanggal</b-col>
                       <b-col cols="9">
                         <b-form-datepicker
@@ -53,49 +53,7 @@
                             ></b-form-datepicker>
                       </b-col>
                     </b-row>
-
-                    <!-- <b-row class="mt-3">
-                      <b-col cols="6">Tampilkan Buah Sakit?</b-col>
-                      <b-col cols="6">
-                        <b-form-checkbox v-model="showSickFruit" switch>
-                          Ya
-                        </b-form-checkbox>
-                      </b-col>
-                    </b-row> -->
-                  </b-col>
-
-                  <!-- Right Section -->
-                  <b-col cols="6">
-                    <b-row class="mt-2">
-                      <b-col cols="3">Produk</b-col>
-                      <b-col cols="9">
-                        <multiselect
-                          v-model="produk_id"
-                          :options="produks"
-                          label="productName"
-                          track-by="productName"
-                          :searchable="true"
-                          :multiple="true"
-                          placeholder="Pilih Produk"
-                        ></multiselect>
-                      </b-col>
-                    </b-row>
-
-                    <b-row class="mt-3">
-                      <b-col cols="3">Kebun</b-col>
-                      <b-col cols="9">
-                        <multiselect
-                          v-model="kebun_id"
-                          :options="kebuns"
-                          label="kebun"
-                          track-by="kebun"
-                          :searchable="true"
-                          :multiple="true"
-                          placeholder="Pilih Kebun"
-                        ></multiselect>
-                      </b-col>
-                    </b-row>
-
+                    
                     <b-row class="mt-3">
                       <b-col cols="3">NPB</b-col>
                       <b-col cols="9">
@@ -112,6 +70,38 @@
                     </b-row>
 
                     <b-row class="mt-3">
+                      <b-col cols="3">Produk</b-col>
+                      <b-col cols="9">
+                        <multiselect
+                          v-model="produk_id"
+                          :options="produks"
+                          label="productName"
+                          track-by="productName"
+                          :searchable="true"
+                          :multiple="true"
+                          placeholder="Pilih Produk"
+                        ></multiselect>
+                      </b-col>
+                    </b-row>
+
+                    
+
+                    
+
+                    <!-- <b-row class="mt-3">
+                      <b-col cols="6">Tampilkan Buah Sakit?</b-col>
+                      <b-col cols="6">
+                        <b-form-checkbox v-model="showSickFruit" switch>
+                          Ya
+                        </b-form-checkbox>
+                      </b-col>
+                    </b-row> -->
+                  </b-col>
+
+                  <!-- Right Section -->
+                  <b-col cols="6">
+                    
+                    <b-row class="mt-3">
                       <b-col cols="3">Driver</b-col>
                       <b-col cols="9">
                         <multiselect
@@ -122,6 +112,21 @@
                           :searchable="true"
                           :multiple="true"
                           placeholder="Pilih Driver"
+                        ></multiselect>
+                      </b-col>
+                    </b-row>
+
+                    <b-row class="mt-3">
+                      <b-col cols="3">Kebun</b-col>
+                      <b-col cols="9">
+                        <multiselect
+                          v-model="kebun_id"
+                          :options="kebuns"
+                          label="kebun"
+                          track-by="kebun"
+                          :searchable="true"
+                          :multiple="true"
+                          placeholder="Pilih Kebun"
                         ></multiselect>
                       </b-col>
                     </b-row>
