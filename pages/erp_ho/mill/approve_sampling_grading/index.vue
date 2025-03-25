@@ -153,6 +153,7 @@
                 striped
                 bordered
                 hover
+                :tbody-tr-class="rowClass"
                 >
                 <!-- Custom grouped header -->
                 <template v-slot:thead-top>
@@ -402,6 +403,12 @@
                   <span>{{ parseFloat(row.item.percentage_fruit_after).toFixed(2) }}</span>
                 </template>
 
+                <template #cell(tonase)="row">
+                  <span :title="getTonaseTooltip(row.item)">
+                    {{ formatToThousand(row.item.tonase) }}
+                  </span>
+                </template>
+
             </b-table>
             <button
               :disabled="selectedItems.length === 0 && unselectedItems.length === 0"
@@ -539,6 +546,14 @@
         },
         watchQuery: ['q', 'page'],
 
+        watch: {
+          posts() {
+            this.$nextTick(() => {
+              this.addRowTooltips();
+            });
+          }
+        },
+
         // watch: {
         //   posts: {
         //     handler(newPosts) {
@@ -630,10 +645,36 @@
 
         mounted() {
           this.applyFilters();
+          this.$nextTick(() => {
+            this.addRowTooltips();
+          });
         },
 
         methods: {
+          
+          addRowTooltips() {
+            this.$nextTick(() => {
+              const rows = document.querySelectorAll('.bg-yellow-row');
+              rows.forEach((td) => {
+                td.setAttribute('title', 'Silahkan dicek kembali no NPB');
+              });
+            });
+          },
+          getTonaseTooltip(item) {
+            if (!item.tonase || item.tonase === 0) {
+              return 'Tonase belum diisi atau bernilai nol';
+            }
+            return `Tonase: ${this.formatToThousand(item.tonase)} Kg`;
+          },
+          rowClass(item) {
+            if (!item) return '';
+            console.log('rowClass called', item.tonase);
 
+            if (item.tonase == null || item.tonase == 0) {
+              return 'bg-yellow-row';
+            }
+            return '';
+          },
           updateLooseFruitDebt(item) {
             const newValue = parseFloat(item.loose_fruit_debt);
             const oldValue = parseFloat(item.old_loose_fruit_debt || item.loose_fruit_debt);
@@ -989,6 +1030,7 @@
     text-align: center;
     white-space: nowrap;
   }
+
   </style>
 
   <style>
@@ -1025,5 +1067,8 @@
     .b-table td:nth-child(30) {
       text-align: end;
     }
+  .bg-yellow-row {
+    background-color: yellow !important; /* Bootstrap warning background */
+  }
   </style>
   
