@@ -433,6 +433,9 @@
                 >{{ rowcount }} data</b-col
               >
             </b-row>
+            <b-col class="text-left" align-self="center"
+                >NB : Jika Baris berwarna kuning, Silahkan dicek kembali no NPB, atau data WB belum ketarik ke iPlant </b-col
+              >
           </div>
         </div>
       </section>
