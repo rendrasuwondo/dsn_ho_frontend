@@ -207,6 +207,15 @@
                 class="form-control"
               />
             </div>
+            <div class="form-group">
+              <label>Batu(Kg)</label>
+              <input
+                type="text"
+                v-model="field.rock"
+                placeholder="Masukkan Jumlah Batu(Kg)"
+                class="form-control"
+              />
+            </div>
 
             <div class="form-group">
               <b-row>
@@ -306,13 +315,12 @@ export default {
       state: 'disabled',
 
       field: {
-
         npb: '',
         afdeling_id: {
-          afdeling_code: ''
+          afdeling_code: '',
         },
         department_id: {
-          department_code_plantation: ''
+          department_code_plantation: '',
         },
         loose_fruit: '',
         loose_fruit_npb: '',
@@ -339,6 +347,7 @@ export default {
         total_qty: '',
         loose_fruit_debt: '',
         tonase: '',
+        rock: '',
       },
 
       company: [],
@@ -371,7 +380,8 @@ export default {
         this.field.npb = response.data.data.npb
         this.field.location_id = response.data.data.location
         this.field.afdeling_id.afdeling_code = response.data.data.afdeling_code
-        this.field.department_id.department_code_plantation = response.data.data.department_code_plantation
+        this.field.department_id.department_code_plantation =
+          response.data.data.department_code_plantation
         this.field.loose_fruit = response.data.data.loose_fruit
         this.field.loose_fruit_npb = response.data.data.loose_fruit_npb
         this.field.qty_unripe = response.data.data.qty_unripe
@@ -388,8 +398,6 @@ export default {
         this.field.loose_fruit_debt = response.data.data.loose_fruit_debt
         this.field.tonase = response.data.data.tonase
 
-
-
         this.field.company_id = response.data.data.company
         this.field.position_id = response.data.data.position
         this.field.activity_group_id = response.data.data.activity_group
@@ -403,8 +411,8 @@ export default {
         this.field.email = response.data.data.email
         this.field.is_active = response.data.data.is_active
         this.field.employee_status = response.data.data.employee_status
+        this.field.rock = response.data.data.rock
         this.show = 1
-
       })
 
     ///Data Estate
@@ -438,15 +446,21 @@ export default {
     },
 
     async update(e) {
-      e.preventDefault();
-      this.show = 0;
+      e.preventDefault()
+      this.show = 0
 
       try {
-        let formData = new FormData();
-        formData.append('afdeling_code', this.field.afdeling_id.afdeling_code);
-        formData.append('department_code', this.field.department_id.department_code_plantation);
+        let formData = new FormData()
+        formData.append('afdeling_code', this.field.afdeling_id.afdeling_code)
+        formData.append(
+          'department_code',
+          this.field.department_id.department_code_plantation
+        )
 
-        const response = await this.$axios.post('/api/agro-dashboard/afdeling', formData);
+        const response = await this.$axios.post(
+          '/api/agro-dashboard/afdeling',
+          formData
+        )
 
         await this.$axios.put(`/api/admin/spot-cek/${this.$route.params.id}`, {
           afdeling_id: response.data.data.id,
@@ -466,9 +480,10 @@ export default {
           loose_fruit_debt: this.field.loose_fruit_debt,
           tonase: this.field.tonase,
           npb: this.field.npb,
-        });
+          rock: this.field.rock,
+        })
 
-        this.show = 1;
+        this.show = 1
 
         this.$swal.fire({
           title: 'BERHASIL!',
@@ -476,26 +491,26 @@ export default {
           icon: 'success',
           showConfirmButton: false,
           timer: 2000,
-        });
+        })
 
         this.$router.push({
           name: 'erp_ho-mill-approve_sampling_grading',
           query: {
             q: this.$route.query.q,
           },
-        });
+        })
       } catch (error) {
         // 5. Handle errors
-        this.show = 1;
+        this.show = 1
 
         // Assign validation error if any
         if (error.response && error.response.data) {
-          this.validation = error.response.data;
+          this.validation = error.response.data
         } else {
-          console.error('Unexpected error:', error);
+          console.error('Unexpected error:', error)
         }
       }
-    }
+    },
   },
   computed: {
     disabled() {
