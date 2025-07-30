@@ -83,36 +83,6 @@
                       ></multiselect>
                     </b-col>
                   </b-row>
-
-                  <b-row class="mt-3">
-                    <b-col cols="3">Estate</b-col>
-                    <b-col cols="9">
-                      <multiselect
-                        v-model="estate_id"
-                        :options="estates"
-                        label="department_code_plantation"
-                        track-by="department_code_plantation"
-                        :searchable="true"
-                        :multiple="true"
-                        placeholder="Pilih Estate"
-                      ></multiselect>
-                    </b-col>
-                  </b-row>
-
-                  <b-row class="mt-3">
-                    <b-col cols="3">Afdeling</b-col>
-                    <b-col cols="9">
-                      <multiselect
-                        v-model="afdeling_id"
-                        :options="afdelings"
-                        label="afdeling_code"
-                        track-by="afdeling_code"
-                        :searchable="true"
-                        :multiple="true"
-                        placeholder="Pilih Afdeling"
-                      ></multiselect>
-                    </b-col>
-                  </b-row>
                 </b-col>
               </b-row>
 
@@ -176,9 +146,7 @@
                 <th rowspan="2">Actions</th>
                 <th rowspan="2">Status</th>
                 <th rowspan="2">Tanggal</th>
-                <th rowspan="2">PT</th>
-                <th rowspan="2">Estate</th>
-                <th rowspan="2">Afd</th>
+                <th rowspan="2">Supplier</th>
                 <th rowspan="2">Driver</th>
                 <th rowspan="2">Tonase Timbang</th>
                 <th colspan="4" class="text-center">Total Janjang</th>
@@ -400,7 +368,7 @@
                     : 'color: blue'
                 "
               >
-                {{ parseFloat(row.item.var_qty).toFixed(0) }}
+                {{ formatToZeroDecimals(row.item.var_qty) }}
               </span>
             </template>
 
@@ -415,7 +383,7 @@
 
             <template v-slot:cell(percentage_fruit_after)="row">
               <span>{{
-                parseFloat(row.item.percentage_fruit_after).toFixed(2)
+                formatToTwoDecimals(row.item.percentage_fruit_after)
               }}</span>
             </template>
 
@@ -487,8 +455,6 @@ export default {
         { key: 'status', label: '' },
         { key: 'transaction_date', label: '', formatter: this.formatDate },
         { key: 'supplier', label: '' },
-        { key: 'department_code_plantation', label: '' },
-        { key: 'afdeling_code', label: '' },
         { key: 'driver', label: '' },
         { key: 'tonase', label: '', formatter: this.formatToThousand },
 
@@ -748,16 +714,8 @@ export default {
         const list_pt = await this.$axios.$get(
           `/api/admin/spot-cek-list-supplier`
         )
-        const list_estate = await this.$axios.$get(
-          `/api/admin/spot-cek-list-estate`
-        )
-        const list_afdeling = await this.$axios.$get(
-          `/api/admin/spot-cek-list-afdeling`
-        )
 
         this.pts = list_pt.data
-        this.estates = list_estate.data
-        this.afdelings = list_afdeling.data
 
         this.dateStart = dateStart
         this.dateEnd = dateEnd
@@ -881,7 +839,7 @@ export default {
       return parseFloat(value).toFixed(2)
     },
     formatToZeroDecimals(value) {
-      if (!value) return '0' // Return 0.00 for empty values
+      if (!value || value === null) return '0' // Return 0.00 for empty values
       return parseFloat(value).toFixed(0)
     },
     toggleSelectAll() {
@@ -1063,24 +1021,17 @@ export default {
         if (this.dateStart) query.dateStart = this.dateStart
         if (this.dateEnd) query.dateEnd = this.dateEnd
         if (this.pt_id && this.pt_id.length > 0) {
-          query.supplier = this.pt_id.map((pt) => pt.supplier).join(',')
+          query.lifnr = this.pt_id.map((pt) => pt.supplier).join(',')
         }
-        if (this.estate_id && this.estate_id.length > 0) {
-          query.department_code_plantation = this.estate_id
-            .map((estate) => estate.department_code_plantation)
-            .join(',')
-        }
-        if (this.afdeling_id && this.afdeling_id.length > 0) {
-          query.afdeling_code = this.afdeling_id
-            .map((afdeling) => afdeling.afdeling_code)
-            .join(',')
-        }
+
         if (this.search) query.search = this.search
 
         query.page = this.pagination.current_page || 1
 
         // Update the URL query dynamically
         this.$router.push({ path: this.$route.path, query })
+
+        query.ffb_source = 'external'
 
         // Fetch the filtered data
         const response = await this.$axios.$get('/api/admin/spot-cek', {
@@ -1115,20 +1066,6 @@ export default {
           queryParams.append(
             'supplier',
             this.pt_id.map((pt) => pt.supplier).join(',')
-          )
-        }
-        if (this.estate_id && this.estate_id.length > 0) {
-          queryParams.append(
-            'department_code_plantation',
-            this.estate_id
-              .map((estate) => estate.department_code_plantation)
-              .join(',')
-          )
-        }
-        if (this.afdeling_id && this.afdeling_id.length > 0) {
-          queryParams.append(
-            'afdeling_code',
-            this.afdeling_id.map((afdeling) => afdeling.afdeling_code).join(',')
           )
         }
         if (this.search) queryParams.append('search', this.search)

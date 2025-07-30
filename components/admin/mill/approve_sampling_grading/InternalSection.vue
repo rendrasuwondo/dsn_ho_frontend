@@ -400,7 +400,7 @@
                     : 'color: blue'
                 "
               >
-                {{ parseFloat(row.item.var_qty).toFixed(0) }}
+                {{ formatToZeroDecimals(row.item.var_qty) }}
               </span>
             </template>
 
@@ -494,7 +494,7 @@ export default {
 
         { key: 'qty_npb', label: '', formatter: this.formatToZeroDecimals },
         { key: 'total_qty', label: '', formatter: this.formatToZeroDecimals },
-        { key: 'var_qty', label: '', formatter: this.formatToZeroDecimals },
+        { key: 'var_qty', label: '',  },
         { key: 'percentage_qty', label: '', formatter: this.formatToThousand },
 
         { key: 'bjr', label: '', formatter: this.formatToTwoDecimals },
@@ -878,7 +878,7 @@ export default {
       return parseFloat(value).toFixed(2)
     },
     formatToZeroDecimals(value) {
-      if (!value) return '0' // Return 0.00 for empty values
+      if (!value || value === null) return '0' // Return 0.00 for empty values
       return parseFloat(value).toFixed(0)
     },
     toggleSelectAll() {
