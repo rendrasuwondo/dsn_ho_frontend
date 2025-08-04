@@ -442,7 +442,6 @@ export default {
   },
 
   async mounted() {
-    this.applyFilters()
     await this.fetchData()
   },
 
@@ -475,6 +474,7 @@ export default {
           }),
           ...(query.afdeling_code && { afdeling_code: query.afdeling_code }),
           status: 'approved',
+          ffb_source: 'internal',
         }
 
         const posts = await this.$axios.$get('/api/admin/spot-cek', { params })
@@ -626,11 +626,13 @@ export default {
         }
         if (this.search) query.search = this.search
 
-        query.status = 'approved'
         query.page = this.pagination.current_page || 1
 
         // Update the URL query dynamically
         this.$router.push({ path: this.$route.path, query })
+        query.status = 'approved'
+
+        query.ffb_source = 'internal'
 
         // Fetch the filtered data
         const response = await this.$axios.$get('/api/admin/spot-cek', {
@@ -677,6 +679,7 @@ export default {
           )
         }
         if (this.search) queryParams.append('search', this.search)
+        queryParams.append('status', 'approved')
 
         // Perform the export request
         this.$axios({

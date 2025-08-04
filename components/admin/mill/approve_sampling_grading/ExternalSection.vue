@@ -56,15 +56,6 @@
                       ></b-form-datepicker>
                     </b-col>
                   </b-row>
-
-                  <b-row class="mt-3">
-                    <b-col cols="6">Tampilkan Buah Sakit?</b-col>
-                    <b-col cols="6">
-                      <b-form-checkbox v-model="showSickFruit" switch>
-                        Ya
-                      </b-form-checkbox>
-                    </b-col>
-                  </b-row>
                 </b-col>
 
                 <!-- Right Section -->
@@ -105,7 +96,7 @@
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <nuxt-link
-                  :to="{ name: 'erp_ho-mill-approve_sampling_grading-create' }"
+                  to="/erp_ho/mill/approve_sampling_grading/create/external"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
                   title="Tambah"
@@ -148,7 +139,6 @@
                 <th rowspan="2">Tanggal</th>
                 <th rowspan="2">Supplier</th>
                 <th rowspan="2">Driver</th>
-                <th rowspan="2">Tonase Timbang</th>
                 <th colspan="4" class="text-center">Total Janjang</th>
                 <th rowspan="2">BJR</th>
                 <th colspan="10" class="text-center">Kriteria TBS Normal</th>
@@ -159,8 +149,6 @@
                 <th colspan="5" class="text-center">Berondolan</th>
                 <th rowspan="2">Hutang Berondol(Kg)</th>
                 <th colspan="2">Bayar Berondolan</th>
-                <th colspan="2">Sampah</th>
-                <th rowspan="2">Batu(Kg)</th>
                 <th rowspan="2">No. NPB</th>
               </tr>
               <tr>
@@ -195,9 +183,6 @@
 
                 <th>Bayar</th>
                 <th>Setelah (%)</th>
-
-                <th>Kg</th>
-                <th>%</th>
               </tr>
             </template>
 
@@ -214,7 +199,7 @@
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'erp_ho-mill-approve_sampling_grading-edit-id',
+                  name: 'erp_ho-mill-approve_sampling_grading-edit-external-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"
@@ -386,12 +371,6 @@
                 formatToTwoDecimals(row.item.percentage_fruit_after)
               }}</span>
             </template>
-
-            <template #cell(tonase)="row">
-              <span :title="getTonaseTooltip(row.item)">
-                {{ formatToThousand(row.item.tonase) }}
-              </span>
-            </template>
           </b-table>
           <button
             :disabled="
@@ -456,7 +435,6 @@ export default {
         { key: 'transaction_date', label: '', formatter: this.formatDate },
         { key: 'supplier', label: '' },
         { key: 'driver', label: '' },
-        { key: 'tonase', label: '', formatter: this.formatToThousand },
 
         { key: 'qty_npb', label: '', formatter: this.formatToZeroDecimals },
         { key: 'total_qty', label: '', formatter: this.formatToZeroDecimals },
@@ -583,14 +561,6 @@ export default {
         // { key: 'qty_abnormal', label: '' },
         // { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
 
-        { key: 'qty_garbage', label: '', formatter: this.formatToZeroDecimals },
-        {
-          key: 'percentage_garbage',
-          label: '',
-          formatter: this.formatToTwoDecimals,
-        },
-
-        { key: 'rock', label: '', formatter: this.formatToTwoDecimals },
         { key: 'npb', label: '' },
       ],
       dateStart: formatDate(yesterday), // Default to yesterday
@@ -620,13 +590,6 @@ export default {
       this.$nextTick(() => {
         this.addRowTooltips()
       })
-    },
-    '$route.query': {
-      handler() {
-        this.loadData()
-      },
-      immediate: true,
-      deep: true,
     },
   },
 
@@ -659,11 +622,10 @@ export default {
   },
 
   mounted() {
-    this.applyFilters()
+    this.loadData()
     this.$nextTick(() => {
       this.addRowTooltips()
     })
-    this.loadData()
   },
 
   methods: {
@@ -725,20 +687,6 @@ export default {
               .split(',')
               .filter(Boolean)
               .map((code) => ({ supplier: code }))
-          : []
-
-        this.estate_id = query.department_code_plantation
-          ? query.department_code_plantation
-              .split(',')
-              .filter(Boolean)
-              .map((code) => ({ department_code_plantation: code }))
-          : []
-
-        this.afdeling_id = query.afdeling_code
-          ? query.afdeling_code
-              .split(',')
-              .filter(Boolean)
-              .map((code) => ({ afdeling_code: code }))
           : []
 
         this.showSickFruit = query.showSickFruit === 'true'
@@ -1021,7 +969,7 @@ export default {
         if (this.dateStart) query.dateStart = this.dateStart
         if (this.dateEnd) query.dateEnd = this.dateEnd
         if (this.pt_id && this.pt_id.length > 0) {
-          query.lifnr = this.pt_id.map((pt) => pt.supplier).join(',')
+          query.lifnr = this.pt_id.map((pt) => pt.lifnr)
         }
 
         if (this.search) query.search = this.search
@@ -1072,7 +1020,7 @@ export default {
 
         // Perform the export request
         this.$axios({
-          url: `/api/admin/approve-sampling-grading-export?${queryParams.toString()}`,
+          url: `/api/admin/approve-sampling-grading-external-export?${queryParams.toString()}`,
           method: 'GET',
           responseType: 'blob', // Ensures the response is treated as a binary file
         })

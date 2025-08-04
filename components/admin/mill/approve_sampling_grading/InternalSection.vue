@@ -494,7 +494,7 @@ export default {
 
         { key: 'qty_npb', label: '', formatter: this.formatToZeroDecimals },
         { key: 'total_qty', label: '', formatter: this.formatToZeroDecimals },
-        { key: 'var_qty', label: '',  },
+        { key: 'var_qty', label: '' },
         { key: 'percentage_qty', label: '', formatter: this.formatToThousand },
 
         { key: 'bjr', label: '', formatter: this.formatToTwoDecimals },
@@ -655,13 +655,6 @@ export default {
         this.addRowTooltips()
       })
     },
-    '$route.query': {
-      handler() {
-        this.loadData()
-      },
-      immediate: true,
-      deep: true,
-    },
   },
 
   // watch: {
@@ -693,11 +686,10 @@ export default {
   },
 
   mounted() {
-    this.applyFilters()
+    this.loadData()
     this.$nextTick(() => {
       this.addRowTooltips()
     })
-    this.loadData()
   },
 
   methods: {
@@ -728,6 +720,7 @@ export default {
           department_code_plantation: query.department_code_plantation,
         }),
         ...(query.afdeling_code && { afdeling_code: query.afdeling_code }),
+        ffb_source: 'internal',
       }
 
       try {
@@ -1082,7 +1075,7 @@ export default {
 
         // Update the URL query dynamically
         this.$router.push({ path: this.$route.path, query })
-
+        query.ffb_source = 'internal'
         // Fetch the filtered data
         const response = await this.$axios.$get('/api/admin/spot-cek', {
           params: query,
@@ -1144,7 +1137,7 @@ export default {
             const url = window.URL.createObjectURL(new Blob([response.data]))
             const link = document.createElement('a')
             link.href = url
-            const fileName = 'ApproveSamplingGrading.xlsx' // You can customize the filename
+            const fileName = 'ApproveSamplingGradingExternal.xlsx' // You can customize the filename
             link.setAttribute('download', fileName) // Set the file name
             document.body.appendChild(link)
             link.click()
