@@ -147,8 +147,6 @@
                 </th>
                 <th v-if="showSickFruit" rowspan="2">Tangkai Panjang</th>
                 <th colspan="5" class="text-center">Berondolan</th>
-                <th rowspan="2">Hutang Berondol(Kg)</th>
-                <th colspan="2">Bayar Berondolan</th>
                 <th rowspan="2">No. NPB</th>
               </tr>
               <tr>
@@ -180,9 +178,6 @@
                 <th>Aktual(%)</th>
                 <th>Var(Kg)</th>
                 <th>Var(%)</th>
-
-                <th>Bayar</th>
-                <th>Setelah (%)</th>
               </tr>
             </template>
 
@@ -541,22 +536,22 @@ export default {
           formatter: this.formatToTwoDecimals,
         },
 
-        {
-          key: 'loose_fruit_debt_expectation',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-        },
+        // {
+        //   key: 'loose_fruit_debt_expectation',
+        //   label: '',
+        //   formatter: this.formatToZeroDecimals,
+        // },
 
-        {
-          key: 'loose_fruit_debt',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-        },
-        {
-          key: 'percentage_fruit_after',
-          label: '',
-          formatter: this.formatToTwoDecimals,
-        },
+        // {
+        //   key: 'loose_fruit_debt',
+        //   label: '',
+        //   formatter: this.formatToZeroDecimals,
+        // },
+        // {
+        //   key: 'percentage_fruit_after',
+        //   label: '',
+        //   formatter: this.formatToTwoDecimals,
+        // },
 
         // { key: 'qty_abnormal', label: '' },
         // { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
