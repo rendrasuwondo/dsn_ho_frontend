@@ -1137,7 +1137,7 @@ export default {
             const url = window.URL.createObjectURL(new Blob([response.data]))
             const link = document.createElement('a')
             link.href = url
-            const fileName = 'ApproveSamplingGradingExternal.xlsx' // You can customize the filename
+            const fileName = 'ApproveSamplingGrading.xlsx' // You can customize the filename
             link.setAttribute('download', fileName) // Set the file name
             document.body.appendChild(link)
             link.click()
