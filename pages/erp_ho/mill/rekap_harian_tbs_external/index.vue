@@ -4,7 +4,13 @@
       <div class="container-fluid"></div>
     </section>
 
-    <section class="content">
+    <div v-if="show === 0">
+      <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+      <p class="txt-2">Loading</p>
+      <div class="spinonediv-4"></div>
+    </div>
+
+    <section class="content" v-if="show === 1">
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
@@ -50,7 +56,7 @@
                   </b-row>
                 </b-col>
 
-                <b-col cols="6">
+                <!-- <b-col cols="6">
                   <b-row class="mt-2">
                     <b-col cols="3">Supplier</b-col>
                     <b-col cols="9">
@@ -64,7 +70,7 @@
                       ></multiselect>
                     </b-col>
                   </b-row>
-                </b-col>
+                </b-col> -->
               </b-row>
 
               <!-- Apply Filters Button -->
@@ -111,26 +117,34 @@
                 <th rowspan="2">Rit</th>
                 <th colspan="2" class="text-center">Netto (Ton)</th>
                 <th colspan="2" class="text-center">Sortasi (Ton)</th>
-                <!-- <th colspan="2" class="text-center">Bruto (Ton)</th> -->
+                <th colspan="2" class="text-center">Bruto (Ton)</th>
                 <!-- <th colspan="2" class="text-center">Dikembalikan (Ton)</th> -->
                 <th colspan="2" class="text-center">Total (Ton)</th>
+                <th rowspan="2" class="text-center">% Sortasi</th>
               </tr>
               <tr>
+                <!-- Netto -->
                 <th>Ton</th>
                 <th>Ton/Rit</th>
 
+                <!-- Sortasi  -->
                 <th>Ton</th>
                 <th>Ton/Rit</th>
 
+                <!-- Bruto  -->
+                <th>Ton</th>
+                <th>Ton/Rit</th>
+
+                <!-- Total  -->
                 <th>Ton</th>
                 <th>Ton/Rit</th>
               </tr>
             </template>
 
             <!-- Row Rendering -->
-            <template #cell(no)="data">
+            <!-- <template #cell(no)="data">
               {{ data.index + 1 }}
-            </template>
+            </template> -->
           </b-table>
           <!-- pagination -->
           <b-row>
@@ -178,15 +192,18 @@ export default {
     return {
       // Fields for the table
       tableFields: [
-        { key: 'no', label: '' },
+        // { key: 'no', label: '' },
         { key: 'transaction_date', label: '' },
         { key: 'unit', label: '' },
         { key: 'netto', label: '' },
         { key: 'nettoPerRit', label: '' },
         { key: 'sortasi', label: '' },
         { key: 'sortasiPerRit', label: '' },
+        { key: 'bruto', label: '' },
+        { key: 'brutoPerRit', label: '' },
         { key: 'total', label: '' },
         { key: 'totalPerRit', label: '' },
+        { key: 'percentSortasi', label: '' },
       ],
       // Dummy Data
 
@@ -197,6 +214,7 @@ export default {
       posts: [], // Data for the table
       pagination: {}, // Pagination data
       rowcount: 0,
+      show: 1,
     }
   },
 
@@ -317,6 +335,7 @@ export default {
     },
 
     async applyFilters() {
+      this.show = 0
       try {
         const query = {}
 
@@ -357,13 +376,16 @@ export default {
         this.posts = response.data.data
         this.pagination = response.data
         this.rowcount = response.data.total
+        this.show = 1
       } catch (error) {
         console.error('Error applying filters:', error)
+        this.show = 1
       }
     },
 
     exportData() {
       try {
+        this.show = 0
         const queryParams = new URLSearchParams()
 
         // Add filters dynamically if they exist
@@ -391,9 +413,12 @@ export default {
         }
         if (this.search) queryParams.append('search', this.search)
 
+        const start = this.dateStart || 'awal'
+        const end = this.dateEnd || 'akhir'
+        const fileName = `Rekap_Harian_Tbs_External_${start}_sd_${end}.xlsx`
         // Perform the export request
         this.$axios({
-          url: `/api/admin/spot-cek-export?${queryParams.toString()}`,
+          url: `/api/admin/rekap_harian_tbs_external_export?${queryParams.toString()}`,
           method: 'GET',
           responseType: 'blob', // Ensures the response is treated as a binary file
         })
@@ -401,17 +426,19 @@ export default {
             const url = window.URL.createObjectURL(new Blob([response.data]))
             const link = document.createElement('a')
             link.href = url
-            const fileName = 'SpotCek.xlsx' // You can customize the filename
             link.setAttribute('download', fileName) // Set the file name
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link) // Clean up the DOM
+            this.show = 1
           })
           .catch((error) => {
             console.error('Error exporting data:', error)
+            this.show = 1
           })
       } catch (error) {
         console.error('Error constructing export URL:', error)
+        this.show = 1
       }
     },
   },
