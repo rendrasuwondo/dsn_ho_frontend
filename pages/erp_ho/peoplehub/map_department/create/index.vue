@@ -102,7 +102,7 @@
               ></textarea>
             </div>
 
-            
+
             <div class="form-group">
               <b-row>
                 <b-col>
@@ -163,7 +163,7 @@
               <i class="fa fa-paper-plane"></i> SIMPAN
             </button>
             <button
-              v-on:click="back()"
+              v-on:click="$router.push({ name: 'erp_ho-peoplehub-map_department' })"
               class="btn btn-warning btn-reset"
               type="reset"
             >
@@ -199,7 +199,7 @@ export default {
       state: 'disabled',
 
       field: {
-        sbu: '', 
+        sbu: '',
         organization_code_peoplehub: '',
         organization_name_peoplehub: '',
         department_code: '',
