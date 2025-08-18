@@ -1,9 +1,5 @@
 <template>
   <div class="">
-    <section class="content-header">
-      <div class="container-fluid"></div>
-    </section>
-
     <div v-if="show === 0">
       <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
       <p class="txt-2">Loading</p>
