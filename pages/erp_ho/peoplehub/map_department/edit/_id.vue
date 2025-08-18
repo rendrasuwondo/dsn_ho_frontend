@@ -14,7 +14,8 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-folder"></i> <b>EDIT DATA MAP DEPARTMENT PEOPLE HUB</b>
+            <i class="nav-icon fas fa-folder"></i>
+            <b>EDIT DATA MAP DEPARTMENT PEOPLE HUB</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -30,9 +31,7 @@
                 ref="code"
               />
               <div v-if="validation.sbu" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.sbu[0]
-                }}</b-alert>
+                <b-alert show variant="danger">{{ validation.sbu[0] }}</b-alert>
               </div>
             </div>
 
@@ -72,7 +71,7 @@
               />
             </div>
 
-           <div class="form-group">
+            <div class="form-group">
               <label>Aktif?</label>
               <b-form-select v-model="field.is_active">
                 <b-form-select-option value="Y">Ya</b-form-select-option>
@@ -150,7 +149,9 @@
               <i class="fa fa-paper-plane"></i> SIMPAN
             </button>
             <button
-              v-on:click="back()"
+              v-on:click="
+                $router.push({ name: 'erp_ho-peoplehub-map_department' })
+              "
               class="btn btn-warning btn-reset"
               type="reset"
             >
@@ -203,8 +204,10 @@ export default {
       .then((response) => {
         //data yang diambil
         this.field.sbu = response.data.data.sbu
-        this.field.organization_code_peoplehub = response.data.data.organization_code_peoplehub
-        this.field.organization_name_peoplehub  = response.data.data.organization_name_peoplehub
+        this.field.organization_code_peoplehub =
+          response.data.data.organization_code_peoplehub
+        this.field.organization_name_peoplehub =
+          response.data.data.organization_name_peoplehub
         this.field.department_code = response.data.data.department_code
         this.field.is_active = response.data.data.is_active
         this.field.description = response.data.data.description
@@ -212,8 +215,6 @@ export default {
         this.field.created_by = response.data.data.created_by
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
-      
-        
       })
     this.$refs.code.focus()
   },
@@ -232,12 +233,13 @@ export default {
       this.show = 0
 
       //send data ke Rest API untuk update
-      await this.$axios.put(`/api/admin/map_department/${this.$route.params.id}`, {
+      await this.$axios
+        .put(`/api/admin/map_department/${this.$route.params.id}`, {
           //data yang dikirim
-          sbu : this.field.sbu,
-          organization_code_peoplehub : this.field.organization_code_peoplehub,
-          organization_name_peoplehub : this.field.organization_name_peoplehub,
-          department_code : this.field.department_code,
+          sbu: this.field.sbu,
+          organization_code_peoplehub: this.field.organization_code_peoplehub,
+          organization_name_peoplehub: this.field.organization_name_peoplehub,
+          department_code: this.field.department_code,
           is_active: this.field.is_active,
           description: this.field.description,
           created_at: this.field.created_at,
