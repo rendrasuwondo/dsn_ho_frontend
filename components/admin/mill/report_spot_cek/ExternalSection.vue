@@ -446,18 +446,23 @@ export default {
       }
 
       try {
-        const response = await this.$axios.$get('/api/admin/report-spot-cek', {
-          params,
-        })
+        let response = { data: { data: [], total: 0 } }
 
-        const postsFilter = response.data.data.map((item) => ({
+        // ✅ Hanya ambil data kalau ada department_id
+        if (query.department_id) {
+          response = await this.$axios.$get('/api/admin/report-spot-cek', {
+            params,
+          })
+        }
+
+        const postsFilter = (response.data.data || []).map((item) => ({
           ...item,
           selected: item.status === 'approved',
         }))
 
         this.posts = postsFilter
-        this.pagination = response.data
-        this.rowcount = response.data.total
+        this.pagination = response.data || {}
+        this.rowcount = response.data.total || 0
 
         const list_pt = await this.$axios.$get(
           `/api/admin/spot-cek-list-supplier`
@@ -691,7 +696,7 @@ export default {
       return `${day}-${month}-${year}`
     },
 
-    changePage(page) {
+    async changePage(page) {
       const query = {
         page,
         dateStart: this.dateStart,
@@ -717,6 +722,8 @@ export default {
           .join(',')
       }
       this.$router.push({ path: this.$route.path, query })
+      this.pagination.current_page = page
+      this.applyFilters() // Reapply filters with new page
     },
 
     //searchData
