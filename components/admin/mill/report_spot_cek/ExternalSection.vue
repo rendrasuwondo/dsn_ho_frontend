@@ -11,7 +11,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-cog"></i>
-            <b>Data Approve Sampling Grading External</b>
+            <b>Data Spot Cek External</b>
           </h3>
           <div class="card-tools"></div>
         </div>
@@ -50,6 +50,21 @@
                           weekday: 'short',
                         }"
                       ></b-form-datepicker>
+                    </b-col>
+                  </b-row>
+                  <b-row class="mt-3">
+                    <b-col cols="3">PKS</b-col>
+                    <b-col cols="9">
+                      <multiselect
+                        v-model="pks_code"
+                        :options="pksList"
+                        label="code"
+                        track-by="department_id"
+                        :searchable="true"
+                        :multiple="true"
+                        placeholder="Pilih PKS"
+                        :loading="isLoadingDropdown"
+                      ></multiselect>
                     </b-col>
                   </b-row>
                 </b-col>
@@ -92,13 +107,6 @@
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <nuxt-link
-                  to="/erp_ho/mill/approve_sampling_grading/create/external"
-                  class="btn btn-info btn-sm"
-                  style="padding-top: 8px"
-                  title="Tambah"
-                  ><i class="fa fa-plus-circle"></i>
-                </nuxt-link>
                 <button
                   title="Export To Excel"
                   class="btn btn-info"
@@ -118,22 +126,13 @@
             striped
             bordered
             hover
-            :tbody-tr-class="rowClass"
           >
             <!-- Custom grouped header -->
             <template v-slot:thead-top>
               <tr>
                 <!-- <th rowspan="2">No</th> -->
-                <th rowspan="2">
-                  <input
-                    type="checkbox"
-                    @change="toggleSelectAll"
-                    v-model="selectAll"
-                  />
-                </th>
-                <th rowspan="2">Actions</th>
-                <th rowspan="2">Status</th>
                 <th rowspan="2">Tanggal</th>
+                <th rowspan="2">PKS</th>
                 <th rowspan="2">Supplier</th>
                 <th rowspan="2">Driver</th>
                 <th colspan="4" class="text-center">Total Janjang</th>
@@ -144,6 +143,8 @@
                 </th>
                 <th v-if="showSickFruit" rowspan="2">Tangkai Panjang</th>
                 <th colspan="5" class="text-center">Berondolan</th>
+                <!-- <th rowspan="2">Hutang Berondol(Kg)</th>
+                <th colspan="2">Bayar Berondolan</th> -->
                 <th rowspan="2">No. NPB</th>
               </tr>
               <tr>
@@ -175,204 +176,12 @@
                 <th>Aktual(%)</th>
                 <th>Var(Kg)</th>
                 <th>Var(%)</th>
+
+                <!-- <th>Bayar</th>
+                <th>Setelah (%)</th> -->
               </tr>
             </template>
-
-            <template #cell(check)="row">
-              <input
-                type="checkbox"
-                v-model="row.item.selected"
-                :check="row.item.status === 'approved'"
-                :disabled="row.item.status === 'cancel'"
-                @change="handleSelectionChange"
-              />
-            </template>
-
-            <template v-slot:cell(actions)="row">
-              <b-button
-                :to="{
-                  name: 'erp_ho-mill-approve_sampling_grading-edit-external-id',
-                  params: { id: row.item.id },
-                }"
-                variant="link"
-                size="sm"
-                title="Edit"
-              >
-                <i class="fa fa-pencil-alt"></i>
-              </b-button>
-              <b-button
-                variant="link"
-                size="sm"
-                @click="deletePost(row.item.id)"
-                title="Hapus"
-                ><i class="fa fa-trash"></i
-              ></b-button>
-            </template>
-
-            <template #cell(qty_unripe)="row">
-              <span v-if="row.item.qty_unripe > 0">
-                <a
-                  :href="`${$axios.defaults.baseURL}${row.item.img_unripe}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-primary"
-                >
-                  {{ parseFloat(row.item.qty_unripe).toFixed(0) }}
-                </a>
-              </span>
-              <span v-else>
-                {{ parseFloat(row.item.qty_unripe).toFixed(0) }}
-              </span>
-            </template>
-
-            <template #cell(qty_underripe)="row">
-              <span v-if="row.item.qty_underripe > 0">
-                <a
-                  :href="`${$axios.defaults.baseURL}${row.item.img_underripe}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-primary"
-                >
-                  {{ parseFloat(row.item.qty_underripe).toFixed(0) }}
-                </a>
-              </span>
-              <span v-else>
-                {{ parseFloat(row.item.qty_underripe).toFixed(0) }}
-              </span>
-            </template>
-
-            <template #cell(qty_overripe)="row">
-              <span v-if="row.item.qty_overripe > 0">
-                <a
-                  :href="`${$axios.defaults.baseURL}${row.item.img_overripe}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-primary"
-                >
-                  {{ parseFloat(row.item.qty_overripe).toFixed(0) }}
-                </a>
-              </span>
-              <span v-else>
-                {{ parseFloat(row.item.qty_overripe).toFixed(0) }}
-              </span>
-            </template>
-
-            <template #cell(qty_empty_bunch)="row">
-              <span v-if="row.item.qty_empty_bunch > 0">
-                <a
-                  :href="`${$axios.defaults.baseURL}${row.item.img_empty_bunch}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-primary"
-                >
-                  {{ parseFloat(row.item.qty_empty_bunch).toFixed(0) }}
-                </a>
-              </span>
-              <span v-else>
-                {{ parseFloat(row.item.qty_empty_bunch).toFixed(0) }}
-              </span>
-            </template>
-
-            <template #cell(qty_tangkai_panjang)="row">
-              <span v-if="row.item.qty_tangkai_panjang > 0">
-                <a
-                  :href="`${$axios.defaults.baseURL}${row.item.img_tangkai_panjang}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-primary"
-                >
-                  {{ parseFloat(row.item.qty_tangkai_panjang).toFixed(0) }}
-                </a>
-              </span>
-              <span v-else>
-                {{ parseFloat(row.item.qty_tangkai_panjang).toFixed(0) }}
-              </span>
-            </template>
-
-            <template #cell(qty_sampah_kotoran)="row">
-              <span v-if="row.item.qty_sampah_kotoran > 0">
-                <a
-                  :href="`${$axios.defaults.baseURL}${row.item.img_sampah_kotoran}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-primary"
-                >
-                  {{ parseFloat(row.item.qty_sampah_kotoran).toFixed(0) }}
-                </a>
-              </span>
-              <span v-else>
-                {{ parseFloat(row.item.qty_sampah_kotoran).toFixed(0) }}
-              </span>
-            </template>
-
-            <template #cell(qty_tbs_sakit)="row">
-              <span v-if="row.item.qty_tbs_sakit > 0">
-                <a
-                  :href="`${$axios.defaults.baseURL}${row.item.img_tbs_sakit}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-primary"
-                >
-                  {{ parseFloat(row.item.qty_tbs_sakit).toFixed(0) }}
-                </a>
-              </span>
-              <span v-else>
-                {{ parseFloat(row.item.qty_tbs_sakit).toFixed(0) }}
-              </span>
-            </template>
-
-            <template #cell(driver)="row">
-              <span v-if="row.item.img_driver != null">
-                <a
-                  :href="`${$axios.defaults.baseURL}${row.item.img_driver}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-primary"
-                >
-                  {{ row.item.driver }}
-                </a>
-              </span>
-              <span v-else>
-                {{ row.item.driver }}
-              </span>
-            </template>
-
-            <template #cell(var_qty)="row">
-              <span
-                :style="
-                  row.item.var_qty < -5 || row.item.var_qty > 5
-                    ? 'color: green'
-                    : 'color: blue'
-                "
-              >
-                {{ formatToZeroDecimals(row.item.var_qty) }}
-              </span>
-            </template>
-
-            <template v-slot:cell(loose_fruit_debt)="row">
-              <input
-                type="text"
-                v-model="row.item.loose_fruit_debt"
-                class="form-control input-fruit-debt"
-                @keyup.enter="updateLooseFruitDebt(row.item)"
-              />
-            </template>
-
-            <template v-slot:cell(percentage_fruit_after)="row">
-              <span>{{
-                formatToTwoDecimals(row.item.percentage_fruit_after)
-              }}</span>
-            </template>
           </b-table>
-          <button
-            :disabled="
-              selectedItems.length === 0 && unselectedItems.length === 0
-            "
-            @click="approveSelected"
-            class="btn btn-primary"
-          >
-            Approve
-          </button>
           <!-- pagination -->
           <b-row>
             <b-col
@@ -389,10 +198,6 @@
               >{{ rowcount }} data</b-col
             >
           </b-row>
-          <b-col class="text-left" align-self="center"
-            >NB : Jika Baris berwarna kuning, Silahkan dicek kembali no NPB,
-            atau data WB belum ketarik ke iPlant
-          </b-col>
         </div>
       </div>
     </section>
@@ -417,14 +222,8 @@ export default {
       unselectedItems: [],
       fields: [
         // { key: 'no', label: '' }, // No label as custom header is used
-        { key: 'check', label: '', sortable: false },
-        {
-          label: 'Actions',
-          key: 'actions',
-          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
-        },
-        { key: 'status', label: '' },
         { key: 'transaction_date', label: '', formatter: this.formatDate },
+        { key: 'department_code', label: '' },
         { key: 'supplier', label: '' },
         { key: 'driver', label: '' },
 
@@ -564,6 +363,8 @@ export default {
       estates: [],
       afdeling_id: [],
       afdelings: [],
+      pks_code: [],
+      pksList: [],
       posts: [], // Data for the table
       pagination: {}, // Pagination data
       rowcount: 0,
@@ -577,14 +378,6 @@ export default {
     }
   },
   watchQuery: ['q', 'page'],
-
-  watch: {
-    posts() {
-      this.$nextTick(() => {
-        this.addRowTooltips()
-      })
-    },
-  },
 
   // watch: {
   //   posts: {
@@ -616,9 +409,6 @@ export default {
 
   mounted() {
     this.loadData()
-    this.$nextTick(() => {
-      this.addRowTooltips()
-    })
   },
 
   methods: {
@@ -649,11 +439,14 @@ export default {
           department_code_plantation: query.department_code_plantation,
         }),
         ...(query.afdeling_code && { afdeling_code: query.afdeling_code }),
+        ...(query.department_id && { department_id: query.department_id }),
+
         ffb_source: 'external',
+        status: 'approved',
       }
 
       try {
-        const response = await this.$axios.$get('/api/admin/spot-cek', {
+        const response = await this.$axios.$get('/api/admin/report-spot-cek', {
           params,
         })
 
@@ -670,7 +463,11 @@ export default {
           `/api/admin/spot-cek-list-supplier`
         )
 
+        const list_pks = await this.$axios.$get(`/api/admin/get_pks_dropdown`)
+
         this.pts = list_pt.data
+
+        this.pksList = list_pks.data
 
         this.dateStart = dateStart
         this.dateEnd = dateEnd
@@ -680,36 +477,25 @@ export default {
               query.lifnr.split(',').includes(item.lifnr.toString())
             )
           : []
+        this.pks_code = query.department_id
+          ? this.pksList.filter((item) =>
+              query.department_id
+                .split(',')
+                .includes(item.department_id.toString())
+            )
+          : []
 
         this.showSickFruit = query.showSickFruit === 'true'
-
-        this.isLoadingDropdown = false
+        this.isLoadingDropdown = false // Set loading to false after data is fetched
       } catch (error) {
         console.error('Failed to load data:', error)
       }
-    },
-    addRowTooltips() {
-      this.$nextTick(() => {
-        const rows = document.querySelectorAll('.bg-yellow-row')
-        rows.forEach((td) => {
-          td.setAttribute('title', 'Silahkan dicek kembali no NPB')
-        })
-      })
     },
     getTonaseTooltip(item) {
       if (!item.tonase || item.tonase === 0) {
         return 'Tonase belum diisi atau bernilai nol'
       }
       return `Tonase: ${this.formatToThousand(item.tonase)} Kg`
-    },
-    rowClass(item) {
-      if (!item) return ''
-      console.log('rowClass called', item.tonase)
-
-      if (item.tonase == null || item.tonase == 0) {
-        return 'bg-yellow-row'
-      }
-      return ''
     },
     updateLooseFruitDebt(item) {
       const newValue = parseFloat(item.loose_fruit_debt)
@@ -783,21 +569,6 @@ export default {
     formatToZeroDecimals(value) {
       if (!value || value === null) return '0' // Return 0.00 for empty values
       return parseFloat(value).toFixed(0)
-    },
-    toggleSelectAll() {
-      this.posts.forEach((post) => {
-        post.selected = this.selectAll
-      })
-      this.handleSelectionChange()
-    },
-
-    handleSelectionChange() {
-      this.selectedItems = this.posts.filter(
-        (item) => item.selected && item.status !== 'approved'
-      )
-      this.unselectedItems = this.posts.filter(
-        (item) => !item.selected && item.status == 'approved'
-      )
     },
 
     approveSelected() {
@@ -940,7 +711,11 @@ export default {
           .map((afdeling) => afdeling.afdeling_code)
           .join(',')
       }
-
+      if (this.pks_code && this.pks_code.length > 0) {
+        query.department_id = this.pks_code
+          .map((pks) => pks.department_id)
+          .join(',')
+      }
       this.$router.push({ path: this.$route.path, query })
     },
 
@@ -966,6 +741,12 @@ export default {
           query.lifnr = this.pt_id.map((pt) => pt.lifnr).join(',')
         }
 
+        if (this.pks_code && this.pks_code.length > 0) {
+          query.department_id = this.pks_code
+            .map((pks) => pks.department_id)
+            .join(',')
+        }
+
         if (this.search) query.search = this.search
 
         query.page = this.pagination.current_page || 1
@@ -974,9 +755,10 @@ export default {
         this.$router.push({ path: this.$route.path, query })
 
         query.ffb_source = 'external'
+        query.status = 'approved'
 
         // Fetch the filtered data
-        const response = await this.$axios.$get('/api/admin/spot-cek', {
+        const response = await this.$axios.$get('/api/admin/report-spot-cek', {
           params: query,
         })
 
@@ -1010,11 +792,20 @@ export default {
             this.pt_id.map((pt) => pt.lifnr).join(',')
           )
         }
+        if (this.pks_code && this.pks_code.length > 0) {
+          queryParams.append(
+            'department_id',
+            this.pks_code.map((pks) => pks.department_id).join(',')
+          )
+        }
         if (this.search) queryParams.append('search', this.search)
+
+        queryParams.append('ffb_source', 'external')
+        queryParams.append('status', 'approved')
 
         // Perform the export request
         this.$axios({
-          url: `/api/admin/approve-sampling-grading-external-export?${queryParams.toString()}`,
+          url: `/api/admin/report-spot-cek-external-export?${queryParams.toString()}`,
           method: 'GET',
           responseType: 'blob', // Ensures the response is treated as a binary file
         })
@@ -1022,7 +813,7 @@ export default {
             const url = window.URL.createObjectURL(new Blob([response.data]))
             const link = document.createElement('a')
             link.href = url
-            const fileName = 'ApproveSamplingGradingExternal.xlsx' // You can customize the filename
+            const fileName = 'ReportSpotCekExternal.xlsx' // You can customize the filename
             link.setAttribute('download', fileName) // Set the file name
             document.body.appendChild(link)
             link.click()

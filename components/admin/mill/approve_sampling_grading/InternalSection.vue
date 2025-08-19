@@ -76,6 +76,7 @@
                         :searchable="true"
                         :multiple="true"
                         placeholder="Pilih PT"
+                        :loading="isLoadingDropdown"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -91,6 +92,7 @@
                         :searchable="true"
                         :multiple="true"
                         placeholder="Pilih Estate"
+                        :loading="isLoadingDropdown"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -106,6 +108,7 @@
                         :searchable="true"
                         :multiple="true"
                         placeholder="Pilih Afdeling"
+                        :loading="isLoadingDropdown"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -641,6 +644,7 @@ export default {
         icon: '',
       },
       show: 1,
+      isLoadingDropdown: true, // Loading state for dropdowns
     }
   },
   watchQuery: ['q', 'page'],
@@ -770,6 +774,7 @@ export default {
           : []
 
         this.showSickFruit = query.showSickFruit === 'true'
+        this.isLoadingDropdown = false // Set loading state to false after data is loaded
       } catch (error) {
         console.error('Failed to load data:', error)
       }

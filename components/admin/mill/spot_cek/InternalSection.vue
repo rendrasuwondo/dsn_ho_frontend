@@ -75,6 +75,7 @@
                         :searchable="true"
                         :multiple="true"
                         placeholder="Pilih PT"
+                        :loading="isLoadingDropdown"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -90,6 +91,7 @@
                         :searchable="true"
                         :multiple="true"
                         placeholder="Pilih Estate"
+                        :loading="isLoadingDropdown"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -105,6 +107,7 @@
                         :searchable="true"
                         :multiple="true"
                         placeholder="Pilih Afdeling"
+                        :loading="isLoadingDropdown"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -415,6 +418,7 @@ export default {
       pagination: {}, // Pagination data
       rowcount: 0,
       show: 1,
+      isLoadingDropdown: true, // Loading state for dropdowns
     }
   },
 
@@ -519,6 +523,7 @@ export default {
                 afdeling_code: code,
               }))
           : []
+        this.isLoadingDropdown = false // Set loading to false after data is fetched
       } catch (error) {
         console.error('Error fetching data:', error)
       }
