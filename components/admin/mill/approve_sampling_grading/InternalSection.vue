@@ -1013,7 +1013,7 @@ export default {
       return `${day}-${month}-${year}`
     },
 
-    changePage(page) {
+    async changePage(page) {
       const query = {
         page,
         dateStart: this.dateStart,
@@ -1037,6 +1037,8 @@ export default {
       }
 
       this.$router.push({ path: this.$route.path, query })
+      this.pagination.current_page = page
+      this.applyFilters() // Reapply filters with new page
     },
 
     //searchData
