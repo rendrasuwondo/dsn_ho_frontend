@@ -857,7 +857,7 @@ export default {
             }
 
             Promise.all(apiCalls)
-              .then((responses) => {
+              .then(async (responses) => {
                 const allSuccess = responses.every(
                   (response) => response.data.success
                 )
@@ -878,7 +878,9 @@ export default {
                   timer: 2000,
                 })
 
-                this.$nuxt.refresh()
+                this.show = 0
+                await this.loadData() // Reload data after approval
+                this.show = 1
               })
               .catch((error) => {
                 console.error('API Error:', error)
