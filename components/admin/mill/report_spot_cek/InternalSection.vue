@@ -42,6 +42,7 @@
                       ></b-form-datepicker>
                       <b-form-datepicker
                         v-model="dateEnd"
+                        dropup="false"
                         placeholder="Pilih tanggal akhir"
                         :date-format-options="{
                           year: 'numeric',

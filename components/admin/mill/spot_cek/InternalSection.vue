@@ -30,6 +30,7 @@
                     <b-col cols="9">
                       <b-form-datepicker
                         v-model="dateStart"
+                        dropup="false"
                         placeholder="Pilih tanggal awal"
                         class="mb-2"
                         :date-format-options="{
@@ -41,6 +42,7 @@
                       ></b-form-datepicker>
                       <b-form-datepicker
                         v-model="dateEnd"
+                        dropup="false"
                         placeholder="Pilih tanggal akhir"
                         :date-format-options="{
                           year: 'numeric',
