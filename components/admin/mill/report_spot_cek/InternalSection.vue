@@ -498,10 +498,13 @@ export default {
           ffb_source: 'internal',
         }
 
-        const posts = await this.$axios.$get('/api/admin/report-spot-cek', {
-          params,
-        })
-
+        let posts = { data: { data: [], total: 0 } } // default kosong
+        // ✅ Hanya ambil data kalau ada department_id
+        if (query.department_id) {
+          posts = await this.$axios.$get('/api/admin/report-spot-cek', {
+            params,
+          })
+        }
         const list_pt = await this.$axios.$get(`/api/admin/spot-cek-list-pt`)
         const list_estate = await this.$axios.$get(
           `/api/admin/spot-cek-list-estate`
@@ -598,7 +601,7 @@ export default {
       return `${day}-${month}-${year}`
     },
 
-    changePage(page) {
+    async changePage(page) {
       const query = {
         page,
         dateStart: this.dateStart,
@@ -626,7 +629,9 @@ export default {
           .join(',')
       }
 
-      this.$router.push({ path: this.$route.path, query })
+      this.$router.replace({ path: this.$route.path, query })
+      this.pagination.current_page = page
+      this.applyFilters() // Reapply filters with new page
     },
 
     //searchData
