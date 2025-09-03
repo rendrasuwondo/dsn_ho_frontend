@@ -31,7 +31,7 @@
                     <b-col cols="9">
                       <b-form-datepicker
                         v-model="dateStart"
-                        dropup="false"
+                        :dropup="false"
                         placeholder="Pilih tanggal awal"
                         class="mb-2"
                         :date-format-options="{
@@ -43,7 +43,7 @@
                       ></b-form-datepicker>
                       <b-form-datepicker
                         v-model="dateEnd"
-                        dropup="false"
+                        :dropup="false"
                         placeholder="Pilih tanggal akhir"
                         :date-format-options="{
                           year: 'numeric',
@@ -154,7 +154,7 @@
                 <th v-if="showSickFruit">%</th>
                 <th v-if="showSickFruit">Hard B.</th>
                 <th v-if="showSickFruit">%</th>
-                <th v-if="showSickFruit">Unripe Brd</th>
+                <th v-if="showSickFruit">Unripe Fruit Fall</th>
                 <th v-if="showSickFruit">%</th>
 
                 <th>SPB</th>
