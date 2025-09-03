@@ -426,134 +426,202 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         { key: 'status', label: '' },
-        { key: 'transaction_date', label: '', formatter: this.formatDate },
+        {
+          key: 'transaction_date',
+          label: '',
+          formatter: this.formatDate,
+          tdClass: 'tanggal-col',
+        },
         { key: 'supplier', label: '' },
         { key: 'driver', label: '' },
 
-        { key: 'qty_npb', label: '', formatter: this.formatToZeroDecimals },
-        { key: 'total_qty', label: '', formatter: this.formatToZeroDecimals },
-        { key: 'var_qty', label: '', formatter: this.formatToZeroDecimals },
-        { key: 'percentage_qty', label: '', formatter: this.formatToThousand },
+        {
+          key: 'qty_npb',
+          label: '',
+          formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
+        },
+        {
+          key: 'total_qty',
+          label: '',
+          formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
+        },
+        {
+          key: 'var_qty',
+          label: '',
+          formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
+        },
+        {
+          key: 'percentage_qty',
+          label: '',
+          formatter: this.formatToThousand,
+          tdClass: 'text-right',
+        },
 
-        { key: 'bjr', label: '', formatter: this.formatToTwoDecimals },
+        {
+          key: 'bjr',
+          label: '',
+          formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
+        },
 
-        { key: 'qty_unripe', label: '', formatter: this.formatToZeroDecimals },
+        {
+          key: 'qty_unripe',
+          label: '',
+          formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
+        },
         {
           key: 'percentage_unripe',
           label: '',
           formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'qty_underripe',
           label: '',
           formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'percentage_underripe',
           label: '',
           formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
-        { key: 'qty_ripe', label: '', formatter: this.formatToZeroDecimals },
+        {
+          key: 'qty_ripe',
+          label: '',
+          formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
+        },
         {
           key: 'percentage_ripe',
           label: '',
           formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'qty_overripe',
           label: '',
           formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'percentage_overripe',
           label: '',
           formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'qty_empty_bunch',
           label: '',
           formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'percentage_empty_bunch',
           label: '',
           formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
 
         {
           key: 'qty_parthenocarpy',
           label: '',
           formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'percentage_parthenocarpy',
           label: '',
           formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'qty_hard_bunch',
           label: '',
           formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'percentage_hard_bunch',
           label: '',
           formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'qty_unripe_fruit_fall',
           label: '',
           formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'percentage_unripe_fruit_fall',
           label: '',
           formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
 
         {
           key: 'qty_long_stalk',
           label: '',
           formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
 
-        { key: 'loose_fruit_npb', label: '', formatter: this.formatToThousand },
-        { key: 'loose_fruit', label: '', formatter: this.formatToThousand },
+        {
+          key: 'loose_fruit_npb',
+          label: '',
+          formatter: this.formatToThousand,
+          tdClass: 'text-right',
+        },
+        {
+          key: 'loose_fruit',
+          label: '',
+          formatter: this.formatToThousand,
+          tdClass: 'text-right',
+        },
         {
           key: 'percentage_fruit',
           label: '',
           formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'var_loose_fruit',
           label: '',
           formatter: this.formatToZeroDecimals,
+          tdClass: 'text-right',
         },
         {
           key: 'var_loose_fruit_percentage',
           label: '',
           formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
 
         // {
         //   key: 'loose_fruit_debt_expectation',
         //   label: '',
         //   formatter: this.formatToZeroDecimals,
-        // },
+        // tdClass: 'text-right',},
 
         // {
         //   key: 'loose_fruit_debt',
         //   label: '',
         //   formatter: this.formatToZeroDecimals,
-        // },
+        // tdClass: 'text-right',},
         // {
         //   key: 'percentage_fruit_after',
         //   label: '',
         //   formatter: this.formatToTwoDecimals,
-        // },
+        // tdClass: 'text-right',},
 
-        // { key: 'qty_abnormal', label: '' },
-        // { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  },
+        // { key: 'qty_abnormal', label: '' tdClass: 'text-right',},
+        // { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  tdClass: 'text-right',},
 
         { key: 'npb', label: '' },
       ],
@@ -1114,31 +1182,7 @@ export default {
 .b-table thead tr:nth-child(3) {
   display: none;
 }
-.b-table td:nth-child(7),
-    .b-table td:nth-child(9),
-    .b-table td:nth-child(10),
-    .b-table td:nth-child(11),
-    .b-table td:nth-child(12),
-    .b-table td:nth-child(13),
-    .b-table td:nth-child(14),
-    .b-table td:nth-child(15),
-    .b-table td:nth-child(16),
-    .b-table td:nth-child(17),
-    .b-table td:nth-child(18),
-    .b-table td:nth-child(19),
-    .b-table td:nth-child(20),
-    .b-table td:nth-child(21),
-    .b-table td:nth-child(22),
-    .b-table td:nth-child(23),
-    .b-table td:nth-child(24),
-    .b-table td:nth-child(25),
-    .b-table td:nth-child(26),
-    /* .b-table td:nth-child(27), */
-    .b-table td:nth-child(28),
-    .b-table td:nth-child(29),
-    .b-table td:nth-child(30) {
-  text-align: end;
-}
+
 .bg-yellow-row {
   background-color: yellow !important; /* Bootstrap warning background */
 }
