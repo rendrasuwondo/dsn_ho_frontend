@@ -30,7 +30,7 @@
                     <b-col cols="9">
                       <b-form-datepicker
                         v-model="dateStart"
-                        :dropup="false"
+                        dropup="false"
                         placeholder="Pilih tanggal awal"
                         class="mb-2"
                         :date-format-options="{
