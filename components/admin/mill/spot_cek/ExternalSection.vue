@@ -73,6 +73,16 @@
                       ></multiselect>
                     </b-col>
                   </b-row>
+                  <b-row class="mt-3">
+                    <b-col cols="3">No. NPB</b-col>
+                    <b-col cols="9">
+                      <b-form-input
+                        v-model="no_npb"
+                        placeholder="Masukkan No. NPB"
+                        class="mb-2"
+                      ></b-form-input>
+                    </b-col>
+                  </b-row>
                 </b-col>
               </b-row>
 
@@ -426,6 +436,7 @@ export default {
       },
       show: 1,
       isLoadingDropdown: true, // Loading state for dropdowns
+      no_npb: '',
     }
   },
   watchQuery: ['q', 'page'],
@@ -751,6 +762,8 @@ export default {
           .join(',')
       }
 
+      if (this.no_npb) query.no_npb = this.no_npb
+
       this.$router.push({ path: this.$route.path, query })
       this.pagination.current_page = page
       this.applyFilters() // Reapply filters with new page
@@ -777,7 +790,7 @@ export default {
         if (this.pt_id && this.pt_id.length > 0) {
           query.lifnr = this.pt_id.map((pt) => pt.lifnr).join(',')
         }
-
+        if (this.no_npb) query.no_npb = this.no_npb
         if (this.search) query.search = this.search
 
         query.page = this.pagination.current_page || 1
@@ -824,6 +837,7 @@ export default {
           )
         }
         if (this.search) queryParams.append('search', this.search)
+        if (this.no_npb) queryParams.append('no_npb', this.no_npb)
 
         queryParams.append('ffb_source', 'external')
         queryParams.append('status', 'approved')

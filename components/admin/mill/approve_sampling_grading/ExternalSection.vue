@@ -73,6 +73,17 @@
                       ></multiselect>
                     </b-col>
                   </b-row>
+                  <!-- Tambahan filter No. NPB -->
+                  <b-row class="mt-3">
+                    <b-col cols="3">No. NPB</b-col>
+                    <b-col cols="9">
+                      <b-form-input
+                        v-model="no_npb"
+                        placeholder="Masukkan No. NPB"
+                        class="mb-2"
+                      ></b-form-input>
+                    </b-col>
+                  </b-row>
                 </b-col>
               </b-row>
 
@@ -644,6 +655,7 @@ export default {
       },
       show: 1,
       isLoadingDropdown: true, // Loading state for dropdowns
+      no_npb: '',
     }
   },
   watchQuery: ['q', 'page'],
@@ -1012,6 +1024,7 @@ export default {
           .map((afdeling) => afdeling.afdeling_code)
           .join(',')
       }
+      if (this.no_npb) query.no_npb = this.no_npb
 
       this.$router.push({ path: this.$route.path, query })
       this.pagination.current_page = page
@@ -1039,6 +1052,7 @@ export default {
         if (this.pt_id && this.pt_id.length > 0) {
           query.lifnr = this.pt_id.map((pt) => pt.lifnr).join(',')
         }
+        if (this.no_npb) query.no_npb = this.no_npb
 
         if (this.search) query.search = this.search
 
@@ -1078,6 +1092,7 @@ export default {
         // Add filters dynamically if they exist
         if (this.dateStart) queryParams.append('dateStart', this.dateStart)
         if (this.dateEnd) queryParams.append('dateEnd', this.dateEnd)
+        if (this.no_npb) queryParams.append('no_npb', this.no_npb)
         if (this.pt_id && this.pt_id.length > 0) {
           queryParams.append(
             'lifnr',

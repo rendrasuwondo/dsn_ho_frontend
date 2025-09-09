@@ -129,6 +129,18 @@
                       ></multiselect>
                     </b-col>
                   </b-row>
+
+                  <!-- Tambahan filter No. NPB -->
+                  <b-row class="mt-3">
+                    <b-col cols="3">No. NPB</b-col>
+                    <b-col cols="9">
+                      <b-form-input
+                        v-model="no_npb"
+                        placeholder="Masukkan No. NPB"
+                        class="mb-2"
+                      ></b-form-input>
+                    </b-col>
+                  </b-row>
                 </b-col>
               </b-row>
 
@@ -535,6 +547,7 @@ export default {
       rowcount: 0,
       show: 1,
       isLoadingDropdown: true, // Loading state for dropdowns
+      no_npb: '',
     }
   },
 
@@ -724,7 +737,7 @@ export default {
           .map((pks) => pks.department_id)
           .join(',')
       }
-
+      if (this.no_npb) query.no_npb = this.no_npb
       this.$router.replace({ path: this.$route.path, query })
       this.pagination.current_page = page
       this.applyFilters() // Reapply filters with new page
@@ -770,7 +783,7 @@ export default {
             .join(',')
         }
         if (this.search) query.search = this.search
-
+        if (this.no_npb) query.no_npb = this.no_npb
         query.page = this.pagination.current_page || 1
 
         // Update the URL query dynamically
@@ -830,8 +843,8 @@ export default {
           )
         }
         if (this.search) queryParams.append('search', this.search)
+        if (this.no_npb) queryParams.append('no_npb', this.no_npb)
         queryParams.append('status', 'approved')
-
         // Perform the export request
         this.$axios({
           url: `/api/admin/report-spot-cek-export?${queryParams.toString()}`,
