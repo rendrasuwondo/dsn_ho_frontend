@@ -1,15 +1,20 @@
 <template>
   <div class="content-wrapper mb-5">
-    <div class="mt-5 mx-2">
-      <b-tabs content-class="mt-4 " fill>
-        <b-tab title="Internal" lazy active>
-          <InternalSection />
-        </b-tab>
-        <b-tab title="External" lazy>
-          <ExternalSection />
-        </b-tab>
-      </b-tabs>
-    </div>
+    <section class="content-header">
+      <div class="container-fluid"></div>
+    </section>
+    <section class="content">
+      <div class="mt-5 mx-2">
+        <b-tabs content-class="mt-4 " fill>
+          <b-tab title="Internal" lazy active>
+            <InternalSection />
+          </b-tab>
+          <b-tab title="External" lazy>
+            <ExternalSection />
+          </b-tab>
+        </b-tabs>
+      </div>
+    </section>
   </div>
 </template>
 
