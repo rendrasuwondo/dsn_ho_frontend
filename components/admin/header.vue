@@ -117,6 +117,11 @@ export default {
         name: 'erp_ho-login',
       })
     },
+    toggleSidebar() {
+      document
+        .querySelector('.hold-transition')
+        .classList.toggle('sidebar-collapse')
+    },
   },
 }
 </script>
