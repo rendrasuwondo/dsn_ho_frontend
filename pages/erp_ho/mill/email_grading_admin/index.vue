@@ -275,7 +275,7 @@ export default {
         { key: 'name', label: 'Employee', sortable: false },
         { key: 'department_code', label: 'PKS' },
         { key: 'department_code_employee', label: 'Department' },
-        { key: 'location', label: 'Location', tdClass: 'text-center' },
+        // { key: 'location', label: 'Location', tdClass: 'text-center' },
         { key: 'description', label: 'Description' },
         { key: 'is_active', label: 'Status', tdClass: 'text-center' },
         {

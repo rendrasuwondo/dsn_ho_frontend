@@ -178,14 +178,14 @@
           <input type="hidden" v-model="form.employee_id" required />
         </b-form-group>
 
-        <b-form-group label="Location" label-for="location-input">
+        <!-- <b-form-group label="Location" label-for="location-input">
           <b-form-input
             id="location-input"
             v-model="form.location"
             disabled
             required
           ></b-form-input>
-        </b-form-group>
+        </b-form-group> -->
 
         <b-form-group label="Description" label-for="desc-input">
           <b-form-textarea
@@ -244,7 +244,7 @@ export default {
         },
         { key: 'name', label: 'Employee', sortable: false },
         { key: 'department_code_employee', label: 'Department' },
-        { key: 'location', label: 'Location', tdClass: 'text-center' },
+        // { key: 'location', label: 'Location', tdClass: 'text-center' },
         { key: 'description', label: 'Description' },
         { key: 'is_active', label: 'Status', tdClass: 'text-center' },
         {
