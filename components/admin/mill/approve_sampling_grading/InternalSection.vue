@@ -1324,7 +1324,10 @@ export default {
       this.$swal
         .fire({
           title: 'KIRIM EMAIL LAPORAN?',
-          text: 'Laporan akan dikirim ke penerima sesuai filter data saat ini.',
+          text: `Laporan akan dikirim ke penerima per tanggal ${new Date().toLocaleDateString(
+            'id-ID',
+            { day: '2-digit', month: 'long', year: 'numeric' }
+          )}.`,
           icon: 'question',
           showCancelButton: true,
           confirmButtonColor: '#28a745',
