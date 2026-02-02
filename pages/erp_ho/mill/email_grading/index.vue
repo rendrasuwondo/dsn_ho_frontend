@@ -62,11 +62,11 @@
             <template #cell(employee)="data">
               <div>
                 <strong>{{
-                  data.item.employee ? data.item.employee.name : '-'
+                  data.item.employee ? data.item.name : '-'
                 }}</strong
                 ><br />
                 <small class="text-muted">{{
-                  data.item.employee ? data.item.employee.email : '-'
+                  data.item.employee ? data.item.email : '-'
                 }}</small>
               </div>
             </template>
@@ -231,7 +231,7 @@ export default {
         location: 'SITE',
         is_active: 'Y',
         description: '',
-        department_id: null,
+        department_id: this.$auth.user.employee.department_id,
       },
 
       fields: [
@@ -242,8 +242,8 @@ export default {
           tdClass: 'text-center',
           width: '50px',
         },
-        { key: 'employee', label: 'Employee', sortable: false },
-        { key: 'department.name', label: 'Department' },
+        { key: 'name', label: 'Employee', sortable: false },
+        { key: 'department_code_employee', label: 'Department' },
         { key: 'location', label: 'Location', tdClass: 'text-center' },
         { key: 'description', label: 'Description' },
         { key: 'is_active', label: 'Status', tdClass: 'text-center' },
@@ -266,39 +266,53 @@ export default {
       if (newVal) {
         this.form.employee_id = newVal.id
         // Pastikan department_id diambil, jika tidak ada di objek employee, set null
-        this.form.department_id = newVal.department_id || null
+        // this.form.department_id = newVal.department_id || null
       } else {
         this.form.employee_id = null
-        this.form.department_id = null
+        // this.form.department_id = null
       }
     },
   },
 
-  async asyncData({ $axios, query }) {
-    let page = query.page ? parseInt(query.page) : 1
-    let search = query.q ? query.q : ''
-
-    try {
-      const response = await $axios.$get(
-        `/api/admin/email-grading?q=${search}&page=${page}&per_page=10`
-      )
-      return {
-        posts: response.data.data,
-        pagination: response.data,
-        search: search,
-        rowcount: response.data.total,
-      }
-    } catch (e) {
-      console.error(e)
-      return { posts: [], rowcount: 0 }
-    }
-  },
-
   mounted() {
+    this.fetchData()
     this.fetchEmployees()
   },
 
   methods: {
+    async fetchData() {
+      this.isTableLoading = true
+
+      // Ambil parameter dari URL browser ($route.query)
+      let page = this.$route.query.page ? parseInt(this.$route.query.page) : 1
+      let search = this.$route.query.q ? this.$route.query.q : ''
+
+      // Sync local variable (opsional, biar input search tetap terisi saat refresh)
+      this.search = search
+
+      try {
+        const response = await this.$axios.$get(
+          `/api/admin/email-grading?q=${search}&page=${page}&per_page=10`
+        )
+
+        console.log('DEBUG API RESPONSE:', response) // Cek Console Browser
+
+        this.posts = response.data.data
+        this.pagination = response.data
+        this.rowcount = response.data.total
+      } catch (e) {
+        console.error('DEBUG API ERROR:', e) // Cek Console Browser (Merah)
+        console.log('Detail Error:', e.response) // Cek response error detail
+
+        this.posts = []
+        this.rowcount = 0
+
+        // Opsional: Tampilkan alert jika error
+        this.$swal.fire('Error', 'Gagal mengambil data tabel', 'error')
+      } finally {
+        this.isTableLoading = false
+      }
+    },
     async fetchEmployees() {
       try {
         const response = await this.$axios.$get(
@@ -384,7 +398,7 @@ export default {
 
       // Fallback department ID jika belum terisi
       if (!payload.department_id && this.selectedEmployeeObj) {
-        payload.department_id = this.selectedEmployeeObj.department_id || 1
+        payload.department_id = this.$auth.user.employee.department_id
       }
 
       try {

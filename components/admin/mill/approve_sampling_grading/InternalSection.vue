@@ -144,8 +144,7 @@
                 <p class="mb-0">
                   <i class="fa fa-info-circle mr-1"></i>
                   Klik tombol di samping untuk mengirim laporan grading ke
-                  daftar email berdasarkan filter (Tanggal, PT, Estate,
-                  Afdeling) yang dipilih di atas.
+                  daftar email.
                 </p>
               </b-col>
               <b-col md="4" class="text-right">

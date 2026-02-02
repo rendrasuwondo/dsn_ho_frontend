@@ -61,12 +61,10 @@
 
             <template #cell(employee)="data">
               <div>
-                <strong>{{
-                  data.item.employee ? data.item.employee.name : '-'
-                }}</strong
+                <strong>{{ data.item.employee ? data.item.name : '-' }}</strong
                 ><br />
                 <small class="text-muted">{{
-                  data.item.employee ? data.item.employee.email : '-'
+                  data.item.employee ? data.item.email : '-'
                 }}</small>
               </div>
             </template>
@@ -143,6 +141,24 @@
       cancel-title="Batal"
     >
       <form ref="form" @submit.stop.prevent="submitForm">
+        <b-form-group label="PKS" label-for="department-input">
+          <multiselect
+            id="department-input"
+            v-model="selectedDepartmentObj"
+            :options="departmentOptions"
+            :loading="isLoadingDepartment"
+            :searchable="true"
+            :clear-on-select="false"
+            :close-on-select="true"
+            placeholder="Pilih Department..."
+            track-by="id"
+            label="code"
+            @input="onDepartmentChange"
+            @search-change="asyncFindDepartment"
+          >
+            <template slot="noResult">Data tidak ditemukan</template>
+          </multiselect>
+        </b-form-group>
         <b-form-group label="Employee" label-for="employee-input">
           <multiselect
             id="employee-input"
@@ -178,7 +194,7 @@
           <input type="hidden" v-model="form.employee_id" required />
         </b-form-group>
 
-        <b-form-group label="Location" label-for="location-input">
+        <!-- <b-form-group label="Location" label-for="location-input">
           <b-form-select
             id="location-input"
             v-model="form.location"
@@ -191,7 +207,7 @@
               >
             </template>
           </b-form-select>
-        </b-form-group>
+        </b-form-group> -->
 
         <b-form-group label="Description" label-for="desc-input">
           <b-form-textarea
@@ -231,10 +247,18 @@ export default {
       selectedEmployeeObj: null,
       employeeOptions: [],
       isLoadingEmployee: false,
+
+      // Department Data
+      selectedDepartmentObj: null,
+      departmentOptions: [],
+      isLoadingDepartment: false,
+
       searchTimer: null,
+      searchTimerDepartment: null,
+
       form: {
         employee_id: null,
-        location: null,
+        location: 'admin',
         is_active: 'Y',
         description: '',
         department_id: null,
@@ -248,8 +272,9 @@ export default {
           tdClass: 'text-center',
           width: '50px',
         },
-        { key: 'employee', label: 'Employee', sortable: false },
-        { key: 'department.name', label: 'Department' },
+        { key: 'name', label: 'Employee', sortable: false },
+        { key: 'department_code', label: 'PKS' },
+        { key: 'department_code_employee', label: 'Department' },
         { key: 'location', label: 'Location', tdClass: 'text-center' },
         { key: 'description', label: 'Description' },
         { key: 'is_active', label: 'Status', tdClass: 'text-center' },
@@ -267,44 +292,86 @@ export default {
   watchQuery: ['q', 'page'],
 
   watch: {
+    // Update form.department_id saat selectedDepartmentObj berubah
+    selectedDepartmentObj(newVal) {
+      if (newVal) {
+        this.form.department_id = newVal.id
+      } else {
+        this.form.department_id = null
+      }
+    },
     // Watcher ini akan otomatis mengisi form.employee_id saat selectedEmployeeObj berubah
     selectedEmployeeObj(newVal) {
       if (newVal) {
         this.form.employee_id = newVal.id
-        // Pastikan department_id diambil, jika tidak ada di objek employee, set null
-        this.form.department_id = newVal.department_id || null
       } else {
         this.form.employee_id = null
-        this.form.department_id = null
       }
     },
   },
 
-  async asyncData({ $axios, query }) {
-    let page = query.page ? parseInt(query.page) : 1
-    let search = query.q ? query.q : ''
-
-    try {
-      const response = await $axios.$get(
-        `/api/admin/email-grading?q=${search}&page=${page}&per_page=10&is_admin=1`
-      )
-      return {
-        posts: response.data.data,
-        pagination: response.data,
-        search: search,
-        rowcount: response.data.total,
-      }
-    } catch (e) {
-      console.error(e)
-      return { posts: [], rowcount: 0 }
-    }
-  },
-
   mounted() {
+    this.fetchData()
     this.fetchEmployees()
+    this.fetchDepartments()
   },
 
   methods: {
+    async fetchData() {
+      this.isTableLoading = true
+
+      // Ambil parameter dari URL browser ($route.query)
+      let page = this.$route.query.page ? parseInt(this.$route.query.page) : 1
+      let search = this.$route.query.q ? this.$route.query.q : ''
+
+      // Sync local variable (opsional, biar input search tetap terisi saat refresh)
+      this.search = search
+
+      try {
+        const response = await this.$axios.$get(
+          `/api/admin/email-grading?q=${search}&page=${page}&per_page=10&is_admin=1`
+        )
+
+        console.log('DEBUG API RESPONSE:', response) // Cek Console Browser
+
+        this.posts = response.data.data
+        this.pagination = response.data
+        this.rowcount = response.data.total
+      } catch (e) {
+        console.error('DEBUG API ERROR:', e) // Cek Console Browser (Merah)
+        console.log('Detail Error:', e.response) // Cek response error detail
+
+        this.posts = []
+        this.rowcount = 0
+
+        // Opsional: Tampilkan alert jika error
+        this.$swal.fire('Error', 'Gagal mengambil data tabel', 'error')
+      } finally {
+        this.isTableLoading = false
+      }
+    },
+    async fetchDepartments() {
+      this.isLoadingDepartment = true
+      try {
+        // Menggunakan endpoint departmentOptions seperti request
+        const response = await this.$axios.$get(
+          '/api/admin/email-grading-department-options'
+        )
+        this.departmentOptions = response.data
+      } catch (error) {
+        console.error('Gagal load department', error)
+      } finally {
+        this.isLoadingDepartment = false
+      }
+    },
+    onDepartmentChange(newVal) {
+      // Reset employee jika department berubah agar user memilih ulang employee yang sesuai department tsb
+      this.selectedEmployeeObj = null
+      this.employeeOptions = []
+
+      // Jika Anda ingin langsung load employee by department, bisa panggil asyncFind disini
+      // this.asyncFind('', newVal ? newVal.id : null)
+    },
     async fetchEmployees() {
       try {
         const response = await this.$axios.$get(
@@ -343,7 +410,7 @@ export default {
       this.selectedEmployeeObj = null // Reset Multiselect
       this.form = {
         employee_id: null,
-        location: null,
+        location: 'admin',
         is_active: 'Y',
         description: '',
         department_id: null,
@@ -376,6 +443,18 @@ export default {
           department_id: item.department_id, // Pastikan ini ada agar tidak hilang
         }
       }
+      // Set object Department untuk Multiselect (Menggunakan data dari item/relation)
+      if (item.department) {
+        this.selectedDepartmentObj = {
+          id: item.department.id,
+          name: item.department.name, // Pastikan field ini sesuai response API
+          code: item.department.code, // Opsional
+        }
+      } else {
+        // Jika tidak ada relasi, coba cari dari options yang sudah di load
+        this.selectedDepartmentObj =
+          this.departmentOptions.find((d) => d.id == item.department_id) || null
+      }
 
       this.$bvModal.show('modal-form')
     },
@@ -383,6 +462,11 @@ export default {
     // 3. MODIFIED: Submit Form menangani Add (POST) dan Edit (PUT)
     async submitForm(bvModalEvent) {
       bvModalEvent.preventDefault()
+
+      if (!this.form.department_id) {
+        this.$swal.fire('Error', 'Pilih Department terlebih dahulu', 'error')
+        return
+      }
 
       if (!this.form.employee_id) {
         this.$swal.fire('Error', 'Pilih Employee terlebih dahulu', 'error')
@@ -408,6 +492,7 @@ export default {
           // LOGIKA TAMBAH (POST)
           await this.$axios.post('/api/admin/email-grading', payload)
           this.$swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
+          await this.fetchData()
         }
 
         this.$bvModal.hide('modal-form')
@@ -442,13 +527,14 @@ export default {
               .put(`/api/admin/email-grading/${id}`, {
                 is_active: newStatus,
               })
-              .then((response) => {
+              .then(async (response) => {
                 this.$nuxt.refresh()
                 this.$swal.fire(
                   'BERHASIL',
                   'Status berhasil diperbarui',
                   'success'
                 )
+                await this.fetchData()
               })
               .catch((error) => {
                 this.$swal.fire('GAGAL!', 'Gagal memperbarui status', 'error')
@@ -476,6 +562,7 @@ export default {
               .then((response) => {
                 this.$nuxt.refresh()
                 this.$swal.fire('BERHASIL!', 'Data Berhasil Dihapus', 'success')
+                this.fetchData()
               })
               .catch((error) => {
                 this.$swal.fire('GAGAL!', 'Terjadi kesalahan', 'error')
@@ -500,6 +587,25 @@ export default {
           .catch((error) => {
             console.error(error)
             this.isLoadingEmployee = false
+          })
+      }, 500)
+    },
+    asyncFindDepartment(query) {
+      this.isLoadingDepartment = true
+      if (this.searchTimerDepartment) clearTimeout(this.searchTimerDepartment)
+
+      this.searchTimerDepartment = setTimeout(() => {
+        this.$axios
+          .$get('/api/admin/email-grading-department-options', {
+            params: { q: query, is_admin: 1 },
+          })
+          .then((response) => {
+            this.departmentOptions = response.data
+            this.isLoadingDepartment = false
+          })
+          .catch((error) => {
+            console.error(error)
+            this.isLoadingDepartment = false
           })
       }, 500)
     },
