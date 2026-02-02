@@ -132,6 +132,33 @@
             </b-card-text>
           </b-card>
 
+          <b-card
+            border-variant="success"
+            header="Kirim Laporan via Email"
+            header-bg-variant="success"
+            header-text-variant="white"
+            class="mt-3 mb-4"
+          >
+            <b-row align-v="center">
+              <b-col md="8">
+                <p class="mb-0">
+                  <i class="fa fa-info-circle mr-1"></i>
+                  Klik tombol di samping untuk mengirim laporan grading ke
+                  daftar email.
+                </p>
+              </b-col>
+              <b-col md="4" class="text-right">
+                <b-button
+                  variant="success"
+                  @click="confirmSendEmail"
+                  :disabled="show === 0"
+                >
+                  <i class="fa fa-paper-plane mr-1"></i> Kirim Email
+                </b-button>
+              </b-col>
+            </b-row>
+          </b-card>
+
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -1292,6 +1319,92 @@ export default {
             })
           }
         })
+    },
+    confirmSendEmail() {
+      this.$swal
+        .fire({
+          title: 'KIRIM EMAIL LAPORAN?',
+          text: 'Laporan akan dikirim ke penerima sesuai filter data saat ini.',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#28a745',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'YA, KIRIM!',
+          cancelButtonText: 'BATAL',
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.sendEmail()
+          }
+        })
+    },
+    sendEmail() {
+      try {
+        this.show = 0 // Show loading
+
+        // 1. Susun Payload (Object) alih-alih URLSearchParams
+        const payload = {}
+
+        if (this.dateStart) payload.dateStart = this.dateStart
+        if (this.dateEnd) payload.dateEnd = this.dateEnd
+
+        // Kirim sebagai string comma-separated (sesuai logic backend explode)
+        if (this.pt_id && this.pt_id.length > 0) {
+          payload.company_code_plantation = this.pt_id
+            .map((pt) => pt.company_code_plantation)
+            .join(',')
+        }
+
+        if (this.estate_id && this.estate_id.length > 0) {
+          payload.department_code_plantation = this.estate_id
+            .map((estate) => estate.department_code_plantation)
+            .join(',')
+        }
+
+        if (this.afdeling_id && this.afdeling_id.length > 0) {
+          payload.afdeling_code = this.afdeling_id
+            .map((afdeling) => afdeling.afdeling_code)
+            .join(',')
+        }
+
+        if (this.search) payload.search = this.search
+
+        payload.ffb_source = 'internal'
+
+        // 2. Request ke API menggunakan POST
+        // Parameter kedua axios.post adalah BODY data
+        this.$axios
+          .post('/api/admin/email-grading-send', payload)
+          .then((response) => {
+            this.show = 1
+            this.$swal.fire({
+              title: 'BERHASIL!',
+              text: response.data.message || 'Email berhasil dikirim.',
+              icon: 'success',
+              timer: 3000,
+              showConfirmButton: false,
+            })
+          })
+          .catch((error) => {
+            this.show = 1
+            console.error('Error sending email:', error)
+
+            let msg =
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : 'Terjadi kesalahan saat mengirim email.'
+
+            this.$swal.fire({
+              title: 'GAGAL!',
+              text: msg,
+              icon: 'error',
+            })
+          })
+      } catch (error) {
+        console.error('Error constructing email payload:', error)
+        this.show = 1
+        this.$swal.fire('Error', 'Terjadi kesalahan sistem', 'error')
+      }
     },
   },
 }
