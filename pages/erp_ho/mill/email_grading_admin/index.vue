@@ -177,15 +177,21 @@
             <template slot="option" slot-scope="props">
               <div class="option__desc">
                 <span class="option__title"
-                  ><strong>{{ props.option.name }}</strong></span
-                >
-                <span class="option__small text-muted">
-                  ({{ props.option.nik }})</span
+                  ><strong>{{
+                    `${props.option.name} (${props.option.nik})`
+                  }}</strong></span
                 >
                 <br />
-                <small v-if="props.option.email" class="text-info">{{
-                  props.option.email
-                }}</small>
+                <span>
+                  <strong>{{ props.option.department_code }}</strong>
+                </span>
+                <br />
+                <small
+                  v-if="props.option.email"
+                  class="text-info"
+                  style="font-size: 12px; color: white"
+                  >{{ props.option.email }}</small
+                >
               </div>
             </template>
 
@@ -353,24 +359,20 @@ export default {
     async fetchDepartments() {
       this.isLoadingDepartment = true
       try {
-        // Menggunakan endpoint departmentOptions seperti request
         const response = await this.$axios.$get(
           '/api/admin/email-grading-department-options'
         )
-        this.departmentOptions = response.data
+        // Gunakan || [] untuk mencegah error jika response null
+        this.departmentOptions = response.data || []
       } catch (error) {
         console.error('Gagal load department', error)
+        this.departmentOptions = []
       } finally {
         this.isLoadingDepartment = false
       }
     },
     onDepartmentChange(newVal) {
-      // Reset employee jika department berubah agar user memilih ulang employee yang sesuai department tsb
-      this.selectedEmployeeObj = null
-      this.employeeOptions = []
-
-      // Jika Anda ingin langsung load employee by department, bisa panggil asyncFind disini
-      // this.asyncFind('', newVal ? newVal.id : null)
+      // Reset selected employee saat department berubah
     },
     async fetchEmployees() {
       try {
@@ -404,10 +406,13 @@ export default {
     },
 
     // 1. MODIFIED: showModalAdd untuk Reset State
-    showModalAdd() {
+    async showModalAdd() {
+      this.fetchEmployees()
+      this.fetchDepartments()
       this.editMode = false // Set mode Tambah
       this.selectedId = null
       this.selectedEmployeeObj = null // Reset Multiselect
+      this.selectedDepartmentObj = null
       this.form = {
         employee_id: null,
         location: 'admin',
@@ -420,10 +425,9 @@ export default {
 
     // 2. NEW: Method untuk Menampilkan Modal Edit
     showModalEdit(item) {
-      this.editMode = true // Set mode Edit
+      this.editMode = true
       this.selectedId = item.id
 
-      // Isi form dengan data yang ada
       this.form = {
         employee_id: item.employee_id,
         location: item.location,
@@ -432,29 +436,46 @@ export default {
         department_id: item.department_id,
       }
 
-      // PENTING: Set object employee untuk Multiselect
-      // Kita ambil data employee dari item row tabel
-      if (item.employee) {
-        this.selectedEmployeeObj = {
-          id: item.employee.id,
-          name: item.employee.name,
-          nik: item.employee.nik,
-          email: item.employee.email,
-          department_id: item.department_id, // Pastikan ini ada agar tidak hilang
-        }
+      // 1. SETUP EMPLOYEE
+      let empObj = null
+
+      empObj = {
+        id: item.employee_id,
+        name: item.name,
+        nik: item.nik || '-',
+        email: item.email,
+        department_code: item.department_code_employee,
       }
-      // Set object Department untuk Multiselect (Menggunakan data dari item/relation)
-      if (item.department) {
-        this.selectedDepartmentObj = {
-          id: item.department.id,
-          name: item.department.name, // Pastikan field ini sesuai response API
-          code: item.department.code, // Opsional
-        }
-      } else {
-        // Jika tidak ada relasi, coba cari dari options yang sudah di load
-        this.selectedDepartmentObj =
-          this.departmentOptions.find((d) => d.id == item.department_id) || null
+
+      if (empObj) {
+        empObj.name_info = `${empObj.name} - ${empObj.department_code_employee} - ${empObj.nik}`
+
+        this.employeeOptions = [empObj]
+
+        this.selectedEmployeeObj = empObj
       }
+
+      // 2. SETUP DEPARTMENT (Perbaikan Utama)
+      let deptObj = null
+
+      // Cek apakah department sudah ada di dalam list options yang terload dari API
+      if (
+        Array.isArray(this.departmentOptions) &&
+        this.departmentOptions.length > 0
+      ) {
+        deptObj = this.departmentOptions.find((d) => d.id == item.department_id)
+      }
+
+      if (item.department_id) {
+        deptObj = {
+          id: item.department_id,
+          code: item.department_code || 'Unknown Dept',
+          name: item.department_name || '',
+        }
+        this.departmentOptions.push(deptObj)
+      }
+
+      this.selectedDepartmentObj = deptObj
 
       this.$bvModal.show('modal-form')
     },
@@ -628,5 +649,19 @@ export default {
 .multiselect__placeholder {
   margin-bottom: 0;
   padding-top: 2px;
+}
+
+/* --- TAMBAHKAN INI --- */
+
+/* Memaksa teks menjadi putih saat item di-hover/dipilih */
+::v-deep .multiselect__option--highlight .text-info,
+::v-deep .multiselect__option--highlight .text-muted,
+::v-deep .multiselect__option--highlight strong {
+  color: #fff !important;
+}
+
+/* Opsional: Membuat warna email sedikit lebih terang saat tidak di-hover agar lebih mudah dibaca */
+.text-info {
+  color: #17a2b8; /* Atau ganti dengan warna lain jika perlu */
 }
 </style>
