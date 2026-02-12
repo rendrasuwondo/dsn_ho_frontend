@@ -346,7 +346,6 @@ export default {
     async showModalAdd() {
       this.editMode = false // Set mode Tambah
       this.fetchEmployees()
-      this.fetchDepartments()
       this.selectedId = null
       this.selectedEmployeeObj = null // Reset Multiselect
       this.form = {
@@ -422,7 +421,7 @@ export default {
         }
 
         this.$bvModal.hide('modal-form')
-        this.$nuxt.refresh()
+        this.fetchData()
       } catch (error) {
         let msg =
           error.response && error.response.data.message

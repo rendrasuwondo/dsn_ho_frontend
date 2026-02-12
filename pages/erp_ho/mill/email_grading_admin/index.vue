@@ -517,7 +517,7 @@ export default {
         }
 
         this.$bvModal.hide('modal-form')
-        this.$nuxt.refresh()
+        this.fetchData()
       } catch (error) {
         let msg =
           error.response && error.response.data.message
