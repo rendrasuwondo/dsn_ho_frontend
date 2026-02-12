@@ -50,6 +50,7 @@
             :fields="fields"
             show-empty
             empty-text="Tidak ada data"
+            :busy="isTableLoading"
           >
             <template #cell(index)="data">
               {{
@@ -220,6 +221,7 @@ export default {
         total: 0,
       },
       rowcount: 0,
+      isTableLoading: false,
 
       // State Edit Mode
       editMode: false,
@@ -261,9 +263,7 @@ export default {
       ],
     }
   },
-
-  watchQuery: ['q', 'page'],
-
+  // watchQuery: ['q', 'page'],
   watch: {
     // Watcher ini akan otomatis mengisi form.employee_id saat selectedEmployeeObj berubah
     selectedEmployeeObj(newVal) {
@@ -284,22 +284,21 @@ export default {
     async fetchData() {
       this.isTableLoading = true
 
-      // Ambil parameter dari URL browser ($route.query)
-      let page = this.$route.query.page ? parseInt(this.$route.query.page) : 1
-      let search = this.$route.query.q ? this.$route.query.q : ''
-
-      // Sync local variable (opsional, biar input search tetap terisi saat refresh)
-      this.search = search
-
       try {
-        const response = await this.$axios.$get(
-          `/api/admin/email-grading?q=${search}&page=${page}&per_page=10`
-        )
+        const response = await this.$axios.$get('/api/admin/email-grading', {
+          params: {
+            q: this.search,
+            page: this.pagination.current_page,
+            per_page: this.pagination.per_page,
+          },
+        })
 
         console.log('DEBUG API RESPONSE:', response) // Cek Console Browser
 
         this.posts = response.data.data
-        this.pagination = response.data
+        this.pagination.total = response.data.total
+        this.pagination.current_page = response.data.current_page
+        this.pagination.per_page = response.data.per_page
         this.rowcount = response.data.total
       } catch (e) {
         console.error('DEBUG API ERROR:', e) // Cek Console Browser (Merah)
@@ -329,17 +328,13 @@ export default {
     },
 
     changePage(page) {
-      this.$router.push({
-        path: this.$route.path,
-        query: { q: this.search, page: page },
-      })
+      this.pagination.current_page = page
+      this.fetchData()
     },
 
     searchData() {
-      this.$router.push({
-        path: this.$route.path,
-        query: { q: this.search, page: 1 },
-      })
+      this.pagination.current_page = 1
+      this.fetchData()
     },
 
     // 1. MODIFIED: showModalAdd untuk Reset State
@@ -421,6 +416,7 @@ export default {
         }
 
         this.$bvModal.hide('modal-form')
+        this.pagination.current_page = 1
         this.fetchData()
       } catch (error) {
         let msg =
@@ -487,6 +483,7 @@ export default {
               .then(async (response) => {
                 this.$nuxt.refresh()
                 this.$swal.fire('BERHASIL!', 'Data Berhasil Dihapus', 'success')
+                this.pagination.current_page = 1
                 await this.fetchData()
               })
               .catch((error) => {
