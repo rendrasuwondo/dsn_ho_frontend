@@ -61,9 +61,7 @@
 
             <template #cell(employee)="data">
               <div>
-                <strong>{{
-                  data.item.employee ? data.item.name : '-'
-                }}</strong
+                <strong>{{ data.item.employee ? data.item.name : '-' }}</strong
                 ><br />
                 <small class="text-muted">{{
                   data.item.employee ? data.item.email : '-'
@@ -161,15 +159,21 @@
             <template slot="option" slot-scope="props">
               <div class="option__desc">
                 <span class="option__title"
-                  ><strong>{{ props.option.name }}</strong></span
-                >
-                <span class="option__small text-muted">
-                  ({{ props.option.nik }})</span
+                  ><strong>{{
+                    `${props.option.name} (${props.option.nik})`
+                  }}</strong></span
                 >
                 <br />
-                <small v-if="props.option.email" class="text-info">{{
-                  props.option.email
-                }}</small>
+                <span>
+                  <strong>{{ props.option.department_code }}</strong>
+                </span>
+                <br />
+                <small
+                  v-if="props.option.email"
+                  class="text-info"
+                  style="font-size: 12px; color: white"
+                  >{{ props.option.email }}</small
+                >
               </div>
             </template>
 
@@ -265,11 +269,8 @@ export default {
     selectedEmployeeObj(newVal) {
       if (newVal) {
         this.form.employee_id = newVal.id
-        // Pastikan department_id diambil, jika tidak ada di objek employee, set null
-        // this.form.department_id = newVal.department_id || null
       } else {
         this.form.employee_id = null
-        // this.form.department_id = null
       }
     },
   },
@@ -320,7 +321,7 @@ export default {
         )
         this.employeeOptions = response.data.map((emp) => ({
           ...emp,
-          name_info: `${emp.name} - ${emp.nik}`,
+          name_info: `${emp.name} - ${emp.department_code} - ${emp.nik}`,
         }))
       } catch (error) {
         console.error('Gagal load employee', error)
@@ -342,8 +343,9 @@ export default {
     },
 
     // 1. MODIFIED: showModalAdd untuk Reset State
-    showModalAdd() {
+    async showModalAdd() {
       this.editMode = false // Set mode Tambah
+      this.fetchEmployees()
       this.selectedId = null
       this.selectedEmployeeObj = null // Reset Multiselect
       this.form = {
@@ -351,35 +353,38 @@ export default {
         location: 'SITE',
         is_active: 'Y',
         description: '',
-        department_id: null,
+        department_id: this.$auth.user.employee.department_id,
       }
       this.$bvModal.show('modal-form')
     },
 
-    // 2. NEW: Method untuk Menampilkan Modal Edit
     showModalEdit(item) {
-      this.editMode = true // Set mode Edit
+      this.editMode = true
       this.selectedId = item.id
 
-      // Isi form dengan data yang ada
       this.form = {
         employee_id: item.employee_id,
         location: item.location,
         is_active: item.is_active,
         description: item.description,
-        department_id: item.department_id,
       }
 
-      // PENTING: Set object employee untuk Multiselect
-      // Kita ambil data employee dari item row tabel
-      if (item.employee) {
-        this.selectedEmployeeObj = {
-          id: item.employee.id,
-          name: item.employee.name,
-          nik: item.employee.nik,
-          email: item.employee.email,
-          department_id: item.department_id, // Pastikan ini ada agar tidak hilang
-        }
+      let empObj = null
+
+      empObj = {
+        id: item.employee_id,
+        name: item.name,
+        nik: item.nik || '-',
+        email: item.email,
+        department_code: item.department_code_employee,
+      }
+
+      if (empObj) {
+        empObj.name_info = `${empObj.name} - ${empObj.department_code_employee} - ${empObj.nik}`
+
+        this.employeeOptions = [empObj]
+
+        this.selectedEmployeeObj = empObj
       }
 
       this.$bvModal.show('modal-form')
@@ -416,7 +421,7 @@ export default {
         }
 
         this.$bvModal.hide('modal-form')
-        this.$nuxt.refresh()
+        this.fetchData()
       } catch (error) {
         let msg =
           error.response && error.response.data.message
@@ -447,13 +452,14 @@ export default {
               .put(`/api/admin/email-grading/${id}`, {
                 is_active: newStatus,
               })
-              .then((response) => {
+              .then(async (response) => {
                 this.$nuxt.refresh()
                 this.$swal.fire(
                   'BERHASIL',
                   'Status berhasil diperbarui',
                   'success'
                 )
+                await this.fetchData()
               })
               .catch((error) => {
                 this.$swal.fire('GAGAL!', 'Gagal memperbarui status', 'error')
@@ -478,9 +484,10 @@ export default {
           if (result.isConfirmed) {
             this.$axios
               .delete(`/api/admin/email-grading/${id}`)
-              .then((response) => {
+              .then(async (response) => {
                 this.$nuxt.refresh()
                 this.$swal.fire('BERHASIL!', 'Data Berhasil Dihapus', 'success')
+                await this.fetchData()
               })
               .catch((error) => {
                 this.$swal.fire('GAGAL!', 'Terjadi kesalahan', 'error')
@@ -499,7 +506,10 @@ export default {
             params: { q: query },
           })
           .then((response) => {
-            this.employeeOptions = response.data
+            this.employeeOptions = response.data.map((emp) => ({
+              ...emp,
+              name_info: `${emp.name} - ${emp.department_code} - ${emp.nik}`,
+            }))
             this.isLoadingEmployee = false
           })
           .catch((error) => {
@@ -527,5 +537,19 @@ export default {
 .multiselect__placeholder {
   margin-bottom: 0;
   padding-top: 2px;
+}
+
+/* --- TAMBAHKAN INI --- */
+
+/* Memaksa teks menjadi putih saat item di-hover/dipilih */
+::v-deep .multiselect__option--highlight .text-info,
+::v-deep .multiselect__option--highlight .text-muted,
+::v-deep .multiselect__option--highlight strong {
+  color: #fff !important;
+}
+
+/* Opsional: Membuat warna email sedikit lebih terang saat tidak di-hover agar lebih mudah dibaca */
+.text-info {
+  color: #17a2b8; /* Atau ganti dengan warna lain jika perlu */
 }
 </style>
