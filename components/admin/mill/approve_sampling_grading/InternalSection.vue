@@ -157,6 +157,58 @@
                 </b-button>
               </b-col>
             </b-row>
+
+            <div v-if="emailLogs && emailLogs.length > 0">
+              <hr />
+              <p class="text-muted mb-2" style="font-size: 0.9rem">
+                <i class="fas fa-history mr-1"></i>
+                <b>Riwayat Pengiriman Terakhir:</b>
+                <br/>
+                  <ul style="font-size: 0.8rem; list-style: inside;">
+                    <li>
+                      Filename: {{ attachmentFilename }}
+                    </li>
+                    <li>
+                      Tanggal Pengiriman: {{ formatDateTime(lastSentAt) }}
+                    </li>
+                    <li>
+                      Oleh: {{ lastSentBy || 'System' }}
+                    </li>
+                  </ul>
+              </p>
+
+              <b-table
+                :items="emailLogs"
+                :fields="logFields"
+                small
+                hover
+                striped
+                bordered
+                responsive
+                class="mb-0"
+                style="font-size: 0.8rem"
+              >
+                <template #cell(status_desc)="data">
+                  <b-badge
+                    :variant="
+                      data.item.status_desc === 'SUCCESS' ? 'success' : 'danger'
+                    "
+                  >
+                    {{ data.item.status_desc }}
+                  </b-badge>
+                </template>
+
+                <template #cell(error_message)="data">
+                  <span
+                    class="text-danger"
+                    v-if="data.item.status_desc !== 'SUCCESS'"
+                  >
+                    {{ data.item.error_message }}
+                  </span>
+                  <span v-else>-</span>
+                </template>
+              </b-table>
+            </div>
           </b-card>
 
           <div class="form-group">
@@ -766,6 +818,21 @@ export default {
       },
       show: 1,
       isLoadingDropdown: true, // Loading state for dropdowns
+      emailLogs: [],
+      lastSentAt: null,
+      lastSentBy: null,
+      attachmentFilename: '',
+      logFields: [
+        { key: 'name', label: 'Penerima' },
+        { key: 'email', label: 'Email' },
+        {
+          key: 'department_code_employee',
+          label: 'Department',
+          tdClass: 'text-center',
+        },
+        { key: 'status_desc', label: 'Status', tdClass: 'text-center' },
+        { key: 'error_message', label: 'Info' },
+      ],
     }
   },
   watchQuery: ['q', 'page'],
@@ -811,6 +878,7 @@ export default {
     this.$nextTick(() => {
       this.addRowTooltips()
     })
+    this.fetchEmailLogs()
   },
 
   methods: {
@@ -1321,13 +1389,29 @@ export default {
         })
     },
     confirmSendEmail() {
+      // Helper kecil untuk format tanggal indo
+      const formatDateIndo = (dateStr) => {
+        return new Date(dateStr).toLocaleDateString('id-ID', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+        })
+      }
+
+      // Ambil tahun dari dateStart
+      const year = new Date(this.dateStart).getFullYear()
+
+      // Hardcode tanggal 1 Januari tahun tersebut
+      const firstDate = `01 Januari ${year}`
+
+      // Tanggal cutoff (dateStart)
+      const lastDate = formatDateIndo(this.dateStart)
+
       this.$swal
         .fire({
           title: 'KIRIM EMAIL LAPORAN?',
-          text: `Laporan akan dikirim ke penerima per tanggal ${new Date().toLocaleDateString(
-            'id-ID',
-            { day: '2-digit', month: 'long', year: 'numeric' }
-          )}.`,
+          // Informasikan range real yang akan digenerate sistem
+          text: `Laporan akumulasi dari tanggal ${firstDate} s/d ${lastDate} akan dikirim ke penerima.`,
           icon: 'question',
           showCancelButton: true,
           confirmButtonColor: '#28a745',
@@ -1387,6 +1471,7 @@ export default {
               timer: 3000,
               showConfirmButton: false,
             })
+            this.fetchEmailLogs()
           })
           .catch((error) => {
             this.show = 1
@@ -1408,6 +1493,44 @@ export default {
         this.show = 1
         this.$swal.fire('Error', 'Terjadi kesalahan sistem', 'error')
       }
+    },
+    async fetchEmailLogs() {
+      try {
+        const response = await this.$axios.$get(
+          '/api/admin/email-grading-last-log',
+          {
+            params: {
+              module: 'approve_sampling_grading',
+              type: 'internal',
+            },
+          }
+        )
+
+        // Ambil array list user
+        this.emailLogs = response.data || []
+
+        // Simpan metadata batch (Buat variable baru di data())
+        this.lastSentAt = response.last_sent_at
+        this.lastSentBy = response.sent_by
+        this.attachmentFilename = response.attachment_name
+      } catch (error) {
+        console.error('Gagal memuat log email:', error)
+        this.emailLogs = []
+      }
+    },
+
+    // 2. Method Format Tanggal & Jam
+    formatDateTime(value) {
+      if (!value) return '-'
+      const date = new Date(value)
+      // Format: 13 Feb 2026 10:30
+      return date.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
     },
   },
 }
