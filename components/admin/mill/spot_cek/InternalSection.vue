@@ -177,6 +177,7 @@
                 <th colspan="2">Sampah</th>
                 <th rowspan="2">Batu(Kg)</th>
                 <th rowspan="2">No. NPB</th>
+                <th rowspan="2">OER</th>
               </tr>
               <tr>
                 <th>SPB</th>
@@ -499,6 +500,12 @@ export default {
           tdClass: 'text-right',
         },
         { key: 'npb', label: '' },
+        {
+          key: 'oer',
+          label: '',
+          formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
+        },
       ],
       dateStart: formatDate(yesterday), // Default to yesterday
       dateEnd: formatDate(yesterday), // Default to today
@@ -628,12 +635,22 @@ export default {
       return new Intl.NumberFormat('id-ID').format(value)
     },
     formatToTwoDecimals(value) {
-      if (!value) return '0.00' // Return 0.00 for empty values
-      return parseFloat(value).toFixed(2)
+      const num = Number(value)
+
+      if (!Number.isFinite(num)) {
+        return '0.00'
+      }
+
+      return num.toFixed(2)
     },
     formatToZeroDecimals(value) {
-      if (!value) return '0' // Return 0.00 for empty values
-      return parseFloat(value).toFixed(0)
+      const num = Number(value)
+
+      if (!Number.isFinite(num)) {
+        return '0'
+      }
+
+      return num.toFixed(0)
     },
     formatDate(value) {
       if (!value) return ''

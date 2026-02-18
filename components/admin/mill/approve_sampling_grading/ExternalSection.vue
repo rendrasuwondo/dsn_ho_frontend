@@ -117,56 +117,89 @@
               </b-col>
             </b-row>
 
-            <div v-if="emailLogs && emailLogs.length > 0">
+            <div class="mt-3">
               <hr />
               <p class="text-muted mb-2" style="font-size: 0.9rem">
                 <i class="fas fa-history mr-1"></i>
-                <b>Riwayat Pengiriman Terakhir:</b>
-                <br/>
-                  <ul style="font-size: 0.8rem; list-style: inside;">
-                    <li>
-                      Filename: {{ attachmentFilename }}
-                    </li>
-                    <li>
-                      Tanggal Pengiriman: {{ formatDateTime(lastSentAt) }}
-                    </li>
-                    <li>
-                      Oleh: {{ lastSentBy || 'System' }}
-                    </li>
-                  </ul>
+                <b
+                  >Riwayat Pengiriman Terakhir (Tgl Data:
+                  {{ formatDate(dateStart) }}):</b
+                >
               </p>
 
-              <b-table
-                :items="emailLogs"
-                :fields="logFields"
-                small
-                hover
-                striped
-                bordered
-                responsive
-                class="mb-0"
-                style="font-size: 0.8rem"
-              >
-                <template #cell(status_desc)="data">
-                  <b-badge
-                    :variant="
-                      data.item.status_desc === 'SUCCESS' ? 'success' : 'danger'
-                    "
-                  >
-                    {{ data.item.status_desc }}
-                  </b-badge>
-                </template>
+              <div v-if="isLoadingLogs" class="text-center py-3">
+                <b-spinner variant="info" small></b-spinner>
+                <span class="text-info ml-2" style="font-size: 0.9rem"
+                  >Memuat riwayat pengiriman...</span
+                >
+              </div>
 
-                <template #cell(error_message)="data">
-                  <span
-                    class="text-danger"
-                    v-if="data.item.status_desc !== 'SUCCESS'"
-                  >
-                    {{ data.item.error_message }}
-                  </span>
-                  <span v-else>-</span>
-                </template>
-              </b-table>
+              <div
+                v-else-if="!emailLogs || emailLogs.length === 0"
+                class="alert alert-secondary text-center py-2 mb-0"
+                style="font-size: 0.85rem"
+              >
+                <i class="fa fa-info-circle mr-1"></i> Belum ada pengiriman
+                email untuk laporan tanggal ini.
+              </div>
+
+              <div v-else>
+                <ul
+                  style="font-size: 0.8rem; list-style: inside"
+                  class="mb-2 text-muted"
+                >
+                  <li>
+                    Filename:
+                    <strong class="text-dark">{{ attachmentFilename }}</strong>
+                  </li>
+                  <li>
+                    Tanggal Kirim:
+                    <strong class="text-dark">{{
+                      formatDateTime(lastSentAt)
+                    }}</strong>
+                  </li>
+                  <li>
+                    Oleh:
+                    <strong class="text-dark">{{
+                      lastSentBy || 'System'
+                    }}</strong>
+                  </li>
+                </ul>
+
+                <b-table
+                  :items="emailLogs"
+                  :fields="logFields"
+                  small
+                  hover
+                  striped
+                  bordered
+                  responsive
+                  class="mb-0"
+                  style="font-size: 0.8rem"
+                >
+                  <template #cell(status_desc)="data">
+                    <b-badge
+                      :variant="
+                        data.item.status_desc === 'SUCCESS'
+                          ? 'success'
+                          : 'danger'
+                      "
+                    >
+                      {{ data.item.status_desc }}
+                    </b-badge>
+                  </template>
+
+                  <template #cell(error_message)="data">
+                    <span
+                      class="text-danger"
+                      v-if="data.item.status_desc !== 'SUCCESS'"
+                    >
+                      {{ data.item.error_message }}
+                    </span>
+                    <span v-else>-</span>
+                  </template>
+                </b-table>
+              </div>
             </div>
           </b-card>
 
@@ -724,6 +757,7 @@ export default {
       show: 1,
       isLoadingDropdown: true, // Loading state for dropdowns
       emailLogs: [],
+      isLoadingLogs: false,
       lastSentAt: null,
       lastSentBy: null,
       attachmentFilename: '',
@@ -747,6 +781,11 @@ export default {
       this.$nextTick(() => {
         this.addRowTooltips()
       })
+    },
+    dateStart(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.fetchEmailLogs()
+      }
     },
   },
 
@@ -942,12 +981,22 @@ export default {
       return new Intl.NumberFormat('id-ID').format(value)
     },
     formatToTwoDecimals(value) {
-      if (!value) return '0.00' // Return 0.00 for empty values
-      return parseFloat(value).toFixed(2)
+      const num = Number(value)
+
+      if (!Number.isFinite(num)) {
+        return '0.00'
+      }
+
+      return num.toFixed(2)
     },
     formatToZeroDecimals(value) {
-      if (!value || value === null) return '0' // Return 0.00 for empty values
-      return parseFloat(value).toFixed(0)
+      const num = Number(value)
+
+      if (!Number.isFinite(num)) {
+        return '0'
+      }
+
+      return num.toFixed(0)
     },
     toggleSelectAll() {
       this.posts.forEach((post) => {
@@ -1355,6 +1404,9 @@ export default {
       }
     },
     async fetchEmailLogs() {
+      this.isLoadingLogs = true // Nyalakan loading
+      this.emailLogs = [] // Reset tabel sebelum ngambil yang baru
+
       try {
         const response = await this.$axios.$get(
           '/api/admin/email-grading-last-log',
@@ -1362,20 +1414,20 @@ export default {
             params: {
               module: 'approve_sampling_grading',
               type: 'external',
+              dateStart: this.dateStart,
             },
           }
         )
 
-        // Ambil array list user
         this.emailLogs = response.data || []
-
-        // Simpan metadata batch (Buat variable baru di data())
         this.lastSentAt = response.last_sent_at
         this.lastSentBy = response.sent_by
         this.attachmentFilename = response.attachment_name
       } catch (error) {
         console.error('Gagal memuat log email:', error)
         this.emailLogs = []
+      } finally {
+        this.isLoadingLogs = false
       }
     },
 
