@@ -27,7 +27,7 @@
                     <b-col cols="3">Tanggal</b-col>
                     <b-col cols="9">
                       <b-form-datepicker
-                        v-model="dateStart"
+                        v-model="selectedDate"
                         dropup="false"
                         class="mb-2"
                         :date-format-options="{
@@ -36,18 +36,19 @@
                           day: '2-digit',
                         }"
                       ></b-form-datepicker>
-                      <b-form-datepicker
-                        v-model="dateEnd"
-                        :dropup="false"
-                        :date-format-options="{
-                          year: 'numeric',
-                          month: 'short',
-                          day: '2-digit',
-                        }"
-                      ></b-form-datepicker>
+                    </b-col>
+                  </b-row>
+                  <b-row class="mt-3 align-items-center">
+                    <b-col cols="3">Tipe</b-col>
+                    <b-col cols="9">
+                      <b-form-select
+                        v-model="selectedType"
+                        :options="typeOptions"
+                      ></b-form-select>
                     </b-col>
                   </b-row>
                 </b-col>
+
                 <b-col cols="6">
                   <b-row class="mt-2 align-items-center">
                     <b-col cols="3">PKS</b-col>
@@ -260,8 +261,13 @@ export default {
           tdClass: 'text-center',
         },
       ],
-      dateStart: formatDate(yesterday),
-      dateEnd: formatDate(yesterday),
+      selectedDate: formatDate(yesterday),
+      selectedType: 'HI',
+      typeOptions: [
+        { value: 'HI', text: 'HI' },
+        { value: 'SHI', text: 'SHI' },
+        { value: 'SBI', text: 'SBI' },
+      ],
       estate_id: [],
       estates: [],
       afdeling_id: [],
@@ -276,9 +282,11 @@ export default {
   },
 
   async mounted() {
-    // Urutan Eksekusi Diperbaiki: Load Dropdown -> Set Filter dari URL -> Fetch Data
+    // 1. Load Dropdown List
     await this.loadDropdownData()
+    // 2. Set Value State Form berdasarkan URL (Hanya 1x saat awal load)
     this.loadFiltersFromUrl()
+    // 3. Fetch Data API (Memakai Value State Form)
     await this.fetchData()
   },
 
@@ -307,15 +315,28 @@ export default {
 
     loadFiltersFromUrl() {
       const query = this.$route.query
-      if (query.dateStart) this.dateStart = query.dateStart
-      if (query.dateEnd) this.dateEnd = query.dateEnd
 
+      // Ambil Tanggal & Tipe dari URL, jika tidak ada biarkan default dari data()
+      if (query.date) this.selectedDate = query.date
+      if (query.tipe_tanggal) this.selectedType = query.tipe_tanggal
+
+      // Setup PKS (Dari URL atau Default Auth)
       if (query.department_id) {
         const ids = query.department_id.split(',').filter(Boolean)
         this.pks_code = this.pksList.filter((p) =>
           ids.includes(p.department_id.toString())
         )
+      } else {
+        const userDeptCode = this.$auth?.user?.employee?.department_code
+        if (userDeptCode) {
+          const defaultPks = this.pksList.find((p) => p.code === userDeptCode)
+          if (defaultPks) {
+            this.pks_code = [defaultPks]
+          }
+        }
       }
+
+      // Setup Estate
       if (query.department_code_plantation) {
         const codes = query.department_code_plantation
           .split(',')
@@ -324,6 +345,8 @@ export default {
           codes.includes(e.department_code_plantation)
         )
       }
+
+      // Setup Afdeling
       if (query.afdeling_code) {
         const codes = query.afdeling_code.split(',').filter(Boolean)
         this.afdeling_id = this.afdelings.filter((a) =>
@@ -334,26 +357,30 @@ export default {
 
     async fetchData() {
       try {
-        // PERBAIKAN: API Params diambil murni dari v-model State (Form), BUKAN dari URL
+        // PERBAIKAN: Selalu gunakan nilai form v-model, bukan dari this.$route.query
         const params = {
-          dateStart: this.dateStart,
-          dateEnd: this.dateEnd,
+          date: this.selectedDate,
+          tipe_tanggal: this.selectedType,
           status: 'approved',
           ffb_source: 'internal',
+          plant_type: 'NUCLEUS',
         }
 
-        if (this.pks_code.length)
+        if (this.pks_code && this.pks_code.length > 0) {
           params.department_id = this.pks_code
             .map((p) => p.department_id)
             .join(',')
-        if (this.estate_id.length)
+        }
+        if (this.estate_id && this.estate_id.length > 0) {
           params.department_code_plantation = this.estate_id
             .map((e) => e.department_code_plantation)
             .join(',')
-        if (this.afdeling_id.length)
+        }
+        if (this.afdeling_id && this.afdeling_id.length > 0) {
           params.afdeling_code = this.afdeling_id
             .map((a) => a.afdeling_code)
             .join(',')
+        }
 
         const rawResponse = await this.$axios.$get(
           '/api/admin/report-sortasi',
@@ -363,7 +390,7 @@ export default {
         this.posts = this.processDataWithTotals(rawResponse.data.data)
         this.rowcount = rawResponse.data.total
       } catch (error) {
-        console.error(error)
+        console.error('Error in fetchData:', error)
       }
     },
 
@@ -489,30 +516,39 @@ export default {
     async applyFilters() {
       this.show = 0
       try {
-        const query = { dateStart: this.dateStart, dateEnd: this.dateEnd }
-        if (this.estate_id.length)
+        const query = {
+          date: this.selectedDate,
+          tipe_tanggal: this.selectedType,
+        }
+
+        if (this.estate_id && this.estate_id.length > 0) {
           query.department_code_plantation = this.estate_id
             .map((e) => e.department_code_plantation)
             .join(',')
-        if (this.afdeling_id.length)
+        }
+        if (this.afdeling_id && this.afdeling_id.length > 0) {
           query.afdeling_code = this.afdeling_id
             .map((a) => a.afdeling_code)
             .join(',')
-        if (this.pks_code.length)
+        }
+        if (this.pks_code && this.pks_code.length > 0) {
           query.department_id = this.pks_code
             .map((p) => p.department_id)
             .join(',')
-
-        // Prevent redundant navigation error from Vue Router
-        if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
-          await this.$router
-            .push({ path: this.$route.path, query })
-            .catch(() => {})
         }
 
+        // Tembak API DULU menggunakan state komponen secara instan
         await this.fetchData()
+
+        // SETELAH API selesai, update URL secara asinkron tanpa mempedulikan hasilnya
+        // Hapus await dari $router.push agar tidak memblokir UI
+        if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
+          this.$router.push({ path: this.$route.path, query }).catch(() => {})
+        }
+
         this.show = 1
       } catch (error) {
+        console.error('Error applying filters:', error)
         this.show = 1
       }
     },
@@ -521,26 +557,33 @@ export default {
       try {
         this.show = 0
         const queryParams = new URLSearchParams()
-        if (this.dateStart) queryParams.append('dateStart', this.dateStart)
-        if (this.dateEnd) queryParams.append('dateEnd', this.dateEnd)
-        if (this.estate_id.length)
+
+        if (this.selectedDate) queryParams.append('date', this.selectedDate)
+        if (this.selectedType)
+          queryParams.append('tipe_tanggal', this.selectedType)
+
+        if (this.estate_id && this.estate_id.length > 0) {
           queryParams.append(
             'department_code_plantation',
             this.estate_id.map((e) => e.department_code_plantation).join(',')
           )
-        if (this.afdeling_id.length)
+        }
+        if (this.afdeling_id && this.afdeling_id.length > 0) {
           queryParams.append(
             'afdeling_code',
             this.afdeling_id.map((a) => a.afdeling_code).join(',')
           )
-        if (this.pks_code.length)
+        }
+        if (this.pks_code && this.pks_code.length > 0) {
           queryParams.append(
             'department_id',
             this.pks_code.map((p) => p.department_id).join(',')
           )
+        }
 
         queryParams.append('status', 'approved')
         queryParams.append('ffb_source', 'internal')
+        queryParams.append('plant_type', 'NUCLEUS')
 
         this.$axios({
           url: `/api/admin/report-sortasi-export?${queryParams.toString()}`,
@@ -551,14 +594,14 @@ export default {
             const url = window.URL.createObjectURL(new Blob([response.data]))
             const link = document.createElement('a')
             link.href = url
-            link.setAttribute('download', 'ReportSortasiHarian.xlsx')
+            link.setAttribute('download', 'ReportSortasiHarianNucleus.xlsx')
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
             this.show = 1
           })
           .catch((error) => {
-            console.error(error)
+            console.error('Export Error:', error)
             this.show = 1
           })
       } catch (error) {

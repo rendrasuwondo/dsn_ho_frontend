@@ -1,19 +1,17 @@
 <template>
   <div class="">
     <div v-if="show === 0">
-      <b-img right src="\img/dsn_logo.png" alt="" class="img-logo"></b-img>
+      <b-img right src="/img/dsn_logo.png" alt="" class="img-logo"></b-img>
       <p class="txt-2">Loading</p>
-      <div class="spinonediv-4 mt-5"></div>
+      <div class="spinonediv-4"></div>
     </div>
 
     <section class="content" v-if="show === 1">
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-cog"></i>
-            <b>Data Spot Cek External</b>
+            <i class="nav-icon fas fa-cog"></i> <b>Data Harian Sortasi</b>
           </h3>
-          <div class="card-tools"></div>
         </div>
         <div class="card-body">
           <b-card
@@ -24,37 +22,35 @@
           >
             <b-card-text>
               <b-row>
-                <!-- Left Section -->
                 <b-col cols="6">
-                  <b-row class="mt-2">
+                  <b-row class="mt-2 align-items-center">
                     <b-col cols="3">Tanggal</b-col>
                     <b-col cols="9">
                       <b-form-datepicker
-                        v-model="dateStart"
-                        :dropup="false"
-                        placeholder="Pilih tanggal awal"
+                        v-model="selectedDate"
+                        dropup="false"
                         class="mb-2"
                         :date-format-options="{
                           year: 'numeric',
                           month: 'short',
                           day: '2-digit',
-                          weekday: 'short',
-                        }"
-                      ></b-form-datepicker>
-                      <b-form-datepicker
-                        v-model="dateEnd"
-                        :dropup="false"
-                        placeholder="Pilih tanggal akhir"
-                        :date-format-options="{
-                          year: 'numeric',
-                          month: 'short',
-                          day: '2-digit',
-                          weekday: 'short',
                         }"
                       ></b-form-datepicker>
                     </b-col>
                   </b-row>
-                  <b-row class="mt-3">
+                  <b-row class="mt-3 align-items-center">
+                    <b-col cols="3">Tipe</b-col>
+                    <b-col cols="9">
+                      <b-form-select
+                        v-model="selectedType"
+                        :options="typeOptions"
+                      ></b-form-select>
+                    </b-col>
+                  </b-row>
+                </b-col>
+
+                <b-col cols="6">
+                  <b-row class="mt-2 align-items-center">
                     <b-col cols="3">PKS</b-col>
                     <b-col cols="9">
                       <multiselect
@@ -69,136 +65,107 @@
                       ></multiselect>
                     </b-col>
                   </b-row>
-                </b-col>
-
-                <!-- Right Section -->
-                <b-col cols="6">
-                  <b-row class="mt-2">
-                    <b-col cols="3">Supplier</b-col>
+                  <b-row class="mt-3 align-items-center">
+                    <b-col cols="3">Estate</b-col>
                     <b-col cols="9">
                       <multiselect
-                        v-model="pt_id"
-                        :options="pts"
-                        label="supplier"
-                        track-by="lifnr"
+                        v-model="estate_id"
+                        :options="estates"
+                        label="department_code_plantation"
+                        track-by="department_code_plantation"
                         :searchable="true"
                         :multiple="true"
-                        placeholder="Pilih Supplier"
+                        placeholder="Pilih Estate"
+                        :loading="isLoadingDropdown"
+                      ></multiselect>
+                    </b-col>
+                  </b-row>
+                  <b-row class="mt-3 align-items-center">
+                    <b-col cols="3">Afdeling</b-col>
+                    <b-col cols="9">
+                      <multiselect
+                        v-model="afdeling_id"
+                        :options="afdelings"
+                        label="afdeling_code"
+                        track-by="afdeling_code"
+                        :searchable="true"
+                        :multiple="true"
+                        placeholder="Pilih Afdeling"
                         :loading="isLoadingDropdown"
                       ></multiselect>
                     </b-col>
                   </b-row>
                 </b-col>
               </b-row>
-
-              <!-- Apply Filters Button -->
-              <b-row class="mt-3">
+              <b-row class="mt-4">
                 <b-col class="text-center">
                   <b-button
-                    class="btn btn-info"
+                    class="btn btn-info px-4"
                     variant="primary"
                     @click="applyFilters"
+                    >Apply Filters</b-button
                   >
-                    Apply Filters
-                  </b-button>
                 </b-col>
               </b-row>
             </b-card-text>
           </b-card>
 
-          <div class="form-group">
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <button
-                  title="Export To Excel"
-                  class="btn btn-info"
-                  @click="exportData"
-                >
-                  <i class="fa fa-file-excel"></i>
-                </button>
-              </div>
-            </div>
+          <div class="form-group mt-3">
+            <button
+              title="Export To Excel"
+              class="btn btn-info"
+              @click="exportData"
+            >
+              <i class="fa fa-file-excel"></i>
+            </button>
           </div>
-          <!-- table -->
+
           <b-table
-            :fields="filteredFields"
+            :fields="fields"
             :items="posts"
+            :tbody-tr-class="rowClass"
             small
             responsive
-            striped
             bordered
             hover
+            class="custom-table"
           >
-            <!-- Custom grouped header -->
             <template v-slot:thead-top>
-              <tr>
-                <!-- <th rowspan="2">No</th> -->
-                <th rowspan="2">Tanggal</th>
-                <th rowspan="2">PKS</th>
-                <th rowspan="2">Supplier</th>
-                <th rowspan="2">Driver</th>
-                <th colspan="4" class="text-center">Total Janjang</th>
-                <th rowspan="2">BJR</th>
-                <th colspan="10" class="text-center">Kriteria TBS Normal</th>
-                <th v-if="showSickFruit" colspan="6" class="text-center">
-                  Kriteria TBS Abnormal
+              <tr class="header-yellow text-center">
+                <th rowspan="2" class="align-middle bg-white border-0">
+                  Tanggal
                 </th>
-                <th v-if="showSickFruit" rowspan="2">Tangkai Panjang</th>
-                <th colspan="5" class="text-center">Berondolan</th>
-                <!-- <th rowspan="2">Hutang Berondol(Kg)</th>
-                <th colspan="2">Bayar Berondolan</th> -->
-                <th rowspan="2">No. NPB</th>
-              </tr>
-              <tr>
-                <th>SPB</th>
-                <th>Aktual</th>
-                <th>Var(Jjg)</th>
-                <th>Var(%)</th>
-
-                <th>Unripe</th>
-                <th>%</th>
-                <th>Under</th>
-                <th>%</th>
+                <th rowspan="2" class="align-middle bg-white border-0">PKS</th>
+                <th rowspan="2" class="align-middle bg-white border-0">
+                  Estate
+                </th>
+                <th rowspan="2" class="align-middle">Afdeling</th>
+                <th>Un Ripe</th>
+                <th>Under Ripe</th>
                 <th>Ripe</th>
-                <th>%</th>
-                <th>Over</th>
-                <th>%</th>
-                <th>Jangkos</th>
-                <th>%</th>
-
-                <th v-if="showSickFruit">Ptherno</th>
-                <th v-if="showSickFruit">%</th>
-                <th v-if="showSickFruit">Hard B.</th>
-                <th v-if="showSickFruit">%</th>
-                <th v-if="showSickFruit">Unripe Fruit Fall</th>
-                <th v-if="showSickFruit">%</th>
-
-                <th>SPB</th>
-                <th>Aktual</th>
-                <th>Aktual(%)</th>
-                <th>Var(Kg)</th>
-                <th>Var(%)</th>
-
-                <!-- <th>Bayar</th>
-                <th>Setelah (%)</th> -->
+                <th>Over Ripe</th>
+                <th>Janjang Kosong</th>
+                <th>Tangkai Panjang</th>
+                <th>Brondolan</th>
+                <th>Total Sampah</th>
+              </tr>
+              <tr class="header-yellow text-center text-sm">
+                <th>0%</th>
+                <th>&lt; 2%</th>
+                <th>&ge; 95 %</th>
+                <th>&lt; 3 %</th>
+                <th>0%</th>
+                <th>0%</th>
+                <th>Min 10</th>
+                <th>0%</th>
               </tr>
             </template>
           </b-table>
-          <!-- pagination -->
+
           <b-row>
-            <b-col
-              ><b-pagination
-                v-model="pagination.current_page"
-                :total-rows="pagination.total"
-                :per-page="pagination.per_page"
-                @change="changePage"
-                align="left"
-                class="mt-1"
-              ></b-pagination
-            ></b-col>
-            <b-col class="text-right" align-self="center"
-              >{{ rowcount }} data</b-col
-            >
+            <b-col class="text-right mt-2 text-muted font-weight-bold">
+              Total: {{ rowcount }} baris data
+            </b-col>
           </b-row>
         </div>
       </div>
@@ -208,11 +175,14 @@
 
 <script>
 export default {
+  layout: 'admin',
+  head() {
+    return { title: 'Report Sortasi Harian' }
+  },
   data() {
     const today = new Date()
     const yesterday = new Date()
     yesterday.setDate(today.getDate() - 1)
-
     const formatDate = (date) =>
       `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
         2,
@@ -220,531 +190,311 @@ export default {
       )}-${String(date.getDate()).padStart(2, '0')}`
 
     return {
-      selectedItems: [],
-      unselectedItems: [],
       fields: [
-        // { key: 'no', label: '' }, // No label as custom header is used
         {
-          key: 'transaction_date',
+          key: 'display_date',
           label: '',
-          formatter: this.formatDate,
-          tdClass: 'tanggal-col',
-        },
-        { key: 'department_code', label: '' },
-        { key: 'supplier', label: '' },
-        { key: 'driver', label: '' },
-
-        {
-          key: 'qty_npb',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
+          tdClass: 'align-middle text-center text-nowrap',
         },
         {
-          key: 'total_qty',
+          key: 'display_pks',
           label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
+          tdClass: 'align-middle text-center text-nowrap',
         },
         {
-          key: 'var_qty',
+          key: 'display_estate',
           label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
+          tdClass:
+            'text-center font-weight-bold align-middle bg-light-blue text-nowrap',
         },
         {
-          key: 'percentage_qty',
+          key: 'afdeling_code',
           label: '',
-          formatter: this.formatToThousand,
-          tdClass: 'text-right',
-        },
-
-        {
-          key: 'bjr',
-          label: '',
-          formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
-
-        {
-          key: 'qty_unripe',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
+          tdClass: 'text-center font-weight-bold',
         },
         {
           key: 'percentage_unripe',
           label: '',
           formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'qty_underripe',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
+          tdClass: 'text-center',
         },
         {
           key: 'percentage_underripe',
           label: '',
           formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'qty_ripe',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
+          tdClass: 'text-center',
         },
         {
           key: 'percentage_ripe',
           label: '',
           formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'qty_overripe',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
+          tdClass: 'text-center',
         },
         {
           key: 'percentage_overripe',
           label: '',
           formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'qty_empty_bunch',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
+          tdClass: 'text-center',
         },
         {
           key: 'percentage_empty_bunch',
           label: '',
           formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
-
-        {
-          key: 'qty_parthenocarpy',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
+          tdClass: 'text-center',
         },
         {
-          key: 'percentage_parthenocarpy',
+          key: 'percentage_long_stalk',
           label: '',
           formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'qty_hard_bunch',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'percentage_hard_bunch',
-          label: '',
-          formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'qty_unripe_fruit_fall',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'percentage_unripe_fruit_fall',
-          label: '',
-          formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
-
-        {
-          key: 'qty_long_stalk',
-          label: '',
-          formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
-
-        {
-          key: 'loose_fruit_npb',
-          label: '',
-          formatter: this.formatToThousand,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'loose_fruit',
-          label: '',
-          formatter: this.formatToThousand,
-          tdClass: 'text-right',
+          tdClass: 'text-center',
         },
         {
           key: 'percentage_fruit',
           label: '',
           formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
+          tdClass: 'text-center',
         },
         {
-          key: 'var_loose_fruit',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'var_loose_fruit_percentage',
+          key: 'percentage_garbage',
           label: '',
           formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
+          tdClass: 'text-center',
         },
-
-        // {
-        //   key: 'loose_fruit_debt_expectation',
-        //   label: '',
-        //   formatter: this.formatToZeroDecimals,
-        // tdClass: 'text-right'},
-
-        // {
-        //   key: 'loose_fruit_debt',
-        //   label: '',
-        //   formatter: this.formatToZeroDecimals,
-        // tdClass: 'text-right'},
-        // {
-        //   key: 'percentage_fruit_after',
-        //   label: '',
-        //   formatter: this.formatToTwoDecimals,
-        // tdClass: 'text-right'},
-
-        // { key: 'qty_abnormal', label: '' tdClass: 'text-right'},
-        // { key: 'percentage_abnormal', label: '', formatter: this.formatToTwoDecimals  tdClass: 'text-right'},
-
-        { key: 'npb', label: '' },
       ],
-      dateStart: formatDate(yesterday), // Default to yesterday
-      dateEnd: formatDate(yesterday), // Default to today
-      showSickFruit: false,
-      pt_id: [],
-      pts: [],
+      selectedDate: formatDate(yesterday),
+      selectedType: 'HI',
+      typeOptions: [
+        { value: 'HI', text: 'HI' },
+        { value: 'SHI', text: 'SHI' },
+        { value: 'SBI', text: 'SBI' },
+      ],
       estate_id: [],
       estates: [],
       afdeling_id: [],
       afdelings: [],
       pks_code: [],
       pksList: [],
-      posts: [], // Data for the table
-      pagination: {}, // Pagination data
+      posts: [],
       rowcount: 0,
-      selectAll: false,
-      sweet_alert: {
-        title: '',
-        icon: '',
-      },
       show: 1,
-      isLoadingDropdown: true, // Loading state for dropdowns
+      isLoadingDropdown: true,
     }
   },
-  watchQuery: ['q', 'page'],
 
-  // watch: {
-  //   posts: {
-  //     handler(newPosts) {
-  //       this.posts = newPosts.map(item => ({
-  //         ...item,
-  //         selected: item.status === 'approved', // Always check if status is approved
-  //       }));
-  //     },
-  //     immediate: true, // Ensure this runs when the component is mounted
-  //   },
-  // },
-  computed: {
-    filteredFields() {
-      return this.showSickFruit
-        ? this.fields
-        : this.fields.filter(
-            (field) =>
-              field.key !== 'qty_parthenocarpy' &&
-              field.key !== 'percentage_parthenocarpy' &&
-              field.key !== 'qty_hard_bunch' &&
-              field.key !== 'percentage_hard_bunch' &&
-              field.key !== 'qty_unripe_fruit_fall' &&
-              field.key !== 'percentage_unripe_fruit_fall' &&
-              field.key !== 'qty_long_stalk'
-          )
-    },
-  },
-
-  mounted() {
-    this.loadData()
+  async mounted() {
+    // 1. Load Dropdown List
+    await this.loadDropdownData()
+    // 2. Set Value State Form berdasarkan URL (Hanya 1x saat awal load)
+    this.loadFiltersFromUrl()
+    // 3. Fetch Data API (Memakai Value State Form)
+    await this.fetchData()
   },
 
   methods: {
-    async loadData() {
-      const today = new Date()
-      const yesterday = new Date()
-      yesterday.setDate(today.getDate() - 1)
+    rowClass(item, type) {
+      if (!item || type !== 'row') return
+      if (item.is_total) return 'row-total font-weight-bold text-dark'
+      return 'row-data text-dark'
+    },
 
-      const formatDate = (date) =>
-        `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-          2,
-          '0'
-        )}-${String(date.getDate()).padStart(2, '0')}`
+    async loadDropdownData() {
+      try {
+        const [pksRes, estateRes, afdRes] = await Promise.all([
+          this.$axios.$get(`/api/admin/report-sortasi-pks-dropdown`),
+          this.$axios.$get(`/api/admin/report-sortasi-estate-dropdown`),
+          this.$axios.$get(`/api/admin/report-sortasi-afdeling-dropdown`),
+        ])
+        this.pksList = pksRes.data || []
+        this.estates = estateRes.data || []
+        this.afdelings = afdRes.data || []
+        this.isLoadingDropdown = false
+      } catch (error) {
+        console.error('Error loading dropdowns', error)
+      }
+    },
 
+    loadFiltersFromUrl() {
       const query = this.$route.query
 
-      const dateStart = query.dateStart || formatDate(yesterday)
-      const dateEnd = query.dateEnd || formatDate(yesterday)
+      // Ambil Tanggal & Tipe dari URL, jika tidak ada biarkan default dari data()
+      if (query.date) this.selectedDate = query.date
+      if (query.tipe_tanggal) this.selectedType = query.tipe_tanggal
 
-      const params = {
-        ...(query.page && { page: query.page }),
-        ...(dateStart && { dateStart }),
-        ...(dateEnd && { dateEnd }),
-        ...(query.lifnr && {
-          lifnr: query.lifnr,
-        }),
-        ...(query.department_code_plantation && {
-          department_code_plantation: query.department_code_plantation,
-        }),
-        ...(query.afdeling_code && { afdeling_code: query.afdeling_code }),
-        ...(query.department_id && { department_id: query.department_id }),
-
-        ffb_source: 'external',
-        status: 'approved',
+      // Setup PKS (Dari URL atau Default Auth)
+      if (query.department_id) {
+        const ids = query.department_id.split(',').filter(Boolean)
+        this.pks_code = this.pksList.filter((p) =>
+          ids.includes(p.department_id.toString())
+        )
+      } else {
+        const userDeptCode = this.$auth?.user?.employee?.department_code
+        if (userDeptCode) {
+          const defaultPks = this.pksList.find((p) => p.code === userDeptCode)
+          if (defaultPks) {
+            this.pks_code = [defaultPks]
+          }
+        }
       }
 
-      try {
-        let response = { data: { data: [], total: 0 } }
+      // Setup Estate
+      if (query.department_code_plantation) {
+        const codes = query.department_code_plantation
+          .split(',')
+          .filter(Boolean)
+        this.estate_id = this.estates.filter((e) =>
+          codes.includes(e.department_code_plantation)
+        )
+      }
 
-        // ✅ Hanya ambil data kalau ada department_id
-        if (query.department_id) {
-          response = await this.$axios.$get('/api/admin/report-spot-cek', {
-            params,
-          })
+      // Setup Afdeling
+      if (query.afdeling_code) {
+        const codes = query.afdeling_code.split(',').filter(Boolean)
+        this.afdeling_id = this.afdelings.filter((a) =>
+          codes.includes(a.afdeling_code)
+        )
+      }
+    },
+
+    async fetchData() {
+      try {
+        // PERBAIKAN: Selalu gunakan nilai form v-model, bukan dari this.$route.query
+        const params = {
+          date: this.selectedDate,
+          tipe_tanggal: this.selectedType,
+          status: 'approved',
+          ffb_source: 'internal',
+          plant_type: 'PLASMA',
         }
 
-        const postsFilter = (response.data.data || []).map((item) => ({
-          ...item,
-          selected: item.status === 'approved',
-        }))
+        if (this.pks_code && this.pks_code.length > 0) {
+          params.department_id = this.pks_code
+            .map((p) => p.department_id)
+            .join(',')
+        }
+        if (this.estate_id && this.estate_id.length > 0) {
+          params.department_code_plantation = this.estate_id
+            .map((e) => e.department_code_plantation)
+            .join(',')
+        }
+        if (this.afdeling_id && this.afdeling_id.length > 0) {
+          params.afdeling_code = this.afdeling_id
+            .map((a) => a.afdeling_code)
+            .join(',')
+        }
 
-        this.posts = postsFilter
-        this.pagination = response.data || {}
-        this.rowcount = response.data.total || 0
-
-        const list_pt = await this.$axios.$get(
-          `/api/admin/spot-cek-list-supplier`
+        const rawResponse = await this.$axios.$get(
+          '/api/admin/report-sortasi',
+          { params }
         )
 
-        const list_pks = await this.$axios.$get(`/api/admin/get_pks_dropdown`)
-
-        this.pts = list_pt.data
-
-        this.pksList = list_pks.data
-
-        this.dateStart = dateStart
-        this.dateEnd = dateEnd
-
-        this.pt_id = query.lifnr
-          ? this.pts.filter((item) =>
-              query.lifnr.split(',').includes(item.lifnr.toString())
-            )
-          : []
-        this.pks_code = query.department_id
-          ? this.pksList.filter((item) =>
-              query.department_id
-                .split(',')
-                .includes(item.department_id.toString())
-            )
-          : []
-
-        this.showSickFruit = query.showSickFruit === 'true'
-        this.isLoadingDropdown = false // Set loading to false after data is fetched
+        this.posts = this.processDataWithTotals(rawResponse.data.data)
+        this.rowcount = rawResponse.data.total
       } catch (error) {
-        console.error('Failed to load data:', error)
+        console.error('Error in fetchData:', error)
       }
     },
-    getTonaseTooltip(item) {
-      if (!item.tonase || item.tonase === 0) {
-        return 'Tonase belum diisi atau bernilai nol'
-      }
-      return `Tonase: ${this.formatToThousand(item.tonase)} Kg`
-    },
-    updateLooseFruitDebt(item) {
-      const newValue = parseFloat(item.loose_fruit_debt)
-      const oldValue = parseFloat(
-        item.old_loose_fruit_debt || item.loose_fruit_debt
-      )
 
-      if (isNaN(newValue)) {
-        this.$swal.fire({
-          title: 'Error!',
-          text: 'Masukkan angka yang valid!',
-          icon: 'error',
-          timer: 2000,
-          showConfirmButton: false,
+    processDataWithTotals(rawData) {
+      if (!rawData || rawData.length === 0) return []
+
+      let groups = []
+      let currentGroupKey = null
+
+      rawData.forEach((item) => {
+        let date = item.transaction_date
+          ? item.transaction_date.split(' ')[0]
+          : 'Unknown'
+        let pks = item.department_code || 'Unknown'
+        let estate = item.department_code_plantation || 'Unknown'
+        let key = `${date}|${pks}|${estate}`
+
+        if (currentGroupKey !== key) {
+          groups.push({ key, date, pks, estate, items: [] })
+          currentGroupKey = key
+        }
+        groups[groups.length - 1].items.push(item)
+      })
+
+      let finalData = []
+      let lastSeenDate = null
+      let lastSeenPks = null
+
+      groups.forEach((group) => {
+        let sum_unripe = 0,
+          sum_underripe = 0,
+          sum_ripe = 0,
+          sum_overripe = 0
+        let sum_empty = 0,
+          sum_long_stalk = 0,
+          sum_fruit = 0,
+          sum_garbage = 0
+
+        group.items.forEach((item, index) => {
+          item.percentage_unripe = parseFloat(item.percentage_unripe || 0)
+          item.percentage_underripe = parseFloat(item.percentage_underripe || 0)
+          item.percentage_ripe = parseFloat(item.percentage_ripe || 0)
+          item.percentage_overripe = parseFloat(item.percentage_overripe || 0)
+          item.percentage_empty_bunch = parseFloat(
+            item.percentage_empty_bunch || 0
+          )
+          item.percentage_long_stalk = parseFloat(
+            item.percentage_long_stalk || 0
+          )
+          item.percentage_fruit = parseFloat(item.percentage_fruit || 0)
+          item.percentage_garbage = parseFloat(item.percentage_garbage || 0)
+
+          let displayDate = this.formatDateStr(group.date)
+          item.display_date = displayDate === lastSeenDate ? '' : displayDate
+          lastSeenDate = displayDate
+
+          item.display_pks =
+            group.pks === lastSeenPks && item.display_date === ''
+              ? ''
+              : group.pks
+          lastSeenPks = group.pks
+
+          item.display_estate = index === 0 ? group.estate : ''
+          item.is_total = false
+
+          finalData.push(item)
+
+          sum_unripe += item.percentage_unripe
+          sum_underripe += item.percentage_underripe
+          sum_ripe += item.percentage_ripe
+          sum_overripe += item.percentage_overripe
+          sum_empty += item.percentage_empty_bunch
+          sum_long_stalk += item.percentage_long_stalk
+          sum_fruit += item.percentage_fruit
+          sum_garbage += item.percentage_garbage
         })
-        return
-      }
 
-      // Calculate the difference
-      const difference = newValue - oldValue
-
-      // Update percentage_fruit_after based on the change
-      item.percentage_fruit_after =
-        ((parseFloat(item.loose_fruit) + parseFloat(item.loose_fruit_debt)) /
-          parseFloat(item.tonase)) *
-        100
-
-      // Store the new value as old value for future updates
-      item.old_loose_fruit_debt = newValue
-
-      // Send update to backend
-      this.$axios
-        .post('/api/admin/spot-cek-update-bayar', {
-          id: item.id,
-          loose_fruit_debt: newValue,
-          // percentage_fruit_after: item.percentage_fruit_after,
+        finalData.push({
+          is_total: true,
+          display_date: '',
+          display_pks: '',
+          display_estate: '',
+          afdeling_code: 'TOTAL',
+          percentage_unripe: sum_unripe,
+          percentage_underripe: sum_underripe,
+          percentage_ripe: sum_ripe,
+          percentage_overripe: sum_overripe,
+          percentage_empty_bunch: sum_empty,
+          percentage_long_stalk: sum_long_stalk,
+          percentage_fruit: sum_fruit,
+          percentage_garbage: sum_garbage,
         })
-        .then(() => {
-          this.$swal.fire({
-            title: 'Berhasil!',
-            text: 'Data berhasil diperbarui.',
-            icon: 'success',
-            timer: 2000,
-            showConfirmButton: false,
-          })
-        })
-        .catch((error) => {
-          console.error('Error updating loose_fruit_debt:', error)
-          this.$swal.fire({
-            title: 'Gagal!',
-            text: 'Terjadi kesalahan saat memperbarui data.',
-            icon: 'error',
-            timer: 2000,
-            showConfirmButton: false,
-          })
-        })
+      })
+
+      return finalData
     },
 
-    calculatePercentage(looseFruitDebt) {
-      const baseValue = 1000 // Adjust this based on actual calculation logic
-      return ((looseFruitDebt / baseValue) * 100).toFixed(2)
-    },
-    formatToThousand(value) {
-      if (!value) return '0' // Return 0 for empty or null values
-      return new Intl.NumberFormat('id-ID').format(value)
-    },
     formatToTwoDecimals(value) {
-      if (!value) return '0.00' // Return 0.00 for empty values
-      return parseFloat(value).toFixed(2)
-    },
-    formatToZeroDecimals(value) {
-      if (!value || value === null) return '0' // Return 0.00 for empty values
-      return parseFloat(value).toFixed(0)
+      return Number.isFinite(Number(value)) ? Number(value).toFixed(2) : '0.00'
     },
 
-    approveSelected() {
-      // Show confirmation alert
-      this.$swal
-        .fire({
-          title: 'APAKAH ANDA YAKIN?',
-          text: 'INGIN MENYETUJUI DATA YANG DIPILIH?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#27ae60',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'YA!',
-          cancelButtonText: 'TIDAK',
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            // Prepare data for the API
-            const updatedItemsSelected = this.posts
-              .filter((item) => item.selected && item.status !== 'approved') // Send only items with changed status
-              .map((item) => item.id)
-
-            const updatedItemsUnselected = this.posts
-              .filter((item) => !item.selected && item.status === 'approved') // Send only items with changed status
-              .map((item) => item.id)
-
-            if (
-              updatedItemsSelected.length === 0 &&
-              updatedItemsUnselected.length === 0
-            ) {
-              this.$swal.fire({
-                title: 'Tidak ada perubahan!',
-                text: 'Semua data sudah diapprove.',
-                icon: 'info',
-                showConfirmButton: false,
-                timer: 2000,
-              })
-              return
-            }
-
-            const apiCalls = []
-
-            if (updatedItemsSelected.length !== 0) {
-              apiCalls.push(
-                this.$axios.post('/api/admin/spot-cek-approve', {
-                  ids: updatedItemsSelected,
-                })
-              )
-            }
-
-            if (updatedItemsUnselected.length !== 0) {
-              apiCalls.push(
-                this.$axios.post('/api/admin/spot-cek-unapprove', {
-                  ids: updatedItemsUnselected,
-                })
-              )
-            }
-
-            Promise.all(apiCalls)
-              .then((responses) => {
-                const allSuccess = responses.every(
-                  (response) => response.data.success
-                )
-
-                if (allSuccess) {
-                  this.sweet_alert.title = 'BERHASIL!'
-                  this.sweet_alert.icon = 'success'
-                } else {
-                  this.sweet_alert.title = 'SEBAGIAN BERHASIL!'
-                  this.sweet_alert.icon = 'warning'
-                }
-
-                this.$swal.fire({
-                  title: this.sweet_alert.title,
-                  text: 'Proses selesai!',
-                  icon: this.sweet_alert.icon,
-                  showConfirmButton: false,
-                  timer: 2000,
-                })
-
-                this.$nuxt.refresh()
-              })
-              .catch((error) => {
-                console.error('API Error:', error)
-
-                this.$swal.fire({
-                  title: 'GAGAL!',
-                  text: 'Terjadi kesalahan saat memproses data.',
-                  icon: 'error',
-                  showConfirmButton: false,
-                  timer: 2000,
-                })
-              })
-          }
-        })
-    },
-
-    formatDate(value) {
-      if (!value) return ''
-      const date = new Date(value)
-
+    formatDateStr(dateString) {
+      if (!dateString) return ''
+      const date = new Date(dateString)
       const day = String(date.getDate()).padStart(2, '0')
       const monthNames = [
         'Jan',
@@ -760,94 +510,42 @@ export default {
         'Nov',
         'Dec',
       ]
-      const month = monthNames[date.getMonth()]
-      const year = date.getFullYear()
-
-      return `${day}-${month}-${year}`
-    },
-
-    async changePage(page) {
-      const query = {
-        page,
-        dateStart: this.dateStart,
-        dateEnd: this.dateEnd,
-      }
-
-      if (this.pt_id && this.pt_id.length > 0) {
-        query.lifnr = this.pt_id.map((pt) => pt.lifnr).join(',')
-      }
-      if (this.estate_id && this.estate_id.length > 0) {
-        query.department_code_plantation = this.estate_id
-          .map((estate) => estate.department_code_plantation)
-          .join(',')
-      }
-      if (this.afdeling_id && this.afdeling_id.length > 0) {
-        query.afdeling_code = this.afdeling_id
-          .map((afdeling) => afdeling.afdeling_code)
-          .join(',')
-      }
-      if (this.pks_code && this.pks_code.length > 0) {
-        query.department_id = this.pks_code
-          .map((pks) => pks.department_id)
-          .join(',')
-      }
-      this.$router.push({ path: this.$route.path, query })
-      this.pagination.current_page = page
-      this.applyFilters() // Reapply filters with new page
-    },
-
-    //searchData
-    searchData() {
-      this.$router.push({
-        path: this.$route.path,
-        query: {
-          q: this.search,
-        },
-      })
+      return `${day}-${monthNames[date.getMonth()]}-${date.getFullYear()}`
     },
 
     async applyFilters() {
       this.show = 0
       try {
-        const query = {}
-
-        // Dynamically add non-empty filters to the query
-        if (this.dateStart) query.dateStart = this.dateStart
-        if (this.dateEnd) query.dateEnd = this.dateEnd
-        if (this.pt_id && this.pt_id.length > 0) {
-          query.lifnr = this.pt_id.map((pt) => pt.lifnr).join(',')
+        const query = {
+          date: this.selectedDate,
+          tipe_tanggal: this.selectedType,
         }
 
+        if (this.estate_id && this.estate_id.length > 0) {
+          query.department_code_plantation = this.estate_id
+            .map((e) => e.department_code_plantation)
+            .join(',')
+        }
+        if (this.afdeling_id && this.afdeling_id.length > 0) {
+          query.afdeling_code = this.afdeling_id
+            .map((a) => a.afdeling_code)
+            .join(',')
+        }
         if (this.pks_code && this.pks_code.length > 0) {
           query.department_id = this.pks_code
-            .map((pks) => pks.department_id)
+            .map((p) => p.department_id)
             .join(',')
         }
 
-        if (this.search) query.search = this.search
+        // Tembak API DULU menggunakan state komponen secara instan
+        await this.fetchData()
 
-        query.page = this.pagination.current_page || 1
+        // SETELAH API selesai, update URL secara asinkron tanpa mempedulikan hasilnya
+        // Hapus await dari $router.push agar tidak memblokir UI
+        if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
+          this.$router.push({ path: this.$route.path, query }).catch(() => {})
+        }
 
-        // Update the URL query dynamically
-        this.$router.push({ path: this.$route.path, query })
-
-        query.ffb_source = 'external'
-        query.status = 'approved'
-
-        // Fetch the filtered data
-        const response = await this.$axios.$get('/api/admin/report-spot-cek', {
-          params: query,
-        })
-
-        const postsFilter = response.data.data.map((item) => ({
-          ...item,
-          selected: item.status === 'approved', // Check the checkbox if status is approved
-        }))
-
-        // Update table and pagination data
-        this.posts = postsFilter
-        this.pagination = response.data
-        this.rowcount = response.data.total
         this.show = 1
       } catch (error) {
         console.error('Error applying filters:', error)
@@ -860,92 +558,55 @@ export default {
         this.show = 0
         const queryParams = new URLSearchParams()
 
-        // Add filters dynamically if they exist
-        if (this.dateStart) queryParams.append('dateStart', this.dateStart)
-        if (this.dateEnd) queryParams.append('dateEnd', this.dateEnd)
-        if (this.pt_id && this.pt_id.length > 0) {
+        if (this.selectedDate) queryParams.append('date', this.selectedDate)
+        if (this.selectedType)
+          queryParams.append('tipe_tanggal', this.selectedType)
+
+        if (this.estate_id && this.estate_id.length > 0) {
           queryParams.append(
-            'lifnr',
-            this.pt_id.map((pt) => pt.lifnr).join(',')
+            'department_code_plantation',
+            this.estate_id.map((e) => e.department_code_plantation).join(',')
+          )
+        }
+        if (this.afdeling_id && this.afdeling_id.length > 0) {
+          queryParams.append(
+            'afdeling_code',
+            this.afdeling_id.map((a) => a.afdeling_code).join(',')
           )
         }
         if (this.pks_code && this.pks_code.length > 0) {
           queryParams.append(
             'department_id',
-            this.pks_code.map((pks) => pks.department_id).join(',')
+            this.pks_code.map((p) => p.department_id).join(',')
           )
         }
-        if (this.search) queryParams.append('search', this.search)
 
-        queryParams.append('ffb_source', 'external')
         queryParams.append('status', 'approved')
+        queryParams.append('ffb_source', 'internal')
+        queryParams.append('plant_type', 'PLASMA')
 
-        // Perform the export request
         this.$axios({
-          url: `/api/admin/report-spot-cek-external-export?${queryParams.toString()}`,
+          url: `/api/admin/report-sortasi-export?${queryParams.toString()}`,
           method: 'GET',
-          responseType: 'blob', // Ensures the response is treated as a binary file
+          responseType: 'blob',
         })
           .then((response) => {
             const url = window.URL.createObjectURL(new Blob([response.data]))
             const link = document.createElement('a')
             link.href = url
-            const fileName = 'ReportSpotCekExternal.xlsx' // You can customize the filename
-            link.setAttribute('download', fileName) // Set the file name
+            link.setAttribute('download', 'ReportSortasiHarianPlasma.xlsx')
             document.body.appendChild(link)
             link.click()
-            document.body.removeChild(link) // Clean up the DOM
+            document.body.removeChild(link)
             this.show = 1
           })
           .catch((error) => {
-            console.error('Error exporting data:', error)
+            console.error('Export Error:', error)
             this.show = 1
           })
       } catch (error) {
-        console.error('Error constructing export URL:', error)
         this.show = 1
       }
-    },
-
-    //deletePost method
-    deletePost(id) {
-      this.$swal
-        .fire({
-          title: 'APAKAH ANDA YAKIN ?',
-          text: 'INGIN MENGHAPUS DATA INI !',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'YA, HAPUS!',
-          cancelButtonText: 'TIDAK',
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            //delete tag from server
-
-            this.$axios.delete(`/api/admin/spot-cek/${id}`).then((response) => {
-              //feresh data
-              this.$nuxt.refresh()
-              if (response.data.success == true) {
-                this.sweet_alert.title = 'BERHASIL!'
-                this.sweet_alert.icon = 'success'
-              } else {
-                this.sweet_alert.title = 'GAGAL!'
-                this.sweet_alert.icon = 'error'
-              }
-
-              //alert
-              this.$swal.fire({
-                title: this.sweet_alert.title,
-                text: response.data.message,
-                icon: this.sweet_alert.icon,
-                showConfirmButton: false,
-                timer: 2000,
-              })
-            })
-          }
-        })
     },
   },
 }
@@ -958,26 +619,35 @@ export default {
 .card-title {
   color: #504d8d;
 }
-.b-table td:nth-child(4),
-.b-table th:nth-child(4) {
-  min-width: 120px;
-  max-width: 200px;
-  text-align: center;
-  white-space: nowrap;
+.text-sm {
+  font-size: 0.85rem;
 }
 </style>
 
 <style>
-.input-fruit-debt {
-  min-width: 120px;
-  max-width: 200px;
-  display: flex;
-}
-.b-table thead tr:nth-child(3) {
-  display: none;
+.custom-table thead tr:nth-child(3) {
+  display: none !important;
 }
 
-.bg-yellow-row {
-  background-color: yellow !important; /* Bootstrap warning background */
+/* Custom CSS Warna Tabel */
+.header-yellow th {
+  background-color: #ffff99 !important;
+  color: #000 !important;
+  border-color: #333 !important;
+}
+.row-data td {
+  background-color: #ccffff !important;
+  border-color: #333 !important;
+}
+.row-total td {
+  background-color: #d9d9d9 !important;
+  border-color: #333 !important;
+}
+.bg-light-blue {
+  background-color: #e0f7fa !important;
+}
+.custom-table td,
+.custom-table th {
+  border: 1px solid #333 !important;
 }
 </style>
