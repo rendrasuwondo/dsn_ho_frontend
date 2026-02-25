@@ -535,10 +535,10 @@ export default {
         this.rowcount = response.data.total || 0
 
         const list_pt = await this.$axios.$get(
-          `/api/admin/spot-cek-list-supplier`
+          `/api/admin/spot-cek-list-supplier-report`
         )
 
-        const list_pks = await this.$axios.$get(`/api/admin/get_pks_dropdown`)
+        const list_pks = await this.$axios.$get(`/api/admin/spot-cek-get_pks_dropdown`)
 
         this.pts = list_pt.data
 

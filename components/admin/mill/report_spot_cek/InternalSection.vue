@@ -608,15 +608,19 @@ export default {
             params,
           })
         }
-        const list_pt = await this.$axios.$get(`/api/admin/spot-cek-list-pt`)
+        const list_pt = await this.$axios.$get(
+          `/api/admin/spot-cek-list-pt-report`
+        )
         const list_estate = await this.$axios.$get(
-          `/api/admin/spot-cek-list-estate`
+          `/api/admin/spot-cek-list-estate-report`
         )
         const list_afdeling = await this.$axios.$get(
-          `/api/admin/spot-cek-list-afdeling`
+          `/api/admin/spot-cek-list-afdeling-report`
         )
 
-        const list_pks = await this.$axios.$get(`/api/admin/get_pks_dropdown`)
+        const list_pks = await this.$axios.$get(
+          `/api/admin/spot-cek-get_pks_dropdown`
+        )
 
         this.posts = posts.data.data
         this.pagination = posts.data

@@ -1,0 +1,88 @@
+<template>
+  <div class="content-wrapper mb-5">
+    <section class="content-header">
+      <div class="container-fluid"></div>
+    </section>
+    <section class="content">
+      <div class="mt-5 mx-2">
+        <b-tabs content-class="mt-4 " fill>
+          <b-tab title="Nucleus" lazy active>
+            <Nucleus />
+          </b-tab>
+          <b-tab title="Plasma" lazy>
+            <Plasma />
+          </b-tab>
+        </b-tabs>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script>
+import Nucleus from '~/components/admin/mill/report_sortasi_harian/Nucleus.vue'
+import Plasma from '~/components/admin/mill/report_sortasi_harian/Plasma.vue'
+export default {
+  layout: 'admin',
+
+  head() {
+    return {
+      title: 'Report Sortasi Harian',
+    }
+  },
+
+  components: {
+    Nucleus,
+    Plasma,
+  },
+
+  data() {
+    return {}
+  },
+
+  computed: {},
+
+  mounted() {},
+
+  methods: {},
+}
+</script>
+
+<style scoped>
+.card-info.card-outline {
+  border-top: 5px solid #504d8d;
+}
+.card-title {
+  color: #504d8d;
+}
+</style>
+
+<style>
+.b-table thead tr:nth-child(3) {
+  display: none;
+}
+.b-table td:nth-child(7),
+.b-table td:nth-child(9),
+.b-table td:nth-child(10),
+.b-table td:nth-child(11),
+.b-table td:nth-child(12),
+.b-table td:nth-child(13),
+.b-table td:nth-child(14),
+.b-table td:nth-child(15),
+.b-table td:nth-child(16),
+.b-table td:nth-child(17),
+.b-table td:nth-child(18),
+.b-table td:nth-child(19),
+.b-table td:nth-child(20),
+.b-table td:nth-child(21),
+.b-table td:nth-child(22),
+.b-table td:nth-child(23),
+.b-table td:nth-child(24),
+.b-table td:nth-child(25),
+.b-table td:nth-child(26),
+.b-table td:nth-child(27),
+.b-table td:nth-child(28),
+.b-table td:nth-child(29),
+.b-table td:nth-child(30) {
+  text-align: end;
+}
+</style>
