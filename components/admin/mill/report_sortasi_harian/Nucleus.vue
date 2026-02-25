@@ -150,14 +150,11 @@
                 <th>Total Sampah</th>
               </tr>
               <tr class="header-yellow text-center text-sm">
-                <th>0%</th>
-                <th>&lt; 2%</th>
-                <th>&ge; 95 %</th>
-                <th>&lt; 3 %</th>
-                <th>0%</th>
-                <th>0%</th>
-                <th>Min 10</th>
-                <th>0%</th>
+                <th
+                  v-for="(head, idx) in headersData"
+                  :key="idx"
+                  v-html="head"
+                ></th>
               </tr>
             </template>
 
@@ -332,6 +329,16 @@ export default {
       rowcount: 0,
       show: 1,
       isLoadingDropdown: true,
+      headersData: [
+        '0%',
+        '&lt; 2%',
+        '&ge; 95 %',
+        '&lt; 3 %',
+        '0%',
+        '0%',
+        'Min 10',
+        '0%',
+      ],
     }
   },
 
@@ -470,6 +477,10 @@ export default {
 
         this.posts = this.processDataWithTotals(rawResponse.data.data)
         this.rowcount = rawResponse.data.total
+
+        if (rawResponse.data.metadata) {
+          this.headersData = rawResponse.data.metadata.split(',')
+        }
       } catch (error) {
         console.error('Error in fetchData:', error)
       }
