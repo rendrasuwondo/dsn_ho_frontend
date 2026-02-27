@@ -109,11 +109,11 @@ export default {
       title: 'Map Department',
     }
   },
-  
-  
+
+
     data() {
       return {
-        //header table  
+        //header table
         fields: [
         {
           label: 'Actions',
@@ -141,6 +141,11 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          label: 'Department Name',
+          key: 'department_name',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
           label: 'Aktif',
           key: 'is_active_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
@@ -151,7 +156,7 @@ export default {
       }
     },
 
-   
+
   watchQuery: ['q', 'page'],
 
   async asyncData({ $axios, query }) {
@@ -224,7 +229,7 @@ export default {
                   showConfirmButton: false,
                   timer: 2000,
                 })
-                  
+
                 } else {
                   this.$swal.fire({
                   title: 'GAGAL!',
@@ -235,7 +240,7 @@ export default {
                 })
                 }
 
-                
+
                 //alert
                 this.$swal.fire({
                   title: this.sweet_alert.title,
