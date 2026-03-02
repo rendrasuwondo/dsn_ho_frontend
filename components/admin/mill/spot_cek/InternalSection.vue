@@ -261,14 +261,23 @@ export default {
 
   data() {
     const today = new Date()
-    const yesterday = new Date()
-    yesterday.setDate(today.getDate() - 1)
+    let defaultDate = new Date()
+
+    // Logika: Jika Senin (1), maka default ke Sabtu (hari ini - 2)
+    // Selain itu, default ke kemarin (hari ini - 1)
+    if (today.getDay() === 1) {
+      defaultDate.setDate(today.getDate() - 2)
+    } else {
+      defaultDate.setDate(today.getDate() - 1)
+    }
 
     const formatDate = (date) =>
       `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
         2,
         '0'
       )}-${String(date.getDate()).padStart(2, '0')}`
+
+    const formattedDefault = formatDate(defaultDate)
 
     return {
       fields: [
@@ -507,8 +516,8 @@ export default {
           tdClass: 'text-right',
         },
       ],
-      dateStart: formatDate(yesterday), // Default to yesterday
-      dateEnd: formatDate(yesterday), // Default to today
+      dateStart: formattedDefault,
+      dateEnd: formattedDefault,
       showSickFruit: false,
       pt_id: [],
       pts: [],
@@ -551,8 +560,14 @@ export default {
     async fetchData() {
       try {
         const today = new Date()
-        const yesterday = new Date()
-        yesterday.setDate(today.getDate() - 1)
+        let defaultDate = new Date()
+
+        // Logika yang sama agar konsisten saat refresh/load awal
+        if (today.getDay() === 1) {
+          defaultDate.setDate(today.getDate() - 2)
+        } else {
+          defaultDate.setDate(today.getDate() - 1)
+        }
 
         const formatDate = (date) =>
           `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
@@ -561,8 +576,11 @@ export default {
           )}-${String(date.getDate()).padStart(2, '0')}`
 
         const query = this.$route.query
-        const dateStart = query.dateStart || formatDate(yesterday)
-        const dateEnd = query.dateEnd || formatDate(yesterday)
+        const formattedDefault = formatDate(defaultDate)
+
+        // Gunakan formattedDefault jika query tidak ada
+        const dateStart = query.dateStart || formattedDefault
+        const dateEnd = query.dateEnd || formattedDefault
 
         const params = {
           ...(query.page && { page: query.page }),

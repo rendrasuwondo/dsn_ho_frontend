@@ -220,13 +220,23 @@ export default {
   },
   data() {
     const today = new Date()
-    const yesterday = new Date()
-    yesterday.setDate(today.getDate() - 1)
+    let defaultDate = new Date()
+
+    // Logika: Jika Senin (1), maka default ke Sabtu (hari ini - 2)
+    // Selain itu, default ke kemarin (hari ini - 1)
+    if (today.getDay() === 1) {
+      defaultDate.setDate(today.getDate() - 2)
+    } else {
+      defaultDate.setDate(today.getDate() - 1)
+    }
+
     const formatDate = (date) =>
       `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
         2,
         '0'
       )}-${String(date.getDate()).padStart(2, '0')}`
+
+    const formattedDefault = formatDate(defaultDate)
 
     return {
       fields: [
@@ -312,7 +322,7 @@ export default {
           tdClass: 'text-center',
         },
       ],
-      selectedDate: formatDate(yesterday),
+      selectedDate: formattedDefault,
       selectedType: 'HI',
       typeOptions: [
         { value: 'HI', text: 'HI' },
@@ -349,6 +359,17 @@ export default {
   },
 
   methods: {
+    getDefaultDate() {
+      const today = new Date()
+      let d = new Date()
+      if (today.getDay() === 1) d.setDate(today.getDate() - 2)
+      else d.setDate(today.getDate() - 1)
+
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+        2,
+        '0'
+      )}-${String(d.getDate()).padStart(2, '0')}`
+    },
     async initDefaultState() {
       // 1. Hapus param dari URL agar tidak mempengaruhi/terpengaruh tab lain
       if (Object.keys(this.$route.query).length > 0) {
@@ -366,7 +387,7 @@ export default {
           '0'
         )}-${String(date.getDate()).padStart(2, '0')}`
 
-      this.selectedDate = formatDate(yesterday)
+      this.selectedDate = this.getDefaultDate()
       this.selectedType = 'HI'
       this.estate_id = []
       this.afdeling_id = []
