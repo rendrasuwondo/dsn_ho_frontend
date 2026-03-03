@@ -289,6 +289,7 @@
                 <th rowspan="2">Actions</th>
                 <th rowspan="2">Status</th>
                 <th rowspan="2">Tanggal</th>
+                <th rowspan="2">OER</th>
                 <th rowspan="2">PT</th>
                 <th rowspan="2">Estate</th>
                 <th rowspan="2">Afd</th>
@@ -307,7 +308,6 @@
                 <th colspan="2">Sampah</th>
                 <th rowspan="2">Batu(Kg)</th>
                 <th rowspan="2">No. NPB</th>
-                <th rowspan="2">OER</th>
               </tr>
               <tr>
                 <th>SPB</th>
@@ -623,6 +623,12 @@ export default {
           formatter: this.formatDate,
           tdClass: 'tanggal-col',
         },
+        {
+          key: 'oer',
+          label: '',
+          formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
+        },
         { key: 'company_code_plantation', label: '' },
         { key: 'department_code_plantation', label: '' },
         { key: 'afdeling_code', label: '', tdClass: 'text-right' },
@@ -840,12 +846,6 @@ export default {
           tdClass: 'text-right',
         },
         { key: 'npb', label: '' },
-        {
-          key: 'oer',
-          label: '',
-          formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
       ],
       dateStart: formattedDefault,
       dateEnd: formattedDefault,

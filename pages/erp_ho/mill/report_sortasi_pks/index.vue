@@ -377,7 +377,6 @@ export default {
           let raw_fruit = parseFloat(item.loose_fruit || 0)
           let raw_garbage = parseFloat(item.qty_garbage || 0)
 
-          // PERHITUNGAN PERSEN OER & FFA: Dikali 100
           let raw_oer = parseFloat(item.oer || 0)
           let raw_ffa = parseFloat(item.ffa || 0)
           let perc_oer = raw_oer
