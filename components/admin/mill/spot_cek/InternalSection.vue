@@ -62,6 +62,14 @@
                       </b-form-checkbox>
                     </b-col>
                   </b-row>
+                  <b-row class="mt-3">
+                    <b-col cols="6">Tampilkan Hutang Berondol?</b-col>
+                    <b-col cols="6">
+                      <b-form-checkbox v-model="showDebtFruit" switch>
+                        Ya
+                      </b-form-checkbox>
+                    </b-col>
+                  </b-row>
                 </b-col>
 
                 <!-- Right Section -->
@@ -159,6 +167,7 @@
               <tr>
                 <!-- <th rowspan="2">No</th> -->
                 <th rowspan="2">Tanggal</th>
+                <th rowspan="2">OER</th>
                 <th rowspan="2">PT</th>
                 <th rowspan="2">Estate</th>
                 <th rowspan="2">Afd</th>
@@ -172,12 +181,11 @@
                 </th>
                 <th v-if="showSickFruit" rowspan="2">Tangkai Panjang</th>
                 <th colspan="5" class="text-center">Berondolan</th>
-                <th rowspan="2">Hutang Berondol(Kg)</th>
-                <th colspan="2">Bayar Berondolan</th>
+                <th rowspan="2" v-if="showDebtFruit">Hutang Berondol(Kg)</th>
+                <th v-if="showDebtFruit" colspan="2">Bayar Berondolan</th>
                 <th colspan="2">Sampah</th>
                 <th rowspan="2">Batu(Kg)</th>
                 <th rowspan="2">No. NPB</th>
-                <th rowspan="2">OER</th>
               </tr>
               <tr>
                 <th>SPB</th>
@@ -209,8 +217,8 @@
                 <th>Var(Kg)</th>
                 <th>Var(%)</th>
 
-                <th>Bayar</th>
-                <th>Setelah (%)</th>
+                <th v-if="showDebtFruit">Bayar</th>
+                <th v-if="showDebtFruit">Setelah (%)</th>
 
                 <th>Kg</th>
                 <th>%</th>
@@ -261,14 +269,23 @@ export default {
 
   data() {
     const today = new Date()
-    const yesterday = new Date()
-    yesterday.setDate(today.getDate() - 1)
+    let defaultDate = new Date()
+
+    // Logika: Jika Senin (1), maka default ke Sabtu (hari ini - 2)
+    // Selain itu, default ke kemarin (hari ini - 1)
+    if (today.getDay() === 1) {
+      defaultDate.setDate(today.getDate() - 2)
+    } else {
+      defaultDate.setDate(today.getDate() - 1)
+    }
 
     const formatDate = (date) =>
       `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
         2,
         '0'
       )}-${String(date.getDate()).padStart(2, '0')}`
+
+    const formattedDefault = formatDate(defaultDate)
 
     return {
       fields: [
@@ -278,6 +295,12 @@ export default {
           label: '',
           formatter: this.formatDate,
           tdClass: 'tanggal-col',
+        },
+        {
+          key: 'oer',
+          label: '',
+          formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
         { key: 'company_code_plantation', label: '' },
         { key: 'department_code_plantation', label: '' },
@@ -500,16 +523,11 @@ export default {
           tdClass: 'text-right',
         },
         { key: 'npb', label: '' },
-        {
-          key: 'oer',
-          label: '',
-          formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
       ],
-      dateStart: formatDate(yesterday), // Default to yesterday
-      dateEnd: formatDate(yesterday), // Default to today
+      dateStart: formattedDefault,
+      dateEnd: formattedDefault,
       showSickFruit: false,
+      showDebtFruit: false,
       pt_id: [],
       pts: [],
       estate_id: [],
@@ -528,18 +546,37 @@ export default {
 
   computed: {
     filteredFields() {
-      return this.showSickFruit
-        ? this.fields
-        : this.fields.filter(
-            (field) =>
-              field.key !== 'qty_parthenocarpy' &&
-              field.key !== 'percentage_parthenocarpy' &&
-              field.key !== 'qty_hard_bunch' &&
-              field.key !== 'percentage_hard_bunch' &&
-              field.key !== 'qty_unripe_fruit_fall' &&
-              field.key !== 'percentage_unripe_fruit_fall' &&
-              field.key !== 'qty_long_stalk'
-          )
+      let currentFields = this.fields
+
+      // Filter TBS Abnormal
+      if (!this.showSickFruit) {
+        const sickFruitKeys = [
+          'qty_parthenocarpy',
+          'percentage_parthenocarpy',
+          'qty_hard_bunch',
+          'percentage_hard_bunch',
+          'qty_unripe_fruit_fall',
+          'percentage_unripe_fruit_fall',
+          'qty_long_stalk',
+        ]
+        currentFields = currentFields.filter(
+          (f) => !sickFruitKeys.includes(f.key)
+        )
+      }
+
+      // Filter Bayar/Hutang Berondol
+      if (!this.showDebtFruit) {
+        const debtFruitKeys = [
+          'loose_fruit_debt',
+          'percentage_fruit_after',
+          'loose_fruit_debt_expectation',
+        ]
+        currentFields = currentFields.filter(
+          (f) => !debtFruitKeys.includes(f.key)
+        )
+      }
+
+      return currentFields
     },
   },
 
@@ -551,8 +588,14 @@ export default {
     async fetchData() {
       try {
         const today = new Date()
-        const yesterday = new Date()
-        yesterday.setDate(today.getDate() - 1)
+        let defaultDate = new Date()
+
+        // Logika yang sama agar konsisten saat refresh/load awal
+        if (today.getDay() === 1) {
+          defaultDate.setDate(today.getDate() - 2)
+        } else {
+          defaultDate.setDate(today.getDate() - 1)
+        }
 
         const formatDate = (date) =>
           `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
@@ -561,8 +604,11 @@ export default {
           )}-${String(date.getDate()).padStart(2, '0')}`
 
         const query = this.$route.query
-        const dateStart = query.dateStart || formatDate(yesterday)
-        const dateEnd = query.dateEnd || formatDate(yesterday)
+        const formattedDefault = formatDate(defaultDate)
+
+        // Gunakan formattedDefault jika query tidak ada
+        const dateStart = query.dateStart || formattedDefault
+        const dateEnd = query.dateEnd || formattedDefault
 
         const params = {
           ...(query.page && { page: query.page }),
