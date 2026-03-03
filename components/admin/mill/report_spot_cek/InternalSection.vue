@@ -78,6 +78,14 @@
                       </b-form-checkbox>
                     </b-col>
                   </b-row>
+                  <b-row class="mt-3">
+                    <b-col cols="6">Tampilkan Hutang Berondol?</b-col>
+                    <b-col cols="6">
+                      <b-form-checkbox v-model="showDebtFruit" switch>
+                        Ya
+                      </b-form-checkbox>
+                    </b-col>
+                  </b-row>
                 </b-col>
 
                 <!-- Right Section -->
@@ -175,6 +183,7 @@
               <tr>
                 <!-- <th rowspan="2">No</th> -->
                 <th rowspan="2">Tanggal</th>
+                <th rowspan="2">OER</th>
                 <th rowspan="2">PKS</th>
                 <th rowspan="2">PT</th>
                 <th rowspan="2">Estate</th>
@@ -189,12 +198,11 @@
                 </th>
                 <th v-if="showSickFruit" rowspan="2">Tangkai Panjang</th>
                 <th colspan="5" class="text-center">Berondolan</th>
-                <th rowspan="2">Hutang Berondol(Kg)</th>
-                <th colspan="2">Bayar Berondolan</th>
+                <th rowspan="2" v-if="showDebtFruit">Hutang Berondol(Kg)</th>
+                <th v-if="showDebtFruit" colspan="2">Bayar Berondolan</th>
                 <th colspan="2">Sampah</th>
                 <th rowspan="2">Batu(Kg)</th>
                 <th rowspan="2">No. NPB</th>
-                <th rowspan="2">OER</th>
               </tr>
               <tr>
                 <th>SPB</th>
@@ -226,8 +234,8 @@
                 <th>Var(Kg)</th>
                 <th>Var(%)</th>
 
-                <th>Bayar</th>
-                <th>Setelah (%)</th>
+                <th v-if="showDebtFruit">Bayar</th>
+                <th v-if="showDebtFruit">Setelah (%)</th>
 
                 <th>Kg</th>
                 <th>%</th>
@@ -304,6 +312,12 @@ export default {
           label: '',
           formatter: this.formatDate,
           tdClass: 'tanggal-col',
+        },
+        {
+          key: 'oer',
+          label: '',
+          formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
         },
         { key: 'department_code', label: '' },
         { key: 'company_code_plantation', label: '' },
@@ -528,16 +542,11 @@ export default {
           tdClass: 'text-right',
         },
         { key: 'npb', label: '' },
-        {
-          key: 'oer',
-          label: '',
-          formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
       ],
       dateStart: formattedDefault,
       dateEnd: formattedDefault,
       showSickFruit: false,
+      showDebtFruit: false,
       pt_id: [],
       pts: [],
       estate_id: [],
@@ -558,18 +567,37 @@ export default {
 
   computed: {
     filteredFields() {
-      return this.showSickFruit
-        ? this.fields
-        : this.fields.filter(
-            (field) =>
-              field.key !== 'qty_parthenocarpy' &&
-              field.key !== 'percentage_parthenocarpy' &&
-              field.key !== 'qty_hard_bunch' &&
-              field.key !== 'percentage_hard_bunch' &&
-              field.key !== 'qty_unripe_fruit_fall' &&
-              field.key !== 'percentage_unripe_fruit_fall' &&
-              field.key !== 'qty_long_stalk'
-          )
+      let currentFields = this.fields
+
+      // Filter TBS Abnormal
+      if (!this.showSickFruit) {
+        const sickFruitKeys = [
+          'qty_parthenocarpy',
+          'percentage_parthenocarpy',
+          'qty_hard_bunch',
+          'percentage_hard_bunch',
+          'qty_unripe_fruit_fall',
+          'percentage_unripe_fruit_fall',
+          'qty_long_stalk',
+        ]
+        currentFields = currentFields.filter(
+          (f) => !sickFruitKeys.includes(f.key)
+        )
+      }
+
+      // Filter Bayar/Hutang Berondol
+      if (!this.showDebtFruit) {
+        const debtFruitKeys = [
+          'loose_fruit_debt',
+          'percentage_fruit_after',
+          'loose_fruit_debt_expectation',
+        ]
+        currentFields = currentFields.filter(
+          (f) => !debtFruitKeys.includes(f.key)
+        )
+      }
+
+      return currentFields
     },
   },
 
