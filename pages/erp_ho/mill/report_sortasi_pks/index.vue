@@ -113,16 +113,19 @@
                   <th class="border-dark">(%)</th>
                   <th class="border-dark">(%)</th>
                 </tr>
+
+                <tr style="display: none"></tr>
+
                 <tr class="header-yellow text-center text-sm">
                   <th colspan="3" class="text-right border-dark">Standar</th>
-                  <th class="border-dark">0%</th>
-                  <th class="border-dark">&lt; 2%</th>
-                  <th class="border-dark">&ge; 95 %</th>
-                  <th class="border-dark">&lt; 3 %</th>
-                  <th class="border-dark">0%</th>
-                  <th class="border-dark">0%</th>
-                  <th class="border-dark">Min 10</th>
-                  <th class="border-dark">Max 0.1</th>
+                  <th class="border-dark" v-html="metadataHeaders[0]"></th>
+                  <th class="border-dark" v-html="metadataHeaders[1]"></th>
+                  <th class="border-dark" v-html="metadataHeaders[2]"></th>
+                  <th class="border-dark" v-html="metadataHeaders[3]"></th>
+                  <th class="border-dark" v-html="metadataHeaders[4]"></th>
+                  <th class="border-dark" v-html="metadataHeaders[5]"></th>
+                  <th class="border-dark" v-html="metadataHeaders[6]"></th>
+                  <th class="border-dark" v-html="metadataHeaders[7]"></th>
                   <th class="border-dark"></th>
                   <th class="border-dark"></th>
                 </tr>
@@ -167,6 +170,7 @@
     </section>
   </div>
 </template>
+
 <script>
 export default {
   layout: 'admin',
@@ -278,6 +282,17 @@ export default {
       ],
       default_department_id: '',
       posts: [],
+      // Menyiapkan 8 elemen default sementara menunggu API me-load
+      metadataHeaders: [
+        '0%',
+        '< 2%',
+        '≥ 95 %',
+        '< 3 %',
+        '0%',
+        '0%',
+        'Min 10',
+        'Max 0.1',
+      ],
       rowcount: 0,
       show: 1,
     }
@@ -320,16 +335,32 @@ export default {
           { params }
         )
 
-        // PERBAIKAN DI SINI: Hierarki pemanggilan objek disesuaikan dengan response JSON
-        const factTotals = rawResponse.data.fact_totals || {}
+        let payload = rawResponse
+        if (
+          rawResponse.data &&
+          !Array.isArray(rawResponse.data) &&
+          rawResponse.data.data
+        ) {
+          payload = rawResponse.data
+        }
+
+        // =========================================================
+        // PARSING METADATA KOMA KE DALAM ARRAY
+        // =========================================================
+        if (payload.metadata) {
+          this.metadataHeaders = payload.metadata.split(',')
+        }
+
+        const dataArray = Array.isArray(payload.data) ? payload.data : []
+        const factTotals = payload.fact_totals || {}
 
         this.posts = this.processDataWithTotals(
-          rawResponse.data.data, // data array-nya ada di sini
+          dataArray,
           factTotals,
           this.selectedType
         )
 
-        this.rowcount = rawResponse.data.total
+        this.rowcount = payload.total || 0
       } catch (error) {
         console.error('Error in fetchData:', error)
       }
@@ -384,15 +415,12 @@ export default {
           let raw_fruit = parseFloat(item.loose_fruit || 0)
           let raw_garbage = parseFloat(item.qty_garbage || 0)
 
-          // Antisipasi jika data oer/ffa null di DB
           let raw_oer = parseFloat(item.oer || 0)
           let raw_ffa = parseFloat(item.ffa || 0)
 
           let tglNum = ''
           if (item.transaction_date) {
             const dateObj = new Date(item.transaction_date)
-
-            // Jika tipe SBI, tampilkan format "Tgl Bulan" (misal: 2 Mar)
             if (selectedType === 'SBI') {
               const monthNames = [
                 'Jan',
@@ -410,7 +438,6 @@ export default {
               ]
               tglNum = `${dateObj.getDate()} ${monthNames[dateObj.getMonth()]}`
             } else {
-              // Jika tipe lain (HI / SHI), tampilkan angka tanggal saja
               tglNum = dateObj.getDate()
             }
           }
@@ -453,7 +480,6 @@ export default {
           sum_qty_npb += raw_qty_npb
           sum_tonase += raw_tonase
 
-          // Hanya hitung rata-rata jika ada nilai OER/FFA
           if (raw_oer > 0) sum_oer += raw_oer
           if (raw_ffa > 0) sum_ffa += raw_ffa
           if (raw_oer > 0 || raw_ffa > 0) day_count++
@@ -462,13 +488,9 @@ export default {
           estateRowspanCount++
         })
 
-        // =========================================================
-        // LOGIKA PENENTUAN RATA-RATA OER & FFA (HI vs SHI/SBI)
-        // =========================================================
         let final_avr_oer = day_count > 0 ? sum_oer / day_count : 0
         let final_avr_ffa = day_count > 0 ? sum_ffa / day_count : 0
 
-        // Jika SHI atau SBI, timpa nilainya menggunakan data dari Fact Table (Data Warehouse)
         if (['SHI', 'SBI'].includes(selectedType)) {
           const pksUpper = pks.toUpperCase()
           if (factTotals[pksUpper]) {
@@ -477,7 +499,6 @@ export default {
           }
         }
 
-        // Baris Rata-rata (Avr)
         finalData.push({
           display_pks: pks,
           display_estate: 'All',
@@ -581,7 +602,8 @@ export default {
 </style>
 
 <style>
-.custom-table thead tr:nth-child(4) {
+/* Header asli b-table akan kita biarkan disembunyikan jika masih mengganggu (opsional) */
+.custom-table thead tr:not([class*='header-']) {
   display: none !important;
 }
 
@@ -589,23 +611,31 @@ export default {
   background-color: #c07b36 !important;
   color: #fff !important;
 }
+
 .header-yellow th {
   background-color: #ffff99 !important;
   color: #000 !important;
+  font-weight: bold;
 }
+
 .border-dark {
   border: 1px solid #333 !important;
 }
+
 .row-data td {
   background-color: #fff !important;
   border-color: #333 !important;
 }
+
 .row-total td {
   background-color: #d1f2eb !important;
   border-color: #333 !important;
+  font-weight: bold;
 }
+
 .custom-table td,
 .custom-table th {
   border: 1px solid #333 !important;
+  vertical-align: middle !important;
 }
 </style>
