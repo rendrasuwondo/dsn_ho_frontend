@@ -207,7 +207,7 @@
                   </li>
                 </ul>
 
-                <b-table
+                <!-- <b-table
                   :items="emailLogs"
                   :fields="logFields"
                   small
@@ -239,7 +239,7 @@
                     </span>
                     <span v-else>-</span>
                   </template>
-                </b-table>
+                </b-table> -->
               </div>
             </div>
           </b-card>
