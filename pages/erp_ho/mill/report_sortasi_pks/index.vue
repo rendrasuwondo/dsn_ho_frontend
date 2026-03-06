@@ -33,7 +33,7 @@
                       <b-col cols="9">
                         <b-form-datepicker
                           v-model="selectedDate"
-                          dropup="false"
+                          :dropup="false"
                           class="mb-2"
                           :date-format-options="{
                             year: 'numeric',
@@ -167,7 +167,6 @@
     </section>
   </div>
 </template>
-
 <script>
 export default {
   layout: 'admin',
@@ -321,14 +320,22 @@ export default {
           { params }
         )
 
-        this.posts = this.processDataWithTotals(rawResponse.data.data)
+        // PERBAIKAN DI SINI: Hierarki pemanggilan objek disesuaikan dengan response JSON
+        const factTotals = rawResponse.data.fact_totals || {}
+
+        this.posts = this.processDataWithTotals(
+          rawResponse.data.data, // data array-nya ada di sini
+          factTotals,
+          this.selectedType
+        )
+
         this.rowcount = rawResponse.data.total
       } catch (error) {
         console.error('Error in fetchData:', error)
       }
     },
 
-    processDataWithTotals(rawData) {
+    processDataWithTotals(rawData, factTotals, selectedType) {
       if (!rawData || rawData.length === 0) return []
 
       let groups = {}
@@ -377,14 +384,36 @@ export default {
           let raw_fruit = parseFloat(item.loose_fruit || 0)
           let raw_garbage = parseFloat(item.qty_garbage || 0)
 
+          // Antisipasi jika data oer/ffa null di DB
           let raw_oer = parseFloat(item.oer || 0)
           let raw_ffa = parseFloat(item.ffa || 0)
-          let perc_oer = raw_oer
-          let perc_ffa = raw_ffa
 
-          let tglNum = item.transaction_date
-            ? new Date(item.transaction_date).getDate()
-            : ''
+          let tglNum = ''
+          if (item.transaction_date) {
+            const dateObj = new Date(item.transaction_date)
+
+            // Jika tipe SBI, tampilkan format "Tgl Bulan" (misal: 2 Mar)
+            if (selectedType === 'SBI') {
+              const monthNames = [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'Mei',
+                'Jun',
+                'Jul',
+                'Agt',
+                'Sep',
+                'Okt',
+                'Nov',
+                'Des',
+              ]
+              tglNum = `${dateObj.getDate()} ${monthNames[dateObj.getMonth()]}`
+            } else {
+              // Jika tipe lain (HI / SHI), tampilkan angka tanggal saja
+              tglNum = dateObj.getDate()
+            }
+          }
 
           finalData.push({
             display_pks: pks,
@@ -406,8 +435,8 @@ export default {
               raw_tonase > 0 ? (raw_fruit / raw_tonase) * 100 : 0,
             percentage_garbage:
               raw_qty_npb > 0 ? (raw_garbage / raw_qty_npb) * 100 : 0,
-            oer: perc_oer,
-            ffa: perc_ffa,
+            oer: raw_oer,
+            ffa: raw_ffa,
             is_total: false,
             pksRowspan: 0,
             estateRowspan: 0,
@@ -424,13 +453,29 @@ export default {
           sum_qty_npb += raw_qty_npb
           sum_tonase += raw_tonase
 
-          sum_oer += perc_oer
-          sum_ffa += perc_ffa
-          day_count++
+          // Hanya hitung rata-rata jika ada nilai OER/FFA
+          if (raw_oer > 0) sum_oer += raw_oer
+          if (raw_ffa > 0) sum_ffa += raw_ffa
+          if (raw_oer > 0 || raw_ffa > 0) day_count++
 
           pksRowspanCount++
           estateRowspanCount++
         })
+
+        // =========================================================
+        // LOGIKA PENENTUAN RATA-RATA OER & FFA (HI vs SHI/SBI)
+        // =========================================================
+        let final_avr_oer = day_count > 0 ? sum_oer / day_count : 0
+        let final_avr_ffa = day_count > 0 ? sum_ffa / day_count : 0
+
+        // Jika SHI atau SBI, timpa nilainya menggunakan data dari Fact Table (Data Warehouse)
+        if (['SHI', 'SBI'].includes(selectedType)) {
+          const pksUpper = pks.toUpperCase()
+          if (factTotals[pksUpper]) {
+            final_avr_oer = factTotals[pksUpper].oer
+            final_avr_ffa = factTotals[pksUpper].ffa
+          }
+        }
 
         // Baris Rata-rata (Avr)
         finalData.push({
@@ -451,8 +496,8 @@ export default {
           percentage_fruit: sum_tonase > 0 ? (sum_fruit / sum_tonase) * 100 : 0,
           percentage_garbage:
             sum_qty_npb > 0 ? (sum_garbage / sum_qty_npb) * 100 : 0,
-          oer: day_count > 0 ? sum_oer / day_count : 0,
-          ffa: day_count > 0 ? sum_ffa / day_count : 0,
+          oer: final_avr_oer,
+          ffa: final_avr_ffa,
           is_total: true,
           pksRowspan: 0,
           estateRowspan: 0,
