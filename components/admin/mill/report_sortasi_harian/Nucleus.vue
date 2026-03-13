@@ -222,8 +222,6 @@ export default {
     const today = new Date()
     let defaultDate = new Date()
 
-    // Logika: Jika Senin (1), maka default ke Sabtu (hari ini - 2)
-    // Selain itu, default ke kemarin (hari ini - 1)
     if (today.getDay() === 1) {
       defaultDate.setDate(today.getDate() - 2)
     } else {
@@ -235,8 +233,6 @@ export default {
         2,
         '0'
       )}-${String(date.getDate()).padStart(2, '0')}`
-
-    const formattedDefault = formatDate(defaultDate)
 
     return {
       fields: [
@@ -322,7 +318,7 @@ export default {
           tdClass: 'text-center',
         },
       ],
-      selectedDate: formattedDefault,
+      selectedDate: formatDate(defaultDate),
       selectedType: 'HI',
       typeOptions: [
         { value: 'HI', text: 'HI' },
@@ -370,29 +366,19 @@ export default {
         '0'
       )}-${String(d.getDate()).padStart(2, '0')}`
     },
+
     async initDefaultState() {
-      // 1. Hapus param dari URL agar tidak mempengaruhi/terpengaruh tab lain
       if (Object.keys(this.$route.query).length > 0) {
         await this.$router
           .replace({ path: this.$route.path, query: {} })
           .catch(() => {})
       }
 
-      // 2. Set default tanggal ke H-1 (Sama dengan format di data())
-      const yesterday = new Date()
-      yesterday.setDate(yesterday.getDate() - 1)
-      const formatDate = (date) =>
-        `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-          2,
-          '0'
-        )}-${String(date.getDate()).padStart(2, '0')}`
-
       this.selectedDate = this.getDefaultDate()
       this.selectedType = 'HI'
       this.estate_id = []
       this.afdeling_id = []
 
-      // 3. Set Default PKS berdasar User Login
       const userDeptCode = this.$auth?.user?.employee?.department_code
       if (userDeptCode) {
         const defaultPks = this.pksList.find((p) => p.code === userDeptCode)
@@ -405,6 +391,7 @@ export default {
         this.pks_code = []
       }
     },
+
     rowClass(item, type) {
       if (!item || type !== 'row') return
       if (item.is_total) return 'row-total font-weight-bold text-dark'
@@ -424,44 +411,6 @@ export default {
         this.isLoadingDropdown = false
       } catch (error) {
         console.error('Error loading dropdowns', error)
-      }
-    },
-
-    loadFiltersFromUrl() {
-      const query = this.$route.query
-
-      if (query.date) this.selectedDate = query.date
-      if (query.tipe_tanggal) this.selectedType = query.tipe_tanggal
-
-      if (query.department_id) {
-        const ids = query.department_id.split(',').filter(Boolean)
-        this.pks_code = this.pksList.filter((p) =>
-          ids.includes(p.department_id.toString())
-        )
-      } else {
-        const userDeptCode = this.$auth?.user?.employee?.department_code
-        if (userDeptCode) {
-          const defaultPks = this.pksList.find((p) => p.code === userDeptCode)
-          if (defaultPks) {
-            this.pks_code = [defaultPks]
-          }
-        }
-      }
-
-      if (query.department_code_plantation) {
-        const codes = query.department_code_plantation
-          .split(',')
-          .filter(Boolean)
-        this.estate_id = this.estates.filter((e) =>
-          codes.includes(e.department_code_plantation)
-        )
-      }
-
-      if (query.afdeling_code) {
-        const codes = query.afdeling_code.split(',').filter(Boolean)
-        this.afdeling_id = this.afdelings.filter((a) =>
-          codes.includes(a.afdeling_code)
-        )
       }
     },
 
@@ -496,27 +445,31 @@ export default {
           { params }
         )
 
-        this.posts = this.processDataWithTotals(rawResponse.data.data)
-        this.rowcount = rawResponse.data.total
+        let payload = rawResponse.data ? rawResponse.data : rawResponse
 
-        if (rawResponse.data.metadata) {
-          this.headersData = rawResponse.data.metadata.split(',')
+        this.posts = this.processDataWithTotals(payload.data, this.selectedType)
+        this.rowcount = payload.total
+
+        if (payload.metadata) {
+          this.headersData = payload.metadata.split(',')
         }
       } catch (error) {
         console.error('Error in fetchData:', error)
       }
     },
 
-    processDataWithTotals(rawData) {
+    processDataWithTotals(rawData, selectedType) {
       if (!rawData || rawData.length === 0) return []
 
       let groupedData = {}
 
-      // 1. Hierarchical Grouping: Date -> PKS -> Estate
       rawData.forEach((item) => {
-        let date = item.transaction_date
-          ? item.transaction_date.split(' ')[0]
-          : 'Unknown'
+        let date = item.transaction_date || 'Unknown'
+        // Jika tipenya HI, format tanggal dipotong agar aman dari spasi jam
+        if (selectedType === 'HI' && date !== 'Unknown') {
+          date = date.split(' ')[0]
+        }
+
         let pks = item.department_code || 'Unknown'
         let estate = item.department_code_plantation || 'Unknown'
 
@@ -529,7 +482,6 @@ export default {
 
       let finalData = []
 
-      // 2. Iterasi & Hitung Rowspan
       for (const [date, pksGroups] of Object.entries(groupedData)) {
         let dateRowspanCount = 0
         let dateFirstItemIndex = finalData.length
@@ -553,7 +505,7 @@ export default {
             let estateRowspanCount = 0
             let estateFirstItemIndex = finalData.length
 
-            items.forEach((item, index) => {
+            items.forEach((item) => {
               let raw_qty_npb = parseFloat(item.qty_npb || 0)
               let raw_tonase = parseFloat(item.tonase || 0)
               let raw_unripe = parseFloat(item.qty_unripe || 0)
@@ -565,7 +517,9 @@ export default {
               let raw_fruit = parseFloat(item.loose_fruit || 0)
               let raw_garbage = parseFloat(item.qty_garbage || 0)
 
-              let formattedDate = this.formatDateStr(date)
+              // Jika HI di-format cantik. Jika SHI/SBI langsung ambil teks range-nya.
+              let formattedDate =
+                selectedType === 'HI' ? this.formatDateStr(date) : date
 
               finalData.push({
                 display_date: formattedDate,
@@ -589,7 +543,7 @@ export default {
                 percentage_garbage:
                   raw_qty_npb > 0 ? (raw_garbage / raw_qty_npb) * 100 : 0,
                 is_total: false,
-                dateRowspan: 0, // Akan di-set nanti di item pertama grup
+                dateRowspan: 0,
                 pksRowspan: 0,
                 estateRowspan: 0,
               })
@@ -610,9 +564,10 @@ export default {
               estateRowspanCount++
             })
 
-            // Baris TOTAL
+            // Baris TOTAL per Estate
             finalData.push({
-              display_date: this.formatDateStr(date),
+              display_date:
+                selectedType === 'HI' ? this.formatDateStr(date) : date,
               display_pks: pks,
               display_estate: estate,
               afdeling_code: 'TOTAL',
@@ -642,15 +597,12 @@ export default {
             pksRowspanCount++
             estateRowspanCount++
 
-            // Inject rowspan ke baris PERTAMA dari grup Estate ini
             finalData[estateFirstItemIndex].estateRowspan = estateRowspanCount
           }
 
-          // Inject rowspan ke baris PERTAMA dari grup PKS ini
           finalData[pksFirstItemIndex].pksRowspan = pksRowspanCount
         }
 
-        // Inject rowspan ke baris PERTAMA dari grup Tanggal ini
         finalData[dateFirstItemIndex].dateRowspan = dateRowspanCount
       }
 
