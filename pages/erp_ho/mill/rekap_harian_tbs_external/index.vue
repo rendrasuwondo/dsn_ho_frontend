@@ -14,9 +14,9 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">
-            <i class="nav-icon fas fa-cog"></i> <b>Rekap Harian TBS External</b>
+            <i class="nav-icon fas fa-chart-bar"></i>
+            <b>Rekap Penerimaan TBS Eksternal & Sortasi</b>
           </h3>
-          <div class="card-tools"></div>
         </div>
         <div class="card-body">
           <b-card
@@ -104,34 +104,52 @@
             bordered
             hover
             small
-            class="custom-table"
+            class="custom-table text-nowrap"
           >
             <template v-slot:thead-top>
-              <tr class="header-yellow text-center text-sm align-middle">
-                <th rowspan="2" class="align-middle border-dark">TANGGAL</th>
-                <th rowspan="2" class="align-middle border-dark">SUPPLIER</th>
-                <th rowspan="2" class="align-middle border-dark">DRIVER</th>
-                <th rowspan="2" class="align-middle border-dark">JUMLAH JJG</th>
-                <th rowspan="2" class="align-middle border-dark">
-                  NO TIKET TIMBANG (NPB)
+              <tr class="header-yellow text-center align-middle">
+                <th rowspan="3" class="align-middle border-dark">TANGGAL</th>
+                <th rowspan="3" class="align-middle border-dark">SUPPLIER</th>
+                <th rowspan="3" class="align-middle border-dark">DRIVER</th>
+                <th rowspan="3" class="align-middle border-dark">
+                  JUMLAH<br />JJG
                 </th>
-                <th rowspan="2" class="align-middle border-dark">NO SPTBS</th>
-                <th rowspan="2" class="align-middle border-dark">
-                  TIMBANG MASUK
+                <th rowspan="3" class="align-middle border-dark">
+                  NO TIKET TIMBANG
                 </th>
-                <th rowspan="2" class="align-middle border-dark">
-                  TIMBANG KELUAR
+                <th rowspan="3" class="align-middle border-dark">
+                  TIMBANG<br />MASUK
                 </th>
-                <th rowspan="2" class="align-middle border-dark">
-                  TONASE BERSIH
+                <th rowspan="3" class="align-middle border-dark">
+                  TIMBANG<br />KELUAR
                 </th>
+                <th rowspan="3" class="align-middle border-dark">
+                  TONASE<br />BERSIH
+                </th>
+                <th rowspan="3" class="align-middle border-dark">NO. POLISI</th>
+                <th rowspan="3" class="align-middle border-dark">NO. SPTBS</th>
+
                 <th colspan="12" class="border-dark">
                   POTONGAN BERDASARKAN KATEGORI TBS
                 </th>
-                <th colspan="2" class="border-dark">TOTAL POTONGAN SORTASI</th>
-                <th rowspan="2" class="align-middle border-dark">NETTO</th>
-                <th colspan="3" class="border-dark">JJG KEMBALI</th>
+
+                <th colspan="2" rowspan="2" class="align-middle border-dark">
+                  TOTAL POTONGAN<br />SORTASI
+                </th>
+                <th rowspan="3" class="align-middle border-dark">NETTO</th>
+                <th colspan="3" rowspan="2" class="align-middle border-dark">
+                  JJG KEMBALI
+                </th>
               </tr>
+              <tr class="header-yellow text-center align-middle">
+                <th colspan="2" class="border-dark">BM</th>
+                <th colspan="2" class="border-dark">BLM</th>
+                <th colspan="2" class="border-dark">TP</th>
+                <th colspan="2" class="border-dark">TK</th>
+                <th colspan="2" class="border-dark">BRD</th>
+                <th colspan="2" class="border-dark">KOTORAN</th>
+              </tr>
+              <tr></tr>
               <tr class="header-yellow text-center text-sm">
                 <th class="border-dark">%</th>
                 <th class="border-dark">KG</th>
@@ -145,7 +163,6 @@
                 <th class="border-dark">KG</th>
                 <th class="border-dark">%</th>
                 <th class="border-dark">KG</th>
-
                 <th class="border-dark">%</th>
                 <th class="border-dark">KG</th>
 
@@ -153,12 +170,23 @@
                 <th class="border-dark">BJR</th>
                 <th class="border-dark">TON</th>
               </tr>
+              <tr style="display: none"></tr>
             </template>
           </b-table>
 
           <b-row>
+            <b-col>
+              <b-pagination
+                v-model="pagination.current_page"
+                :total-rows="pagination.total"
+                :per-page="pagination.per_page"
+                @change="changePage"
+                align="left"
+                class="mt-1"
+              ></b-pagination>
+            </b-col>
             <b-col class="text-right mt-2 text-muted font-weight-bold">
-              Total: {{ rowcount }} baris data
+              Total: {{ rowcount }} data
             </b-col>
           </b-row>
         </div>
@@ -171,7 +199,7 @@
 export default {
   layout: 'admin',
   head() {
-    return { title: 'Rekap Harian TBS External' }
+    return { title: 'Rekap Penerimaan TBS Eksternal & Sortasi' }
   },
 
   data() {
@@ -190,68 +218,171 @@ export default {
         { key: 'tanggal', label: '', tdClass: 'align-middle text-center' },
         { key: 'supplier', label: '', tdClass: 'align-middle' },
         { key: 'driver', label: '', tdClass: 'align-middle' },
-        { key: 'jumlah_jjg', label: '', tdClass: 'align-middle text-center' },
-        { key: 'npb', label: '', tdClass: 'align-middle text-center' },
-        { key: 'spb', label: '', tdClass: 'align-middle text-center' },
-        { key: 'timbang_masuk', label: '', tdClass: 'align-middle text-right' },
         {
-          key: 'timbang_keluar',
+          key: 'jumlah_jjg',
           label: '',
-          tdClass: 'align-middle text-right',
-        },
-        {
-          key: 'tonase',
-          label: '',
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right font-weight-bold',
         },
 
-        { key: 'bm_perc', label: '', tdClass: 'align-middle text-center' },
-        { key: 'bm_kg', label: '', tdClass: 'align-middle text-right' },
+        {
+          key: 'no_tiket_timbang',
+          label: '',
+          tdClass: 'align-middle text-center text-nowrap',
+        },
 
-        { key: 'blm_perc', label: '', tdClass: 'align-middle text-center' },
-        { key: 'blm_kg', label: '', tdClass: 'align-middle text-right' },
+        {
+          key: 'timbang_masuk',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right',
+        },
+        {
+          key: 'timbang_keluar',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right',
+        },
+        {
+          key: 'tonase_bersih',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right font-weight-bold',
+        },
 
-        { key: 'tp_perc', label: '', tdClass: 'align-middle text-center' },
-        { key: 'tp_kg', label: '', tdClass: 'align-middle text-right' },
+        { key: 'no_polisi', label: '', tdClass: 'align-middle text-center' },
+        {
+          key: 'no_sptbs',
+          label: '',
+          tdClass: 'align-middle text-center text-nowrap',
+        },
 
-        { key: 'tk_perc', label: '', tdClass: 'align-middle text-center' },
-        { key: 'tk_kg', label: '', tdClass: 'align-middle text-right' },
+        // Kategori TBS
+        {
+          key: 'bm_perc',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-center',
+        },
+        {
+          key: 'bm_kg',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right',
+        },
+        {
+          key: 'blm_perc',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-center',
+        },
+        {
+          key: 'blm_kg',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right',
+        },
+        {
+          key: 'tp_perc',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-center',
+        },
+        {
+          key: 'tp_kg',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right',
+        },
+        {
+          key: 'tk_perc',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-center',
+        },
+        {
+          key: 'tk_kg',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right',
+        },
+        {
+          key: 'brd_perc',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-center',
+        },
+        {
+          key: 'brd_kg',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right',
+        },
+        {
+          key: 'kotoran_perc',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-center',
+        },
+        {
+          key: 'kotoran_kg',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right',
+        },
 
-        { key: 'brd_perc', label: '', tdClass: 'align-middle text-center' },
-        { key: 'brd_kg', label: '', tdClass: 'align-middle text-right' },
-
-        { key: 'kotoran_perc', label: '', tdClass: 'align-middle text-center' },
-        { key: 'kotoran_kg', label: '', tdClass: 'align-middle text-right' },
-
+        // Total Potongan Sortasi
         {
           key: 'tot_potongan_perc',
           label: '',
-          tdClass: 'align-middle text-center font-weight-bold',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-center bg-light font-weight-bold',
         },
         {
           key: 'tot_potongan_kg',
           label: '',
-          tdClass: 'align-middle text-right font-weight-bold',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right bg-light font-weight-bold',
         },
 
+        // Netto (Tonase Bersih)
         {
           key: 'netto',
           label: '',
-          tdClass: 'align-middle text-right font-weight-bold text-success',
+          formatter: this.formatThousand,
+          tdClass: 'align-middle text-right font-weight-bold',
         },
 
-        { key: 'jjg_kembali', label: '', tdClass: 'align-middle text-center' },
-        { key: 'bjr', label: '', tdClass: 'align-middle text-center' },
-        { key: 'ton_kembali', label: '', tdClass: 'align-middle text-right' },
+        // JJG Kembali
+        {
+          key: 'jjg_kembali_jjg',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right bg-light',
+        },
+        {
+          key: 'jjg_kembali_bjr',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right bg-light',
+        },
+        {
+          key: 'jjg_kembali_ton',
+          label: '',
+          formatter: this.formatNumber,
+          tdClass: 'align-middle text-right bg-light font-weight-bold',
+        },
       ],
       dateStart: formatDate(yesterday),
       dateEnd: formatDate(yesterday),
       supplier_id: [],
       suppliers: [],
       posts: [],
+      pagination: { current_page: 1, per_page: 50, total: 0 },
       rowcount: 0,
       show: 0,
       isLoadingDropdown: true,
+      isPaginating: false,
     }
   },
 
@@ -262,6 +393,15 @@ export default {
   },
 
   methods: {
+    formatNumber(value) {
+      if (value === null || value === undefined) return '0.00'
+      return Number(value).toFixed(2)
+    },
+    formatThousand(value) {
+      if (value === null || value === undefined) return '0'
+      return Number(value).toLocaleString('en-US')
+    },
+
     async loadDropdownData() {
       try {
         const response = await this.$axios.$get(
@@ -279,6 +419,7 @@ export default {
       const query = this.$route.query
       if (query.dateStart) this.dateStart = query.dateStart
       if (query.dateEnd) this.dateEnd = query.dateEnd
+      if (query.page) this.pagination.current_page = parseInt(query.page)
 
       if (query.supplier) {
         const lifnrs = query.supplier.split(',')
@@ -294,10 +435,11 @@ export default {
         const params = {
           dateStart: this.dateStart,
           dateEnd: this.dateEnd,
+          page: this.pagination.current_page || 1,
         }
 
         if (this.supplier_id && this.supplier_id.length > 0) {
-          params.supplier = this.supplier_id.map((s) => s.supplier).join(',')
+          params.supplier = this.supplier_id.map((s) => s.lifnr).join(',')
         }
 
         const response = await this.$axios.$get(
@@ -305,8 +447,9 @@ export default {
           { params }
         )
 
-        this.posts = response.data || []
-        this.rowcount = this.posts.length
+        this.posts = response.data.data || []
+        this.pagination = response.data
+        this.rowcount = response.data.total
 
         this.show = 1
       } catch (error) {
@@ -316,26 +459,51 @@ export default {
     },
 
     async applyFilters() {
+      // 1. Reset ke halaman pertama HANYA jika yang di-klik adalah tombol filter
+      // (bukan klik tombol pagination)
+      if (this.pagination.current_page > 1 && !this.isPaginating) {
+        this.pagination.current_page = 1
+      }
+      this.isPaginating = false // Reset flag
+
       const query = {
         dateStart: this.dateStart,
         dateEnd: this.dateEnd,
+        page: this.pagination.current_page,
       }
 
       if (this.supplier_id && this.supplier_id.length > 0) {
         query.supplier = this.supplier_id.map((s) => s.lifnr).join(',')
       }
 
-      if (JSON.stringify(this.$route.query) !== JSON.stringify(query)) {
-        await this.$router
-          .push({ path: this.$route.path, query })
-          .catch(() => {})
+      // 2. Gunakan pendekatan push yang lebih aman tanpa .catch berantai
+      const currentQueryStr = JSON.stringify(this.$route.query)
+      const newQueryStr = JSON.stringify(query)
+
+      if (currentQueryStr !== newQueryStr) {
+        try {
+          await this.$router.push({ path: this.$route.path, query: query })
+        } catch (err) {
+          // Abaikan error "NavigationDuplicated"
+          if (err.name !== 'NavigationDuplicated') {
+            console.error(err)
+          }
+        }
       }
 
+      // 3. Tarik data baru
       await this.fetchData()
+    },
+
+    changePage(page) {
+      this.isPaginating = true // Tandai bahwa ini adalah aksi pagination
+      this.pagination.current_page = page
+      this.applyFilters()
     },
 
     exportData() {
       const queryParams = new URLSearchParams()
+      this.show = 0
 
       if (this.dateStart) queryParams.append('dateStart', this.dateStart)
       if (this.dateEnd) queryParams.append('dateEnd', this.dateEnd)
@@ -362,9 +530,11 @@ export default {
           document.body.appendChild(link)
           link.click()
           document.body.removeChild(link)
+          this.show = 1
         })
         .catch((error) => {
           console.error('Export Error:', error)
+          this.show = 1
         })
     },
   },
@@ -373,13 +543,10 @@ export default {
 
 <style scoped>
 .card-info.card-outline {
-  border-top: 5px solid #ffc107;
+  border-top: 5px solid #ffb300;
 }
 .card-title {
   color: #333;
-}
-.text-sm {
-  font-size: 0.8rem;
 }
 </style>
 
@@ -390,7 +557,7 @@ export default {
 }
 
 .header-yellow th {
-  background-color: #ffc107 !important; /* Warna Kuning seperti Mockup */
+  background-color: #ffb300 !important; /* Warna Oranye/Kuning seperti Mockup */
   color: #000 !important;
   font-weight: bold;
 }
