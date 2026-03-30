@@ -135,8 +135,18 @@
           </b-table>
 
           <b-row>
+            <b-col>
+              <b-pagination
+                v-model="pagination.current_page"
+                :total-rows="pagination.total"
+                :per-page="pagination.per_page"
+                @change="changePage"
+                align="left"
+                class="mt-1"
+              ></b-pagination>
+            </b-col>
             <b-col class="text-right mt-2 text-muted font-weight-bold">
-              Total: {{ posts.length }} baris data
+              Total: {{ rowcount }} data
             </b-col>
           </b-row>
         </div>
@@ -197,25 +207,27 @@ export default {
           tdClass: 'align-middle text-right',
         },
 
+        // NETTO TIMBANGAN (TON) -> Semuanya Format Number 2 Desimal
         {
           key: 'netto_jjg',
           label: '',
           formatter: this.formatNumber,
-          tdClass: 'align-middle text-right',
+          tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'netto_ton',
           label: '',
           formatter: this.formatNumber,
-          tdClass: 'align-middle text-right',
+          tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'netto_ton_rit',
           label: '',
           formatter: this.formatNumber,
-          tdClass: 'align-middle text-right',
+          tdClass: 'align-middle text-right bg-light',
         },
 
+        // DIKEMBALIKAN (TON)
         {
           key: 'dikembalikan_jjg',
           label: '',
@@ -235,53 +247,60 @@ export default {
           tdClass: 'align-middle text-right',
         },
 
+        // TOTAL (TON)
         {
           key: 'total_jjg',
           label: '',
           formatter: this.formatNumber,
-          tdClass: 'align-middle text-right',
+          tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'total_ton',
           label: '',
           formatter: this.formatNumber,
-          tdClass: 'align-middle text-right',
+          tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'total_ton_rit',
           label: '',
           formatter: this.formatNumber,
-          tdClass: 'align-middle text-right',
+          tdClass: 'align-middle text-right bg-light',
         },
 
+        // POTONGAN %
         {
           key: 'potongan_persen',
           label: '',
           tdClass: 'align-middle text-center',
         },
 
+        // % DIKEMBALIKAN
         {
           key: 'perc_kembali_jjg',
           label: '',
           formatter: this.formatNumber,
-          tdClass: 'align-middle text-right',
+          tdClass: 'align-middle text-right text-muted',
         },
         {
           key: 'perc_kembali_ton',
           label: '',
           formatter: this.formatNumber,
-          tdClass: 'align-middle text-right',
+          tdClass: 'align-middle text-right text-muted',
         },
       ],
       dateStart: formatDate(firstDay),
       dateEnd: formatDate(today),
       posts: [],
+      pagination: { current_page: 1, per_page: 50, total: 0 },
+      isPaginating: false, // Menandakan sedang berganti page via pagination
+      rowcount: 0,
       show: 0,
-      defaultPotongan: 3, // Diupdate dinamis dari response API nanti
+      defaultPotongan: 3,
     }
   },
 
   async mounted() {
+    this.loadFiltersFromUrl()
     await this.fetchData()
   },
 
@@ -290,12 +309,20 @@ export default {
       return Number.isFinite(Number(value)) ? Number(value).toFixed(2) : '0.00'
     },
 
+    loadFiltersFromUrl() {
+      const query = this.$route.query
+      if (query.dateStart) this.dateStart = query.dateStart
+      if (query.dateEnd) this.dateEnd = query.dateEnd
+      if (query.page) this.pagination.current_page = parseInt(query.page)
+    },
+
     async fetchData() {
       this.show = 0
       try {
         const params = {
           dateStart: this.dateStart,
           dateEnd: this.dateEnd,
+          page: this.pagination.current_page || 1,
         }
 
         const response = await this.$axios.$get(
@@ -303,8 +330,11 @@ export default {
           { params }
         )
 
-        this.posts = response.data || []
-        if (response.potongan_persen) {
+        this.posts = response.data.data || []
+        this.pagination = response.data
+        this.rowcount = response.data.total
+
+        if (response.potongan_persen !== undefined) {
           this.defaultPotongan = response.potongan_persen
         }
 
@@ -316,12 +346,76 @@ export default {
     },
 
     async applyFilters() {
+      // 1. Reset ke halaman pertama HANYA jika yang di-klik adalah tombol filter
+      if (this.pagination.current_page > 1 && !this.isPaginating) {
+        this.pagination.current_page = 1
+      }
+      this.isPaginating = false
+
+      const query = {
+        dateStart: this.dateStart,
+        dateEnd: this.dateEnd,
+        page: this.pagination.current_page,
+      }
+
+      // 2. Update URL dengan Error Handling (Mencegah "NavigationDuplicated")
+      const currentQueryStr = JSON.stringify(this.$route.query)
+      const newQueryStr = JSON.stringify(query)
+
+      if (currentQueryStr !== newQueryStr) {
+        try {
+          await this.$router.push({ path: this.$route.path, query: query })
+        } catch (err) {
+          if (err.name !== 'NavigationDuplicated') {
+            console.error(err)
+          }
+        }
+      }
+
       await this.fetchData()
     },
 
+    changePage(page) {
+      this.isPaginating = true
+      this.pagination.current_page = page
+      this.applyFilters()
+    },
+
     exportData() {
-      // Export logic goes here if requested in future. You can copy the usual Axios export pattern.
-      alert('Fitur export sedang disiapkan')
+      const queryParams = new URLSearchParams()
+      this.show = 0
+
+      if (this.dateStart) queryParams.append('dateStart', this.dateStart)
+      if (this.dateEnd) queryParams.append('dateEnd', this.dateEnd)
+
+      // if (this.supplier_id && this.supplier_id.length > 0) {
+      //   queryParams.append(
+      //     'supplier',
+      //     this.supplier_id.map((s) => s.supplier).join(',')
+      //   )
+      // }
+
+      const fileName = `Rekap_Penerimaan_Tbs_External_Sortasi_${this.dateStart}_sd_${this.dateEnd}.xlsx`
+
+      this.$axios({
+        url: `/api/admin/rekap_penerimaan_external_sortasi_export?${queryParams.toString()}`,
+        method: 'GET',
+        responseType: 'blob',
+      })
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute('download', fileName)
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          this.show = 1
+        })
+        .catch((error) => {
+          console.error('Export Error:', error)
+          this.show = 1
+        })
     },
   },
 }
