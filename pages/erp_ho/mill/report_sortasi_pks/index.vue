@@ -92,6 +92,9 @@
                   <th rowspan="2" class="align-middle border-dark">Mill</th>
                   <th rowspan="2" class="align-middle border-dark">Estate</th>
                   <th rowspan="2" class="align-middle border-dark">TGL</th>
+                  <th class="border-dark align-middle" rowspan="2">
+                    Selisih Jjg<br />(%)
+                  </th>
                   <th class="border-dark">Buah Mentah</th>
                   <th class="border-dark">Buah Mengkal</th>
                   <th class="border-dark">Buah Matang</th>
@@ -100,6 +103,7 @@
                   <th class="border-dark">Tangkai</th>
                   <th class="border-dark">Brondolan</th>
                   <th class="border-dark">Kotoran</th>
+
                   <th class="border-dark" rowspan="2">OER<br />%</th>
                   <th class="border-dark" rowspan="2">FFA<br />%</th>
                 </tr>
@@ -118,6 +122,7 @@
 
                 <tr class="header-yellow text-center text-sm">
                   <th colspan="3" class="text-right border-dark">Standar</th>
+                  <th class="border-dark"></th>
                   <th class="border-dark" v-html="metadataHeaders[0]"></th>
                   <th class="border-dark" v-html="metadataHeaders[1]"></th>
                   <th class="border-dark" v-html="metadataHeaders[2]"></th>
@@ -126,6 +131,7 @@
                   <th class="border-dark" v-html="metadataHeaders[5]"></th>
                   <th class="border-dark" v-html="metadataHeaders[6]"></th>
                   <th class="border-dark" v-html="metadataHeaders[7]"></th>
+
                   <th class="border-dark"></th>
                   <th class="border-dark"></th>
                 </tr>
@@ -211,6 +217,12 @@ export default {
           key: 'display_tgl',
           label: '',
           tdClass: 'text-center font-weight-bold align-middle',
+        },
+        {
+          key: 'percentage_qty',
+          label: '',
+          formatter: this.formatToTwoDecimals,
+          tdClass: 'text-center align-middle',
         },
         {
           key: 'percentage_unripe',
@@ -323,7 +335,6 @@ export default {
           date: this.selectedDate,
           tipe_tanggal: this.selectedType,
           status: 'approved',
-          plant_type: 'NUCLEUS',
         }
 
         if (this.default_department_id) {
@@ -383,37 +394,38 @@ export default {
         let pksRowspanCount = 0
         let pksFirstItemIndex = finalData.length
 
-        // Di PKS ini hanya ada 1 grup Estate yaitu "All"
         let estateRowspanCount = 0
         let estateFirstItemIndex = finalData.length
 
-        let sum_unripe = 0,
-          sum_underripe = 0,
-          sum_ripe = 0,
-          sum_overripe = 0
-        let sum_empty = 0,
-          sum_long_stalk = 0,
-          sum_fruit = 0,
-          sum_garbage = 0
-        let sum_qty_npb = 0,
-          sum_tonase = 0
+        // Variabel penampung untuk TOTAL GRAND ALL (Baris Paling Bawah)
+        let grand_sum_unripe = 0,
+          grand_sum_underripe = 0,
+          grand_sum_ripe = 0,
+          grand_sum_overripe = 0
+        let grand_sum_empty = 0,
+          grand_sum_long_stalk = 0,
+          grand_sum_fruit = 0,
+          grand_sum_garbage = 0
+        let grand_sum_qty = 0
+        let grand_jml_data = 0 // Total Pembagi Keseluruhan
 
         let sum_oer = 0,
           sum_ffa = 0
         let day_count = 0
 
         items.forEach((item) => {
-          let raw_qty_npb = parseFloat(item.qty_npb || 0)
-          let raw_tonase = parseFloat(item.tonase || 0)
+          // Ambil SUM dan Count dari backend
+          let sum_unripe = parseFloat(item.sum_perc_unripe || 0)
+          let sum_underripe = parseFloat(item.sum_perc_underripe || 0)
+          let sum_ripe = parseFloat(item.sum_perc_ripe || 0)
+          let sum_overripe = parseFloat(item.sum_perc_overripe || 0)
+          let sum_empty = parseFloat(item.sum_perc_empty_bunch || 0)
+          let sum_long_stalk = parseFloat(item.sum_perc_long_stalk || 0)
+          let sum_fruit = parseFloat(item.sum_perc_fruit || 0)
+          let sum_garbage = parseFloat(item.sum_perc_garbage || 0)
+          let sum_qty = parseFloat(item.sum_perc_qty || 0)
 
-          let raw_unripe = parseFloat(item.qty_unripe || 0)
-          let raw_underripe = parseFloat(item.qty_underripe || 0)
-          let raw_ripe = parseFloat(item.qty_ripe || 0)
-          let raw_overripe = parseFloat(item.qty_overripe || 0)
-          let raw_empty = parseFloat(item.qty_empty_bunch || 0)
-          let raw_long_stalk = parseFloat(item.qty_long_stalk || 0)
-          let raw_fruit = parseFloat(item.loose_fruit || 0)
-          let raw_garbage = parseFloat(item.qty_garbage || 0)
+          let jml_data = parseInt(item.jml_data || 1) // Hindari pembagi 0
 
           let raw_oer = parseFloat(item.oer || 0)
           let raw_ffa = parseFloat(item.ffa || 0)
@@ -442,26 +454,20 @@ export default {
             }
           }
 
+          // Push Baris Harian (Dibagi jml_data pada hari itu)
           finalData.push({
             display_pks: pks,
             display_estate: 'All',
             display_tgl: tglNum,
-            percentage_unripe:
-              raw_qty_npb > 0 ? (raw_unripe / raw_qty_npb) * 100 : 0,
-            percentage_underripe:
-              raw_qty_npb > 0 ? (raw_underripe / raw_qty_npb) * 100 : 0,
-            percentage_ripe:
-              raw_qty_npb > 0 ? (raw_ripe / raw_qty_npb) * 100 : 0,
-            percentage_overripe:
-              raw_qty_npb > 0 ? (raw_overripe / raw_qty_npb) * 100 : 0,
-            percentage_empty_bunch:
-              raw_qty_npb > 0 ? (raw_empty / raw_qty_npb) * 100 : 0,
-            percentage_long_stalk:
-              raw_qty_npb > 0 ? (raw_long_stalk / raw_qty_npb) * 100 : 0,
-            percentage_fruit:
-              raw_tonase > 0 ? (raw_fruit / raw_tonase) * 100 : 0,
-            percentage_garbage:
-              raw_qty_npb > 0 ? (raw_garbage / raw_qty_npb) * 100 : 0,
+            percentage_unripe: sum_unripe / jml_data,
+            percentage_underripe: sum_underripe / jml_data,
+            percentage_ripe: sum_ripe / jml_data,
+            percentage_overripe: sum_overripe / jml_data,
+            percentage_empty_bunch: sum_empty / jml_data,
+            percentage_long_stalk: sum_long_stalk / jml_data,
+            percentage_fruit: sum_fruit / jml_data,
+            percentage_garbage: sum_garbage / jml_data,
+            percentage_qty: sum_qty / jml_data,
             oer: raw_oer,
             ffa: raw_ffa,
             is_total: false,
@@ -469,25 +475,28 @@ export default {
             estateRowspan: 0,
           })
 
-          sum_unripe += raw_unripe
-          sum_underripe += raw_underripe
-          sum_ripe += raw_ripe
-          sum_overripe += raw_overripe
-          sum_empty += raw_empty
-          sum_long_stalk += raw_long_stalk
-          sum_fruit += raw_fruit
-          sum_garbage += raw_garbage
-          sum_qty_npb += raw_qty_npb
-          sum_tonase += raw_tonase
+          // Akumulasikan ke Grand Total
+          grand_sum_unripe += sum_unripe
+          grand_sum_underripe += sum_underripe
+          grand_sum_ripe += sum_ripe
+          grand_sum_overripe += sum_overripe
+          grand_sum_empty += sum_empty
+          grand_sum_long_stalk += sum_long_stalk
+          grand_sum_fruit += sum_fruit
+          grand_sum_garbage += sum_garbage
+          grand_sum_qty += sum_qty
+
+          grand_jml_data += jml_data // Tambahkan total pembaginya
 
           if (raw_oer > 0) sum_oer += raw_oer
           if (raw_ffa > 0) sum_ffa += raw_ffa
-          if (raw_oer > 0 || raw_ffa > 0) day_count++
+          day_count++
 
           pksRowspanCount++
           estateRowspanCount++
         })
 
+        // Rata-rata OER & FFA (Tetap menggunakan day_count karena sumber awalnya sudah AVG per hari)
         let final_avr_oer = day_count > 0 ? sum_oer / day_count : 0
         let final_avr_ffa = day_count > 0 ? sum_ffa / day_count : 0
 
@@ -499,24 +508,29 @@ export default {
           }
         }
 
+        // Push Baris AVR (Dibagi grand_jml_data agar menjadi rata-rata mutlak)
         finalData.push({
           display_pks: pks,
           display_estate: 'All',
           display_tgl: 'Avr',
           percentage_unripe:
-            sum_qty_npb > 0 ? (sum_unripe / sum_qty_npb) * 100 : 0,
+            grand_jml_data > 0 ? grand_sum_unripe / grand_jml_data : 0,
           percentage_underripe:
-            sum_qty_npb > 0 ? (sum_underripe / sum_qty_npb) * 100 : 0,
-          percentage_ripe: sum_qty_npb > 0 ? (sum_ripe / sum_qty_npb) * 100 : 0,
+            grand_jml_data > 0 ? grand_sum_underripe / grand_jml_data : 0,
+          percentage_ripe:
+            grand_jml_data > 0 ? grand_sum_ripe / grand_jml_data : 0,
           percentage_overripe:
-            sum_qty_npb > 0 ? (sum_overripe / sum_qty_npb) * 100 : 0,
+            grand_jml_data > 0 ? grand_sum_overripe / grand_jml_data : 0,
           percentage_empty_bunch:
-            sum_qty_npb > 0 ? (sum_empty / sum_qty_npb) * 100 : 0,
+            grand_jml_data > 0 ? grand_sum_empty / grand_jml_data : 0,
           percentage_long_stalk:
-            sum_qty_npb > 0 ? (sum_long_stalk / sum_qty_npb) * 100 : 0,
-          percentage_fruit: sum_tonase > 0 ? (sum_fruit / sum_tonase) * 100 : 0,
+            grand_jml_data > 0 ? grand_sum_long_stalk / grand_jml_data : 0,
+          percentage_fruit:
+            grand_jml_data > 0 ? grand_sum_fruit / grand_jml_data : 0,
           percentage_garbage:
-            sum_qty_npb > 0 ? (sum_garbage / sum_qty_npb) * 100 : 0,
+            grand_jml_data > 0 ? grand_sum_garbage / grand_jml_data : 0,
+          percentage_qty:
+            grand_jml_data > 0 ? grand_sum_qty / grand_jml_data : 0,
           oer: final_avr_oer,
           ffa: final_avr_ffa,
           is_total: true,
@@ -533,7 +547,6 @@ export default {
 
       return finalData
     },
-
     formatToTwoDecimals(value) {
       return Number.isFinite(Number(value)) ? Number(value).toFixed(2) : '0.00'
     },
