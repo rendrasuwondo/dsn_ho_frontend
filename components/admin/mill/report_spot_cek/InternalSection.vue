@@ -311,7 +311,8 @@ export default {
           key: 'transaction_date',
           label: '',
           formatter: this.formatDate,
-          tdClass: 'tanggal-col',
+          tdClass: 'text-nowrap',
+          thClass: 'text-nowrap',
         },
         {
           key: 'oer',
@@ -939,10 +940,10 @@ export default {
 </style>
 
 <style>
-.tanggal-col {
+/* .tanggal-col {
   min-width: 110px;
   white-space: nowrap;
-}
+} */
 
 .b-table thead tr:nth-child(3) {
   display: none;

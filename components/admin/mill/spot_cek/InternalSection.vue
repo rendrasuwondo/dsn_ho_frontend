@@ -294,7 +294,8 @@ export default {
           key: 'transaction_date',
           label: '',
           formatter: this.formatDate,
-          tdClass: 'tanggal-col',
+          tdClass: 'text-nowrap',
+          thClass: 'text-nowrap',
         },
         {
           key: 'oer',
@@ -879,10 +880,10 @@ export default {
 .card-title {
   color: #504d8d;
 }
-.tanggal-col {
-  min-width: 110px;
+/* .tanggal-col {
+  min-width: 2100px;
   white-space: nowrap;
-}
+} */
 </style>
 
 <style scoped>
