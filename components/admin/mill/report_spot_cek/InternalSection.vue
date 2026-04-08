@@ -311,7 +311,8 @@ export default {
           key: 'transaction_date',
           label: '',
           formatter: this.formatDate,
-          tdClass: 'tanggal-col',
+          tdClass: 'text-nowrap',
+          thClass: 'text-nowrap',
         },
         {
           key: 'oer',
