@@ -939,10 +939,10 @@ export default {
 </style>
 
 <style>
-.tanggal-col {
+/* .tanggal-col {
   min-width: 110px;
   white-space: nowrap;
-}
+} */
 
 .b-table thead tr:nth-child(3) {
   display: none;

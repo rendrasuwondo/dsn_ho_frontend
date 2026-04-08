@@ -879,10 +879,10 @@ export default {
 .card-title {
   color: #504d8d;
 }
-.tanggal-col {
+/* .tanggal-col {
   min-width: 110px;
   white-space: nowrap;
-}
+} */
 </style>
 
 <style scoped>
