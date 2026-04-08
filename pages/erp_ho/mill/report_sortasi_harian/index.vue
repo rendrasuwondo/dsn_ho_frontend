@@ -52,6 +52,16 @@
                       ></b-form-select>
                     </b-col>
                   </b-row>
+
+                  <b-row class="mt-3 align-items-center">
+                    <b-col cols="3">Kategori</b-col>
+                    <b-col cols="9">
+                      <b-form-select
+                        v-model="selectedStatus"
+                        :options="statusOptions"
+                      ></b-form-select>
+                    </b-col>
+                  </b-row>
                 </b-col>
 
                 <b-col cols="6">
@@ -331,6 +341,12 @@ export default {
         { value: 'SHI', text: 'SHI' },
         { value: 'SBI', text: 'SBI' },
       ],
+      selectedStatus: '', // Default kosong = Semua Kategori
+      statusOptions: [
+        { value: '', text: 'Semua Kategori' },
+        { value: 'NUCLEUS', text: 'NUCLEUS' },
+        { value: 'PLASMA', text: 'PLASMA' },
+      ],
       estate_id: [],
       estates: [],
       afdeling_id: [],
@@ -380,6 +396,7 @@ export default {
       }
       this.selectedDate = this.getDefaultDate()
       this.selectedType = 'HI'
+      this.selectedStatus = ''
       this.estate_id = []
       this.afdeling_id = []
 
@@ -420,7 +437,10 @@ export default {
           date: this.selectedDate,
           tipe_tanggal: this.selectedType,
           status: 'approved',
-          // HAPUS plant_type: 'NUCLEUS' / 'PLASMA' AGAR SEMUA DATANG
+        }
+
+        if (this.selectedStatus !== '') {
+          params.plant_type = this.selectedStatus
         }
 
         if (this.pks_code && this.pks_code.length > 0) {
@@ -665,6 +685,10 @@ export default {
           tipe_tanggal: this.selectedType,
         }
 
+        if (this.selectedStatus !== '') {
+          query.plant_type = this.selectedStatus
+        }
+
         if (this.estate_id && this.estate_id.length > 0) {
           query.department_code_plantation = this.estate_id
             .map((e) => e.department_code_plantation)
@@ -700,9 +724,13 @@ export default {
         const queryParams = new URLSearchParams()
 
         if (this.selectedDate) queryParams.append('date', this.selectedDate)
-        if (this.selectedType)
+        if (this.selectedType) {
           queryParams.append('tipe_tanggal', this.selectedType)
+        }
 
+        if (this.selectedStatus !== '') {
+          queryParams.append('plant_type', this.selectedStatus)
+        }
         if (this.estate_id && this.estate_id.length > 0) {
           queryParams.append(
             'department_code_plantation',
