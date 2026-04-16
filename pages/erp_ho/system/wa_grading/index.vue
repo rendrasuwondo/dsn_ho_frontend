@@ -179,6 +179,7 @@
           <b-form-input
             id="wa-input"
             v-model="form.wa_number"
+            :formatter="formatWaNumber"
             placeholder="Contoh: 08123456789"
             required
           ></b-form-input>
@@ -478,6 +479,11 @@ export default {
             this.isLoadingDept = false
           })
       }, 500)
+    },
+
+    formatWaNumber(value) {
+      // Pastikan value adalah string, lalu hapus semua selain angka
+      return String(value).replace(/\D/g, '')
     },
   },
 }
