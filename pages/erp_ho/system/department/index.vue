@@ -290,22 +290,25 @@
             </b-form-group>
 
             <b-row>
-              <b-col
-                ><b-form-checkbox
+              <b-col>
+                <b-form-checkbox
                   v-model="formDept.is_mill"
                   value="Y"
                   unchecked-value="N"
-                  >Is Mill?</b-form-checkbox
-                ></b-col
-              >
-              <b-col
-                ><b-form-checkbox
+                >
+                  Is Mill?
+                </b-form-checkbox>
+              </b-col>
+
+              <b-col>
+                <b-form-checkbox
                   v-model="formDept.is_harvest_system"
                   value="Y"
-                  unchecked-value="N"
-                  >Is Harvest System?</b-form-checkbox
-                ></b-col
-              >
+                  :unchecked-value="null"
+                >
+                  Is Harvest System?
+                </b-form-checkbox>
+              </b-col>
             </b-row>
           </b-col>
         </b-row>
