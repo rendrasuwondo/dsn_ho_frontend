@@ -393,7 +393,7 @@ export default {
         description: '',
       },
       optLevel: [
-        { text: 'D - Division', value: 'D' },
+        { text: 'D - Department', value: 'D' },
         { text: 'P - Plantation', value: 'P' },
         { text: 'R - Region', value: 'R' },
         { text: 'V - Division', value: 'V' }, // Sesuaikan deskripsinya jika perlu
