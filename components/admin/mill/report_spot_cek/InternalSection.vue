@@ -605,7 +605,7 @@ export default {
   async mounted() {
     await this.fetchData()
   },
-
+  inject: ['apiConfig'],
   methods: {
     async fetchData() {
       try {
@@ -655,19 +655,11 @@ export default {
             params,
           })
         }
-        const list_pt = await this.$axios.$get(
-          `/api/admin/spot-cek-list-pt-report`
-        )
-        const list_estate = await this.$axios.$get(
-          `/api/admin/spot-cek-list-estate-report`
-        )
-        const list_afdeling = await this.$axios.$get(
-          `/api/admin/spot-cek-list-afdeling-report`
-        )
+        const list_pt = await this.$axios.$get(this.apiConfig.pt)
+        const list_estate = await this.$axios.$get(this.apiConfig.pt)
+        const list_afdeling = await this.$axios.$get(this.apiConfig.afdeling)
 
-        const list_pks = await this.$axios.$get(
-          `/api/admin/spot-cek-get_pks_dropdown`
-        )
+        const list_pks = await this.$axios.$get(this.apiConfig.pks)
 
         this.posts = posts.data.data
         this.pagination = posts.data

@@ -491,6 +491,8 @@ export default {
     this.loadData()
   },
 
+  inject: ['apiConfig'],
+
   methods: {
     async loadData() {
       const today = new Date()
@@ -556,9 +558,7 @@ export default {
           `/api/admin/spot-cek-list-supplier-report`
         )
 
-        const list_pks = await this.$axios.$get(
-          `/api/admin/spot-cek-get_pks_dropdown`
-        )
+        const list_pks = await this.$axios.$get(this.apiConfig.pks)
 
         this.pts = list_pt.data
 
