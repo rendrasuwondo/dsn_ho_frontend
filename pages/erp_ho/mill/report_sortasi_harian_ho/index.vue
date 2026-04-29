@@ -373,7 +373,7 @@ export default {
   async mounted() {
     await this.loadDropdownData()
     await this.initDefaultState()
-    await this.fetchData()
+    // await this.fetchData()
   },
 
   methods: {
