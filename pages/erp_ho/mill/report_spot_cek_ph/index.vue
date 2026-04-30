@@ -29,20 +29,21 @@ export default {
       title: 'Spot Cek',
     }
   },
-  provide() {
-    return {
-      apiConfig: {
-        pt: '/api/admin/spot-cek-list-pt-report', // URL public/all
-        estate: '/api/admin/spot-cek-list-estate-report',
-        afdeling: '/api/admin/spot-cek-list-afdeling-report',
-        pks: '/api/admin/spot-cek-get_pks_dropdown',
-      },
-    }
-  },
 
   components: {
     InternalSection,
     ExternalSection,
+  },
+
+  provide() {
+    return {
+      apiConfig: {
+        pt: '/api/admin/dropdown-company-user',
+        estate: '/api/admin/spot-cek-list-estate-report-by-company',
+        afdeling: '/api/admin/spot-cek-list-afdeling-report-by-estate',
+        pks: '/api/admin/spot-cek-get-pks-by-user'
+      }
+    }
   },
 
   data() {

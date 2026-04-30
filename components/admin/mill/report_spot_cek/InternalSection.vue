@@ -605,8 +605,98 @@ export default {
   async mounted() {
     await this.fetchData()
   },
-
+  watch: {
+    // Memantau perubahan pada dropdown PT (pt_id)
+    pt_id: {
+      handler(newVal) {
+        // Jika user adalah PhRole, jalankan fungsi update dropdown estate
+        const userPosition = this.$auth?.user?.employee?.position_code
+        if (userPosition && this.PhRole.includes(userPosition)) {
+          this.fetchEstatesByCompany(newVal)
+        }
+      },
+      deep: true, // Wajib menggunakan deep: true karena pt_id berbentuk Array/Object dari vue-multiselect
+    },
+    estate_id: {
+      handler(newVal) {
+        const userPosition = this.$auth?.user?.employee?.position_code
+        if (userPosition && this.PhRole.includes(userPosition)) {
+          this.fetchAfdelingsByEstate(newVal)
+        }
+      },
+      deep: true,
+    },
+  },
+  inject: ['apiConfig'],
   methods: {
+    async fetchEstatesByCompany(selectedPts) {
+      this.isLoadingDropdown = true
+      try {
+        let companyCodes = ''
+
+        // Ekstrak kode company dari array objek multiselect jika ada yang dipilih
+        if (selectedPts && selectedPts.length > 0) {
+          companyCodes = selectedPts
+            .map((pt) => pt.company_code_plantation)
+            .join(',')
+        }
+
+        // Tembak API yang sudah direfactor di atas
+        // Sesuaikan URL endpoint dengan route API kamu
+        const response = await this.$axios.$get(
+          `/api/admin/spot-cek-list-estate-report-by-company`,
+          {
+            params: {
+              company_code_plantation: companyCodes,
+            },
+          }
+        )
+
+        // Timpa data option dropdown estate dengan data yang baru difilter
+        this.estates = response.data
+
+        // Opsional: Kosongkan pilihan estate saat ini jika PT berubah agar user memilih ulang
+        this.estate_id = []
+      } catch (error) {
+        console.error('Error fetching estates based on company:', error)
+      } finally {
+        this.isLoadingDropdown = false
+      }
+    },
+    async fetchAfdelingsByEstate(selectedEstates) {
+      this.isLoadingDropdown = true
+      try {
+        let estateCodes = ''
+
+        // Ekstrak kode estate dari array objek multiselect
+        if (selectedEstates && selectedEstates.length > 0) {
+          estateCodes = selectedEstates
+            .map((estate) => estate.department_code_plantation)
+            .join(',')
+        }
+
+        // Tembak API dengan parameter estate
+        // Sesuaikan endpoint sesuai route di backend kamu
+        const response = await this.$axios.$get(
+          `/api/admin/spot-cek-list-afdeling-report-by-estate`,
+          {
+            params: {
+              department_code_plantation: estateCodes,
+            },
+          }
+        )
+
+        // Timpa data dropdown afdeling dengan data hasil filter
+        this.afdelings = response.data
+
+        // Kosongkan pilihan afdeling saat ini agar user memilih ulang sesuai estate baru
+        this.afdeling_id = []
+      } catch (error) {
+        console.error('Error fetching afdelings based on estate:', error)
+      } finally {
+        this.isLoadingDropdown = false
+      }
+    },
     async fetchData() {
       try {
         const today = new Date()
@@ -655,19 +745,11 @@ export default {
             params,
           })
         }
-        const list_pt = await this.$axios.$get(
-          `/api/admin/spot-cek-list-pt-report`
-        )
-        const list_estate = await this.$axios.$get(
-          `/api/admin/spot-cek-list-estate-report`
-        )
-        const list_afdeling = await this.$axios.$get(
-          `/api/admin/spot-cek-list-afdeling-report`
-        )
+        const list_pt = await this.$axios.$get(this.apiConfig.pt)
+        const list_estate = await this.$axios.$get(this.apiConfig.pt)
+        const list_afdeling = await this.$axios.$get(this.apiConfig.afdeling)
 
-        const list_pks = await this.$axios.$get(
-          `/api/admin/spot-cek-get_pks_dropdown`
-        )
+        const list_pks = await this.$axios.$get(this.apiConfig.pks)
 
         this.posts = posts.data.data
         this.pagination = posts.data
