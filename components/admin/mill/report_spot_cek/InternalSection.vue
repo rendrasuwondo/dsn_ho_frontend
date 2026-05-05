@@ -610,19 +610,13 @@ export default {
     pt_id: {
       handler(newVal) {
         // Jika user adalah PhRole, jalankan fungsi update dropdown estate
-        const userPosition = this.$auth?.user?.employee?.position_code
-        if (userPosition && this.PhRole.includes(userPosition)) {
-          this.fetchEstatesByCompany(newVal)
-        }
+        this.fetchEstatesByCompany(newVal)
       },
       deep: true, // Wajib menggunakan deep: true karena pt_id berbentuk Array/Object dari vue-multiselect
     },
     estate_id: {
       handler(newVal) {
-        const userPosition = this.$auth?.user?.employee?.position_code
-        if (userPosition && this.PhRole.includes(userPosition)) {
-          this.fetchAfdelingsByEstate(newVal)
-        }
+        this.fetchAfdelingsByEstate(newVal)
       },
       deep: true,
     },
@@ -644,7 +638,7 @@ export default {
         // Tembak API yang sudah direfactor di atas
         // Sesuaikan URL endpoint dengan route API kamu
         const response = await this.$axios.$get(
-          `/api/admin/spot-cek-list-estate-report-by-company`,
+          this.apiConfig.estate, // Pastikan endpoint ini sesuai dengan route API yang sudah direfactor
           {
             params: {
               company_code_plantation: companyCodes,
@@ -678,7 +672,7 @@ export default {
         // Tembak API dengan parameter estate
         // Sesuaikan endpoint sesuai route di backend kamu
         const response = await this.$axios.$get(
-          `/api/admin/spot-cek-list-afdeling-report-by-estate`,
+          this.apiConfig.afdeling, // Pastikan endpoint ini sesuai dengan route API yang sudah direfactor
           {
             params: {
               department_code_plantation: estateCodes,
@@ -746,7 +740,7 @@ export default {
           })
         }
         const list_pt = await this.$axios.$get(this.apiConfig.pt)
-        const list_estate = await this.$axios.$get(this.apiConfig.pt)
+        const list_estate = await this.$axios.$get(this.apiConfig.estate)
         const list_afdeling = await this.$axios.$get(this.apiConfig.afdeling)
 
         const list_pks = await this.$axios.$get(this.apiConfig.pks)
