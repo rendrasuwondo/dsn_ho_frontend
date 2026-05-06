@@ -232,11 +232,14 @@
 </template>
 
 <script>
+import menuAccessLog from '~/mixins/menuAccessLog'
+
 export default {
   layout: 'admin',
   head() {
     return { title: 'Report Sortasi Harian' }
   },
+  mixins: [menuAccessLog],
   data() {
     const today = new Date()
     let defaultDate = new Date()
@@ -371,6 +374,7 @@ export default {
   },
 
   async mounted() {
+    this.recordMenuLog('Report Sortasi Harian') // Catat akses menu
     await this.loadDropdownData()
     await this.initDefaultState()
     await this.fetchData()

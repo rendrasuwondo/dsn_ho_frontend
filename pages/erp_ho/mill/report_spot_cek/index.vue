@@ -21,6 +21,7 @@
 <script>
 import InternalSection from '~/components/admin/mill/report_spot_cek/InternalSection.vue'
 import ExternalSection from '~/components/admin/mill/report_spot_cek/ExternalSection.vue'
+import menuAccessLog from '~/mixins/menuAccessLog'
 export default {
   layout: 'admin',
 
@@ -29,6 +30,7 @@ export default {
       title: 'Spot Cek',
     }
   },
+  mixins: [menuAccessLog],
   provide() {
     return {
       apiConfig: {
@@ -51,7 +53,9 @@ export default {
 
   computed: {},
 
-  mounted() {},
+  async mounted() {
+    this.recordMenuLog('Report Grading HO') // Catat akses menu
+  },
 
   methods: {},
 }

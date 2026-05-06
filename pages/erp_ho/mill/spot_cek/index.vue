@@ -21,8 +21,10 @@
 <script>
 import InternalSection from '~/components/admin/mill/spot_cek/InternalSection.vue'
 import ExternalSection from '~/components/admin/mill/spot_cek/ExternalSection.vue'
+import menuAccessLog from '~/mixins/menuAccessLog'
 export default {
   layout: 'admin',
+  mixins: [menuAccessLog],
 
   head() {
     return {
@@ -41,7 +43,9 @@ export default {
 
   computed: {},
 
-  mounted() {},
+  async mounted() {
+    this.recordMenuLog('Report Grading') // Catat akses menu
+  },
 
   methods: {},
 }

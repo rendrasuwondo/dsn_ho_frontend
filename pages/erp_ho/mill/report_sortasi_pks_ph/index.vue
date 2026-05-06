@@ -193,11 +193,13 @@
 </template>
 
 <script>
+import menuAccessLog from '~/mixins/menuAccessLog'
 export default {
   layout: 'admin',
   head() {
     return { title: 'Report Sortasi PKS' }
   },
+  mixins: [menuAccessLog],
   data() {
     const today = new Date()
     const yesterday = new Date()
@@ -331,6 +333,7 @@ export default {
   },
 
   async mounted() {
+    this.recordMenuLog('Report Sortasi PKS PH') // Catat akses menu
     await this.fetchPksDropdown()
     // await this.initDefaultState()
     // await this.fetchData()

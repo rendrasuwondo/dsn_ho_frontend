@@ -21,6 +21,7 @@
 <script>
 import InternalSection from '~/components/admin/mill/report_spot_cek/InternalSection.vue'
 import ExternalSection from '~/components/admin/mill/report_spot_cek/ExternalSection.vue'
+import menuAccessLog from '~/mixins/menuAccessLog'
 export default {
   layout: 'admin',
 
@@ -29,6 +30,7 @@ export default {
       title: 'Spot Cek',
     }
   },
+  mixins: [menuAccessLog],
 
   components: {
     InternalSection,
@@ -41,8 +43,8 @@ export default {
         pt: '/api/admin/dropdown-company-user',
         estate: '/api/admin/spot-cek-list-estate-report-by-company',
         afdeling: '/api/admin/spot-cek-list-afdeling-report-by-estate',
-        pks: '/api/admin/spot-cek-get-pks-by-user'
-      }
+        pks: '/api/admin/spot-cek-get-pks-by-user',
+      },
     }
   },
 
@@ -52,7 +54,9 @@ export default {
 
   computed: {},
 
-  mounted() {},
+  async mounted() {
+    this.recordMenuLog('Report Grading PH') // Catat akses menu
+  },
 
   methods: {},
 }
