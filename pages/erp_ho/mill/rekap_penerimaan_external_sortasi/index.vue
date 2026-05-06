@@ -156,11 +156,14 @@
 </template>
 
 <script>
+import menuAccessLog from '~/mixins/menuAccessLog'
+
 export default {
   layout: 'admin',
   head() {
     return { title: 'Rekap Penerimaan TBS Eksternal & Sortasi' }
   },
+  mixins: [menuAccessLog],
 
   data() {
     const today = new Date()
@@ -300,6 +303,7 @@ export default {
   },
 
   async mounted() {
+    this.recordMenuLog('Rekap Penerimaan TBS Eksternal Sortasi') // Catat akses menu
     this.loadFiltersFromUrl()
     await this.fetchData()
   },

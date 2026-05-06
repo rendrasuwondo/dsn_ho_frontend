@@ -605,22 +605,6 @@ export default {
   async mounted() {
     await this.fetchData()
   },
-  watch: {
-    // Memantau perubahan pada dropdown PT (pt_id)
-    pt_id: {
-      handler(newVal) {
-        // Jika user adalah PhRole, jalankan fungsi update dropdown estate
-        this.fetchEstatesByCompany(newVal)
-      },
-      deep: true, // Wajib menggunakan deep: true karena pt_id berbentuk Array/Object dari vue-multiselect
-    },
-    estate_id: {
-      handler(newVal) {
-        this.fetchAfdelingsByEstate(newVal)
-      },
-      deep: true,
-    },
-  },
   inject: ['apiConfig'],
   methods: {
     async fetchEstatesByCompany(selectedPts) {
