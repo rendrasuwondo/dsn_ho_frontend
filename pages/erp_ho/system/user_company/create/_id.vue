@@ -177,7 +177,7 @@
 
       //Data Users
       this.$axios
-        .get('/api/admin/lov_company')
+        .get('/api/admin/lov_company_all')
 
         .then((response) => {
           this.company = response.data.data
