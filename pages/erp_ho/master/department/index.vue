@@ -309,6 +309,15 @@
                   Is Harvest System?
                 </b-form-checkbox>
               </b-col>
+              <b-col>
+                <b-form-checkbox
+                  v-model="formDept.is_operating"
+                  value="Y"
+                  :unchecked-value="null"
+                >
+                  Is Operating?
+                </b-form-checkbox>
+              </b-col>
             </b-row>
           </b-col>
         </b-row>
@@ -391,6 +400,7 @@ export default {
         is_mill: 'N',
         is_harvest_system: 'N',
         description: '',
+        is_operating: 'N',
       },
       optLevel: [
         { text: 'D - Department', value: 'D' },
@@ -515,6 +525,7 @@ export default {
           is_active: item.is_active,
           is_mill: item.is_mill || 'N',
           is_harvest_system: item.is_harvest_system || 'N',
+          is_operating: item.is_operating || 'N',
           description: item.description,
         }
 
@@ -542,6 +553,7 @@ export default {
           is_active: 'Y',
           is_mill: 'N',
           is_harvest_system: 'N',
+          is_operating: 'N',
           description: '',
         }
 
