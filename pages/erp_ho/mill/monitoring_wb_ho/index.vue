@@ -56,6 +56,23 @@
                     </b-col>
                   </b-row>
 
+                  <!-- DROPDOWN PKS -->
+                  <b-row class="mt-3">
+                    <b-col cols="3">PKS</b-col>
+                    <b-col cols="9">
+                      <multiselect
+                        v-model="pks_id"
+                        :options="pks_list"
+                        label="code"
+                        track-by="code"
+                        :searchable="true"
+                        :multiple="false"
+                        placeholder="Pilih PKS (Pilih dulu untuk memuat dropdown lain)"
+                      ></multiselect>
+                    </b-col>
+                  </b-row>
+                  <!-- END DROPDOWN PKS -->
+
                   <b-row class="mt-3">
                     <b-col cols="3">NPB</b-col>
                     <b-col cols="9">
@@ -66,6 +83,10 @@
                         track-by="npb"
                         :searchable="true"
                         :multiple="true"
+                        :disabled="
+                          !pks_id || pks_id.length === 0 || isLoadingDropdowns
+                        "
+                        :loading="isLoadingDropdowns"
                         placeholder="Pilih NPB"
                       ></multiselect>
                     </b-col>
@@ -81,6 +102,10 @@
                         track-by="productName"
                         :searchable="true"
                         :multiple="true"
+                        :disabled="
+                          !pks_id || pks_id.length === 0 || isLoadingDropdowns
+                        "
+                        :loading="isLoadingDropdowns"
                         placeholder="Pilih Produk"
                       ></multiselect>
                     </b-col>
@@ -99,6 +124,10 @@
                         track-by="driverName"
                         :searchable="true"
                         :multiple="true"
+                        :disabled="
+                          !pks_id || pks_id.length === 0 || isLoadingDropdowns
+                        "
+                        :loading="isLoadingDropdowns"
                         placeholder="Pilih Driver"
                       ></multiselect>
                     </b-col>
@@ -114,6 +143,10 @@
                         track-by="kebun"
                         :searchable="true"
                         :multiple="true"
+                        :disabled="
+                          !pks_id || pks_id.length === 0 || isLoadingDropdowns
+                        "
+                        :loading="isLoadingDropdowns"
                         placeholder="Pilih Kebun"
                       ></multiselect>
                     </b-col>
@@ -129,6 +162,10 @@
                         track-by="transportVehiclePlateNo"
                         :searchable="true"
                         :multiple="true"
+                        :disabled="
+                          !pks_id || pks_id.length === 0 || isLoadingDropdowns
+                        "
+                        :loading="isLoadingDropdowns"
                         placeholder="Pilih Plat"
                       ></multiselect>
                     </b-col>
@@ -173,21 +210,32 @@
             striped
             bordered
             hover
+            show-empty
+            empty-text="Belum ada data. Silahkan pilih filter dan klik Apply Filters."
           >
           </b-table>
-
+          <!-- <button
+            :disabled="
+              selectedItems.length === 0 && unselectedItems.length === 0
+            "
+            @click="approveSelected"
+            class="btn btn-primary"
+            v-if="posts.length > 0"
+          >
+            Approve
+          </button> -->
           <!-- pagination -->
-          <b-row>
-            <b-col>
-              <b-pagination
+          <b-row v-if="posts.length > 0">
+            <b-col
+              ><b-pagination
                 v-model="pagination.current_page"
                 :total-rows="pagination.total"
                 :per-page="pagination.per_page"
                 @change="changePage"
                 align="left"
                 class="mt-1"
-              ></b-pagination>
-            </b-col>
+              ></b-pagination
+            ></b-col>
             <b-col class="text-right" align-self="center">
               {{ formatToThousand(rowcount) }} data
             </b-col>
@@ -234,8 +282,10 @@ export default {
         { key: 'janjang', label: 'Janjang' },
       ],
       dateStart: formatDate(yesterday), // Default to yesterday
-      dateEnd: formatDate(yesterday), // Default to yesterday
+      dateEnd: formatDate(yesterday), // Default to today
       showSickFruit: false,
+      pks_id: [], // State PKS
+      pks_list: [], // Option list PKS
       produk_id: [],
       kebun_id: [],
       npb_id: [],
@@ -257,7 +307,7 @@ export default {
         current_page: 1,
         total: 0,
         per_page: 10,
-      }, // Pagination data
+      }, // Pagination data initialized
       search: '',
       rowcount: 0,
       selectAll: false,
@@ -265,7 +315,8 @@ export default {
         title: '',
         icon: '',
       },
-      show: 0, // Set default to 0 (Loading state)
+      show: 1, // Start with 1 to show filter form
+      isLoadingDropdowns: false, // Menambah state lokal khusus untuk dropdown dependent
     }
   },
 
@@ -286,23 +337,70 @@ export default {
     },
   },
 
+  watch: {
+    // Watch ketika pks_id berubah
+    pks_id: {
+      handler(newVal) {
+        // Reset list option dropdown dependent ketika pks berubah
+        this.produk_id = []
+        this.kebun_id = []
+        this.npb_id = []
+        this.driver_id = []
+        this.plat_id = []
+
+        if (newVal) {
+          console.log('newVal :>> ', newVal)
+          // Ambil value "code" yang dipisahkan oleh koma untuk diparsing ke backend
+          // const pksString = newVal.map((pks) => pks.code).join(',')
+          this.fetchDependentDropdowns(newVal.code)
+        } else {
+          // Jika PKS dikosongkan, list dropdown yang lain dihilangkan
+          this.produks = []
+          this.kebuns = []
+          this.npbs = []
+          this.drivers = []
+          this.plats = []
+        }
+      },
+      deep: true,
+    },
+  },
+
   mounted() {
-    // Panggil dropdown data dan table data saat komponen dimuat
-    this.fetchDropdowns()
-    this.applyFilters()
+    this.fetchInitialPks()
   },
 
   methods: {
-    async fetchDropdowns() {
+    async fetchInitialPks() {
       try {
-        // Menggunakan Promise.all agar fetch berjalan paralel & lebih cepat
+        const response = await this.$axios.$get(
+          '/api/admin/spot-cek-get_pks_dropdown-report'
+        )
+        this.pks_list = response.data || []
+      } catch (error) {
+        console.error('Error fetching PKS list:', error)
+      }
+    },
+
+    async fetchDependentDropdowns(pksString) {
+      // Mengubah loading khusus dropdown, bukan memanggil "this.show = 0"
+      this.isLoadingDropdowns = true
+
+      try {
+        const params = { pks: pksString }
+
+        // Eksekusi semua secara paralel
         const [produkRes, kebunRes, driverRes, platRes, npbRes] =
           await Promise.all([
-            this.$axios.$get('/api/admin/monitoring-wb-list-produk'),
-            this.$axios.$get('/api/admin/monitoring-wb-list-kebun'),
-            this.$axios.$get('/api/admin/monitoring-wb-list-driver'),
-            this.$axios.$get('/api/admin/monitoring-wb-list-plat'),
-            this.$axios.$get('/api/admin/monitoring-wb-list-npb'),
+            this.$axios.$get('/api/admin/monitoring-wb-list-produk', {
+              params,
+            }),
+            this.$axios.$get('/api/admin/monitoring-wb-list-kebun', { params }),
+            this.$axios.$get('/api/admin/monitoring-wb-list-driver', {
+              params,
+            }),
+            this.$axios.$get('/api/admin/monitoring-wb-list-plat', { params }),
+            this.$axios.$get('/api/admin/monitoring-wb-list-npb', { params }),
           ])
 
         this.produks = produkRes.data || []
@@ -311,7 +409,9 @@ export default {
         this.plats = platRes.data || []
         this.npbs = npbRes.data || []
       } catch (error) {
-        console.error('Error fetching dropdowns:', error)
+        console.error('Error fetching dependent dropdowns:', error)
+      } finally {
+        this.isLoadingDropdowns = false // Matikan loading dropdown
       }
     },
 
@@ -327,7 +427,6 @@ export default {
       if (!value) return '0'
       return parseFloat(value).toFixed(0)
     },
-
     toggleSelectAll() {
       this.posts.forEach((post) => {
         post.selected = this.selectAll
@@ -420,7 +519,7 @@ export default {
                   timer: 2000,
                 })
 
-                this.applyFilters() // Refresh data directly
+                this.applyFilters() // Refresh via CSR applyFilters
               })
               .catch((error) => {
                 console.error('API Error:', error)
@@ -440,6 +539,7 @@ export default {
     formatDate(value) {
       if (!value) return ''
       const date = new Date(value)
+
       const day = String(date.getDate()).padStart(2, '0')
       const monthNames = [
         'Jan',
@@ -463,16 +563,16 @@ export default {
 
     changePage(page) {
       this.pagination.current_page = page
-      this.applyFilters() // Langsung ambil data tanpa ganti router URL
+      this.applyFilters()
     },
 
     searchData() {
-      this.pagination.current_page = 1 // Reset ke halaman pertama setiap mencari
-      this.applyFilters() // Langsung ambil data tanpa ganti router URL
+      this.pagination.current_page = 1 // Reset halaman
+      this.applyFilters()
     },
 
     async applyFilters() {
-      this.show = 0
+      this.show = 0 // Munculkan loading indicator full page untuk data table
       try {
         const params = {
           page: this.pagination.current_page || 1,
@@ -481,6 +581,11 @@ export default {
         if (this.dateStart) params.dateStart = this.dateStart
         if (this.dateEnd) params.dateEnd = this.dateEnd
 
+        // if (this.pks_id && this.pks_id.length > 0) {
+        //   params.pks = this.pks_id.map((pks) => pks.code).join(',')
+        // }
+
+        params.pks = this.pks_id ? this.pks_id.code : ''
         if (this.produk_id && this.produk_id.length > 0) {
           params.produks = this.produk_id.map((pt) => pt.productName).join(',')
         }
@@ -489,7 +594,7 @@ export default {
         }
         if (this.plat_id && this.plat_id.length > 0) {
           params.plats = this.plat_id
-            .map((estate) => estate.transportVehiclePlateNo)
+            .map((estate) => estate.transportVehiclePlateNo.trim())
             .join(',')
         }
         if (this.npb_id && this.npb_id.length > 0) {
@@ -502,7 +607,7 @@ export default {
         }
         if (this.search) params.search = this.search
 
-        // Ambil data langsung, tanpa this.$router.push
+        // Fetch the filtered data
         const response = await this.$axios.$get('/api/admin/monitoring-wb', {
           params,
         })
@@ -512,7 +617,6 @@ export default {
           selected: item.status === 'approved',
         }))
 
-        // Update state
         this.posts = postsFilter
         this.pagination = response.data
         this.rowcount = response.data.total
@@ -531,6 +635,11 @@ export default {
         // Tanggal
         if (this.dateStart) queryParams.append('dateStart', this.dateStart)
         if (this.dateEnd) queryParams.append('dateEnd', this.dateEnd)
+
+        // PKS (single object karena :multiple="false")
+        if (this.pks_id && this.pks_id.code) {
+          queryParams.append('pks', this.pks_id.code)
+        }
 
         // Produk
         if (this.produk_id && this.produk_id.length > 0) {
@@ -553,7 +662,7 @@ export default {
           queryParams.append(
             'plats',
             this.plat_id
-              .map((estate) => estate.transportVehiclePlateNo)
+              .map((estate) => estate.transportVehiclePlateNo.trim())
               .join(',')
           )
         }
@@ -638,7 +747,7 @@ export default {
                   timer: 2000,
                 })
 
-                this.applyFilters() // Refresh data directly
+                this.applyFilters() // Refresh via CSR applyFilters
               })
           }
         })
