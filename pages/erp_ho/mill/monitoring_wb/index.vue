@@ -67,6 +67,7 @@
                         :searchable="true"
                         :multiple="true"
                         placeholder="Pilih NPB"
+                        :loading="isLoadingDropdowns"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -82,6 +83,7 @@
                         :searchable="true"
                         :multiple="true"
                         placeholder="Pilih Produk"
+                        :loading="isLoadingDropdowns"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -100,6 +102,7 @@
                         :searchable="true"
                         :multiple="true"
                         placeholder="Pilih Driver"
+                        :loading="isLoadingDropdowns"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -115,6 +118,7 @@
                         :searchable="true"
                         :multiple="true"
                         placeholder="Pilih Kebun"
+                        :loading="isLoadingDropdowns"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -130,6 +134,7 @@
                         :searchable="true"
                         :multiple="true"
                         placeholder="Pilih Plat"
+                        :loading="isLoadingDropdowns"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -266,6 +271,7 @@ export default {
         icon: '',
       },
       show: 0, // Set default to 0 (Loading state)
+      isLoadingDropdowns: false,
     }
   },
 
@@ -295,6 +301,7 @@ export default {
   methods: {
     async fetchDropdowns() {
       try {
+        this.isLoadingDropdowns = true
         // Menggunakan Promise.all agar fetch berjalan paralel & lebih cepat
         const [produkRes, kebunRes, driverRes, platRes, npbRes] =
           await Promise.all([
@@ -312,6 +319,8 @@ export default {
         this.npbs = npbRes.data || []
       } catch (error) {
         console.error('Error fetching dropdowns:', error)
+      } finally {
+        this.isLoadingDropdowns = false
       }
     },
 
