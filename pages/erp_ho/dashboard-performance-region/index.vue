@@ -23,10 +23,10 @@
             <DashboardPerformanceRegionCardCpo :cpoData="cpoData" :isLoading="$fetchState.pending" />
           </div>
           <div class="col-12 col-md-6 col-xl-3 mb-3 px-2">
-            <DashboardPerformanceRegionCardOer />
+            <DashboardPerformanceRegionCardOer :oerData="oerData" :isLoading="$fetchState.pending" />
           </div>
           <div class="col-12 col-md-6 col-xl-3 mb-3 pr-xl-0 pl-xl-2 px-2">
-            <DashboardPerformanceRegionCardKer />
+            <DashboardPerformanceRegionCardKer :kerData="kerData" :isLoading="$fetchState.pending" />
           </div>
         </div>
 
@@ -39,7 +39,7 @@
             <DashboardPerformanceRegionCardCpoDetail />
           </div>
           <div class="col-12 col-xl-3 mb-3 mb-xl-0 pr-xl-0 pl-xl-2 px-2">
-            <DashboardPerformanceRegionCardOek />
+            <DashboardPerformanceRegionCardOek :oekData="oekData" :isLoading="$fetchState.pending" />
           </div>
         </div>
 
@@ -61,7 +61,10 @@ export default {
     return {
       displayTitle: 'BULAN: MEMUAT...',
       tbsData: null,
-      cpoData: null
+      cpoData: null,
+      oerData: null,
+      kerData: null,
+      oekData: null
     }
   },
   async fetch() {
@@ -84,9 +87,12 @@ export default {
     this.displayTitle = `BULAN: ${prevMonthName} ${prevYear}`;
 
     try {
-      const [resTbs, resCpo] = await Promise.all([
+      const [resTbs, resCpo, resOer, resKer, resOek] = await Promise.all([
         this.$axios.$get(`/api/agro-dashboard-web/public/tbs-masuk?year=${prevYear}&month=${prevMonth}`).catch(() => null),
-        this.$axios.$get(`/api/agro-dashboard-web/public/produksi-cpo?year=${prevYear}&month=${prevMonth}`).catch(() => null)
+        this.$axios.$get(`/api/agro-dashboard-web/public/produksi-cpo?year=${prevYear}&month=${prevMonth}`).catch(() => null),
+        this.$axios.$get(`/api/agro-dashboard-web/public/oer?year=${prevYear}&month=${prevMonth}`).catch(() => null),
+        this.$axios.$get(`/api/agro-dashboard-web/public/ker?year=${prevYear}&month=${prevMonth}`).catch(() => null),
+        this.$axios.$get(`/api/agro-dashboard-web/public/oek?year=${prevYear}&month=${prevMonth}`).catch(() => null)
       ]);
 
       if (resTbs && resTbs.status === 'success' && resTbs.data) {
@@ -95,6 +101,18 @@ export default {
 
       if (resCpo && resCpo.status === 'success' && resCpo.data) {
         this.cpoData = resCpo.data.produksi_cpo;
+      }
+
+      if (resOer && resOer.status === 'success' && resOer.data) {
+        this.oerData = resOer.data.oer;
+      }
+
+      if (resKer && resKer.status === 'success' && resKer.data) {
+        this.kerData = resKer.data.ker;
+      }
+
+      if (resOek && resOek.status === 'success' && resOek.data) {
+        this.oekData = resOek.data.oek;
       }
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
