@@ -7,7 +7,7 @@
         <h1 class="main-title mb-1">DASHBOARD KINERJA BULANAN PKS: OPTIMALISASI PABRIK KELAPA SAWIT</h1>
         <h4 class="sub-title text-muted mb-2">MONTHLY PKS PERFORMANCE DASHBOARD</h4>
         <div class="month-selector mt-1 shadow-sm">
-          BULAN: JUNI 2026
+          {{ displayTitle }}
         </div>
       </div>
 
@@ -17,10 +17,10 @@
         <!-- Top Row (4 items) -->
         <div class="row flex-grow-1 mb-2 mx-0">
           <div class="col-12 col-md-6 col-xl-3 mb-3 pl-xl-0 pr-xl-2 px-2">
-            <DashboardPerformanceRegionCardTbs />
+            <DashboardPerformanceRegionCardTbs :tbsData="tbsData" :isLoading="$fetchState.pending" />
           </div>
           <div class="col-12 col-md-6 col-xl-3 mb-3 px-2">
-            <DashboardPerformanceRegionCardCpo />
+            <DashboardPerformanceRegionCardCpo :cpoData="cpoData" :isLoading="$fetchState.pending" />
           </div>
           <div class="col-12 col-md-6 col-xl-3 mb-3 px-2">
             <DashboardPerformanceRegionCardOer />
@@ -55,6 +55,49 @@ export default {
   head() {
     return {
       title: 'Dashboard - Kinerja Bulanan PKS'
+    }
+  },
+  data() {
+    return {
+      displayTitle: 'BULAN: MEMUAT...',
+      tbsData: null,
+      cpoData: null
+    }
+  },
+  async fetch() {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth() + 1;
+
+    let prevMonth = currentMonth - 1;
+    let prevYear = currentYear;
+    if (prevMonth === 0) {
+      prevMonth = 12;
+      prevYear = currentYear - 1;
+    }
+
+    const monthNames = [
+      "JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI",
+      "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"
+    ];
+    const prevMonthName = monthNames[prevMonth - 1];
+    this.displayTitle = `BULAN: ${prevMonthName} ${prevYear}`;
+
+    try {
+      const [resTbs, resCpo] = await Promise.all([
+        this.$axios.$get(`/api/agro-dashboard-web/public/tbs-masuk?year=${prevYear}&month=${prevMonth}`).catch(() => null),
+        this.$axios.$get(`/api/agro-dashboard-web/public/produksi-cpo?year=${prevYear}&month=${prevMonth}`).catch(() => null)
+      ]);
+
+      if (resTbs && resTbs.status === 'success' && resTbs.data) {
+        this.tbsData = resTbs.data.tbs_masuk;
+      }
+
+      if (resCpo && resCpo.status === 'success' && resCpo.data) {
+        this.cpoData = resCpo.data.produksi_cpo;
+      }
+    } catch (error) {
+      console.error('Failed to fetch dashboard data:', error);
     }
   }
 }

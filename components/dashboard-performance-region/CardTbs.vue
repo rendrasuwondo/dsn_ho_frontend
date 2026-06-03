@@ -1,18 +1,36 @@
 <template>
   <div class="glass-card h-100 p-3 d-flex flex-column">
-    <h5 class="kpi-title mb-3"><i class="fas fa-clipboard-list text-success mr-2"></i> PRODUKSI TBS <small class="text-muted">(TBS RECEIVED)</small></h5>
-    <div class="kpi-data flex-shrink-0">
-      <div class="d-flex justify-content-between align-items-start">
-        <div>
-          <div class="kpi-value text-dark">160,000 <span style="font-size: 1.2rem;">TON</span></div>
-          <div class="kpi-vs text-success mt-1 font-weight-bold">VS TAHUN LALU: (+5.5% YoY)</div>
-        </div>
-        <div class="badge badge-success px-3 py-2 rounded-pill shadow-sm" style="font-size: 0.9rem;">+3.1% DARI<br>TARGET</div>
+    <div class="d-flex align-items-start mb-3">
+      <i class="fas fa-clipboard-list text-success mr-2" style="font-size: 1.5rem; margin-top: 2px;"></i>
+      <div style="line-height: 1.2;">
+        <h5 class="kpi-title mb-0">TBS MASUK</h5>
+        <small class="text-muted font-weight-bold" style="font-size: 0.75rem;">(TBS RECEIVED)</small>
       </div>
     </div>
-    <div class="chart-wrapper flex-grow-1 mt-3">
-      <client-only>
-        <fusioncharts type="splinearea" width="100%" height="100%" dataFormat="json" :dataSource="chartData"></fusioncharts>
+    <div class="kpi-data flex-shrink-0">
+      <div v-if="isLoading" class="py-2">
+        <b-skeleton width="70%" height="2.5rem" class="mb-2"></b-skeleton>
+        <b-skeleton width="40%"></b-skeleton>
+      </div>
+      <div v-else class="d-flex justify-content-between align-items-start">
+        <div>
+          <div class="kpi-value text-dark">{{ formattedTotalTonase }} <span style="font-size: 1.2rem;">TON</span></div>
+          <div class="kpi-vs mt-1 font-weight-bold" :class="yoyColorClass">VS TAHUN LALU: ({{ formattedYoy }} YoY)</div>
+        </div>
+        <div class="badge px-3 py-2 rounded-pill shadow-sm" :class="targetBadgeClass" style="font-size: 0.9rem;">{{ formattedTarget }} DARI<br>TARGET</div>
+      </div>
+    </div>
+    <div class="chart-wrapper flex-grow-1 mt-3 position-relative">
+      <div v-if="isLoading" class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
+        <b-spinner variant="success"></b-spinner>
+      </div>
+      <client-only v-else>
+        <fusioncharts type="splinearea" width="100%" height="100%" dataFormat="json" :dataSource="computedChartData"></fusioncharts>
+        <template #placeholder>
+          <div class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
+            <b-spinner variant="success"></b-spinner>
+          </div>
+        </template>
       </client-only>
     </div>
   </div>
@@ -21,6 +39,16 @@
 <script>
 export default {
   name: 'DashboardPerformanceRegionCardTbs',
+  props: {
+    tbsData: {
+      type: Object,
+      default: null
+    },
+    isLoading: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     const commonChartConfig = {
       theme: "fusion", showBorder: "0", bgColor: "#ffffff", bgAlpha: "0", canvasBgAlpha: "0",
@@ -28,21 +56,63 @@ export default {
       showToolTip: "1", toolTipBgColor: "#ffffff", toolTipBorderColor: "#e2e8f0", plotHoverEffect: "1",
     };
     return {
-      chartData: {
+      defaultChartData: {
         chart: {
           ...commonChartConfig,
-          paletteColors: "#3498db", plotFillAlpha: "40", drawAnchors: "0", showYAxisValues: "1",
+          paletteColors: "#3498db", plotFillAlpha: "40", drawAnchors: "1", showValues: "1", showYAxisValues: "1",
           yAxisValuesPadding: "5", showXAxisLine: "1", xAxisLineColor: "#ccc", divLineAlpha: "30",
           divLineColor: "#e0e0e0", divLineIsDashed: "1", numDivLines: "3", chartBottomMargin: "0",
-          chartTopMargin: "10", chartLeftMargin: "0", chartRightMargin: "0", formatNumberScale: "1",
-          numberScaleValue: "1000", numberScaleUnit: "K"
+          chartTopMargin: "25", chartLeftMargin: "0", chartRightMargin: "0", formatNumberScale: "1",
+          numberScaleValue: "1000", numberScaleUnit: "K", decimals: "0", anchorRadius: "4", anchorBgColor: "#ffffff",
+          anchorBorderColor: "#3498db", anchorBorderThickness: "2", valueFontColor: "#0f172a",
+          valueFontSize: "9", valueFontBold: "1"
         },
         data: [
           { label: "JUN", value: "80000" }, { label: "FEB", value: "70000" }, { label: "MAR", value: "85000" },
           { label: "APR", value: "90000" }, { label: "MAI", value: "110000" }, { label: "JUN", value: "160000" },
-          { label: "JUL", value: "140000" }, { label: "AUG", value: "155000" }, { label: "SEC", value: "165000" },
+          { label: "JUL", value: "140000" }, { label: "AUG", value: "155000" }, { label: "SEP", value: "165000" },
         ]
       }
+    }
+  },
+  computed: {
+    formattedTotalTonase() {
+      if (!this.tbsData || this.tbsData.total_tonase == null) return '0';
+      return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(this.tbsData.total_tonase);
+    },
+    formattedYoy() {
+      if (!this.tbsData || this.tbsData.yoy_percentage == null) return '0%';
+      const val = this.tbsData.yoy_percentage;
+      return (val > 0 ? '+' : '') + val + '%';
+    },
+    yoyColorClass() {
+      if (!this.tbsData || this.tbsData.yoy_percentage == null) return 'text-secondary';
+      return this.tbsData.yoy_percentage >= 0 ? 'text-success' : 'text-danger';
+    },
+    formattedTarget() {
+      if (!this.tbsData || this.tbsData.vs_target_percentage == null) return '0%';
+      const val = this.tbsData.vs_target_percentage;
+      return (val > 0 ? '+' : '') + val + '%';
+    },
+    targetBadgeClass() {
+      if (!this.tbsData || this.tbsData.vs_target_percentage == null) return 'badge-secondary';
+      return this.tbsData.vs_target_percentage >= 0 ? 'badge-success' : 'badge-danger';
+    },
+    computedChartData() {
+      const baseConfig = { ...this.defaultChartData.chart };
+      let trendData = [];
+      if (this.tbsData && this.tbsData.trend) {
+        trendData = this.tbsData.trend.map(item => ({
+          label: item.month_name,
+          value: item.total,
+          showValue: item.total > 0 ? "1" : "0",
+          tooltext: `<b>${item.month_name}</b>: ${new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(item.total)} TON`
+        }));
+      }
+      return {
+        chart: baseConfig,
+        data: trendData.length ? trendData : this.defaultChartData.data
+      };
     }
   }
 }
