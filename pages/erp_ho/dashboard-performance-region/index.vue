@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-performance-region">
     <div class="tv-container d-flex flex-column">
-      
+
       <!-- Header -->
       <div class="header-section text-center d-flex flex-column justify-content-center align-items-center mb-2 flex-shrink-0">
         <h1 class="main-title mb-1">DASHBOARD KINERJA BULANAN PKS: OPTIMALISASI PABRIK KELAPA SAWIT</h1>
@@ -13,7 +13,7 @@
 
       <!-- Content -->
       <div class="content-section flex-grow-1 d-flex flex-column" style="min-height: 0;">
-        
+
         <!-- Top Row (4 items) -->
         <div class="row flex-grow-1 mb-2 mx-0">
           <div class="col-12 col-md-6 col-xl-3 mb-3 pl-xl-0 pr-xl-2 px-2">
@@ -129,7 +129,7 @@ export default {
   overflow-x: hidden;
   font-family: 'Quicksand', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #2c3e50;
-  
+
   /* Modern Premium Background */
   background: radial-gradient(circle at top left, #f1f5f9 0%, #e2e8f0 100%);
   position: relative;
