@@ -68,6 +68,7 @@
                         :searchable="true"
                         :multiple="false"
                         placeholder="Pilih PKS (Pilih dulu untuk memuat dropdown lain)"
+                        :loading="isLoadingPks"
                       ></multiselect>
                     </b-col>
                   </b-row>
@@ -252,7 +253,7 @@ export default {
 
   head() {
     return {
-      title: 'Monitoring WB',
+      title: 'Monitoring WB PH',
     }
   },
 
@@ -317,6 +318,7 @@ export default {
       },
       show: 1, // Start with 1 to show filter form
       isLoadingDropdowns: false, // Menambah state lokal khusus untuk dropdown dependent
+      isLoadingPks: false, // Menambah state lokal khusus untuk dropdown PKS
     }
   },
 
@@ -373,12 +375,15 @@ export default {
   methods: {
     async fetchInitialPks() {
       try {
+        this.isLoadingPks = true
         const response = await this.$axios.$get(
           '/api/admin/spot-cek-get-pks-by-user'
         )
         this.pks_list = response.data || []
       } catch (error) {
         console.error('Error fetching PKS list:', error)
+      } finally {
+        this.isLoadingPks = false
       }
     },
 
