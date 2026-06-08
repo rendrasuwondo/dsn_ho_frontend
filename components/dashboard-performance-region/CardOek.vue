@@ -23,7 +23,7 @@
         <b-spinner variant="warning"></b-spinner>
       </div>
       <client-only v-else>
-        <fusioncharts type="splinearea" width="100%" height="100%" dataFormat="json" :dataSource="computedChartData"></fusioncharts>
+        <fusioncharts type="area2d" width="100%" height="100%" dataFormat="json" :dataSource="computedChartData"></fusioncharts>
         <template #placeholder>
           <div class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
             <b-spinner variant="warning"></b-spinner>
@@ -58,8 +58,8 @@ export default {
         chart: {
           ...commonChartConfig,
           paletteColors: "#e67e22", plotFillAlpha: "40", drawAnchors: "1", showYAxisValues: "1",
-          yAxisValuesPadding: "5", showXAxisLine: "1", xAxisLineColor: "#ccc", divLineAlpha: "30",
-          divLineColor: "#e0e0e0", divLineIsDashed: "1", numDivLines: "2", chartBottomMargin: "0",
+          yAxisMinValue: "0", setMinAsZero: "1", setAdaptiveYMin: "0", yAxisValuesPadding: "5", showXAxisLine: "1", xAxisLineColor: "#ccc", divLineAlpha: "30",
+          divLineColor: "#e0e0e0", divLineIsDashed: "1", adjustDiv: "0", chartBottomMargin: "0",
           chartTopMargin: "15", chartLeftMargin: "0", chartRightMargin: "0", formatNumberScale: "0",
           decimals: "1", anchorRadius: "4", anchorBgColor: "#ffffff", anchorBorderColor: "#e67e22", 
           anchorBorderThickness: "2", valueFontColor: "#0f172a", valueFontSize: "9", valueFontBold: "1"
@@ -77,14 +77,37 @@ export default {
     computedChartData() {
       const baseConfig = { ...this.defaultChartData.chart };
       let trendData = [];
+      let maxVal = 0;
       if (this.oekData && this.oekData.trend) {
-        trendData = this.oekData.trend.map(item => ({
-          label: item.month_name,
-          value: item.total,
-          showValue: item.total > 0 ? "1" : "0",
-          tooltext: `<b>${item.month_name}</b>: ${new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(item.total)}%`
-        }));
+        trendData = this.oekData.trend.map(item => {
+          if (item.total > maxVal) maxVal = Number(item.total);
+          return {
+            label: item.month_name,
+            value: item.total,
+            showValue: item.total > 0 ? "1" : "0",
+            tooltext: `<b>${item.month_name}</b>: ${new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(item.total)}%`
+          };
+        });
       }
+
+      if (maxVal > 0) {
+        const paddedMax = maxVal * 1.1;
+        const magnitude = Math.pow(10, Math.floor(Math.log10(paddedMax)));
+        const normalized = paddedMax / magnitude;
+        let niceMultiplier;
+        if (normalized <= 1.2) niceMultiplier = 1.2;
+        else if (normalized <= 2) niceMultiplier = 2;
+        else if (normalized <= 4) niceMultiplier = 4;
+        else if (normalized <= 6) niceMultiplier = 6;
+        else if (normalized <= 8) niceMultiplier = 8;
+        else niceMultiplier = 10;
+        
+        baseConfig.yAxisMaxValue = (niceMultiplier * magnitude).toString();
+        baseConfig.yAxisMinValue = "0";
+        baseConfig.numDivLines = "3";
+        baseConfig.adjustDiv = "0";
+      }
+
       return {
         chart: baseConfig,
         data: trendData.length ? trendData : this.defaultChartData.data
