@@ -123,7 +123,7 @@
                 <th rowspan="2">Driver</th>
                 <th colspan="4" class="text-center">Total Janjang</th>
                 <th rowspan="2">BJR</th>
-                <th colspan="10" class="text-center">Kriteria TBS Normal</th>
+                <th colspan="6" class="text-center">Kriteria TBS Normal</th>
                 <th v-if="showSickFruit" colspan="6" class="text-center">
                   Kriteria TBS Abnormal
                 </th>
@@ -141,12 +141,12 @@
 
                 <th>Unripe</th>
                 <th>%</th>
-                <th>Under</th>
-                <th>%</th>
+                <!-- <th>Under</th>
+                <th>%</th> -->
                 <th>Ripe</th>
                 <th>%</th>
-                <th>Over</th>
-                <th>%</th>
+                <!-- <th>Over</th>
+                <th>%</th> -->
                 <th>Jangkos</th>
                 <th>%</th>
 
@@ -271,18 +271,18 @@ export default {
           formatter: this.formatToTwoDecimals,
           tdClass: 'text-right',
         },
-        {
-          key: 'qty_underripe',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'percentage_underripe',
-          label: '',
-          formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
+        // {
+        //   key: 'qty_underripe',
+        //   label: '',
+        //   formatter: this.formatToZeroDecimals,
+        //   tdClass: 'text-right',
+        // },
+        // {
+        //   key: 'percentage_underripe',
+        //   label: '',
+        //   formatter: this.formatToTwoDecimals,
+        //   tdClass: 'text-right',
+        // },
         {
           key: 'qty_ripe',
           label: '',
@@ -295,18 +295,18 @@ export default {
           formatter: this.formatToTwoDecimals,
           tdClass: 'text-right',
         },
-        {
-          key: 'qty_overripe',
-          label: '',
-          formatter: this.formatToZeroDecimals,
-          tdClass: 'text-right',
-        },
-        {
-          key: 'percentage_overripe',
-          label: '',
-          formatter: this.formatToTwoDecimals,
-          tdClass: 'text-right',
-        },
+        // {
+        //   key: 'qty_overripe',
+        //   label: '',
+        //   formatter: this.formatToZeroDecimals,
+        //   tdClass: 'text-right',
+        // },
+        // {
+        //   key: 'percentage_overripe',
+        //   label: '',
+        //   formatter: this.formatToTwoDecimals,
+        //   tdClass: 'text-right',
+        // },
         {
           key: 'qty_empty_bunch',
           label: '',

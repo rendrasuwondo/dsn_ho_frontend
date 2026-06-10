@@ -3,8 +3,8 @@
     <div class="d-flex align-items-start mb-3">
       <i class="fas fa-clipboard-list text-success mr-2" style="font-size: 1.5rem; margin-top: 2px;"></i>
       <div style="line-height: 1.2;">
-        <h5 class="kpi-title mb-0">TBS MASUK</h5>
-        <small class="text-muted font-weight-bold" style="font-size: 0.75rem;">(TBS RECEIVED)</small>
+        <h5 class="kpi-title mb-0">PRODUKSI TBS</h5>
+        <small class="text-muted font-weight-bold" style="font-size: 0.75rem;">(Production FFB)</small>
       </div>
     </div>
     <div class="kpi-data flex-shrink-0">
@@ -125,7 +125,7 @@ export default {
         else if (normalized <= 6) niceMultiplier = 6;
         else if (normalized <= 8) niceMultiplier = 8;
         else niceMultiplier = 10;
-        
+
         baseConfig.yAxisMaxValue = (niceMultiplier * magnitude).toString();
         baseConfig.yAxisMinValue = "0";
         baseConfig.numDivLines = "3";

@@ -67,68 +67,86 @@ export default {
       kerData: null,
       oekData: null,
       tbsDetailData: null,
-      cpoDetailData: null
+      cpoDetailData: null,
+      refreshInterval: null
     }
   },
   async fetch() {
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth() + 1;
-
-    let prevMonth = currentMonth - 1;
-    let prevYear = currentYear;
-    if (prevMonth === 0) {
-      prevMonth = 12;
-      prevYear = currentYear - 1;
+    await this.loadDashboardData();
+  },
+  mounted() {
+    // Refresh data silently every 1 hour (3600000 milliseconds)
+    this.refreshInterval = setInterval(() => {
+      this.loadDashboardData();
+    }, 3600000); //1 jam 
+  },
+  beforeDestroy() {
+    // Clear the interval when user navigates away from this page
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
     }
+  },
+  methods: {
+    async loadDashboardData() {
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      const currentMonth = today.getMonth() + 1;
 
-    const monthNames = [
-      "JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI",
-      "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"
-    ];
-    const prevMonthName = monthNames[prevMonth - 1];
-    this.displayTitle = `BULAN: ${prevMonthName} ${prevYear}`;
-
-    try {
-      const [resTbs, resCpo, resOer, resKer, resOek, resTbsDetail, resCpoDetail] = await Promise.all([
-        this.$axios.$get(`/api/agro-dashboard-web/public/tbs-masuk?year=${prevYear}&month=${prevMonth}`).catch(() => null),
-        this.$axios.$get(`/api/agro-dashboard-web/public/produksi-cpo?year=${prevYear}&month=${prevMonth}`).catch(() => null),
-        this.$axios.$get(`/api/agro-dashboard-web/public/oer?year=${prevYear}&month=${prevMonth}`).catch(() => null),
-        this.$axios.$get(`/api/agro-dashboard-web/public/ker?year=${prevYear}&month=${prevMonth}`).catch(() => null),
-        this.$axios.$get(`/api/agro-dashboard-web/public/oek?year=${prevYear}&month=${prevMonth}`).catch(() => null),
-        this.$axios.$get(`/api/agro-dashboard-web/public/detail-produksi-tbs?year=${prevYear}&month=${prevMonth}`).catch(() => null),
-        this.$axios.$get(`/api/agro-dashboard-web/public/detail-produksi-cpo?year=${prevYear}&month=${prevMonth}`).catch(() => null)
-      ]);
-
-      if (resTbs && resTbs.status === 'success' && resTbs.data) {
-        this.tbsData = resTbs.data.tbs_masuk;
+      let prevMonth = currentMonth - 1;
+      let prevYear = currentYear;
+      if (prevMonth === 0) {
+        prevMonth = 12;
+        prevYear = currentYear - 1;
       }
 
-      if (resCpo && resCpo.status === 'success' && resCpo.data) {
-        this.cpoData = resCpo.data.produksi_cpo;
-      }
+      const monthNames = [
+        "JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI",
+        "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"
+      ];
+      const prevMonthName = monthNames[prevMonth - 1];
+      this.displayTitle = `BULAN: ${prevMonthName} ${prevYear}`;
 
-      if (resOer && resOer.status === 'success' && resOer.data) {
-        this.oerData = resOer.data.oer;
-      }
+      try {
+        const [resTbs, resCpo, resOer, resKer, resOek, resTbsDetail, resCpoDetail] = await Promise.all([
+          this.$axios.$get(`/api/agro-dashboard-web/public/tbs-masuk?year=${prevYear}&month=${prevMonth}`).catch(() => null),
+          this.$axios.$get(`/api/agro-dashboard-web/public/produksi-cpo?year=${prevYear}&month=${prevMonth}`).catch(() => null),
+          this.$axios.$get(`/api/agro-dashboard-web/public/oer?year=${prevYear}&month=${prevMonth}`).catch(() => null),
+          this.$axios.$get(`/api/agro-dashboard-web/public/ker?year=${prevYear}&month=${prevMonth}`).catch(() => null),
+          this.$axios.$get(`/api/agro-dashboard-web/public/oek?year=${prevYear}&month=${prevMonth}`).catch(() => null),
+          this.$axios.$get(`/api/agro-dashboard-web/public/detail-produksi-tbs?year=${prevYear}&month=${prevMonth}`).catch(() => null),
+          this.$axios.$get(`/api/agro-dashboard-web/public/detail-produksi-cpo?year=${prevYear}&month=${prevMonth}`).catch(() => null)
+        ]);
 
-      if (resKer && resKer.status === 'success' && resKer.data) {
-        this.kerData = resKer.data.ker;
-      }
+        if (resTbs && resTbs.status === 'success' && resTbs.data) {
+          this.tbsData = resTbs.data.tbs_masuk;
+        }
 
-      if (resOek && resOek.status === 'success' && resOek.data) {
-        this.oekData = resOek.data.oek;
-      }
+        if (resCpo && resCpo.status === 'success' && resCpo.data) {
+          this.cpoData = resCpo.data.produksi_cpo;
+        }
 
-      if (resTbsDetail && resTbsDetail.status === 'success' && resTbsDetail.data) {
-        this.tbsDetailData = resTbsDetail.data.detail_produksi_tbs;
-      }
+        if (resOer && resOer.status === 'success' && resOer.data) {
+          this.oerData = resOer.data.oer;
+        }
 
-      if (resCpoDetail && resCpoDetail.status === 'success' && resCpoDetail.data) {
-        this.cpoDetailData = resCpoDetail.data.detail_produksi_cpo;
+        if (resKer && resKer.status === 'success' && resKer.data) {
+          this.kerData = resKer.data.ker;
+        }
+
+        if (resOek && resOek.status === 'success' && resOek.data) {
+          this.oekData = resOek.data.oek;
+        }
+
+        if (resTbsDetail && resTbsDetail.status === 'success' && resTbsDetail.data) {
+          this.tbsDetailData = resTbsDetail.data.detail_produksi_tbs;
+        }
+
+        if (resCpoDetail && resCpoDetail.status === 'success' && resCpoDetail.data) {
+          this.cpoDetailData = resCpoDetail.data.detail_produksi_cpo;
+        }
+      } catch (error) {
+        console.error('Failed to fetch dashboard data:', error);
       }
-    } catch (error) {
-      console.error('Failed to fetch dashboard data:', error);
     }
   }
 }
