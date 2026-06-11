@@ -188,26 +188,26 @@ export default {
         {
           key: 'setelah_potongan_ton',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right',
         },
         {
           key: 'setelah_potongan_ton_rit',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right',
         },
 
         {
           key: 'tonase_potongan_ton',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right',
         },
         {
           key: 'tonase_potongan_ton_rit',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right',
         },
 
@@ -215,19 +215,19 @@ export default {
         {
           key: 'netto_jjg',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'netto_ton',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'netto_ton_rit',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right bg-light',
         },
 
@@ -235,19 +235,19 @@ export default {
         {
           key: 'dikembalikan_jjg',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right',
         },
         {
           key: 'dikembalikan_ton',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right',
         },
         {
           key: 'dikembalikan_ton_rit',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right',
         },
 
@@ -255,19 +255,19 @@ export default {
         {
           key: 'total_jjg',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'total_ton',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'total_ton_rit',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right bg-light',
         },
 
@@ -275,6 +275,7 @@ export default {
         {
           key: 'potongan_persen',
           label: '',
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-center',
         },
 
@@ -312,6 +313,11 @@ export default {
   methods: {
     formatNumber(value) {
       return Number.isFinite(Number(value)) ? Number(value).toFixed(2) : '0.00'
+    },
+
+    formatThousand(value) {
+      if (value === null || value === undefined) return '0'
+      return Number(value).toLocaleString('en-US')
     },
 
     loadFiltersFromUrl() {
