@@ -251,6 +251,22 @@
                 {{ formatToTwoDecimals(row.item.percentage_garbage) }}
               </span>
             </template>
+
+            <template #cell(npb)="row">
+              <span v-if="row.item.img_no_npb != null">
+                <a
+                  :href="`${$axios.defaults.baseURL}${row.item.img_no_npb}`"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary"
+                >
+                  {{ row.item.npb }}
+                </a>
+              </span>
+              <span v-else>
+                {{ row.item.npb }}
+              </span>
+            </template>
           </b-table>
           <!-- pagination -->
           <b-row>
