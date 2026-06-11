@@ -216,7 +216,12 @@ export default {
 
     return {
       tableFields: [
-        { key: 'tanggal', label: '', tdClass: 'align-middle text-center' },
+        {
+          key: 'tanggal',
+          label: '',
+          tdClass: 'align-middle text-center',
+          formatter: this.formatDate,
+        },
         { key: 'supplier', label: '', tdClass: 'align-middle' },
         { key: 'driver', label: '', tdClass: 'align-middle' },
         {

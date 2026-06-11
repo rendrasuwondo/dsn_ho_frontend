@@ -181,6 +181,7 @@ export default {
           key: 'tanggal',
           label: '',
           tdClass: 'align-middle text-center font-weight-bold',
+          formatter: this.formatDate,
         },
         { key: 'ritase', label: '', tdClass: 'align-middle text-center' },
 
