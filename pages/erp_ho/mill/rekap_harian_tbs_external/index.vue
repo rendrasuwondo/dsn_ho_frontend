@@ -235,19 +235,19 @@ export default {
         {
           key: 'timbang_masuk',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right',
         },
         {
           key: 'timbang_keluar',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right',
         },
         {
           key: 'tonase_bersih',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatThousand,
           tdClass: 'align-middle text-right font-weight-bold',
         },
 
