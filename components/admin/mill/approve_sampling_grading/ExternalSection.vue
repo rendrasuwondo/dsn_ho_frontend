@@ -248,6 +248,7 @@
                 <th rowspan="2">Actions</th>
                 <th rowspan="2">Status</th>
                 <th rowspan="2">Tanggal</th>
+                <th rowspan="2">Ring</th>
                 <th rowspan="2">Supplier</th>
                 <th rowspan="2">Driver</th>
                 <th colspan="4" class="text-center">Total Janjang</th>
@@ -570,6 +571,7 @@ export default {
           tdClass: 'text-nowrap',
           thClass: 'text-nowrap',
         },
+        { key: 'ring', label: '' },
         { key: 'supplier', label: '' },
         { key: 'driver', label: '' },
 
