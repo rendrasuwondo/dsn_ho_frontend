@@ -134,6 +134,7 @@
               <tr>
                 <!-- <th rowspan="2">No</th> -->
                 <th rowspan="2">Tanggal</th>
+                <th rowspan="2">Ring</th>
                 <th rowspan="2">PKS</th>
                 <th rowspan="2">Supplier</th>
                 <th rowspan="2">Driver</th>
@@ -256,6 +257,7 @@ export default {
           tdClass: 'text-nowrap',
           thClass: 'text-nowrap',
         },
+        { key: 'ring', label: '' },
         { key: 'department_code', label: '' },
         { key: 'supplier', label: '' },
         { key: 'driver', label: '' },

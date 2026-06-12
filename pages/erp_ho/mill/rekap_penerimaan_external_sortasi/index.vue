@@ -100,17 +100,13 @@
                 <th rowspan="2" class="align-middle border-dark">TANGGAL</th>
                 <th rowspan="2" class="align-middle border-dark">RITASE</th>
                 <th colspan="2" class="border-dark">
-                  TONASE SETELAH POTONGAN {{ defaultPotongan }}% (TON)
+                  TONASE SETELAH POTONGAN (TON)
                 </th>
-                <th colspan="2" class="border-dark">
-                  TONASE POTONGAN {{ defaultPotongan }}% (TON)
-                </th>
+                <th colspan="2" class="border-dark">TONASE POTONGAN (TON)</th>
                 <th colspan="3" class="border-dark">NETTO TIMBANGAN (TON)</th>
                 <th colspan="3" class="border-dark">DIKEMBALIKAN (TON)</th>
                 <th colspan="3" class="border-dark">TOTAL (TON)</th>
-                <th rowspan="2" class="align-middle border-dark">
-                  POTONGAN {{ defaultPotongan }}%
-                </th>
+                <th rowspan="2" class="align-middle border-dark">POTONGAN %</th>
                 <th colspan="2" class="border-dark">% DIKEMBALIKAN</th>
               </tr>
               <tr class="header-yellow text-center">
