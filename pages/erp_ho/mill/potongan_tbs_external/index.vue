@@ -225,6 +225,7 @@ export default {
       editMode: false,
       selectedId: null,
       departmentOptions: [],
+      isMatchedPks: false,
 
       form: {
         department_id: null,
@@ -296,7 +297,7 @@ export default {
   watch: {
     '$route.query': {
       handler: 'fetchPosts',
-      immediate: true,
+      immediate: false,
     },
   },
   mounted() {
@@ -308,9 +309,22 @@ export default {
       if (!value) return '-'
       const date = new Date(value)
       if (isNaN(date.getTime())) return value
-      
+
       const day = String(date.getDate()).padStart(2, '0')
-      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      const monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ]
       const month = monthNames[date.getMonth()]
       const year = date.getFullYear()
 
@@ -322,10 +336,13 @@ export default {
       let search = this.$route.query.q ? this.$route.query.q : ''
       this.search = search
 
+      let url = `/api/admin/potongan_tbs_external?q=${search}&page=${page}`
+      if (this.isMatchedPks) {
+        url += `&department_code=${this.$auth.user.employee.department_code}`
+      }
+
       try {
-        const posts = await this.$axios.$get(
-          `/api/admin/potongan_tbs_external?q=${search}&page=${page}`
-        )
+        const posts = await this.$axios.$get(url)
         this.posts = posts.data.data
         this.pagination = posts.data
         this.rowcount = posts.data.total
@@ -348,11 +365,15 @@ export default {
         const matchedPks = allPks.find((pks) => pks.code === userDeptCode)
         if (matchedPks) {
           this.departmentOptions = [matchedPks]
+          this.isMatchedPks = true
         } else {
           this.departmentOptions = allPks
+          this.isMatchedPks = false
         }
       } catch (error) {
         console.error(error)
+      } finally {
+        this.fetchPosts()
       }
     },
     changePage(page) {
