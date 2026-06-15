@@ -125,12 +125,12 @@
             </b-form-group>
 
             <b-form-group label="Ring" label-for="ring-input">
-              <b-form-input
+              <b-form-select
                 id="ring-input"
                 v-model="form.ring"
+                :options="[{ text: 'Pilih Ring', value: '' }, 'R1', 'R2', 'R3']"
                 required
-                placeholder="Contoh: Ring 1"
-              ></b-form-input>
+              ></b-form-select>
             </b-form-group>
 
             <b-form-group label="Tanggal Aktif" label-for="active_at-input">
@@ -240,6 +240,13 @@ export default {
 
       fields: [
         {
+          key: 'actions',
+          label: 'Aksi',
+          thClass: 'text-center',
+          tdClass: 'text-center',
+          width: '100px',
+        },
+        {
           key: 'index',
           label: 'No',
           thClass: 'text-center',
@@ -283,13 +290,6 @@ export default {
           formatter: 'formatDate',
           thClass: 'text-center',
           tdClass: 'text-center',
-        },
-        {
-          key: 'actions',
-          label: 'Aksi',
-          thClass: 'text-center',
-          tdClass: 'text-center',
-          width: '100px',
         },
       ],
     }
@@ -444,10 +444,22 @@ export default {
             `/api/admin/potongan_tbs_external/${this.selectedId}`,
             payload
           )
-          this.$swal.fire('BERHASIL!', 'Data berhasil diupdate.', 'success')
+          this.$swal.fire({
+            title: 'BERHASIL!',
+            text: 'Data berhasil diupdate.',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500,
+          })
         } else {
           await this.$axios.post('/api/admin/potongan_tbs_external', payload)
-          this.$swal.fire('BERHASIL!', 'Data berhasil ditambah.', 'success')
+          this.$swal.fire({
+            title: 'BERHASIL!',
+            text: 'Data berhasil ditambah.',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500,
+          })
         }
         this.$bvModal.hide('modal-form')
         this.fetchPosts()
@@ -484,11 +496,13 @@ export default {
                 ) {
                   this.$swal.fire('GAGAL!', 'Gagal menghapus data.', 'error')
                 } else {
-                  this.$swal.fire(
-                    'BERHASIL!',
-                    'Data berhasil dihapus.',
-                    'success'
-                  )
+                  this.$swal.fire({
+                    title: 'BERHASIL!',
+                    text: 'Data berhasil dihapus.',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1500,
+                  })
                 }
               })
               .catch((err) => {
