@@ -60,6 +60,17 @@
               }}
             </template>
 
+            <template #cell(total)="data">
+              {{
+                (
+                  parseFloat(data.item.bm || 0) +
+                  parseFloat(data.item.blm || 0) +
+                  parseFloat(data.item.tk || 0) +
+                  parseFloat(data.item.tp || 0)
+                ).toFixed(2)
+              }}
+            </template>
+
             <template #cell(actions)="data">
               <button
                 class="btn btn-primary btn-sm mr-1"
@@ -111,7 +122,7 @@
       <form @submit.stop.prevent="submitForm">
         <b-row>
           <b-col md="6">
-            <b-form-group label="PKS" label-for="department-input">
+            <b-form-group label="PKS" label-for="department-input" :invalid-feedback="errors.department_id ? errors.department_id[0] : ''" :state="errors.department_id ? false : null">
               <multiselect
                 id="department-input"
                 v-model="form.department_id"
@@ -124,12 +135,13 @@
               ></multiselect>
             </b-form-group>
 
-            <b-form-group label="Ring" label-for="ring-input">
+            <b-form-group label="Ring" label-for="ring-input" :invalid-feedback="errors.ring ? errors.ring[0] : ''" :state="errors.ring ? false : null">
               <b-form-select
                 id="ring-input"
                 v-model="form.ring"
                 :options="[{ text: 'Pilih Ring', value: '' }, 'R1', 'R2', 'R3']"
                 required
+                :state="errors.ring ? false : null"
               ></b-form-select>
             </b-form-group>
 
@@ -157,43 +169,47 @@
           </b-col>
 
           <b-col md="6">
-            <b-form-group label="BM (%)" label-for="bm-input">
+            <b-form-group label="BM (%)" label-for="bm-input" :invalid-feedback="errors.bm ? errors.bm[0] : ''" :state="errors.bm ? false : null">
               <b-form-input
                 id="bm-input"
                 type="number"
                 step="0.01"
                 v-model="form.bm"
                 required
+                :state="errors.bm ? false : null"
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group label="BLM (%)" label-for="blm-input">
+            <b-form-group label="BLM (%)" label-for="blm-input" :invalid-feedback="errors.blm ? errors.blm[0] : ''" :state="errors.blm ? false : null">
               <b-form-input
                 id="blm-input"
                 type="number"
                 step="0.01"
                 v-model="form.blm"
                 required
+                :state="errors.blm ? false : null"
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group label="TK (%)" label-for="tk-input">
+            <b-form-group label="TK (%)" label-for="tk-input" :invalid-feedback="errors.tk ? errors.tk[0] : ''" :state="errors.tk ? false : null">
               <b-form-input
                 id="tk-input"
                 type="number"
                 step="0.01"
                 v-model="form.tk"
                 required
+                :state="errors.tk ? false : null"
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group label="TP (%)" label-for="tp-input">
+            <b-form-group label="TP (%)" label-for="tp-input" :invalid-feedback="errors.tp ? errors.tp[0] : ''" :state="errors.tp ? false : null">
               <b-form-input
                 id="tp-input"
                 type="number"
                 step="0.01"
                 v-model="form.tp"
                 required
+                :state="errors.tp ? false : null"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -226,6 +242,7 @@ export default {
       selectedId: null,
       departmentOptions: [],
       isMatchedPks: false,
+      errors: {},
 
       form: {
         department_id: null,
@@ -261,6 +278,12 @@ export default {
           tdClass: 'text-center',
         },
         {
+          key: 'total',
+          label: 'Total',
+          thClass: 'text-center',
+          tdClass: 'text-center',
+        },
+        {
           key: 'bm',
           label: 'BM',
           thClass: 'text-center',
@@ -290,6 +313,11 @@ export default {
           formatter: 'formatDate',
           thClass: 'text-center',
           tdClass: 'text-center',
+        },
+        {
+          key: 'description',
+          label: 'Deskripsi',
+          thClass: 'text-center',
         },
       ],
     }
@@ -390,6 +418,7 @@ export default {
     },
     showModal(isEdit, item = null) {
       this.editMode = isEdit
+      this.errors = {}
       if (isEdit) {
         this.selectedId = item.id
         this.form = {
@@ -425,6 +454,7 @@ export default {
     },
     async submitForm(e) {
       e.preventDefault()
+      this.errors = {}
       try {
         const payload = {
           department_id: this.form.department_id
@@ -464,11 +494,20 @@ export default {
         this.$bvModal.hide('modal-form')
         this.fetchPosts()
       } catch (err) {
-        this.$swal.fire(
-          'GAGAL!',
-          err.response?.data?.message || 'Terjadi kesalahan',
-          'error'
-        )
+        if (err.response && err.response.status === 422) {
+          this.errors = err.response.data.errors || err.response.data.data || err.response.data || {}
+          this.$swal.fire(
+            'GAGAL!',
+            err.response?.data?.message || 'Silakan periksa kembali form Anda.',
+            'error'
+          )
+        } else {
+          this.$swal.fire(
+            'GAGAL!',
+            err.response?.data?.message || 'Terjadi kesalahan',
+            'error'
+          )
+        }
       }
     },
     deletePost(id) {
