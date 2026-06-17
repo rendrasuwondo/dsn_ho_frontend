@@ -97,7 +97,9 @@
           >
             <template v-slot:thead-top>
               <tr class="header-yellow text-center align-middle">
-                <th rowspan="2" class="align-middle border-dark">TANGGAL</th>
+                <th rowspan="2" class="align-middle border-dark text-nowrap">
+                  TANGGAL
+                </th>
                 <th rowspan="2" class="align-middle border-dark">RITASE</th>
                 <th colspan="2" class="border-dark">
                   TONASE SETELAH POTONGAN (TON)
@@ -176,8 +178,8 @@ export default {
         {
           key: 'tanggal',
           label: '',
-          tdClass: 'align-middle text-center font-weight-bold',
-          formatter: this.formatDate,
+          formatter: this.formatDateTable,
+          tdClass: 'align-middle text-center font-weight-bold text-nowrap',
         },
         { key: 'ritase', label: '', tdClass: 'align-middle text-center' },
 
@@ -307,6 +309,34 @@ export default {
   },
 
   methods: {
+    formatDateTable(dateString) {
+      if (!dateString) return ''
+
+      // 1. Pecah input "11/6/2026" menjadi hari (11), bulan (6), dan tahun (2026)
+      const [day, month, year] = dateString.split('/')
+
+      // 2. Buat daftar singkatan nama bulan
+      const monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ]
+
+      // 3. Cocokkan angka bulan dengan daftar nama bulan
+      const monthName = monthNames[parseInt(month) - 1]
+
+      // 4. Format hari agar selalu 2 digit, gabungkan semuanya
+      return `${String(day).padStart(2, '0')}-${monthName}-${year}`
+    },
     formatNumber(value) {
       return Number.isFinite(Number(value)) ? Number(value).toFixed(2) : '0.00'
     },
