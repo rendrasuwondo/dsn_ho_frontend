@@ -146,7 +146,7 @@
                 <b-td class="text-right align-middle">{{ formatThousand(totalTotalJjg) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatThousand(totalTotalTon) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatThousand(totalTotalTonRit) }}</b-td>
-                <b-td>&nbsp;</b-td>
+                <b-td class="text-center align-middle">{{ formatNumber(totalPotonganPersen) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalPercKembaliJjg) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalPercKembaliTon) }}</b-td>
               </b-tr>
@@ -362,6 +362,9 @@ export default {
     },
     totalTotalTonRit() {
       return this.posts.reduce((sum, item) => sum + (parseFloat(item.total_ton_rit) || 0), 0)
+    },
+    totalPotonganPersen() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.potongan_persen) || 0), 0)
     },
     totalPercKembaliJjg() {
       return this.totalTotalJjg > 0 ? (this.totalDikembalikanJjg / this.totalTotalJjg) * 100 : 0
