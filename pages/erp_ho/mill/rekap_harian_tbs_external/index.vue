@@ -182,7 +182,7 @@
                 <b-td class="text-right align-middle">{{ formatNumber(totalTotPotonganKg) }}</b-td>
                 <b-td class="text-right align-middle font-weight-bold">{{ formatThousand(totalNetto) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliJjg) }}</b-td>
-                <b-td>&nbsp;</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliBjr) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliTon) }}</b-td>
               </b-tr>
             </template>
@@ -442,6 +442,11 @@ export default {
         (sum, item) => sum + (parseFloat(item.jjg_kembali_ton) || 0),
         0
       )
+    },
+    totalJjgKembaliBjr() {
+      return this.totalJjgKembaliJjg > 0
+        ? this.totalJjgKembaliTon / this.totalJjgKembaliJjg
+        : 0
     },
   },
 
