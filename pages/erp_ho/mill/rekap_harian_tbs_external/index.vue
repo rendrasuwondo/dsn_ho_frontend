@@ -172,6 +172,20 @@
               </tr>
               <tr style="display: none"></tr>
             </template>
+            <template v-slot:custom-foot="data">
+              <b-tr v-if="posts.length > 0" class="bg-light font-weight-bold">
+                <b-td colspan="3" class="text-center align-middle">TOTAL</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalJumlahJjg) }}</b-td>
+                <b-td colspan="3">&nbsp;</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalTonaseBersih) }}</b-td>
+                <b-td colspan="15">&nbsp;</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalTotPotonganKg) }}</b-td>
+                <b-td>&nbsp;</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliJjg) }}</b-td>
+                <b-td>&nbsp;</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliTon) }}</b-td>
+              </b-tr>
+            </template>
           </b-table>
 
           <b-row>
@@ -220,7 +234,7 @@ export default {
           key: 'tanggal',
           label: '',
           tdClass: 'align-middle text-center',
-          formatter: this.formatDate,
+          formatter: this.formatDateTable,
         },
         { key: 'supplier', label: '', tdClass: 'align-middle' },
         { key: 'driver', label: '', tdClass: 'align-middle' },
@@ -392,6 +406,39 @@ export default {
     }
   },
 
+  computed: {
+    totalJumlahJjg() {
+      return this.posts.reduce(
+        (sum, item) => sum + (parseFloat(item.jumlah_jjg) || 0),
+        0
+      )
+    },
+    totalTonaseBersih() {
+      return this.posts.reduce(
+        (sum, item) => sum + (parseFloat(item.tonase_bersih) || 0),
+        0
+      )
+    },
+    totalTotPotonganKg() {
+      return this.posts.reduce(
+        (sum, item) => sum + (parseFloat(item.tot_potongan_kg) || 0),
+        0
+      )
+    },
+    totalJjgKembaliJjg() {
+      return this.posts.reduce(
+        (sum, item) => sum + (parseFloat(item.jjg_kembali_jjg) || 0),
+        0
+      )
+    },
+    totalJjgKembaliTon() {
+      return this.posts.reduce(
+        (sum, item) => sum + (parseFloat(item.jjg_kembali_ton) || 0),
+        0
+      )
+    },
+  },
+
   async mounted() {
     this.recordMenuLog('Rekap Harian TBS Eksternal') // Catat akses menu;
     await this.loadDropdownData()
@@ -400,6 +447,34 @@ export default {
   },
 
   methods: {
+    formatDateTable(dateString) {
+      if (!dateString) return ''
+
+      // 1. Pecah input "11/6/2026" menjadi hari (11), bulan (6), dan tahun (2026)
+      const [day, month, year] = dateString.split('/')
+
+      // 2. Buat daftar singkatan nama bulan
+      const monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ]
+
+      // 3. Cocokkan angka bulan dengan daftar nama bulan
+      const monthName = monthNames[parseInt(month) - 1]
+
+      // 4. Format hari agar selalu 2 digit, gabungkan semuanya
+      return `${String(day).padStart(2, '0')}-${monthName}-${year}`
+    },
     formatNumber(value) {
       if (value === null || value === undefined) return '0.00'
       return Number(value).toFixed(2)
