@@ -180,7 +180,7 @@
                 <b-td class="text-right align-middle">{{ formatThousand(totalTonaseBersih) }}</b-td>
                 <b-td colspan="15">&nbsp;</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalTotPotonganKg) }}</b-td>
-                <b-td>&nbsp;</b-td>
+                <b-td class="text-right align-middle font-weight-bold">{{ formatThousand(totalNetto) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliJjg) }}</b-td>
                 <b-td>&nbsp;</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliTon) }}</b-td>
@@ -422,6 +422,12 @@ export default {
     totalTotPotonganKg() {
       return this.posts.reduce(
         (sum, item) => sum + (parseFloat(item.tot_potongan_kg) || 0),
+        0
+      )
+    },
+    totalNetto() {
+      return this.posts.reduce(
+        (sum, item) => sum + (parseFloat(item.netto) || 0),
         0
       )
     },
