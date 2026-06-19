@@ -130,6 +130,27 @@
               </tr>
               <tr style="display: none"></tr>
             </template>
+            <template v-slot:custom-foot="data">
+              <b-tr v-if="posts.length > 0" class="bg-light font-weight-bold">
+                <b-td colspan="2" class="text-center align-middle">TOTAL</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalSetelahPotonganTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalSetelahPotonganTonRit) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalTonasePotonganTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalTonasePotonganTonRit) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalNettoJjg) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalNettoTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalNettoTonRit) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalDikembalikanJjg) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalDikembalikanTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalDikembalikanTonRit) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalTotalJjg) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalTotalTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalTotalTonRit) }}</b-td>
+                <b-td>&nbsp;</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalPercKembaliJjg) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalPercKembaliTon) }}</b-td>
+              </b-tr>
+            </template>
           </b-table>
 
           <b-row>
@@ -299,6 +320,54 @@ export default {
       rowcount: 0,
       show: 0,
       defaultPotongan: 3,
+    }
+  },
+
+  computed: {
+    totalSetelahPotonganTon() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.setelah_potongan_ton) || 0), 0)
+    },
+    totalSetelahPotonganTonRit() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.setelah_potongan_ton_rit) || 0), 0)
+    },
+    totalTonasePotonganTon() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.tonase_potongan_ton) || 0), 0)
+    },
+    totalTonasePotonganTonRit() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.tonase_potongan_ton_rit) || 0), 0)
+    },
+    totalNettoJjg() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.netto_jjg) || 0), 0)
+    },
+    totalNettoTon() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.netto_ton) || 0), 0)
+    },
+    totalNettoTonRit() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.netto_ton_rit) || 0), 0)
+    },
+    totalDikembalikanJjg() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.dikembalikan_jjg) || 0), 0)
+    },
+    totalDikembalikanTon() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.dikembalikan_ton) || 0), 0)
+    },
+    totalDikembalikanTonRit() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.dikembalikan_ton_rit) || 0), 0)
+    },
+    totalTotalJjg() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.total_jjg) || 0), 0)
+    },
+    totalTotalTon() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.total_ton) || 0), 0)
+    },
+    totalTotalTonRit() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.total_ton_rit) || 0), 0)
+    },
+    totalPercKembaliJjg() {
+      return this.totalTotalJjg > 0 ? (this.totalDikembalikanJjg / this.totalTotalJjg) * 100 : 0
+    },
+    totalPercKembaliTon() {
+      return this.totalTotalTon > 0 ? (this.totalDikembalikanTon / this.totalTotalTon) * 100 : 0
     }
   },
 
