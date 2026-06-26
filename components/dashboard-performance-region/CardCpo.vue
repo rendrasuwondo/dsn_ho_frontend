@@ -176,13 +176,33 @@ export default {
       let trendData = []
       let maxVal = 0
       if (this.cpoData && this.cpoData.trend) {
-        trendData = this.cpoData.trend.map((item) => {
+        let lastValidIndex = -1;
+        for (let i = this.cpoData.trend.length - 1; i >= 0; i--) {
+          if (Number(this.cpoData.trend[i].total) > 0) {
+            lastValidIndex = i;
+            break;
+          }
+        }
+        
+        const monthMap = { 'JAN': 'JAN', 'FEB': 'FEB', 'MAR': 'MAR', 'APR': 'APR', 'MAY': 'MEI', 'MAI': 'MEI', 'JUN': 'JUN', 'JUL': 'JUL', 'AUG': 'AGU', 'AGU': 'AGU', 'SEP': 'SEP', 'OCT': 'OKT', 'OKT': 'OKT', 'NOV': 'NOV', 'DEC': 'DES', 'DES': 'DES' };
+
+        trendData = this.cpoData.trend.map((item, index) => {
           if (item.total > maxVal) maxVal = Number(item.total)
+          
+          let monthLabel = item.month_name ? item.month_name.toUpperCase() : '';
+          if (monthMap[monthLabel]) {
+            monthLabel = monthMap[monthLabel];
+          } else if (item.month_name) {
+            monthLabel = item.month_name;
+          }
+          
+          const val = index <= lastValidIndex ? item.total : null;
+          
           return {
-            label: item.month_name,
-            value: item.total,
+            label: monthLabel,
+            value: val,
             showValue: item.total > 0 ? '1' : '0',
-            tooltext: `<b>${item.month_name}</b>: ${new Intl.NumberFormat(
+            tooltext: `<b>${monthLabel}</b>: ${new Intl.NumberFormat(
               'en-US',
               { maximumFractionDigits: 2 }
             ).format(item.total)} TON`,

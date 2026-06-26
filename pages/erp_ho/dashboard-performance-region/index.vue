@@ -2,21 +2,6 @@
 <template>
   <div class="dashboard-performance-region">
     <div class="tv-container d-flex flex-column">
-      <!-- Header (Selalu Tampil) -->
-      <div
-        class="header-section text-center d-flex flex-column justify-content-center align-items-center flex-shrink-0"
-      >
-        <h1 class="main-title mb-1">
-          DASHBOARD KINERJA BULANAN PKS: OPTIMALISASI PABRIK KELAPA SAWIT
-        </h1>
-        <h4 class="sub-title text-muted mb-2">
-          MONTHLY PKS PERFORMANCE DASHBOARD
-        </h4>
-        <div class="month-selector mt-1 shadow-sm">
-          {{ displayTitle }}
-        </div>
-      </div>
-
       <!-- Slideshow Container (Hanya Content yang digeser) -->
       <div class="slideshow-wrapper">
         <!-- Slide 1: Map -->
@@ -30,6 +15,21 @@
 
         <!-- Slide 2: Dashboard Content -->
         <div class="slide-item content-section" :class="slideStates[2]">
+          <!-- Header (Tampil di Slide 2) -->
+          <div
+            class="header-section text-center d-flex flex-column justify-content-center align-items-center flex-shrink-0 mb-3"
+          >
+            <h1 class="main-title mb-1">
+              DASHBOARD KINERJA BULANAN PKS: OPTIMALISASI PABRIK KELAPA SAWIT
+            </h1>
+            <h4 class="sub-title text-muted mb-2">
+              MONTHLY PKS PERFORMANCE DASHBOARD
+            </h4>
+            <div class="month-selector mt-1 shadow-sm">
+              {{ displayTitle }}
+            </div>
+          </div>
+
           <!-- Top Row (4 items) -->
             <div class="row row-top mx-0">
               <div class="col-12 col-md-6 col-xl-3 dash-col">
