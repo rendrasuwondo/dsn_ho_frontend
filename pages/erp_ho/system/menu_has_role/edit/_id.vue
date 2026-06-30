@@ -258,7 +258,7 @@ export default {
           is_active: this.field.is_active,
           description: this.field.description,
           created_at: this.field.created_at,
-          created_by: this.field.description,
+          created_by: this.field.created_by,
           updated_at: this.field.updated_at,
           updated_by: this.field.updated_by,
         })
