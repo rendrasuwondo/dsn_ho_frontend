@@ -191,7 +191,7 @@ export default {
         },
         {
           label: 'Aktif?',
-          key: 'is_active_role_code',
+          key: 'is_active_code',
           tdClass: 'text-left',
         },
       ],
