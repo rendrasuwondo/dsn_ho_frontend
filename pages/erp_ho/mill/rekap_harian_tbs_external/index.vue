@@ -130,6 +130,9 @@
                   JUMLAH<br />JJG
                 </th>
                 <th rowspan="3" class="align-middle border-dark">
+                  NO. BONTRIP
+                </th>
+                <th rowspan="3" class="align-middle border-dark">
                   NO TIKET TIMBANG
                 </th>
                 <th rowspan="3" class="align-middle border-dark">
@@ -191,7 +194,7 @@
               <b-tr v-if="posts.length > 0" class="bg-light font-weight-bold">
                 <b-td colspan="3" class="text-center align-middle">TOTAL</b-td>
                 <b-td class="text-right align-middle">{{ formatThousand(totalJumlahJjg) }}</b-td>
-                <b-td colspan="3">&nbsp;</b-td>
+                <b-td colspan="4">&nbsp;</b-td>
                 <b-td class="text-right align-middle">{{ formatThousand(totalTonaseBersih) }}</b-td>
                 <b-td colspan="15">&nbsp;</b-td>
                 <b-td class="text-right align-middle">{{ formatThousand(totalTotPotonganKg) }}</b-td>
@@ -258,6 +261,11 @@ export default {
           label: '',
           formatter: this.formatThousand,
           tdClass: 'align-middle text-right font-weight-bold',
+        },
+        {
+          key: 'no_bontrip',
+          label: '',
+          tdClass: 'align-middle text-center text-nowrap',
         },
 
         {
