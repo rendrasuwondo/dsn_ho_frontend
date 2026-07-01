@@ -70,6 +70,21 @@
                       ></multiselect>
                     </b-col>
                   </b-row>
+                  <b-row class="mt-2 align-items-center">
+                    <b-col cols="3">PKS</b-col>
+                    <b-col cols="9">
+                      <multiselect
+                        v-model="pks_id"
+                        :options="pks_options"
+                        label="code"
+                        track-by="code"
+                        :searchable="true"
+                        :multiple="false"
+                        placeholder="Pilih PKS"
+                        :loading="isLoadingDropdownPks"
+                      ></multiselect>
+                    </b-col>
+                  </b-row>
                 </b-col>
               </b-row>
 
@@ -397,11 +412,14 @@ export default {
       dateEnd: formatDate(yesterday),
       supplier_id: [],
       suppliers: [],
+      pks_id: null,
+      pks_options: [],
       posts: [],
       pagination: { current_page: 1, per_page: 50, total: 0 },
       rowcount: 0,
       show: 0,
       isLoadingDropdown: true,
+      isLoadingDropdownPks: true,
       isPaginating: false,
     }
   },
@@ -452,7 +470,11 @@ export default {
 
   async mounted() {
     this.recordMenuLog('Rekap Harian TBS Eksternal') // Catat akses menu;
-    await this.loadDropdownData()
+    console.log('user:', this.$auth.user.employee.department_code)
+    await Promise.all([
+      this.loadDropdownData(),
+      this.loadDropdownDataPks()
+    ])
     this.loadFiltersFromUrl()
     await this.fetchData()
   },
@@ -508,6 +530,26 @@ export default {
       }
     },
 
+    async loadDropdownDataPks() {
+      try {
+        const response = await this.$axios.$get('/api/admin/lov_user_departemen')
+        this.pks_options = response.data || []
+
+        const userDeptCode = this.$auth.user?.employee?.department_code
+        if (userDeptCode) {
+          const matchedPks = this.pks_options.find((p) => p.code === userDeptCode)
+          if (matchedPks) {
+            this.pks_id = matchedPks
+          }
+        }
+
+        this.isLoadingDropdownPks = false
+      } catch (error) {
+        console.error('Error loading pks dropdown', error)
+        this.isLoadingDropdownPks = false
+      }
+    },
+
     loadFiltersFromUrl() {
       const query = this.$route.query
       if (query.dateStart) this.dateStart = query.dateStart
@@ -519,6 +561,10 @@ export default {
         this.supplier_id = this.suppliers.filter((s) =>
           lifnrs.includes(s.lifnr)
         )
+      }
+
+      if (query.pks) {
+        this.pks_id = this.pks_options.find((p) => p.code === query.pks) || null
       }
     },
 
@@ -533,6 +579,10 @@ export default {
 
         if (this.supplier_id && this.supplier_id.length > 0) {
           params.supplier = this.supplier_id.map((s) => s.lifnr).join(',')
+        }
+
+        if (this.pks_id && this.pks_id.code) {
+          params.pks = this.pks_id.code
         }
 
         const response = await this.$axios.$get(
@@ -567,6 +617,10 @@ export default {
 
       if (this.supplier_id && this.supplier_id.length > 0) {
         query.supplier = this.supplier_id.map((s) => s.lifnr).join(',')
+      }
+
+      if (this.pks_id && this.pks_id.code) {
+        query.pks = this.pks_id.code
       }
 
       // 2. Gunakan pendekatan push yang lebih aman tanpa .catch berantai
@@ -606,6 +660,10 @@ export default {
           'supplier',
           this.supplier_id.map((s) => s.supplier).join(',')
         )
+      }
+
+      if (this.pks_id && this.pks_id.code) {
+        queryParams.append('pks', this.pks_id.code)
       }
 
       const fileName = `Rekap_Harian_Tbs_External_${this.dateStart}_sd_${this.dateEnd}.xlsx`

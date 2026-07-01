@@ -139,6 +139,118 @@
             </b-card-text>
           </b-card>
 
+          <b-card
+            border-variant="success"
+            header="Kirim Laporan via Email"
+            header-bg-variant="success"
+            header-text-variant="white"
+            class="mt-3 mb-4"
+          >
+            <b-row align-v="center">
+              <b-col md="8">
+                <p class="mb-0">
+                  <i class="fa fa-info-circle mr-1"></i>
+                  Klik tombol di samping untuk mengirim laporan grading ke
+                  daftar email.
+                </p>
+              </b-col>
+              <b-col md="4" class="text-right">
+                <b-button
+                  variant="success"
+                  @click="confirmSendEmail"
+                  :disabled="show === 0"
+                >
+                  <i class="fa fa-paper-plane mr-1"></i> Kirim Email
+                </b-button>
+              </b-col>
+            </b-row>
+
+            <div class="mt-3">
+              <hr />
+              <p class="text-muted mb-2" style="font-size: 0.9rem">
+                <i class="fas fa-history mr-1"></i>
+                <b
+                  >Riwayat Pengiriman Terakhir (Tgl Data:
+                  {{ formatDate(dateStart) }}):</b
+                >
+              </p>
+
+              <div v-if="isLoadingLogs" class="text-center py-3">
+                <b-spinner variant="info" small></b-spinner>
+                <span class="text-info ml-2" style="font-size: 0.9rem"
+                  >Memuat riwayat pengiriman...</span
+                >
+              </div>
+
+              <div
+                v-else-if="!emailLogs || emailLogs.length === 0"
+                class="alert alert-secondary text-center py-2 mb-0"
+                style="font-size: 0.85rem"
+              >
+                <i class="fa fa-info-circle mr-1"></i> Belum ada pengiriman
+                email untuk laporan tanggal ini.
+              </div>
+
+              <div v-else>
+                <ul
+                  style="font-size: 0.8rem; list-style: inside"
+                  class="mb-2 text-muted"
+                >
+                  <li>
+                    Filename:
+                    <strong class="text-dark">{{ attachmentFilename }}</strong>
+                  </li>
+                  <li>
+                    Tanggal Kirim:
+                    <strong class="text-dark">{{
+                      formatDateTime(lastSentAt)
+                    }}</strong>
+                  </li>
+                  <li>
+                    Oleh:
+                    <strong class="text-dark">{{
+                      lastSentBy || 'System'
+                    }}</strong>
+                  </li>
+                </ul>
+
+                <!-- <b-table
+                  :items="emailLogs"
+                  :fields="logFields"
+                  small
+                  hover
+                  striped
+                  bordered
+                  responsive
+                  class="mb-0"
+                  style="font-size: 0.8rem"
+                >
+                  <template #cell(status_desc)="data">
+                    <b-badge
+                      :variant="
+                        data.item.status_desc === 'SUCCESS'
+                          ? 'success'
+                          : 'danger'
+                      "
+                    >
+                      {{ data.item.status_desc }}
+                    </b-badge>
+                  </template>
+
+                  <template #cell(error_message)="data">
+                    <span
+                      class="text-danger"
+                      v-if="data.item.status_desc !== 'SUCCESS'"
+                    >
+                      {{ data.item.error_message }}
+                    </span>
+                    <span v-else>-</span>
+                  </template>
+                </b-table> -->
+              </div>
+            </div>
+          </b-card>
+
           <div class="form-group">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -556,10 +668,34 @@ export default {
       rowcount: 0,
       show: 1,
       isLoadingDropdown: true, // Loading state for dropdowns
+      emailLogs: [],
+      isLoadingLogs: false,
+      lastSentAt: null,
+      lastSentBy: null,
+      attachmentFilename: '',
+      logFields: [
+        { key: 'name', label: 'Penerima' },
+        { key: 'email', label: 'Email' },
+        {
+          key: 'department_code_employee',
+          label: 'Department',
+          tdClass: 'text-center',
+        },
+        { key: 'status_desc', label: 'Status', tdClass: 'text-center' },
+        { key: 'error_message', label: 'Info' },
+      ],
     }
   },
 
   watchQuery: ['q', 'page'],
+
+  watch: {
+    dateStart(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.fetchEmailLogs()
+      }
+    },
+  },
 
   computed: {
     filteredFields() {
@@ -599,6 +735,7 @@ export default {
 
   async mounted() {
     await this.fetchData()
+    this.fetchEmailLogs()
   },
 
   methods: {
@@ -884,6 +1021,153 @@ export default {
         console.error('Error constructing export URL:', error)
         this.show = 1
       }
+    },
+    confirmSendEmail() {
+      // Helper kecil untuk format tanggal indo
+      const formatDateIndo = (dateStr) => {
+        return new Date(dateStr).toLocaleDateString('id-ID', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+        })
+      }
+
+      // Ambil tahun dari dateStart
+      const year = new Date(this.dateStart).getFullYear()
+
+      // Hardcode tanggal 1 Januari tahun tersebut
+      const firstDate = `01 Januari ${year}`
+
+      // Tanggal cutoff (dateStart)
+      const lastDate = formatDateIndo(this.dateStart)
+
+      this.$swal
+        .fire({
+          title: 'KIRIM EMAIL LAPORAN?',
+          // Informasikan range real yang akan digenerate sistem
+          text: `Laporan akumulasi dari tanggal ${firstDate} s/d ${lastDate} akan dikirim ke penerima.`,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#28a745',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'YA, KIRIM!',
+          cancelButtonText: 'BATAL',
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.sendEmail()
+          }
+        })
+    },
+    sendEmail() {
+      try {
+        this.show = 0 // Show loading
+
+        // 1. Susun Payload (Object) alih-alih URLSearchParams
+        const payload = {}
+
+        if (this.dateStart) payload.dateStart = this.dateStart
+        if (this.dateEnd) payload.dateEnd = this.dateEnd
+
+        // Kirim sebagai string comma-separated (sesuai logic backend explode)
+        if (this.pt_id && this.pt_id.length > 0) {
+          payload.company_code_plantation = this.pt_id
+            .map((pt) => pt.company_code_plantation)
+            .join(',')
+        }
+
+        if (this.estate_id && this.estate_id.length > 0) {
+          payload.department_code_plantation = this.estate_id
+            .map((estate) => estate.department_code_plantation)
+            .join(',')
+        }
+
+        if (this.afdeling_id && this.afdeling_id.length > 0) {
+          payload.afdeling_code = this.afdeling_id
+            .map((afdeling) => afdeling.afdeling_code)
+            .join(',')
+        }
+
+        if (this.search) payload.search = this.search
+
+        payload.ffb_source = 'internal'
+
+        // 2. Request ke API menggunakan POST
+        // Parameter kedua axios.post adalah BODY data
+        this.$axios
+          .post('/api/admin/email-grading-send', payload)
+          .then((response) => {
+            this.show = 1
+            this.$swal.fire({
+              title: 'BERHASIL!',
+              text: response.data.message || 'Email berhasil dikirim.',
+              icon: 'success',
+              timer: 3000,
+              showConfirmButton: false,
+            })
+            this.fetchEmailLogs()
+          })
+          .catch((error) => {
+            this.show = 1
+            console.error('Error sending email:', error)
+
+            let msg =
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : 'Terjadi kesalahan saat mengirim email.'
+
+            this.$swal.fire({
+              title: 'GAGAL!',
+              text: msg,
+              icon: 'error',
+            })
+          })
+      } catch (error) {
+        console.error('Error constructing email payload:', error)
+        this.show = 1
+        this.$swal.fire('Error', 'Terjadi kesalahan sistem', 'error')
+      }
+    },
+    async fetchEmailLogs() {
+      this.isLoadingLogs = true // Nyalakan loading
+      this.emailLogs = [] // Reset tabel sebelum ngambil yang baru
+
+      try {
+        const response = await this.$axios.$get(
+          '/api/admin/email-grading-last-log',
+          {
+            params: {
+              module: 'spot_cek',
+              type: 'internal',
+              dateStart: this.dateStart,
+            },
+          }
+        )
+
+        this.emailLogs = response.data || []
+        this.lastSentAt = response.last_sent_at
+        this.lastSentBy = response.sent_by
+        this.attachmentFilename = response.attachment_name
+      } catch (error) {
+        console.error('Gagal memuat log email:', error)
+        this.emailLogs = []
+      } finally {
+        this.isLoadingLogs = false
+      }
+    },
+
+    // 2. Method Format Tanggal & Jam
+    formatDateTime(value) {
+      if (!value) return '-'
+      const date = new Date(value)
+      // Format: 13 Feb 2026 10:30
+      return date.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
     },
   },
 }
