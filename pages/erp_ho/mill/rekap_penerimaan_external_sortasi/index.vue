@@ -59,6 +59,21 @@
                       </b-row>
                     </b-col>
                   </b-row>
+                  <b-row class="mt-2 align-items-center">
+                    <b-col cols="3" class="text-right">PKS</b-col>
+                    <b-col cols="9">
+                      <multiselect
+                        v-model="pks_id"
+                        :options="pks_options"
+                        label="code"
+                        track-by="code"
+                        :searchable="true"
+                        :multiple="false"
+                        placeholder="Pilih PKS"
+                        :loading="isLoadingDropdownPks"
+                      ></multiselect>
+                    </b-col>
+                  </b-row>
                 </b-col>
               </b-row>
 
@@ -315,6 +330,9 @@ export default {
       dateStart: formatDate(firstDay),
       dateEnd: formatDate(today),
       posts: [],
+      pks_id: null,
+      pks_options: [],
+      isLoadingDropdownPks: true,
       pagination: { current_page: 1, per_page: 50, total: 0 },
       isPaginating: false, // Menandakan sedang berganti page via pagination
       rowcount: 0,
@@ -376,7 +394,19 @@ export default {
 
   async mounted() {
     this.recordMenuLog('Rekap Penerimaan TBS Eksternal Sortasi') // Catat akses menu
-    this.loadFiltersFromUrl()
+    
+    await this.loadDropdownDataPks()
+    
+    if (Object.keys(this.$route.query).length > 0) {
+      try {
+        await this.$router.replace({ path: this.$route.path, query: {} })
+      } catch (err) {
+        if (err.name !== 'NavigationDuplicated') {
+          console.error(err)
+        }
+      }
+    }
+
     await this.fetchData()
   },
 
@@ -418,11 +448,24 @@ export default {
       return Number(value).toLocaleString('en-US')
     },
 
-    loadFiltersFromUrl() {
-      const query = this.$route.query
-      if (query.dateStart) this.dateStart = query.dateStart
-      if (query.dateEnd) this.dateEnd = query.dateEnd
-      if (query.page) this.pagination.current_page = parseInt(query.page)
+    async loadDropdownDataPks() {
+      try {
+        const response = await this.$axios.$get('/api/admin/lov_user_departemen')
+        this.pks_options = response.data || []
+
+        const userDeptCode = this.$auth.user?.employee?.department_code
+        if (userDeptCode) {
+          const matchedPks = this.pks_options.find((p) => p.code === userDeptCode)
+          if (matchedPks) {
+            this.pks_id = matchedPks
+          }
+        }
+
+        this.isLoadingDropdownPks = false
+      } catch (error) {
+        console.error('Error loading pks dropdown', error)
+        this.isLoadingDropdownPks = false
+      }
     },
 
     async fetchData() {
@@ -432,6 +475,10 @@ export default {
           dateStart: this.dateStart,
           dateEnd: this.dateEnd,
           page: this.pagination.current_page || 1,
+        }
+
+        if (this.pks_id && this.pks_id.code) {
+          params.pks = this.pks_id.code
         }
 
         const response = await this.$axios.$get(
@@ -465,6 +512,10 @@ export default {
         dateStart: this.dateStart,
         dateEnd: this.dateEnd,
         page: this.pagination.current_page,
+      }
+
+      if (this.pks_id && this.pks_id.code) {
+        query.pks = this.pks_id.code
       }
 
       // 2. Update URL dengan Error Handling (Mencegah "NavigationDuplicated")
@@ -503,6 +554,10 @@ export default {
       //     this.supplier_id.map((s) => s.supplier).join(',')
       //   )
       // }
+
+      if (this.pks_id && this.pks_id.code) {
+        queryParams.append('pks', this.pks_id.code)
+      }
 
       const fileName = `Rekap_Penerimaan_Tbs_External_Sortasi_${this.dateStart}_sd_${this.dateEnd}.xlsx`
 

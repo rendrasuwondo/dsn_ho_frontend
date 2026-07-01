@@ -14,32 +14,49 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <div class="form-group">
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <button
-                  class="btn btn-info btn-sm"
-                  style="padding-top: 8px"
-                  title="Tambah"
-                  @click="showModal(false)"
-                >
-                  <i class="fa fa-plus-circle"></i> Tambah
-                </button>
+          <b-row class="mb-3">
+            <b-col md="3">
+              <multiselect
+                v-model="pks_id"
+                :options="pks_options"
+                label="code"
+                track-by="code"
+                :searchable="true"
+                :multiple="false"
+                placeholder="Semua PKS"
+                :loading="isLoadingDropdownPks"
+              ></multiselect>
+            </b-col>
+            <b-col md="9">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <button
+                    class="btn btn-info btn-sm"
+                    style="padding-top: 8px"
+                    title="Tambah"
+                    @click="showModal(false)"
+                  >
+                    <i class="fa fa-plus-circle"></i> Tambah
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="search"
+                  @keypress.enter="searchData"
+                  placeholder="Cari Ring..."
+                />
+                <div class="input-group-append">
+                  <button @click="searchData" class="btn btn-info">
+                    <i class="fa fa-search"></i> CARI
+                  </button>
+                  <button @click="exportData" class="btn btn-success" title="Export Excel">
+                    <i class="fa fa-file-excel"></i> EXPORT
+                  </button>
+                </div>
               </div>
-              <input
-                type="text"
-                class="form-control"
-                v-model="search"
-                @keypress.enter="searchData"
-                placeholder="Cari Ring..."
-              />
-              <div class="input-group-append">
-                <button @click="searchData" class="btn btn-info">
-                  <i class="fa fa-search"></i> CARI
-                </button>
-              </div>
-            </div>
-          </div>
+            </b-col>
+          </b-row>
 
           <b-table
             small
@@ -128,7 +145,7 @@
                 v-model="form.department_id"
                 :options="departmentOptions"
                 label="code"
-                track-by="department_id"
+                track-by="code"
                 :searchable="true"
                 placeholder="Pilih PKS"
                 required
@@ -237,6 +254,10 @@ export default {
       },
       rowcount: 0,
 
+      pks_id: null,
+      pks_options: [],
+      isLoadingDropdownPks: true,
+      
       // Modal State
       editMode: false,
       selectedId: null,
@@ -328,9 +349,16 @@ export default {
       immediate: false,
     },
   },
-  mounted() {
-    console.log('department_code:', this.$auth.user.employee.department_code)
-    this.fetchDepartments()
+  async mounted() {
+    await this.loadDropdownDataPks()
+    
+    if (Object.keys(this.$route.query).length > 0) {
+      try {
+        await this.$router.replace({ path: this.$route.path, query: {} })
+      } catch (err) {}
+    }
+
+    this.fetchPosts()
   },
   methods: {
     formatDate(value) {
@@ -358,6 +386,30 @@ export default {
 
       return `${day} ${month} ${year}`
     },
+    async loadDropdownDataPks() {
+      try {
+        const response = await this.$axios.$get('/api/admin/lov_user_departemen')
+        this.pks_options = response.data || []
+
+        const userDeptCode = this.$auth.user?.employee?.department_code
+        if (userDeptCode) {
+          const matchedPks = this.pks_options.find((p) => p.code === userDeptCode)
+          if (matchedPks) {
+            this.pks_id = matchedPks
+            this.departmentOptions = [matchedPks]
+          } else {
+            this.departmentOptions = this.pks_options
+          }
+        } else {
+          this.departmentOptions = this.pks_options
+        }
+
+        this.isLoadingDropdownPks = false
+      } catch (error) {
+        console.error('Error loading pks dropdown', error)
+        this.isLoadingDropdownPks = false
+      }
+    },
     async fetchPosts() {
       this.loading = true
       let page = this.$route.query.page ? parseInt(this.$route.query.page) : 1
@@ -365,8 +417,8 @@ export default {
       this.search = search
 
       let url = `/api/admin/potongan_tbs_external?q=${search}&page=${page}`
-      if (this.isMatchedPks) {
-        url += `&department_code=${this.$auth.user.employee.department_code}`
+      if (this.pks_id && this.pks_id.code) {
+        url += `&department_code=${this.pks_id.code}`
       }
 
       try {
@@ -382,38 +434,25 @@ export default {
         this.loading = false
       }
     },
-    async fetchDepartments() {
-      try {
-        const response = await this.$axios.$get(
-          `/api/admin/spot-cek-get_pks_dropdown-report`
-        )
-        const allPks = response.data
-        const userDeptCode = this.$auth.user.employee?.department_code
 
-        const matchedPks = allPks.find((pks) => pks.code === userDeptCode)
-        if (matchedPks) {
-          this.departmentOptions = [matchedPks]
-          this.isMatchedPks = true
-        } else {
-          this.departmentOptions = allPks
-          this.isMatchedPks = false
-        }
-      } catch (error) {
-        console.error(error)
-      } finally {
-        this.fetchPosts()
-      }
-    },
     changePage(page) {
+      const query = { q: this.$route.query.q, page: page }
+      if (this.pks_id && this.pks_id.code) {
+        query.pks = this.pks_id.code
+      }
       this.$router.push({
         path: this.$route.path,
-        query: { q: this.$route.query.q, page: page },
+        query: query,
       })
     },
     searchData() {
+      const query = { q: this.search }
+      if (this.pks_id && this.pks_id.code) {
+        query.pks = this.pks_id.code
+      }
       this.$router.push({
         path: this.$route.path,
-        query: { q: this.search },
+        query: query,
       })
     },
     showModal(isEdit, item = null) {
@@ -458,7 +497,7 @@ export default {
       try {
         const payload = {
           department_id: this.form.department_id
-            ? this.form.department_id.department_id
+            ? this.form.department_id.id || this.form.department_id.department_id
             : null,
           ring: this.form.ring,
           bm: this.form.bm,
@@ -551,8 +590,12 @@ export default {
         })
     },
     exportData() {
+      let url = `/api/admin/potongan_tbs_external/export?`
+      if (this.pks_id && this.pks_id.code) {
+        url += `department_code=${this.pks_id.code}`
+      }
       this.$axios({
-        url: `/api/admin/potongan_tbs_external/export`,
+        url: url,
         method: 'GET',
         responseType: 'blob',
       }).then((response) => {
