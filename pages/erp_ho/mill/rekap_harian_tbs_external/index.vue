@@ -478,12 +478,22 @@ export default {
 
   async mounted() {
     this.recordMenuLog('Rekap Harian TBS Eksternal') // Catat akses menu;
-    console.log('user:', this.$auth.user.employee.department_code)
     await Promise.all([
       this.loadDropdownData(),
       this.loadDropdownDataPks()
     ])
-    this.loadFiltersFromUrl()
+    
+    // Reset filter: hapus query URL saat halaman dimuat
+    if (Object.keys(this.$route.query).length > 0) {
+      try {
+        await this.$router.replace({ path: this.$route.path, query: {} })
+      } catch (err) {
+        if (err.name !== 'NavigationDuplicated') {
+          console.error(err)
+        }
+      }
+    }
+
     await this.fetchData()
   },
 
@@ -558,23 +568,7 @@ export default {
       }
     },
 
-    loadFiltersFromUrl() {
-      const query = this.$route.query
-      if (query.dateStart) this.dateStart = query.dateStart
-      if (query.dateEnd) this.dateEnd = query.dateEnd
-      if (query.page) this.pagination.current_page = parseInt(query.page)
 
-      if (query.supplier) {
-        const lifnrs = query.supplier.split(',')
-        this.supplier_id = this.suppliers.filter((s) =>
-          lifnrs.includes(s.lifnr)
-        )
-      }
-
-      if (query.pks) {
-        this.pks_id = this.pks_options.find((p) => p.code === query.pks) || null
-      }
-    },
 
     async fetchData() {
       this.show = 0
