@@ -143,6 +143,10 @@
           </div>
 
           <div id="exportTableWrapper">
+            <div id="exportTitle" style="display: none;" class="mb-4">
+              <h5 class="font-weight-bold mb-1" style="color: black;">Laporan Grading TBS Inti & Kemitraan PT.{{ companyCode }}</h5>
+              <h6 class="font-weight-bold mb-0" style="color: black;">{{ formattedSelectedDate }}</h6>
+            </div>
           <b-table
             :fields="fields"
             :items="posts"
@@ -380,10 +384,28 @@ export default {
         'Min 10',
         '0%',
       ],
+      isExporting: false,
+    }
+  },
+
+  computed: {
+    companyCode() {
+      return this.$auth?.user?.employee?.company_code || ''
+    },
+    formattedSelectedDate() {
+      if (!this.selectedDate) return ''
+      const date = new Date(this.selectedDate)
+      const day = String(date.getDate()).padStart(2, '0')
+      const monthNames = [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+      ]
+      return `${day} ${monthNames[date.getMonth()]} ${date.getFullYear()}`
     }
   },
 
   async mounted() {
+    console.log("user", this.$auth.user)
     this.recordMenuLog('Report Sortasi Harian') // Catat akses menu
     await this.loadDropdownData()
     await this.initDefaultState()
@@ -511,9 +533,14 @@ export default {
         if (plantType === 'PLASMA' && estate.length >= 2) {
           let originalEstate = estate
           estate = originalEstate.substring(0, 2).toUpperCase()
-          
+
           if (afdeling && afdeling !== 'Unknown' && afdeling !== '') {
-            afdeling = originalEstate + '-' + afdeling
+            let afdNum = parseInt(afdeling)
+            if (!isNaN(afdNum) && afdNum > 0 && afdNum <= 26) {
+              afdeling = originalEstate + String.fromCharCode(64 + afdNum)
+            } else {
+              afdeling = originalEstate + '-' + afdeling
+            }
           } else {
             afdeling = originalEstate
           }
@@ -740,7 +767,7 @@ export default {
 
     async exportToPNG() {
       try {
-        const tableElement = document.querySelector('#exportTableWrapper table')
+        const tableElement = document.querySelector('#exportTableWrapper')
         if (!tableElement) {
           this.$swal.fire('Error', 'Tabel tidak ditemukan', 'error')
           return
@@ -758,7 +785,21 @@ export default {
         const canvas = await html2canvas(tableElement, {
           scale: 2,
           useCORS: true,
-          backgroundColor: '#ffffff'
+          backgroundColor: '#ffffff',
+          onclone: (clonedDoc) => {
+            const wrapper = clonedDoc.getElementById('exportTableWrapper')
+            if (wrapper) {
+              wrapper.style.padding = '20px'
+              wrapper.style.backgroundColor = 'white'
+              wrapper.style.width = 'max-content'
+              wrapper.style.minWidth = '100%'
+            }
+            const title = clonedDoc.getElementById('exportTitle')
+            if (title) title.style.display = 'block'
+            
+            const responsiveDiv = clonedDoc.querySelector('.table-responsive')
+            if (responsiveDiv) responsiveDiv.style.overflow = 'visible'
+          }
         })
 
         const image = canvas.toDataURL('image/png')
