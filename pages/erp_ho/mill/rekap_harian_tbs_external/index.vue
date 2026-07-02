@@ -201,7 +201,7 @@
                 <b-td class="text-right align-middle font-weight-bold">{{ formatThousand(totalNetto) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliJjg) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliBjr) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalJjgKembaliTon) }}</b-td>
               </b-tr>
             </template>
           </b-table>
@@ -482,7 +482,7 @@ export default {
       this.loadDropdownData(),
       this.loadDropdownDataPks()
     ])
-    
+
     // Reset filter: hapus query URL saat halaman dimuat
     if (Object.keys(this.$route.query).length > 0) {
       try {

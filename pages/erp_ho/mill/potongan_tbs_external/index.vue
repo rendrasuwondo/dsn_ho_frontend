@@ -23,7 +23,10 @@
                 track-by="code"
                 :searchable="true"
                 :multiple="false"
-                placeholder="Semua PKS"
+                placeholder="Pilih PKS"
+                select-label=""
+                deselect-label=""
+                selected-label=""
                 :loading="isLoadingDropdownPks"
               ></multiselect>
             </b-col>
@@ -49,9 +52,6 @@
                 <div class="input-group-append">
                   <button @click="searchData" class="btn btn-info">
                     <i class="fa fa-search"></i> CARI
-                  </button>
-                  <button @click="exportData" class="btn btn-success" title="Export Excel">
-                    <i class="fa fa-file-excel"></i> EXPORT
                   </button>
                 </div>
               </div>
@@ -139,7 +139,14 @@
       <form @submit.stop.prevent="submitForm">
         <b-row>
           <b-col md="6">
-            <b-form-group label="PKS" label-for="department-input" :invalid-feedback="errors.department_id ? errors.department_id[0] : ''" :state="errors.department_id ? false : null">
+            <b-form-group
+              label="PKS"
+              label-for="department-input"
+              :invalid-feedback="
+                errors.department_id ? errors.department_id[0] : ''
+              "
+              :state="errors.department_id ? false : null"
+            >
               <multiselect
                 id="department-input"
                 v-model="form.department_id"
@@ -152,7 +159,12 @@
               ></multiselect>
             </b-form-group>
 
-            <b-form-group label="Ring" label-for="ring-input" :invalid-feedback="errors.ring ? errors.ring[0] : ''" :state="errors.ring ? false : null">
+            <b-form-group
+              label="Ring"
+              label-for="ring-input"
+              :invalid-feedback="errors.ring ? errors.ring[0] : ''"
+              :state="errors.ring ? false : null"
+            >
               <b-form-select
                 id="ring-input"
                 v-model="form.ring"
@@ -186,7 +198,12 @@
           </b-col>
 
           <b-col md="6">
-            <b-form-group label="BM (%)" label-for="bm-input" :invalid-feedback="errors.bm ? errors.bm[0] : ''" :state="errors.bm ? false : null">
+            <b-form-group
+              label="BM (%)"
+              label-for="bm-input"
+              :invalid-feedback="errors.bm ? errors.bm[0] : ''"
+              :state="errors.bm ? false : null"
+            >
               <b-form-input
                 id="bm-input"
                 type="number"
@@ -197,7 +214,12 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group label="BLM (%)" label-for="blm-input" :invalid-feedback="errors.blm ? errors.blm[0] : ''" :state="errors.blm ? false : null">
+            <b-form-group
+              label="BLM (%)"
+              label-for="blm-input"
+              :invalid-feedback="errors.blm ? errors.blm[0] : ''"
+              :state="errors.blm ? false : null"
+            >
               <b-form-input
                 id="blm-input"
                 type="number"
@@ -208,7 +230,12 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group label="TK (%)" label-for="tk-input" :invalid-feedback="errors.tk ? errors.tk[0] : ''" :state="errors.tk ? false : null">
+            <b-form-group
+              label="TK (%)"
+              label-for="tk-input"
+              :invalid-feedback="errors.tk ? errors.tk[0] : ''"
+              :state="errors.tk ? false : null"
+            >
               <b-form-input
                 id="tk-input"
                 type="number"
@@ -219,7 +246,12 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group label="TP (%)" label-for="tp-input" :invalid-feedback="errors.tp ? errors.tp[0] : ''" :state="errors.tp ? false : null">
+            <b-form-group
+              label="TP (%)"
+              label-for="tp-input"
+              :invalid-feedback="errors.tp ? errors.tp[0] : ''"
+              :state="errors.tp ? false : null"
+            >
               <b-form-input
                 id="tp-input"
                 type="number"
@@ -257,7 +289,7 @@ export default {
       pks_id: null,
       pks_options: [],
       isLoadingDropdownPks: true,
-      
+
       // Modal State
       editMode: false,
       selectedId: null,
@@ -351,7 +383,7 @@ export default {
   },
   async mounted() {
     await this.loadDropdownDataPks()
-    
+
     if (Object.keys(this.$route.query).length > 0) {
       try {
         await this.$router.replace({ path: this.$route.path, query: {} })
@@ -390,18 +422,14 @@ export default {
       try {
         const response = await this.$axios.$get('/api/admin/lov_user_departemen')
         this.pks_options = response.data || []
+        this.departmentOptions = this.pks_options
 
         const userDeptCode = this.$auth.user?.employee?.department_code
         if (userDeptCode) {
           const matchedPks = this.pks_options.find((p) => p.code === userDeptCode)
           if (matchedPks) {
             this.pks_id = matchedPks
-            this.departmentOptions = [matchedPks]
-          } else {
-            this.departmentOptions = this.pks_options
           }
-        } else {
-          this.departmentOptions = this.pks_options
         }
 
         this.isLoadingDropdownPks = false
@@ -497,7 +525,8 @@ export default {
       try {
         const payload = {
           department_id: this.form.department_id
-            ? this.form.department_id.id || this.form.department_id.department_id
+            ? this.form.department_id.id ||
+              this.form.department_id.department_id
             : null,
           ring: this.form.ring,
           bm: this.form.bm,
@@ -534,7 +563,11 @@ export default {
         this.fetchPosts()
       } catch (err) {
         if (err.response && err.response.status === 422) {
-          this.errors = err.response.data.errors || err.response.data.data || err.response.data || {}
+          this.errors =
+            err.response.data.errors ||
+            err.response.data.data ||
+            err.response.data ||
+            {}
           this.$swal.fire(
             'GAGAL!',
             err.response?.data?.message || 'Silakan periksa kembali form Anda.',
@@ -588,24 +621,6 @@ export default {
               })
           }
         })
-    },
-    exportData() {
-      let url = `/api/admin/potongan_tbs_external/export?`
-      if (this.pks_id && this.pks_id.code) {
-        url += `department_code=${this.pks_id.code}`
-      }
-      this.$axios({
-        url: url,
-        method: 'GET',
-        responseType: 'blob',
-      }).then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]))
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', 'Potongan_TBS_External.xlsx')
-        document.body.appendChild(link)
-        link.click()
-      })
     },
   },
 }
