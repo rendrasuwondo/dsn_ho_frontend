@@ -14,32 +14,49 @@
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <div class="form-group">
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <button
-                  class="btn btn-info btn-sm"
-                  style="padding-top: 8px"
-                  title="Tambah"
-                  @click="showModal(false)"
-                >
-                  <i class="fa fa-plus-circle"></i> Tambah
-                </button>
+          <b-row class="mb-3">
+            <b-col md="3">
+              <multiselect
+                v-model="pks_id"
+                :options="pks_options"
+                label="code"
+                track-by="code"
+                :searchable="true"
+                :multiple="false"
+                placeholder="Pilih PKS"
+                select-label=""
+                deselect-label=""
+                selected-label=""
+                :loading="isLoadingDropdownPks"
+              ></multiselect>
+            </b-col>
+            <b-col md="9">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <button
+                    class="btn btn-info btn-sm"
+                    style="padding-top: 8px"
+                    title="Tambah"
+                    @click="showModal(false)"
+                  >
+                    <i class="fa fa-plus-circle"></i> Tambah
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="search"
+                  @keypress.enter="searchData"
+                  placeholder="Cari Ring..."
+                />
+                <div class="input-group-append">
+                  <button @click="searchData" class="btn btn-info">
+                    <i class="fa fa-search"></i> CARI
+                  </button>
+                </div>
               </div>
-              <input
-                type="text"
-                class="form-control"
-                v-model="search"
-                @keypress.enter="searchData"
-                placeholder="Cari Ring..."
-              />
-              <div class="input-group-append">
-                <button @click="searchData" class="btn btn-info">
-                  <i class="fa fa-search"></i> CARI
-                </button>
-              </div>
-            </div>
-          </div>
+            </b-col>
+          </b-row>
 
           <b-table
             small
@@ -122,20 +139,32 @@
       <form @submit.stop.prevent="submitForm">
         <b-row>
           <b-col md="6">
-            <b-form-group label="PKS" label-for="department-input" :invalid-feedback="errors.department_id ? errors.department_id[0] : ''" :state="errors.department_id ? false : null">
+            <b-form-group
+              label="PKS"
+              label-for="department-input"
+              :invalid-feedback="
+                errors.department_id ? errors.department_id[0] : ''
+              "
+              :state="errors.department_id ? false : null"
+            >
               <multiselect
                 id="department-input"
                 v-model="form.department_id"
                 :options="departmentOptions"
                 label="code"
-                track-by="department_id"
+                track-by="code"
                 :searchable="true"
                 placeholder="Pilih PKS"
                 required
               ></multiselect>
             </b-form-group>
 
-            <b-form-group label="Ring" label-for="ring-input" :invalid-feedback="errors.ring ? errors.ring[0] : ''" :state="errors.ring ? false : null">
+            <b-form-group
+              label="Ring"
+              label-for="ring-input"
+              :invalid-feedback="errors.ring ? errors.ring[0] : ''"
+              :state="errors.ring ? false : null"
+            >
               <b-form-select
                 id="ring-input"
                 v-model="form.ring"
@@ -169,7 +198,12 @@
           </b-col>
 
           <b-col md="6">
-            <b-form-group label="BM (%)" label-for="bm-input" :invalid-feedback="errors.bm ? errors.bm[0] : ''" :state="errors.bm ? false : null">
+            <b-form-group
+              label="BM (%)"
+              label-for="bm-input"
+              :invalid-feedback="errors.bm ? errors.bm[0] : ''"
+              :state="errors.bm ? false : null"
+            >
               <b-form-input
                 id="bm-input"
                 type="number"
@@ -180,7 +214,12 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group label="BLM (%)" label-for="blm-input" :invalid-feedback="errors.blm ? errors.blm[0] : ''" :state="errors.blm ? false : null">
+            <b-form-group
+              label="BLM (%)"
+              label-for="blm-input"
+              :invalid-feedback="errors.blm ? errors.blm[0] : ''"
+              :state="errors.blm ? false : null"
+            >
               <b-form-input
                 id="blm-input"
                 type="number"
@@ -191,7 +230,12 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group label="TK (%)" label-for="tk-input" :invalid-feedback="errors.tk ? errors.tk[0] : ''" :state="errors.tk ? false : null">
+            <b-form-group
+              label="TK (%)"
+              label-for="tk-input"
+              :invalid-feedback="errors.tk ? errors.tk[0] : ''"
+              :state="errors.tk ? false : null"
+            >
               <b-form-input
                 id="tk-input"
                 type="number"
@@ -202,7 +246,12 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group label="TP (%)" label-for="tp-input" :invalid-feedback="errors.tp ? errors.tp[0] : ''" :state="errors.tp ? false : null">
+            <b-form-group
+              label="TP (%)"
+              label-for="tp-input"
+              :invalid-feedback="errors.tp ? errors.tp[0] : ''"
+              :state="errors.tp ? false : null"
+            >
               <b-form-input
                 id="tp-input"
                 type="number"
@@ -236,6 +285,10 @@ export default {
         total: 0,
       },
       rowcount: 0,
+
+      pks_id: null,
+      pks_options: [],
+      isLoadingDropdownPks: true,
 
       // Modal State
       editMode: false,
@@ -328,9 +381,16 @@ export default {
       immediate: false,
     },
   },
-  mounted() {
-    console.log('department_code:', this.$auth.user.employee.department_code)
-    this.fetchDepartments()
+  async mounted() {
+    await this.loadDropdownDataPks()
+
+    if (Object.keys(this.$route.query).length > 0) {
+      try {
+        await this.$router.replace({ path: this.$route.path, query: {} })
+      } catch (err) {}
+    }
+
+    this.fetchPosts()
   },
   methods: {
     formatDate(value) {
@@ -358,6 +418,26 @@ export default {
 
       return `${day} ${month} ${year}`
     },
+    async loadDropdownDataPks() {
+      try {
+        const response = await this.$axios.$get('/api/admin/lov_user_departemen')
+        this.pks_options = response.data || []
+        this.departmentOptions = this.pks_options
+
+        const userDeptCode = this.$auth.user?.employee?.department_code
+        if (userDeptCode) {
+          const matchedPks = this.pks_options.find((p) => p.code === userDeptCode)
+          if (matchedPks) {
+            this.pks_id = matchedPks
+          }
+        }
+
+        this.isLoadingDropdownPks = false
+      } catch (error) {
+        console.error('Error loading pks dropdown', error)
+        this.isLoadingDropdownPks = false
+      }
+    },
     async fetchPosts() {
       this.loading = true
       let page = this.$route.query.page ? parseInt(this.$route.query.page) : 1
@@ -365,8 +445,8 @@ export default {
       this.search = search
 
       let url = `/api/admin/potongan_tbs_external?q=${search}&page=${page}`
-      if (this.isMatchedPks) {
-        url += `&department_code=${this.$auth.user.employee.department_code}`
+      if (this.pks_id && this.pks_id.code) {
+        url += `&department_code=${this.pks_id.code}`
       }
 
       try {
@@ -382,38 +462,25 @@ export default {
         this.loading = false
       }
     },
-    async fetchDepartments() {
-      try {
-        const response = await this.$axios.$get(
-          `/api/admin/spot-cek-get_pks_dropdown-report`
-        )
-        const allPks = response.data
-        const userDeptCode = this.$auth.user.employee?.department_code
 
-        const matchedPks = allPks.find((pks) => pks.code === userDeptCode)
-        if (matchedPks) {
-          this.departmentOptions = [matchedPks]
-          this.isMatchedPks = true
-        } else {
-          this.departmentOptions = allPks
-          this.isMatchedPks = false
-        }
-      } catch (error) {
-        console.error(error)
-      } finally {
-        this.fetchPosts()
-      }
-    },
     changePage(page) {
+      const query = { q: this.$route.query.q, page: page }
+      if (this.pks_id && this.pks_id.code) {
+        query.pks = this.pks_id.code
+      }
       this.$router.push({
         path: this.$route.path,
-        query: { q: this.$route.query.q, page: page },
+        query: query,
       })
     },
     searchData() {
+      const query = { q: this.search }
+      if (this.pks_id && this.pks_id.code) {
+        query.pks = this.pks_id.code
+      }
       this.$router.push({
         path: this.$route.path,
-        query: { q: this.search },
+        query: query,
       })
     },
     showModal(isEdit, item = null) {
@@ -458,7 +525,8 @@ export default {
       try {
         const payload = {
           department_id: this.form.department_id
-            ? this.form.department_id.department_id
+            ? this.form.department_id.id ||
+              this.form.department_id.department_id
             : null,
           ring: this.form.ring,
           bm: this.form.bm,
@@ -495,7 +563,11 @@ export default {
         this.fetchPosts()
       } catch (err) {
         if (err.response && err.response.status === 422) {
-          this.errors = err.response.data.errors || err.response.data.data || err.response.data || {}
+          this.errors =
+            err.response.data.errors ||
+            err.response.data.data ||
+            err.response.data ||
+            {}
           this.$swal.fire(
             'GAGAL!',
             err.response?.data?.message || 'Silakan periksa kembali form Anda.',
@@ -549,20 +621,6 @@ export default {
               })
           }
         })
-    },
-    exportData() {
-      this.$axios({
-        url: `/api/admin/potongan_tbs_external/export`,
-        method: 'GET',
-        responseType: 'blob',
-      }).then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]))
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', 'Potongan_TBS_External.xlsx')
-        document.body.appendChild(link)
-        link.click()
-      })
     },
   },
 }
