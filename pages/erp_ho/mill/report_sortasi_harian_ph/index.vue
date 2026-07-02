@@ -125,16 +125,24 @@
             </b-card-text>
           </b-card>
 
-          <div class="form-group mt-3">
+          <div class="form-group mt-3 d-flex">
             <button
               title="Export To Excel"
-              class="btn btn-info"
+              class="btn btn-info mr-2"
               @click="exportData"
             >
               <i class="fa fa-file-excel"></i>
             </button>
+            <button
+              title="Export To Image (PNG)"
+              class="btn btn-secondary"
+              @click="exportToPNG"
+            >
+              <i class="fa fa-image"></i>
+            </button>
           </div>
 
+          <div id="exportTableWrapper">
           <b-table
             :fields="fields"
             :items="posts"
@@ -219,6 +227,7 @@
               </div>
             </template>
           </b-table>
+          </div>
 
           <b-row>
             <b-col class="text-right mt-2 text-muted font-weight-bold">
@@ -233,6 +242,8 @@
 
 <script>
 import menuAccessLog from '~/mixins/menuAccessLog'
+import html2canvas from 'html2canvas'
+
 export default {
   layout: 'admin',
   head() {
@@ -500,8 +511,14 @@ export default {
 
         // Logika Plasma (Ubah Estate menjadi "KL")
         if (plantType === 'PLASMA' && estate.length >= 2) {
-          afdeling = estate
-          estate = estate.substring(0, 2).toUpperCase()
+          let originalEstate = estate
+          estate = originalEstate.substring(0, 2).toUpperCase()
+          
+          if (afdeling && afdeling !== 'Unknown' && afdeling !== '') {
+            afdeling = originalEstate + '-' + afdeling
+          } else {
+            afdeling = originalEstate
+          }
         }
 
         if (!groupedData[date]) groupedData[date] = {}
@@ -720,6 +737,44 @@ export default {
       } catch (error) {
         console.error('Error applying filters:', error)
         this.show = 1
+      }
+    },
+
+    async exportToPNG() {
+      try {
+        const tableElement = document.querySelector('#exportTableWrapper table')
+        if (!tableElement) {
+          this.$swal.fire('Error', 'Tabel tidak ditemukan', 'error')
+          return
+        }
+
+        // Tampilkan loading SweetAlert
+        this.$swal.fire({
+          title: 'Memproses Gambar...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            this.$swal.showLoading()
+          }
+        })
+
+        const canvas = await html2canvas(tableElement, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff'
+        })
+
+        const image = canvas.toDataURL('image/png')
+        const link = document.createElement('a')
+        link.href = image
+        link.download = `ReportSortasiHarianPH_${this.selectedDate}.png`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+
+        this.$swal.close()
+      } catch (error) {
+        console.error('Error exporting to PNG:', error)
+        this.$swal.fire('Error', 'Gagal mengekspor gambar', 'error')
       }
     },
 
