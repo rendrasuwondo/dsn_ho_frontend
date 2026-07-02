@@ -28,6 +28,7 @@
                 deselect-label=""
                 selected-label=""
                 :loading="isLoadingDropdownPks"
+                @input="searchData"
               ></multiselect>
             </b-col>
             <b-col md="9">
