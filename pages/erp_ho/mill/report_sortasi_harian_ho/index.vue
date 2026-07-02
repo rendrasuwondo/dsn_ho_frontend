@@ -230,6 +230,19 @@
                 > -->
               </div>
             </template>
+            <template #custom-foot v-if="grandTotalData">
+              <tr class="row-total text-dark font-weight-bold">
+                <td colspan="4" class="text-right pr-3">GRAND TOTAL</td>
+                <td class="text-center">{{ formatToTwoDecimals(grandTotalData.percentage_unripe) }}</td>
+                <td class="text-center">{{ formatToTwoDecimals(grandTotalData.percentage_underripe) }}</td>
+                <td class="text-center">{{ formatToTwoDecimals(grandTotalData.percentage_ripe) }}</td>
+                <td class="text-center">{{ formatToTwoDecimals(grandTotalData.percentage_overripe) }}</td>
+                <td class="text-center">{{ formatToTwoDecimals(grandTotalData.percentage_empty_bunch) }}</td>
+                <td class="text-center">{{ formatToTwoDecimals(grandTotalData.percentage_long_stalk) }}</td>
+                <td class="text-center">{{ formatToTwoDecimals(grandTotalData.percentage_fruit) }}</td>
+                <td class="text-center">{{ formatToTwoDecimals(grandTotalData.percentage_garbage) }}</td>
+              </tr>
+            </template>
           </b-table>
           </div>
 
@@ -268,6 +281,7 @@ export default {
       )}-${String(date.getDate()).padStart(2, '0')}`
 
     return {
+      grandTotalData: null,
       fields: [
         {
           key: 'display_date',
@@ -505,6 +519,38 @@ export default {
 
         if (payload.metadata) {
           this.headersData = payload.metadata.split(',')
+        }
+
+        if (payload.data && payload.data.length > 0) {
+          let sum_unripe = 0, sum_underripe = 0, sum_ripe = 0, sum_overripe = 0
+          let sum_empty = 0, sum_long_stalk = 0, sum_fruit = 0, sum_garbage = 0
+          let sum_qty_npb = 0, sum_tonase = 0
+
+          payload.data.forEach(item => {
+            sum_unripe += parseFloat(item.qty_unripe || 0)
+            sum_underripe += parseFloat(item.qty_underripe || 0)
+            sum_ripe += parseFloat(item.qty_ripe || 0)
+            sum_overripe += parseFloat(item.qty_overripe || 0)
+            sum_empty += parseFloat(item.qty_empty_bunch || 0)
+            sum_long_stalk += parseFloat(item.qty_long_stalk || 0)
+            sum_fruit += parseFloat(item.loose_fruit || 0)
+            sum_garbage += parseFloat(item.qty_garbage || 0)
+            sum_qty_npb += parseFloat(item.qty_npb || 0)
+            sum_tonase += parseFloat(item.tonase || 0)
+          })
+
+          this.grandTotalData = {
+            percentage_unripe: sum_qty_npb > 0 ? (sum_unripe / sum_qty_npb) * 100 : 0,
+            percentage_underripe: sum_qty_npb > 0 ? (sum_underripe / sum_qty_npb) * 100 : 0,
+            percentage_ripe: sum_qty_npb > 0 ? (sum_ripe / sum_qty_npb) * 100 : 0,
+            percentage_overripe: sum_qty_npb > 0 ? (sum_overripe / sum_qty_npb) * 100 : 0,
+            percentage_empty_bunch: sum_qty_npb > 0 ? (sum_empty / sum_qty_npb) * 100 : 0,
+            percentage_long_stalk: sum_qty_npb > 0 ? (sum_long_stalk / sum_qty_npb) * 100 : 0,
+            percentage_fruit: sum_tonase > 0 ? (sum_fruit / sum_tonase) * 100 : 0,
+            percentage_garbage: sum_qty_npb > 0 ? (sum_garbage / sum_qty_npb) * 100 : 0,
+          }
+        } else {
+          this.grandTotalData = null
         }
       } catch (error) {
         console.error('Error in fetchData:', error)
