@@ -175,11 +175,10 @@
           </multiselect>
         </b-form-group>
 
-        <b-form-group label="WA Number" label-for="wa-input">
+        <b-form-group label="ID WA" label-for="wa-input">
           <b-form-input
             id="wa-input"
             v-model="form.wa_number"
-            :formatter="formatWaNumber"
             placeholder="Contoh: 08123456789"
             required
           ></b-form-input>
@@ -252,7 +251,7 @@ export default {
           width: '50px',
         },
         { key: 'department', label: 'PKS' },
-        { key: 'wa_number', label: 'WA Number' },
+        { key: 'wa_number', label: 'ID WA' },
         { key: 'grading_type_info', label: 'Type' },
         { key: 'description', label: 'Description' },
         {
