@@ -164,7 +164,7 @@
                 <th colspan="2" class="border-dark">BLM</th>
                 <th colspan="2" class="border-dark">TP</th>
                 <th colspan="2" class="border-dark">TK</th>
-                <th colspan="2" class="border-dark">BRD</th>
+                <th colspan="2" class="border-dark">BD</th>
                 <th colspan="2" class="border-dark">KOTORAN</th>
               </tr>
               <tr></tr>
@@ -358,7 +358,7 @@ export default {
         {
           key: 'brd_kg',
           label: '',
-          formatter: this.formatNumber,
+          formatter: () => '0',
           tdClass: 'align-middle text-right',
         },
         {
