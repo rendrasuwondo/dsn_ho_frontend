@@ -193,15 +193,15 @@
             <template v-slot:custom-foot="data">
               <b-tr v-if="posts.length > 0" class="bg-light font-weight-bold">
                 <b-td colspan="3" class="text-center align-middle">TOTAL</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalJumlahJjg) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalJumlahJjg) }}</b-td>
                 <b-td colspan="4">&nbsp;</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalTonaseBersih) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalTonaseBersih) }}</b-td>
                 <b-td colspan="15">&nbsp;</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalTotPotonganKg) }}</b-td>
-                <b-td class="text-right align-middle font-weight-bold">{{ formatThousand(totalNetto) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalTotPotonganKg) }}</b-td>
+                <b-td class="text-right align-middle font-weight-bold">{{ formatNumber(totalNetto) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliJjg) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliBjr) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalJjgKembaliTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalJjgKembaliTon) }}</b-td>
               </b-tr>
             </template>
           </b-table>
@@ -304,7 +304,7 @@ export default {
         {
           key: 'bm_perc',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatNumberPerc,
           tdClass: 'align-middle text-center',
         },
         {
@@ -316,7 +316,7 @@ export default {
         {
           key: 'blm_perc',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatNumberPerc,
           tdClass: 'align-middle text-center',
         },
         {
@@ -328,7 +328,7 @@ export default {
         {
           key: 'tp_perc',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatNumberPerc,
           tdClass: 'align-middle text-center',
         },
         {
@@ -340,7 +340,7 @@ export default {
         {
           key: 'tk_perc',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatNumberPerc,
           tdClass: 'align-middle text-center',
         },
         {
@@ -352,7 +352,7 @@ export default {
         {
           key: 'brd_perc',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatNumberPerc,
           tdClass: 'align-middle text-center',
         },
         {
@@ -364,7 +364,7 @@ export default {
         {
           key: 'kotoran_perc',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatNumberPerc,
           tdClass: 'align-middle text-center',
         },
         {
@@ -378,13 +378,13 @@ export default {
         {
           key: 'tot_potongan_perc',
           label: '',
-          formatter: this.formatNumber,
+          formatter: this.formatNumberPerc,
           tdClass: 'align-middle text-center bg-light font-weight-bold',
         },
         {
           key: 'tot_potongan_kg',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right bg-light font-weight-bold',
         },
 
@@ -392,7 +392,7 @@ export default {
         {
           key: 'netto',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right font-weight-bold',
         },
 
@@ -527,6 +527,10 @@ export default {
       return `${String(day).padStart(2, '0')}-${monthName}-${year}`
     },
     formatNumber(value) {
+      if (value === null || value === undefined) return '0.00'
+      return Number(value).toFixed(0)
+    },
+    formatNumberPerc(value) {
       if (value === null || value === undefined) return '0.00'
       return Number(value).toFixed(2)
     },
