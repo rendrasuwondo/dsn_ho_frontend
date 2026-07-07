@@ -527,8 +527,8 @@ export default {
       return `${String(day).padStart(2, '0')}-${monthName}-${year}`
     },
     formatNumber(value) {
-      if (value === null || value === undefined) return '0.00'
-      return Number(value).toFixed(0)
+      if (value === null || value === undefined) return '0'
+      return Number(value).toLocaleString('en-US', { maximumFractionDigits: 0 })
     },
     formatNumberPerc(value) {
       if (value === null || value === undefined) return '0.00'
