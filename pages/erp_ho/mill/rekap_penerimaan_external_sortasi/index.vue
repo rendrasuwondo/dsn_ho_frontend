@@ -147,20 +147,21 @@
             </template>
             <template v-slot:custom-foot="data">
               <b-tr v-if="posts.length > 0" class="bg-light font-weight-bold">
-                <b-td colspan="2" class="text-center align-middle">TOTAL</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalSetelahPotonganTon) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalSetelahPotonganTonRit) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalTonasePotonganTon) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalTonasePotonganTonRit) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalNettoJjg) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalNettoTon) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalNettoTonRit) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalDikembalikanJjg) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalDikembalikanTon) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalDikembalikanTonRit) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalTotalJjg) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalTotalTon) }}</b-td>
-                <b-td class="text-right align-middle">{{ formatThousand(totalTotalTonRit) }}</b-td>
+                <b-td class="text-center align-middle">TOTAL</b-td>
+                <b-td class="text-right align-middle">{{ formatThousand(totalRitase) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalSetelahPotonganTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalSetelahPotonganTonRit) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalTonasePotonganTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalTonasePotonganTonRit) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalNettoJjg) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalNettoTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalNettoTonRit) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalDikembalikanJjg) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalDikembalikanTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalDikembalikanTonRit) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalTotalJjg) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalTotalTon) }}</b-td>
+                <b-td class="text-right align-middle">{{ formatNumber(totalTotalTonRit) }}</b-td>
                 <b-td class="text-center align-middle">{{ formatNumber(totalPotonganPersen) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalPercKembaliJjg) }}</b-td>
                 <b-td class="text-right align-middle">{{ formatNumber(totalPercKembaliTon) }}</b-td>
@@ -222,26 +223,26 @@ export default {
         {
           key: 'setelah_potongan_ton',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right',
         },
         {
           key: 'setelah_potongan_ton_rit',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right',
         },
 
         {
           key: 'tonase_potongan_ton',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right',
         },
         {
           key: 'tonase_potongan_ton_rit',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right',
         },
 
@@ -249,19 +250,19 @@ export default {
         {
           key: 'netto_jjg',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'netto_ton',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'netto_ton_rit',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right bg-light',
         },
 
@@ -269,19 +270,19 @@ export default {
         {
           key: 'dikembalikan_jjg',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right',
         },
         {
           key: 'dikembalikan_ton',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right',
         },
         {
           key: 'dikembalikan_ton_rit',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right',
         },
 
@@ -289,19 +290,19 @@ export default {
         {
           key: 'total_jjg',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'total_ton',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right bg-light',
         },
         {
           key: 'total_ton_rit',
           label: '',
-          formatter: this.formatThousand,
+          formatter: this.formatNumber,
           tdClass: 'align-middle text-right bg-light',
         },
 
@@ -342,17 +343,20 @@ export default {
   },
 
   computed: {
+    totalRitase() {
+      return this.posts.reduce((sum, item) => sum + (parseFloat(item.ritase) || 0), 0)
+    },
     totalSetelahPotonganTon() {
       return this.posts.reduce((sum, item) => sum + (parseFloat(item.setelah_potongan_ton) || 0), 0)
     },
     totalSetelahPotonganTonRit() {
-      return this.posts.reduce((sum, item) => sum + (parseFloat(item.setelah_potongan_ton_rit) || 0), 0)
+      return this.totalSetelahPotonganTon / this.totalRitase
     },
     totalTonasePotonganTon() {
       return this.posts.reduce((sum, item) => sum + (parseFloat(item.tonase_potongan_ton) || 0), 0)
     },
     totalTonasePotonganTonRit() {
-      return this.posts.reduce((sum, item) => sum + (parseFloat(item.tonase_potongan_ton_rit) || 0), 0)
+      return this.totalTonasePotonganTon / this.totalRitase
     },
     totalNettoJjg() {
       return this.posts.reduce((sum, item) => sum + (parseFloat(item.netto_jjg) || 0), 0)
@@ -361,7 +365,7 @@ export default {
       return this.posts.reduce((sum, item) => sum + (parseFloat(item.netto_ton) || 0), 0)
     },
     totalNettoTonRit() {
-      return this.posts.reduce((sum, item) => sum + (parseFloat(item.netto_ton_rit) || 0), 0)
+      return this.totalNettoTon / this.totalRitase
     },
     totalDikembalikanJjg() {
       return this.posts.reduce((sum, item) => sum + (parseFloat(item.dikembalikan_jjg) || 0), 0)
@@ -370,7 +374,7 @@ export default {
       return this.posts.reduce((sum, item) => sum + (parseFloat(item.dikembalikan_ton) || 0), 0)
     },
     totalDikembalikanTonRit() {
-      return this.posts.reduce((sum, item) => sum + (parseFloat(item.dikembalikan_ton_rit) || 0), 0)
+      return this.totalDikembalikanTon / this.totalRitase
     },
     totalTotalJjg() {
       return this.posts.reduce((sum, item) => sum + (parseFloat(item.total_jjg) || 0), 0)
@@ -379,10 +383,10 @@ export default {
       return this.posts.reduce((sum, item) => sum + (parseFloat(item.total_ton) || 0), 0)
     },
     totalTotalTonRit() {
-      return this.posts.reduce((sum, item) => sum + (parseFloat(item.total_ton_rit) || 0), 0)
+      return this.totalTotalTon / this.totalRitase
     },
     totalPotonganPersen() {
-      return this.posts.reduce((sum, item) => sum + (parseFloat(item.potongan_persen) || 0), 0)
+      return this.totalTonasePotonganTon / this.totalNettoTon * 100
     },
     totalPercKembaliJjg() {
       return this.totalTotalJjg > 0 ? (this.totalDikembalikanJjg / this.totalTotalJjg) * 100 : 0
@@ -440,7 +444,8 @@ export default {
       return `${String(day).padStart(2, '0')}-${monthName}-${year}`
     },
     formatNumber(value) {
-      return Number.isFinite(Number(value)) ? Number(value).toFixed(2) : '0.00'
+      if (!Number.isFinite(Number(value))) return '0.00'
+      return Number(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     },
 
     formatThousand(value) {
