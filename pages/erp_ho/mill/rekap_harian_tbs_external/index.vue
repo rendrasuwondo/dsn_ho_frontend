@@ -423,7 +423,7 @@ export default {
       pks_id: null,
       pks_options: [],
       posts: [],
-      pagination: { current_page: 1, per_page: 50, total: 0 },
+      pagination: { current_page: 1, per_page: 100, total: 0 },
       rowcount: 0,
       show: 0,
       isLoadingDropdown: true,
@@ -581,6 +581,7 @@ export default {
           dateStart: this.dateStart,
           dateEnd: this.dateEnd,
           page: this.pagination.current_page || 1,
+          per_page: this.pagination.per_page || 100,
         }
 
         if (this.supplier_id && this.supplier_id.length > 0) {
