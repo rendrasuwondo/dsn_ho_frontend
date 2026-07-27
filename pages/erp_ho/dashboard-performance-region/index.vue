@@ -20,10 +20,10 @@
             class="header-section text-center d-flex flex-column justify-content-center align-items-center flex-shrink-0 mb-3"
           >
             <h1 class="main-title mb-1">
-              DASHBOARD KINERJA BULANAN PKS: OPTIMALISASI PABRIK KELAPA SAWIT
+              DASHBOARD KINERJA BULANAN REGION 1 & 2
             </h1>
             <h4 class="sub-title text-muted mb-2">
-              MONTHLY PKS PERFORMANCE DASHBOARD
+              MONTHLY REGION 1 & 2 PERFORMANCE DASHBOARD
             </h4>
             <div class="month-selector mt-1 shadow-sm">
               {{ displayTitle }}
