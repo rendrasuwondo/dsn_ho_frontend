@@ -9,7 +9,7 @@
         >
       </div>
     </div>
-    <h6 class="text-center font-weight-bold mt-1 mb-0">PRODUKSI TBS KEBUN</h6>
+    <h6 class="text-center font-weight-bold mt-1 mb-0">PRODUKSI TBS KEBUN (Nucleus)</h6>
     <div class="chart-wrapper flex-grow-1 position-relative mt-1">
       <div
         v-if="isLoading"

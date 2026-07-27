@@ -3,7 +3,7 @@
     <div class="d-flex align-items-start mb-3">
       <i class="fas fa-clipboard-list text-success mr-2" style="font-size: 1.5rem; margin-top: 2px;"></i>
       <div style="line-height: 1.2;">
-        <h5 class="kpi-title mb-0">PRODUKSI TBS</h5>
+        <h5 class="kpi-title mb-0">PRODUKSI TBS (Nucleus)</h5>
         <small class="text-muted font-weight-bold" style="font-size: 0.75rem;">(Production FFB)</small>
       </div>
     </div>
