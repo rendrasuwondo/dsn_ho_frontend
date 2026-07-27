@@ -42,6 +42,16 @@
                   >
                     <i class="fa fa-plus-circle"></i> Tambah
                   </button>
+                  <button
+                    class="btn btn-secondary btn-sm ml-1"
+                    style="padding-top: 8px"
+                    title="Screenshot Table"
+                    :disabled="loadingScreenshot"
+                    @click="downloadScreenshot"
+                  >
+                    <i v-if="loadingScreenshot" class="fa fa-spinner fa-spin"></i>
+                    <i v-else class="fa fa-camera"></i> Screenshot
+                  </button>
                 </div>
                 <input
                   type="text"
@@ -280,6 +290,7 @@ export default {
       search: '',
       posts: [],
       loading: false,
+      loadingScreenshot: false,
       pagination: {
         current_page: 1,
         per_page: 10,
@@ -622,6 +633,47 @@ export default {
               })
           }
         })
+    },
+    async downloadScreenshot() {
+      this.loadingScreenshot = true
+      try {
+        let search = this.search || ''
+        let url = `/api/admin/potongan_tbs_external/screenshot?q=${encodeURIComponent(search)}`
+        if (this.pks_id && this.pks_id.code) {
+          url += `&department_code=${encodeURIComponent(this.pks_id.code)}`
+        }
+
+        const response = await this.$axios.$get(url, {
+          responseType: 'blob',
+        })
+
+        const blob = new Blob([response], { type: 'image/png' })
+        const downloadUrl = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = downloadUrl
+        link.setAttribute('download', `potongan_tbs_external_table.png`)
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+        window.URL.revokeObjectURL(downloadUrl)
+
+        this.$swal.fire({
+          title: 'BERHASIL!',
+          text: 'Screenshot tabel berhasil diunduh.',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500,
+        })
+      } catch (error) {
+        console.error('Error downloading screenshot:', error)
+        this.$swal.fire(
+          'GAGAL!',
+          'Gagal mengambil screenshot tabel.',
+          'error'
+        )
+      } finally {
+        this.loadingScreenshot = false
+      }
     },
   },
 }
