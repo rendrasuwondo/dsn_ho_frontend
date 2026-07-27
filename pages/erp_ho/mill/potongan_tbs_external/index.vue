@@ -5,7 +5,7 @@
     </section>
 
     <section class="content">
-      <div class="card card-outline card-info">
+      <div class="card card-outline card-info" ref="tableCard">
         <div class="card-header">
           <h3 class="card-title">
             <i class="nav-icon fas fa-percentage"></i>
@@ -270,6 +270,8 @@
 </template>
 
 <script>
+import html2canvas from 'html2canvas'
+
 export default {
   layout: 'admin',
   head() {
@@ -622,6 +624,47 @@ export default {
               })
           }
         })
+    },
+    async downloadScreenshot() {
+      this.loadingScreenshot = true
+      try {
+        const element = this.$refs.tableCard || document.querySelector('.card-outline')
+        if (!element) {
+          throw new Error('Elemen tabel tidak ditemukan')
+        }
+
+        const canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          backgroundColor: '#ffffff',
+        })
+
+        const image = canvas.toDataURL('image/png')
+        const link = document.createElement('a')
+        link.href = image
+        link.setAttribute('download', `potongan_tbs_external_table.png`)
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+
+        this.$swal.fire({
+          title: 'BERHASIL!',
+          text: 'Screenshot tabel berhasil diunduh.',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500,
+        })
+      } catch (error) {
+        console.error('Error taking screenshot with html2canvas:', error)
+        this.$swal.fire(
+          'GAGAL!',
+          'Gagal mengambil screenshot tabel.',
+          'error'
+        )
+      } finally {
+        this.loadingScreenshot = false
+      }
     },
   },
 }
