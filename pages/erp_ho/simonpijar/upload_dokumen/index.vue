@@ -342,26 +342,42 @@ export default {
   async asyncData({ $axios, query }) {
     const current = new Date()
     let month_at = current.getMonth() + 1
-
     let year_at = current.getFullYear()
 
-    let year_list = await $axios.$get(`/api/admin/lov_years`)
+    let year_list = { data: [] }
+    let month_list = { data: [] }
+    let f_month_id = []
+    let f_year_id = []
+    let year_id = []
+    let month_id = []
+    let fetchError = null
 
-    let month_list = await $axios.$get(`/api/admin/lov_months`)
+    try {
+      year_list = await $axios.$get(`/api/admin/lov_years`)
+    } catch (err) {
+      console.log(err?.response, 'ERROR fetching year_list')
+      fetchError = err
+    }
+
+    try {
+      month_list = await $axios.$get(`/api/admin/lov_months`)
+    } catch (err) {
+      console.log(err?.response, 'ERROR fetching month_list')
+      fetchError = err
+    }
 
     let q_month_id = query.q_month_id ? query.q_month_id : month_at
 
-    let f_month_id = []
-
     if (query.q_month_id) {
-      $axios
-        .get(`/api/admin/lov_months?q_month_id=${q_month_id}`)
-        .then((response) => {
-          f_month_id = response.data.data
-        })
+      try {
+        const response = await $axios.get(`/api/admin/lov_months?q_month_id=${q_month_id}`)
+        f_month_id = response.data.data
+      } catch (err) {
+        console.log(err?.response, 'ERROR')
+        fetchError = err
+      }
     } else {
       f_month_id = []
-
       q_month_id = month_at
     }
 
@@ -371,17 +387,16 @@ export default {
 
     let q_year_id = query.q_year_id ? query.q_year_id : year_at
 
-    let f_year_id = []
-
     if (query.q_year_id) {
-      $axios
-        .get(`/api/admin/lov_years?q_year_id=${q_year_id}`)
-        .then((response) => {
-          f_year_id = response.data.data
-        })
+      try {
+        const response = await $axios.get(`/api/admin/lov_years?q_year_id=${q_year_id}`)
+        f_year_id = response.data.data
+      } catch (err) {
+        console.log(err?.response, 'ERROR')
+        fetchError = err
+      }
     } else {
       f_year_id = []
-
       q_year_id = year_at
     }
 
@@ -389,43 +404,97 @@ export default {
       q_year_id = year_at
     }
 
-    let year_id = []
-
-    $axios.get(`/api/admin/lov_years?q_year_id=${year_at}`).then((response) => {
+    try {
+      const response = await $axios.get(`/api/admin/lov_years?q_year_id=${year_at}`)
       year_id = response.data.data
-    })
+    } catch (err) {
+      console.log(err?.response, 'ERROR')
+      fetchError = err
+    }
 
-    let month_id = []
-
-    $axios
-      .get(`/api/admin/lov_months?q_month_id=${month_at}`)
-      .then((response) => {
-        month_id = response.data.data
-      })
+    try {
+      const response = await $axios.get(`/api/admin/lov_months?q_month_id=${month_at}`)
+      month_id = response.data.data
+    } catch (err) {
+      console.log(err?.response, 'ERROR')
+      fetchError = err
+    }
 
     let page = query.page ? parseInt(query.page) : ''
-
     let search = query.q ? query.q : ''
 
-    const posts = await $axios.$get(
-      `/api/admin/simonpijar?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
-    )
+    let postsResult = null
+
+    try {
+      const postsResponse = await $axios.$get(
+        `/api/admin/simonpijar?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+      )
+      postsResult = postsResponse.data
+    } catch (err) {
+      console.log(err?.response, 'ERROR')
+      fetchError = err
+    }
+
+    const asyncErrorMessage = fetchError
+      ? fetchError?.response?.data?.message || fetchError?.message || 'Gagal mengambil data dari server.'
+      : null
+
+    if (postsResult) {
+      return {
+        ...postsResult,
+        asyncErrorMessage: asyncErrorMessage,
+      }
+    }
 
     return {
-      posts: posts.data.data,
-      pagination: posts.data,
+      posts: [],
+      pagination: { total: 0, data: [] },
       search: search,
-      rowcount: posts.data.total,
+      rowcount: 0,
       year_id: year_id,
       month_id: month_id,
       f_month_id: f_month_id,
       f_year_id: f_year_id,
-      years: year_list.data,
-      months: month_list.data,
+      years: year_list?.data || [],
+      months: month_list?.data || [],
+      asyncErrorMessage: asyncErrorMessage,
     }
   },
 
   methods: {
+    showErrorToast(error, defaultTitle = 'Error') {
+      let message = ''
+      if (typeof error === 'string') {
+        message = error
+      } else {
+        message =
+          error?.response?.data?.message ||
+          error?.response?.statusText ||
+          error?.message ||
+          'Terjadi kesalahan saat mengambil/memproses data.'
+      }
+
+      if (this.$bvToast) {
+        this.$bvToast.toast(message, {
+          title: defaultTitle,
+          variant: 'danger',
+          solid: true,
+          autoHideDelay: 5000,
+          appendToast: true,
+        })
+      } else if (this.$swal) {
+        this.$swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'error',
+          title: defaultTitle,
+          text: message,
+          showConfirmButton: false,
+          timer: 4000,
+        })
+      }
+    },
+
     onChangeFiler() {
       this.searchData()
     },
@@ -579,16 +648,21 @@ export default {
         method: 'GET',
         responseType: 'blob',
         headers: headers,
-      }).then((response) => {
-        this.isLoading = false
-        const url = window.URL.createObjectURL(new Blob([response.data]))
-        const link = document.createElement('a')
-        link.href = url
-        var fileName = 'Upload Dokumen.xlsx'
-        link.setAttribute('download', fileName)
-        document.body.appendChild(link)
-        link.click()
       })
+        .then((response) => {
+          this.isLoading = false
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+          link.href = url
+          var fileName = 'Upload Dokumen.xlsx'
+          link.setAttribute('download', fileName)
+          document.body.appendChild(link)
+          link.click()
+        })
+        .catch((error) => {
+          this.isLoading = false
+          this.showErrorToast(error, 'Gagal Export Data')
+        })
     },
 
     async exportDataTemplate() {
@@ -626,11 +700,18 @@ export default {
       let i_month =
         this.query_month_id === undefined ? month_at : this.query_month_id
 
-      await this.$axios
-        .get(`/api/admin/lov_months?q_month_id=${i_month}`)
-        .then((response) => {
-          this.month_code = response.data.data
-        })
+      try {
+        const response = await this.$axios.get(`/api/admin/lov_months?q_month_id=${i_month}`)
+        this.month_code = response.data.data
+      } catch (error) {
+        this.showErrorToast(error, 'Gagal Memuat Data Bulan')
+        return
+      }
+
+      if (!this.month_code || !this.month_code[0]) {
+        this.showErrorToast('Data bulan tidak ditemukan.', 'Gagal Export Template')
+        return
+      }
 
       let month_code = this.month_code[0].name
 
@@ -638,12 +719,13 @@ export default {
         'Content-Type': 'application/json',
       }
 
-      await this.$axios({
-        url: `/api/admin/template_simonpijar/export?q=${this.search}`,
-        method: 'GET',
-        responseType: 'blob',
-        headers: headers,
-      }).then((response) => {
+      try {
+        const response = await this.$axios({
+          url: `/api/admin/template_simonpijar/export?q=${this.search}`,
+          method: 'GET',
+          responseType: 'blob',
+          headers: headers,
+        })
         this.isLoading = false
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
@@ -652,7 +734,10 @@ export default {
         link.setAttribute('download', fileName)
         document.body.appendChild(link)
         link.click()
-      })
+      } catch (error) {
+        this.isLoading = false
+        this.showErrorToast(error, 'Gagal Export Template')
+      }
     },
 
     upload(e) {
@@ -693,11 +778,20 @@ export default {
 
       let q_month = i_month_at === '' ? current.getMonth() + 1 : i_month_at
 
-      await this.$axios
-        .get(`/api/admin/lov_months?q_month_id=${i_month_at}`)
-        .then((response) => {
-          this.month_code = response.data.data
-        })
+      try {
+        const response = await this.$axios.get(`/api/admin/lov_months?q_month_id=${i_month_at}`)
+        this.month_code = response.data.data
+      } catch (error) {
+        this.show = 1
+        this.showErrorToast(error, 'Gagal Validasi Bulan')
+        return
+      }
+
+      if (!this.month_code || !this.month_code[0]) {
+        this.show = 1
+        this.showErrorToast('Data bulan tidak ditemukan.', 'Gagal Upload File')
+        return
+      }
 
       let monthCode =
         this.month_id.name !== null &&
@@ -745,9 +839,11 @@ export default {
               query: { q_month_id: i_month_at, q_year_id: i_year_at },
             })
 
+            this.showErrorToast(error, 'Data Gagal Disimpan!')
+
             this.$swal.fire({
               title: 'ERROR!',
-              text: 'Data Gagal Disimpan!',
+              text: error?.response?.data?.message || 'Data Gagal Disimpan!',
               icon: 'error',
               showConfirmButton: false,
               timer: 2000,
@@ -762,9 +858,12 @@ export default {
           query: { q_month_id: q_month, q_year_id: q_year },
         })
 
+        const errMsg = 'Data Yang Anda Upload Tidak Sesuai Dengan Bulan Yang Ditentukan. Harap Cek Kembali!'
+        this.showErrorToast(errMsg, 'File Tidak Sesuai')
+
         this.$swal.fire({
           title: 'ERROR!',
-          text: 'Data Yang Anda Upload Tidak Sesuai Dengan Bulan Yang Ditentukan. Harap Cek Kembali!',
+          text: errMsg,
           icon: 'error',
           showConfirmButton: false,
           timer: 3500,
@@ -774,37 +873,49 @@ export default {
   },
 
   mounted() {
+    if (this.asyncErrorMessage) {
+      this.showErrorToast(this.asyncErrorMessage, 'Gagal Memuat Data')
+    }
+
     const current = new Date()
 
     if (this.$route.query.q_month_id == null) {
       this.$axios
         .get(`/api/admin/lov_months?q_month_id=${current.getMonth() + 1}`)
-
         .then((response) => {
           this.f_month_id = response.data.data
+        })
+        .catch((error) => {
+          this.showErrorToast(error, 'Gagal Memuat Bulan')
         })
     } else {
       this.$axios
         .get(`/api/admin/lov_months?q_month_id=${this.$route.query.q_month_id}`)
-
         .then((response) => {
           this.f_month_id = response.data.data
+        })
+        .catch((error) => {
+          this.showErrorToast(error, 'Gagal Memuat Bulan')
         })
     }
 
     if (this.$route.query.q_year_id == null) {
       this.$axios
         .get(`/api/admin/lov_years?q_year_id=${current.getFullYear()}`)
-
         .then((response) => {
           this.f_year_id = response.data.data
+        })
+        .catch((error) => {
+          this.showErrorToast(error, 'Gagal Memuat Tahun')
         })
     } else {
       this.$axios
         .get(`/api/admin/lov_years?q_year_id=${this.$route.query.q_year_id}`)
-
         .then((response) => {
           this.f_year_id = response.data.data
+        })
+        .catch((error) => {
+          this.showErrorToast(error, 'Gagal Memuat Tahun')
         })
     }
   },
