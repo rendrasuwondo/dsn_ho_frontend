@@ -435,37 +435,37 @@ export default {
   computed: {
     totalJumlahJjg() {
       return this.posts.reduce(
-        (sum, item) => sum + (parseFloat(item.jumlah_jjg) || 0),
+        (sum, item) => sum + (Math.round(parseFloat(item.jumlah_jjg)) || 0),
         0
       )
     },
     totalTonaseBersih() {
       return this.posts.reduce(
-        (sum, item) => sum + (parseFloat(item.tonase_bersih) || 0),
+        (sum, item) => sum + (Math.round(parseFloat(item.tonase_bersih)) || 0),
         0
       )
     },
     totalTotPotonganKg() {
       return this.posts.reduce(
-        (sum, item) => sum + (parseFloat(item.tot_potongan_kg) || 0),
+        (sum, item) => sum + (Math.round(parseFloat(item.tot_potongan_kg)) || 0),
         0
       )
     },
     totalNetto() {
       return this.posts.reduce(
-        (sum, item) => sum + (parseFloat(item.netto) || 0),
+        (sum, item) => sum + (Math.round(parseFloat(item.netto)) || 0),
         0
       )
     },
     totalJjgKembaliJjg() {
       return this.posts.reduce(
-        (sum, item) => sum + (parseFloat(item.jjg_kembali_jjg) || 0),
+        (sum, item) => sum + (Math.round(parseFloat(item.jjg_kembali_jjg)) || 0),
         0
       )
     },
     totalJjgKembaliTon() {
       return this.posts.reduce(
-        (sum, item) => sum + (parseFloat(item.jjg_kembali_ton) || 0),
+        (sum, item) => sum + (Math.round(parseFloat(item.jjg_kembali_ton)) || 0),
         0
       )
     },
