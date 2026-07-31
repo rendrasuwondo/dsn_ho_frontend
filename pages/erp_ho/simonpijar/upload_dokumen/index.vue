@@ -368,17 +368,12 @@ export default {
 
     let q_month_id = query.q_month_id ? query.q_month_id : month_at
 
-    if (query.q_month_id) {
-      try {
-        const response = await $axios.get(`/api/admin/lov_months?q_month_id=${q_month_id}`)
-        f_month_id = response.data.data
-      } catch (err) {
-        console.log(err?.response, 'ERROR')
-        fetchError = err
-      }
-    } else {
-      f_month_id = []
-      q_month_id = month_at
+    try {
+      const response = await $axios.get(`/api/admin/lov_months?q_month_id=${q_month_id}`)
+      f_month_id = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data
+    } catch (err) {
+      console.log(err?.response, 'ERROR')
+      fetchError = err
     }
 
     if (q_month_id == undefined || q_month_id == '') {
@@ -387,17 +382,12 @@ export default {
 
     let q_year_id = query.q_year_id ? query.q_year_id : year_at
 
-    if (query.q_year_id) {
-      try {
-        const response = await $axios.get(`/api/admin/lov_years?q_year_id=${q_year_id}`)
-        f_year_id = response.data.data
-      } catch (err) {
-        console.log(err?.response, 'ERROR')
-        fetchError = err
-      }
-    } else {
-      f_year_id = []
-      q_year_id = year_at
+    try {
+      const response = await $axios.get(`/api/admin/lov_years?q_year_id=${q_year_id}`)
+      f_year_id = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data
+    } catch (err) {
+      console.log(err?.response, 'ERROR')
+      fetchError = err
     }
 
     if (q_year_id == undefined || q_year_id == '') {
@@ -406,7 +396,7 @@ export default {
 
     try {
       const response = await $axios.get(`/api/admin/lov_years?q_year_id=${year_at}`)
-      year_id = response.data.data
+      year_id = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data
     } catch (err) {
       console.log(err?.response, 'ERROR')
       fetchError = err
@@ -414,7 +404,7 @@ export default {
 
     try {
       const response = await $axios.get(`/api/admin/lov_months?q_month_id=${month_at}`)
-      month_id = response.data.data
+      month_id = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data
     } catch (err) {
       console.log(err?.response, 'ERROR')
       fetchError = err
@@ -439,18 +429,11 @@ export default {
       ? fetchError?.response?.data?.message || fetchError?.message || 'Gagal mengambil data dari server.'
       : null
 
-    if (postsResult) {
-      return {
-        ...postsResult,
-        asyncErrorMessage: asyncErrorMessage,
-      }
-    }
-
     return {
-      posts: [],
-      pagination: { total: 0, data: [] },
+      posts: postsResult?.data || [],
+      pagination: postsResult || { total: 0, data: [] },
       search: search,
-      rowcount: 0,
+      rowcount: postsResult?.total || 0,
       year_id: year_id,
       month_id: month_id,
       f_month_id: f_month_id,
@@ -560,7 +543,6 @@ export default {
     },
 
     searchData() {
-      this.show = 0
       const current = new Date()
 
       let month_at = current.getMonth() + 1
@@ -589,19 +571,14 @@ export default {
         }
       } catch (err) {}
 
-      this.$router.push(
-        {
-          path: this.$route.path,
-          query: {
-            q: this.search,
-            q_month_id: this.query_month_id ? this.query_month_id : month_at,
-            q_year_id: this.query_year_id ? this.query_year_id : year_at,
-          },
+      this.$router.push({
+        path: this.$route.path,
+        query: {
+          q: this.search,
+          q_month_id: this.query_month_id ? this.query_month_id : month_at,
+          q_year_id: this.query_year_id ? this.query_year_id : year_at,
         },
-        () => {
-          this.$router.go(0);
-        }
-      )
+      })
     },
 
     exportData() {
@@ -883,7 +860,7 @@ export default {
       this.$axios
         .get(`/api/admin/lov_months?q_month_id=${current.getMonth() + 1}`)
         .then((response) => {
-          this.f_month_id = response.data.data
+          this.f_month_id = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data
         })
         .catch((error) => {
           this.showErrorToast(error, 'Gagal Memuat Bulan')
@@ -892,7 +869,7 @@ export default {
       this.$axios
         .get(`/api/admin/lov_months?q_month_id=${this.$route.query.q_month_id}`)
         .then((response) => {
-          this.f_month_id = response.data.data
+          this.f_month_id = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data
         })
         .catch((error) => {
           this.showErrorToast(error, 'Gagal Memuat Bulan')
@@ -903,7 +880,7 @@ export default {
       this.$axios
         .get(`/api/admin/lov_years?q_year_id=${current.getFullYear()}`)
         .then((response) => {
-          this.f_year_id = response.data.data
+          this.f_year_id = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data
         })
         .catch((error) => {
           this.showErrorToast(error, 'Gagal Memuat Tahun')
@@ -912,7 +889,7 @@ export default {
       this.$axios
         .get(`/api/admin/lov_years?q_year_id=${this.$route.query.q_year_id}`)
         .then((response) => {
-          this.f_year_id = response.data.data
+          this.f_year_id = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data
         })
         .catch((error) => {
           this.showErrorToast(error, 'Gagal Memuat Tahun')
