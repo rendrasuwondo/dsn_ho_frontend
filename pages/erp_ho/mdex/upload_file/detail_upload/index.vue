@@ -106,7 +106,7 @@
               ></b-pagination
             ></b-col>
             <b-col class="text-right" align-self="center"
-              >{{ rowcount }} data</b-col
+              >{{ formatPrice(rowcount) }} data</b-col
             >
           </b-row>
         </div>
@@ -116,6 +116,8 @@
 </template>
 
 <script>
+import { formatPrice, formatDateTable } from '~/utils/formatters'
+
 export default {
   //layout
   layout: 'admin',
@@ -148,6 +150,9 @@ export default {
         {
           label: 'Tanggal Upload',
           key: 'update_date',
+          formatter: (value) => {
+            return this.formatDateTable(value)
+          },
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
@@ -201,6 +206,8 @@ export default {
   },
 
   methods: {
+    formatPrice,
+    formatDateTable,
     //change page pagination
     changePage(page) {
       this.$router.push({
