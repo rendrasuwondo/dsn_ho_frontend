@@ -343,105 +343,45 @@ export default {
 
   async asyncData({ $axios, query }) {
     const current = new Date()
-    let month_at = current.getMonth() + 1
-    let year_at = current.getFullYear()
-
-    let year_list = { data: [] }
-    let month_list = { data: [] }
-    let f_month_id = []
-    let f_year_id = []
-    let year_id = []
-    let month_id = []
-    let fetchError = null
-
-    try {
-      year_list = await $axios.$get(`/api/admin/lov_years`)
-    } catch (err) {
-      console.log(err?.response, 'ERROR fetching year_list')
-      fetchError = err
-    }
-
-    try {
-      month_list = await $axios.$get(`/api/admin/lov_months`)
-    } catch (err) {
-      console.log(err?.response, 'ERROR fetching month_list')
-      fetchError = err
-    }
+    const prevDate = new Date(current.getFullYear(), current.getMonth() - 1, 1)
+    let month_at = prevDate.getMonth() + 1
+    let year_at = prevDate.getFullYear()
 
     let q_month_id = query.q_month_id ? query.q_month_id : month_at
-
-    try {
-      const response = await $axios.get(
-        `/api/admin/lov_months?q_month_id=${q_month_id}`
-      )
-      f_month_id = Array.isArray(response.data.data)
-        ? response.data.data[0]
-        : response.data.data
-    } catch (err) {
-      console.log(err?.response, 'ERROR')
-      fetchError = err
-    }
-
-    if (q_month_id == undefined || q_month_id == '') {
-      q_month_id = month_at
-    }
-
     let q_year_id = query.q_year_id ? query.q_year_id : year_at
-
-    try {
-      const response = await $axios.get(
-        `/api/admin/lov_years?q_year_id=${q_year_id}`
-      )
-      f_year_id = Array.isArray(response.data.data)
-        ? response.data.data[0]
-        : response.data.data
-    } catch (err) {
-      console.log(err?.response, 'ERROR')
-      fetchError = err
-    }
-
-    if (q_year_id == undefined || q_year_id == '') {
-      q_year_id = year_at
-    }
-
-    try {
-      const response = await $axios.get(
-        `/api/admin/lov_years?q_year_id=${year_at}`
-      )
-      year_id = Array.isArray(response.data.data)
-        ? response.data.data[0]
-        : response.data.data
-    } catch (err) {
-      console.log(err?.response, 'ERROR')
-      fetchError = err
-    }
-
-    try {
-      const response = await $axios.get(
-        `/api/admin/lov_months?q_month_id=${month_at}`
-      )
-      month_id = Array.isArray(response.data.data)
-        ? response.data.data[0]
-        : response.data.data
-    } catch (err) {
-      console.log(err?.response, 'ERROR')
-      fetchError = err
-    }
-
     let page = query.page ? parseInt(query.page) : ''
     let search = query.q ? query.q : ''
 
+    let year_list = { data: [] }
+    let month_list = { data: [] }
     let postsResult = null
+    let fetchError = null
 
     try {
-      const postsResponse = await $axios.$get(
-        `/api/admin/simonpijar?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
-      )
-      postsResult = postsResponse.data
+      const [yearsRes, monthsRes, postsRes] = await Promise.all([
+        $axios.$get(`/api/admin/lov_years`),
+        $axios.$get(`/api/admin/lov_months`),
+        $axios.$get(
+          `/api/admin/simonpijar?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+        ),
+      ])
+      year_list = yearsRes
+      month_list = monthsRes
+      postsResult = postsRes.data
     } catch (err) {
-      console.log(err?.response, 'ERROR')
+      console.log(err?.response, 'ERROR fetching data')
       fetchError = err
     }
+
+    const years = year_list?.data || []
+    const months = month_list?.data || []
+
+    const f_month_id =
+      months.find((m) => m.id == q_month_id) || months[0] || null
+    const f_year_id =
+      years.find((y) => y.year_at == q_year_id || y.id == q_year_id) ||
+      years[0] ||
+      null
 
     const asyncErrorMessage = fetchError
       ? fetchError?.response?.data?.message ||
@@ -454,12 +394,12 @@ export default {
       pagination: postsResult || { total: 0, data: [] },
       search: search,
       rowcount: postsResult?.total || 0,
-      year_id: year_id,
-      month_id: month_id,
+      year_id: f_year_id,
+      month_id: f_month_id,
       f_month_id: f_month_id,
       f_year_id: f_year_id,
-      years: year_list?.data || [],
-      months: month_list?.data || [],
+      years: years,
+      months: months,
       asyncErrorMessage: asyncErrorMessage,
     }
   },
@@ -505,18 +445,34 @@ export default {
     },
     currentMonth() {
       const current = new Date()
-      const date = `${current.getMonth() + 1}`
+      const prevDate = new Date(
+        current.getFullYear(),
+        current.getMonth() - 1,
+        1
+      )
+      const date = `${prevDate.getMonth() + 1}`
       return date
     },
 
     currentYear() {
       const current = new Date()
-      const date = `${current.getFullYear()}`
+      const prevDate = new Date(
+        current.getFullYear(),
+        current.getMonth() - 1,
+        1
+      )
+      const date = `${prevDate.getFullYear()}`
 
       return date
     },
 
     showModal() {
+      if (this.f_month_id) {
+        this.month_id = this.f_month_id
+      }
+      if (this.f_year_id) {
+        this.year_id = this.f_year_id
+      }
       this.$refs['my-modal'].show()
     },
 
@@ -526,8 +482,13 @@ export default {
 
     changePage(page) {
       const current = new Date()
+      const prevDate = new Date(
+        current.getFullYear(),
+        current.getMonth() - 1,
+        1
+      )
 
-      let month_at = current.getMonth() + 1
+      let month_at = prevDate.getMonth() + 1
 
       try {
         if (this.f_month_id.id === null) {
@@ -539,7 +500,7 @@ export default {
         }
       } catch (err) {}
 
-      let year_at = current.getFullYear()
+      let year_at = prevDate.getFullYear()
 
       try {
         if (this.f_year_id.year_at === null) {
@@ -566,8 +527,13 @@ export default {
 
     searchData() {
       const current = new Date()
+      const prevDate = new Date(
+        current.getFullYear(),
+        current.getMonth() - 1,
+        1
+      )
 
-      let month_at = current.getMonth() + 1
+      let month_at = prevDate.getMonth() + 1
 
       try {
         if (this.f_month_id.id === null) {
@@ -579,7 +545,7 @@ export default {
         }
       } catch (err) {}
 
-      let year_at = current.getFullYear()
+      let year_at = prevDate.getFullYear()
 
       try {
         if (this.f_year_id.year_at === null) {
@@ -605,8 +571,13 @@ export default {
 
     async exportData() {
       const current = new Date()
+      const prevDate = new Date(
+        current.getFullYear(),
+        current.getMonth() - 1,
+        1
+      )
 
-      let month_at = current.getMonth() + 1
+      let month_at = prevDate.getMonth() + 1
 
       try {
         if (this.f_month_id.id === null) {
@@ -692,8 +663,13 @@ export default {
 
     async exportDataTemplate() {
       const current = new Date()
+      const prevDate = new Date(
+        current.getFullYear(),
+        current.getMonth() - 1,
+        1
+      )
 
-      let month_at = current.getMonth() + 1
+      let month_at = prevDate.getMonth() + 1
 
       try {
         if (this.f_month_id.id === null) {
@@ -705,7 +681,7 @@ export default {
         }
       } catch (err) {}
 
-      let year_at = current.getFullYear()
+      let year_at = prevDate.getFullYear()
 
       try {
         if (this.f_year_id.year_at === null) {
@@ -779,6 +755,13 @@ export default {
     async submitFileUpload() {
       this.show = 0
       const current = new Date()
+      const prevDate = new Date(
+        current.getFullYear(),
+        current.getMonth() - 1,
+        1
+      )
+      const prevMonth = prevDate.getMonth() + 1
+      const prevYear = prevDate.getFullYear()
 
       let i_year_at = ''
 
@@ -786,13 +769,13 @@ export default {
         if (this.year_id.year_at === null) {
           i_year_at = ''
         } else if (this.year_id.year_at === undefined) {
-          i_year_at = current.getFullYear()
+          i_year_at = prevYear
         } else {
           i_year_at = this.year_id.year_at ? this.year_id.year_at : ''
         }
       } catch (err) {}
 
-      let q_year = i_year_at === '' ? current.getFullYear() : i_year_at
+      let q_year = i_year_at === '' ? prevYear : i_year_at
 
       let i_month_at = ''
 
@@ -800,37 +783,39 @@ export default {
         if (this.month_id.id === null) {
           i_month_at = ''
         } else if (this.month_id.id === undefined) {
-          i_month_at = current.getMonth() + 1
+          i_month_at = prevMonth
         } else {
           i_month_at = this.month_id.id ? this.month_id.id : ''
         }
       } catch (err) {}
 
-      let q_month = i_month_at === '' ? current.getMonth() + 1 : i_month_at
+      let q_month = i_month_at === '' ? prevMonth : i_month_at
 
-      try {
-        const response = await this.$axios.get(
-          `/api/admin/lov_months?q_month_id=${i_month_at}`
-        )
-        this.month_code = response.data.data
-      } catch (error) {
-        this.show = 1
-        this.showErrorToast(error, 'Gagal Validasi Bulan')
-        return
+      let monthCode =
+        this.month_id && this.month_id.name
+          ? this.month_id.name
+          : (this.months || []).find((m) => m.id == i_month_at)?.name
+
+      if (!monthCode) {
+        try {
+          const response = await this.$axios.get(
+            `/api/admin/lov_months?q_month_id=${i_month_at}`
+          )
+          this.month_code = response.data.data
+          monthCode =
+            this.month_code && this.month_code[0] ? this.month_code[0].name : ''
+        } catch (error) {
+          this.show = 1
+          this.showErrorToast(error, 'Gagal Validasi Bulan')
+          return
+        }
       }
 
-      if (!this.month_code || !this.month_code[0]) {
+      if (!monthCode) {
         this.show = 1
         this.showErrorToast('Data bulan tidak ditemukan.', 'Gagal Upload File')
         return
       }
-
-      let monthCode =
-        this.month_id.name !== null &&
-        this.month_id.name !== '' &&
-        this.month_id.name !== undefined
-          ? this.month_id.name
-          : this.month_code[0].name
 
       let checkFile = 'Upload_Dokumen_' + monthCode + '_' + i_year_at + '.xlsx'
 
@@ -908,56 +893,6 @@ export default {
   mounted() {
     if (this.asyncErrorMessage) {
       this.showErrorToast(this.asyncErrorMessage, 'Gagal Memuat Data')
-    }
-
-    const current = new Date()
-
-    if (this.$route.query.q_month_id == null) {
-      this.$axios
-        .get(`/api/admin/lov_months?q_month_id=${current.getMonth() + 1}`)
-        .then((response) => {
-          this.f_month_id = Array.isArray(response.data.data)
-            ? response.data.data[0]
-            : response.data.data
-        })
-        .catch((error) => {
-          this.showErrorToast(error, 'Gagal Memuat Bulan')
-        })
-    } else {
-      this.$axios
-        .get(`/api/admin/lov_months?q_month_id=${this.$route.query.q_month_id}`)
-        .then((response) => {
-          this.f_month_id = Array.isArray(response.data.data)
-            ? response.data.data[0]
-            : response.data.data
-        })
-        .catch((error) => {
-          this.showErrorToast(error, 'Gagal Memuat Bulan')
-        })
-    }
-
-    if (this.$route.query.q_year_id == null) {
-      this.$axios
-        .get(`/api/admin/lov_years?q_year_id=${current.getFullYear()}`)
-        .then((response) => {
-          this.f_year_id = Array.isArray(response.data.data)
-            ? response.data.data[0]
-            : response.data.data
-        })
-        .catch((error) => {
-          this.showErrorToast(error, 'Gagal Memuat Tahun')
-        })
-    } else {
-      this.$axios
-        .get(`/api/admin/lov_years?q_year_id=${this.$route.query.q_year_id}`)
-        .then((response) => {
-          this.f_year_id = Array.isArray(response.data.data)
-            ? response.data.data[0]
-            : response.data.data
-        })
-        .catch((error) => {
-          this.showErrorToast(error, 'Gagal Memuat Tahun')
-        })
     }
   },
 }
