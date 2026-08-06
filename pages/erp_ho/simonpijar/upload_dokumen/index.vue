@@ -18,6 +18,18 @@
           </h3>
           <div class="card-tools"></div>
         </div>
+        <b-tabs v-model="tabIndex" class="px-3 pt-2">
+          <b-tab
+            title="AP"
+            @click="changeTab('AP')"
+            :active="activeTab === 'AP'"
+          ></b-tab>
+          <b-tab
+            title="Direct"
+            @click="changeTab('Direct')"
+            :active="activeTab === 'Direct'"
+          ></b-tab>
+        </b-tabs>
         <div class="card-body">
           <b-card
             border-variant="primary"
@@ -86,8 +98,9 @@
                     name: 'erp_ho-data_warehouse-rna-detail_upload',
                     query: {
                       url: 'erp_ho-simonpijar-upload_dokumen',
-                      tab_header: 'UPLOAD DOKUMEN',
-                      account: 'Upload Dokumen',
+                      tab_header:
+                        'UPLOAD DOKUMEN (' + (this.activeTab || 'AP') + ')',
+                      account: 'Upload Dokumen ' + (this.activeTab || 'AP'),
                       q_month_id: this.period_month,
                       q_year_id: this.period_year,
                     },
@@ -277,6 +290,9 @@ export default {
       years: [],
       months: [],
 
+      activeTab: this.$route.query.q_type ? this.$route.query.q_type : 'AP',
+      tabIndex: this.$route.query.q_type === 'Direct' ? 1 : 0,
+
       show: 1,
 
       fields: [
@@ -339,7 +355,7 @@ export default {
       },
     }
   },
-  watchQuery: ['q', 'page', 'q_year_id', 'q_month_id'],
+  watchQuery: ['q', 'page', 'q_year_id', 'q_month_id', 'q_type'],
 
   async asyncData({ $axios, query }) {
     const current = new Date()
@@ -349,6 +365,7 @@ export default {
 
     let q_month_id = query.q_month_id ? query.q_month_id : month_at
     let q_year_id = query.q_year_id ? query.q_year_id : year_at
+    let q_type = query.q_type ? query.q_type : 'AP'
     let page = query.page ? parseInt(query.page) : ''
     let search = query.q ? query.q : ''
 
@@ -362,7 +379,7 @@ export default {
         $axios.$get(`/api/admin/lov_years`),
         $axios.$get(`/api/admin/lov_months`),
         $axios.$get(
-          `/api/admin/simonpijar?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+          `/api/admin/simonpijar?q=${search}&page=${page}&q_month_id=${q_month_id}&q_year_id=${q_year_id}&q_type=${q_type}`
         ),
       ])
       year_list = yearsRes
@@ -400,6 +417,8 @@ export default {
       f_year_id: f_year_id,
       years: years,
       months: months,
+      activeTab: q_type,
+      tabIndex: q_type === 'Direct' ? 1 : 0,
       asyncErrorMessage: asyncErrorMessage,
     }
   },
@@ -480,6 +499,55 @@ export default {
       this.$refs['my-modal'].hide()
     },
 
+    changeTab(type) {
+      if (this.activeTab === type) return
+      this.activeTab = type
+      this.tabIndex = type === 'Direct' ? 1 : 0
+
+      const current = new Date()
+      const prevDate = new Date(
+        current.getFullYear(),
+        current.getMonth() - 1,
+        1
+      )
+
+      let month_at = prevDate.getMonth() + 1
+      let year_at = prevDate.getFullYear()
+
+      try {
+        if (this.f_month_id.id === null) {
+          this.query_month_id = ''
+        } else if (this.f_month_id.id === undefined) {
+          this.query_month_id = this.$route.query.q_month_id
+        } else {
+          this.query_month_id = this.f_month_id.id ? this.f_month_id.id : ''
+        }
+      } catch (err) {}
+
+      try {
+        if (this.f_year_id.year_at === null) {
+          this.query_year_id = ''
+        } else if (this.f_year_id.year_at === undefined) {
+          this.query_year_id = this.$route.query.q_year_id
+        } else {
+          this.query_year_id = this.f_year_id.year_at
+            ? this.f_year_id.year_at
+            : ''
+        }
+      } catch (err) {}
+
+      this.$router.push({
+        path: this.$route.path,
+        query: {
+          q: this.search,
+          page: 1,
+          q_month_id: this.query_month_id ? this.query_month_id : month_at,
+          q_year_id: this.query_year_id ? this.query_year_id : year_at,
+          q_type: type,
+        },
+      })
+    },
+
     changePage(page) {
       const current = new Date()
       const prevDate = new Date(
@@ -521,6 +589,7 @@ export default {
           page: page,
           q_month_id: this.query_month_id ? this.query_month_id : month_at,
           q_year_id: this.query_year_id ? this.query_year_id : year_at,
+          q_type: this.activeTab || 'AP',
         },
       })
     },
@@ -565,6 +634,7 @@ export default {
           q: this.search,
           q_month_id: this.query_month_id ? this.query_month_id : month_at,
           q_year_id: this.query_year_id ? this.query_year_id : year_at,
+          q_type: this.activeTab || 'AP',
         },
       })
     },
@@ -638,7 +708,11 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/simonpijar/export?q=${this.search}&q_month_id=${i_month}&q_year_id=${i_year}`,
+        url: `/api/admin/simonpijar/export?q=${
+          this.search
+        }&q_month_id=${i_month}&q_year_id=${i_year}&q_type=${
+          this.activeTab || 'AP'
+        }`,
         method: 'GET',
         responseType: 'blob',
         headers: headers,
@@ -649,8 +723,10 @@ export default {
           const link = document.createElement('a')
           link.href = url
           var fileName = month_name
-            ? `Upload Dokumen ${i_year} ${month_name}.xlsx`
-            : `Upload Dokumen ${i_year}.xlsx`
+            ? `Upload Dokumen ${
+                this.activeTab || 'AP'
+              } ${i_year} ${month_name}.xlsx`
+            : `Upload Dokumen ${this.activeTab || 'AP'} ${i_year}.xlsx`
           link.setAttribute('download', fileName)
           document.body.appendChild(link)
           link.click()
@@ -736,7 +812,14 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Upload_Dokumen_' + month_code + '_' + i_year + '.xlsx'
+        var fileName =
+          'Upload_Dokumen_' +
+          (this.activeTab || 'AP') +
+          '_' +
+          month_code +
+          '_' +
+          i_year +
+          '.xlsx'
         link.setAttribute('download', fileName)
         document.body.appendChild(link)
         link.click()
@@ -817,15 +900,25 @@ export default {
         return
       }
 
-      let checkFile = 'Upload_Dokumen_' + monthCode + '_' + i_year_at + '.xlsx'
+      let checkFile1 =
+        'Upload_Dokumen_' +
+        (this.activeTab || 'AP') +
+        '_' +
+        monthCode +
+        '_' +
+        i_year_at +
+        '.xlsx'
+      let checkFile2 = 'Upload_Dokumen_' + monthCode + '_' + i_year_at + '.xlsx'
 
-      if (this.files.name === checkFile) {
+      if (this.files.name === checkFile1 || this.files.name === checkFile2) {
         let formData = new FormData()
         formData.append('upload_file', this.files)
 
         await this.$axios
           .post(
-            `/api/admin/simonpijar?q_month_id=${i_month_at}&q_year_id=${i_year_at}`,
+            `/api/admin/simonpijar?q_month_id=${i_month_at}&q_year_id=${i_year_at}&q_type=${
+              this.activeTab || 'AP'
+            }`,
             formData
           )
           .then((response) => {
@@ -844,7 +937,11 @@ export default {
 
             this.$router.push({
               name: 'erp_ho-simonpijar-upload_dokumen',
-              query: { q_month_id: i_month_at, q_year_id: i_year_at },
+              query: {
+                q_month_id: i_month_at,
+                q_year_id: i_year_at,
+                q_type: this.activeTab || 'AP',
+              },
             })
           })
           .catch((error) => {
@@ -853,7 +950,11 @@ export default {
 
             this.$router.push({
               name: 'erp_ho-simonpijar-upload_dokumen',
-              query: { q_month_id: i_month_at, q_year_id: i_year_at },
+              query: {
+                q_month_id: i_month_at,
+                q_year_id: i_year_at,
+                q_type: this.activeTab || 'AP',
+              },
             })
 
             this.showErrorToast(error, 'Data Gagal Disimpan!')
