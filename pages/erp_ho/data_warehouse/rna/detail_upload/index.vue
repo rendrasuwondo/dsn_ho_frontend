@@ -19,6 +19,7 @@
                         q_month_id: this.$route.query.q_month_id,
                         q_year_id: this.$route.query.q_year_id,
                         q_department_id: this.$route.query.q_department_id,
+                        q_type: this.$route.query.q_type,
                       },
                     }"
                     class="nav-link"
@@ -33,6 +34,7 @@
                       query: {
                         q_month_id: this.$route.query.q_month_id,
                         q_year_id: this.$route.query.q_year_id,
+                        q_type: this.$route.query.q_type,
                       },
                     }"
                     class="nav-link"
@@ -183,24 +185,29 @@ export default {
     let search = query.q ? query.q : ''
 
     //account
-    const account = route.query.account
+    const account = query.account || (route ? route.query.account : '') || ''
 
     //q_year_id
-    const q_year_id = route.query.q_year_id ? route.query.q_year_id : ''
+    const q_year_id =
+      query.q_year_id || (route ? route.query.q_year_id : '') || ''
 
     //q_month_id
-    const q_month_id = route.query.q_month_id ? route.query.q_month_id : ''
+    const q_month_id =
+      query.q_month_id || (route ? route.query.q_month_id : '') || ''
 
     //user_has_role
     const posts = await $axios.$get(
-      `/api/admin/history_upload_file?q=${search}&page=${page}&account=${account}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
+      `/api/admin/history_upload_file?q=${encodeURIComponent(
+        search
+      )}&page=${page}&account=${encodeURIComponent(
+        account
+      )}&q_month_id=${q_month_id}&q_year_id=${q_year_id}`
     )
 
     return {
       posts: posts.data.data,
       rowcount: posts.data.total,
       search: search,
-      rowcount: posts.data.total,
       pagination: posts.data,
     }
   },
@@ -220,6 +227,7 @@ export default {
           tab_header: this.$route.query.tab_header,
           q_month_id: this.$route.query.q_month_id,
           q_year_id: this.$route.query.q_year_id,
+          q_type: this.$route.query.q_type,
         },
       })
     },
@@ -235,6 +243,7 @@ export default {
           tab_header: this.$route.query.tab_header,
           q_month_id: this.$route.query.q_month_id,
           q_year_id: this.$route.query.q_year_id,
+          q_type: this.$route.query.q_type,
         },
       })
     },
