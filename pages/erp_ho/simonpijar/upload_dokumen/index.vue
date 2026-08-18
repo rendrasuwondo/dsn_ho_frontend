@@ -98,10 +98,16 @@
                     name: 'erp_ho-data_warehouse-rna-detail_upload',
                     query: {
                       url: 'erp_ho-simonpijar-upload_dokumen',
-                      tab_header: 'UPLOAD DOKUMEN',
-                      account: 'Upload Dokumen',
+                      tab_header:
+                        'UPLOAD DOKUMEN ' +
+                        (this.activeTab === 'Direct' ? 'DIRECT' : 'AP'),
+                      account:
+                        this.activeTab === 'Direct'
+                          ? 'Upload Dokumen DIRECT'
+                          : 'Upload Dokumen AP',
+                      q_type: this.activeTab || 'AP',
                       q_month_id: this.period_month,
-                      q_year_id: this.period_year,
+                      q_year_id: this.period_year
                     },
                   }"
                 >
