@@ -128,6 +128,7 @@
                             label="year_at"
                             track-by="id"
                             :searchable="true"
+                            :disabled="true"
                           ></multiselect>
                         </b-col>
                       </b-row>
@@ -146,6 +147,7 @@
                             label="name"
                             track-by="id"
                             :searchable="true"
+                            :disabled="true"
                           ></multiselect>
                         </b-col>
                       </b-row>
@@ -448,7 +450,7 @@ export default {
           title: defaultTitle,
           variant: 'danger',
           solid: true,
-          autoHideDelay: 5000,
+          autoHideDelay: 8000,
           appendToast: true,
         })
       } else if (this.$swal) {
@@ -459,7 +461,8 @@ export default {
           title: defaultTitle,
           text: message,
           showConfirmButton: false,
-          timer: 4000,
+          timer: 8000,
+          timerProgressBar: true,
         })
       }
     },
@@ -968,8 +971,10 @@ export default {
               title: 'ERROR!',
               text: error?.response?.data?.message || 'Data Gagal Disimpan!',
               icon: 'error',
-              showConfirmButton: false,
-              timer: 2000,
+              showConfirmButton: true,
+              confirmButtonColor: '#3085d6',
+              timer: 8000,
+              timerProgressBar: true,
             })
           })
       } else {
@@ -989,8 +994,10 @@ export default {
           title: 'ERROR!',
           text: errMsg,
           icon: 'error',
-          showConfirmButton: false,
-          timer: 3500,
+          showConfirmButton: true,
+          confirmButtonColor: '#3085d6',
+          timer: 8000,
+          timerProgressBar: true,
         })
       }
     },
