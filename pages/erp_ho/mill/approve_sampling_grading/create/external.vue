@@ -36,6 +36,16 @@
             </div>
 
             <div class="form-group">
+              <label>Ring</label>
+              <input
+                type="text"
+                v-model="field.ring"
+                placeholder="Masukkan Ring"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
               <label>Supplier</label>
               <multiselect
                 v-model="field.supplier_id"
@@ -264,6 +274,7 @@ export default {
 
       field: {
         npb: '',
+        ring: '',
         supplier_id: {
           supplier: '',
           lifnr: '',
@@ -376,6 +387,7 @@ export default {
           ffb_source: 'external',
           estate: this.field.supplier_id.lifnr,
           npb: this.field.npb,
+          ring: this.field.ring,
           loose_fruit: this.field.loose_fruit,
           loose_fruit_npb: this.field.loose_fruit_npb,
           qty_unripe: this.field.qty_unripe,
