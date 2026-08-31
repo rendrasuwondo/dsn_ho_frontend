@@ -36,6 +36,16 @@
             </div>
 
             <div class="form-group">
+              <label>Ring</label>
+              <input
+                type="text"
+                v-model="field.ring"
+                placeholder="Masukkan Ring"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
               <label>Supplier</label>
               <multiselect
                 v-model="field.supplier_id"
@@ -256,6 +266,7 @@ export default {
 
       field: {
         npb: '',
+        ring: '',
         supplier_id: {
           supplier: '',
           lifnr: '',
@@ -316,6 +327,7 @@ export default {
         this.field.supplier_id.supplier = response.data.data.supplier
         this.field.supplier_id.lifnr = response.data.data.lifnr
         this.field.npb = response.data.data.npb
+        this.field.ring = response.data.data.ring
         this.field.location_id = response.data.data.location
         this.field.loose_fruit = response.data.data.loose_fruit
         this.field.loose_fruit_npb = response.data.data.loose_fruit_npb
@@ -388,6 +400,7 @@ export default {
         await this.$axios.put(`/api/admin/spot-cek/${this.$route.params.id}`, {
           ffb_source: 'external',
           estate: this.field.supplier_id.lifnr,
+          ring: this.field.ring,
           loose_fruit: this.field.loose_fruit,
           loose_fruit_npb: this.field.loose_fruit_npb,
           qty_unripe: this.field.qty_unripe,
