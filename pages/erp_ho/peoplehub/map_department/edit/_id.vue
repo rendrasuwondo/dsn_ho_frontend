@@ -63,12 +63,38 @@
 
             <div class="form-group">
               <label>Kode Department</label>
-              <input
-                type="text"
-                v-model="field.department_code"
-                placeholder=""
-                class="form-control"
-              />
+              <multiselect
+                v-model="selected_department"
+                :options="department_options"
+                label="label"
+                track-by="code"
+                :searchable="true"
+                placeholder="Pilih Kode Department"
+                @input="val => { field.department_code = val ? (val.code || val.value || '') : '' }"
+              ></multiselect>
+              <div v-if="validation.department_code" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.department_code[0]
+                }}</b-alert>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>RU</label>
+              <multiselect
+                v-model="selected_ru"
+                :options="ru_options"
+                label="label"
+                track-by="value"
+                :searchable="true"
+                placeholder="Pilih RU"
+                @input="val => { field.ru = val ? (val.prio_urg || val.value || '') : '' }"
+              ></multiselect>
+              <div v-if="validation.ru" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.ru[0]
+                }}</b-alert>
+              </div>
             </div>
 
             <div class="form-group">
@@ -183,6 +209,7 @@ export default {
         organization_code_peoplehub: '',
         organization_name_peoplehub: '',
         department_code: '',
+        ru: '',
         is_active: '',
         description: '',
         created_at: '',
@@ -191,6 +218,11 @@ export default {
         updated_by: '',
       },
 
+      department_options: [],
+      ru_options: [],
+      selected_department: null,
+      selected_ru: null,
+
       //state validation
       validation: [],
       show: 1,
@@ -198,6 +230,22 @@ export default {
   },
 
   mounted() {
+    // Data Department Options
+    this.$axios
+      .get('/api/admin/map_department-department-options')
+      .then((response) => {
+        this.department_options = response.data.data
+        this.syncSelectedDepartment()
+      })
+
+    // Data RU Options
+    this.$axios
+      .get('/api/admin/map_department-ru-options')
+      .then((response) => {
+        this.ru_options = response.data.data
+        this.syncSelectedRu()
+      })
+
     //get data field by ID
     this.$axios
       .get(`/api/admin/map_department/${this.$route.params.id}`)
@@ -209,17 +257,43 @@ export default {
         this.field.organization_name_peoplehub =
           response.data.data.organization_name_peoplehub
         this.field.department_code = response.data.data.department_code
+        this.field.ru = response.data.data.ru
         this.field.is_active = response.data.data.is_active
         this.field.description = response.data.data.description
         this.field.created_at = response.data.data.created_at
         this.field.created_by = response.data.data.created_by
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
+
+        this.syncSelectedDepartment()
+        this.syncSelectedRu()
       })
     this.$refs.code.focus()
   },
 
   methods: {
+    syncSelectedDepartment() {
+      if (this.field.department_code && this.department_options.length) {
+        this.selected_department = this.department_options.find(
+          (item) => item.code == this.field.department_code || item.value == this.field.department_code || item.department == this.field.department_code
+        ) || { code: this.field.department_code, value: this.field.department_code, label: this.field.department_code }
+        if (this.selected_department && this.selected_department.code) {
+          this.field.department_code = this.selected_department.code
+        }
+      }
+    },
+
+    syncSelectedRu() {
+      if (this.field.ru && this.ru_options.length) {
+        this.selected_ru = this.ru_options.find(
+          (item) => item.prio_urg == this.field.ru || item.value == this.field.ru
+        ) || { value: this.field.ru, prio_urg: this.field.ru, label: this.field.ru }
+        if (this.selected_ru && (this.selected_ru.prio_urg || this.selected_ru.value)) {
+          this.field.ru = this.selected_ru.prio_urg || this.selected_ru.value
+        }
+      }
+    },
+
     back() {
       this.$router.push({
         name: 'erp_ho-peoplehub-map_location_peoplehub',
@@ -232,6 +306,24 @@ export default {
       e.preventDefault()
       this.show = 0
 
+      let deptCode = ''
+      if (this.selected_department && typeof this.selected_department === 'object') {
+        deptCode = this.selected_department.code || this.selected_department.value || ''
+      } else if (this.selected_department) {
+        deptCode = this.selected_department
+      } else {
+        deptCode = this.field.department_code || ''
+      }
+
+      let ruVal = ''
+      if (this.selected_ru && typeof this.selected_ru === 'object') {
+        ruVal = this.selected_ru.prio_urg || this.selected_ru.value || ''
+      } else if (this.selected_ru) {
+        ruVal = this.selected_ru
+      } else {
+        ruVal = this.field.ru || ''
+      }
+
       //send data ke Rest API untuk update
       await this.$axios
         .put(`/api/admin/map_department/${this.$route.params.id}`, {
@@ -239,7 +331,8 @@ export default {
           sbu: this.field.sbu,
           organization_code_peoplehub: this.field.organization_code_peoplehub,
           organization_name_peoplehub: this.field.organization_name_peoplehub,
-          department_code: this.field.department_code,
+          department_code: deptCode,
+          ru: ruVal,
           is_active: this.field.is_active,
           description: this.field.description,
           created_at: this.field.created_at,

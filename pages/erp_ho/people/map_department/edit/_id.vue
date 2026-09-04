@@ -75,11 +75,6 @@
                 placeholder=""
                 class="form-control"
               />
-              <div v-if="validation.department_code" class="mt-2">
-                <b-alert show variant="danger">{{
-                  validation.department_code[0]
-                }}</b-alert>
-              </div>
             </div>
 
            <div class="form-group">
@@ -209,7 +204,7 @@ export default {
   mounted() {
     //get data field by ID
     this.$axios
-      .get(`/api/admin/map_department/${this.$route.params.id}`)
+      .get(`/api/admin/map_department_people/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
         this.field.sbu = response.data.data.sbu
@@ -222,8 +217,6 @@ export default {
         this.field.created_by = response.data.data.created_by
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
-      
-        
       })
     this.$refs.code.focus()
   },

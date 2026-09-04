@@ -146,6 +146,11 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
+          label: 'RU',
+          key: 'ru',
+          tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
+        },
+        {
           label: 'Aktif',
           key: 'is_active_code',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
