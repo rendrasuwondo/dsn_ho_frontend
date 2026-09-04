@@ -71,15 +71,36 @@
 
             <div class="form-group">
               <label>Kode Department</label>
-              <input
-                type="text"
-                v-model="field.department_code"
-                placeholder="Masukan Nama Kode Department"
-                class="form-control"
-              />
+              <multiselect
+                v-model="selected_department"
+                :options="department_options"
+                label="label"
+                track-by="code"
+                :searchable="true"
+                placeholder="Pilih Kode Department"
+                @input="val => { field.department_code = val ? (val.code || val.value || '') : '' }"
+              ></multiselect>
               <div v-if="validation.department_code" class="mt-2">
                 <b-alert show variant="danger">{{
                   validation.department_code[0]
+                }}</b-alert>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>RU</label>
+              <multiselect
+                v-model="selected_ru"
+                :options="ru_options"
+                label="label"
+                track-by="value"
+                :searchable="true"
+                placeholder="Pilih RU"
+                @input="val => { field.ru = val ? (val.prio_urg || val.value || '') : '' }"
+              ></multiselect>
+              <div v-if="validation.ru" class="mt-2">
+                <b-alert show variant="danger">{{
+                  validation.ru[0]
                 }}</b-alert>
               </div>
             </div>
@@ -203,6 +224,7 @@ export default {
         organization_code_peoplehub: '',
         organization_name_peoplehub: '',
         department_code: '',
+        ru: '',
         is_active: 'Y',
         description:'',
         created_at: '',
@@ -210,6 +232,11 @@ export default {
         updated_at: '',
         updated_by: '',
       },
+
+      department_options: [],
+      ru_options: [],
+      selected_department: null,
+      selected_ru: null,
 
       //state validation
       validation: [],
@@ -226,6 +253,20 @@ export default {
       this.$auth.user.employee.nik + '-' + this.$auth.user.employee.name
 
     this.$refs.code.focus()
+
+    // Data Department Options
+    this.$axios
+      .get('/api/admin/map_department-department-options')
+      .then((response) => {
+        this.department_options = response.data.data
+      })
+
+    // Data RU Options
+    this.$axios
+      .get('/api/admin/map_department-ru-options')
+      .then((response) => {
+        this.ru_options = response.data.data
+      })
   },
 
   methods: {
@@ -248,12 +289,31 @@ export default {
     async storePost() {
       this.show = 0
 
+      let deptCode = ''
+      if (this.selected_department && typeof this.selected_department === 'object') {
+        deptCode = this.selected_department.code || this.selected_department.value || ''
+      } else if (this.selected_department) {
+        deptCode = this.selected_department
+      } else {
+        deptCode = this.field.department_code || ''
+      }
+
+      let ruVal = ''
+      if (this.selected_ru && typeof this.selected_ru === 'object') {
+        ruVal = this.selected_ru.prio_urg || this.selected_ru.value || ''
+      } else if (this.selected_ru) {
+        ruVal = this.selected_ru
+      } else {
+        ruVal = this.field.ru || ''
+      }
+
       //define formData
       let formData = new FormData()
       formData.append('sbu', this.field.sbu)
       formData.append('organization_code_peoplehub', this.field.organization_code_peoplehub)
       formData.append('organization_name_peoplehub', this.field.organization_name_peoplehub)
-      formData.append('department_code', this.field.department_code)
+      formData.append('department_code', deptCode)
+      formData.append('ru', ruVal)
       formData.append('is_active', this.field.is_active)
       formData.append('description', this.field.description)
       formData.append('created_at', this.field.created_at)
