@@ -224,7 +224,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: 'admin-site',
+        name: 'erp_ho-admin-site',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -249,8 +249,8 @@ export default {
       formData.append('description', this.field.description)
       formData.append('created_at', this.field.created_at)
       formData.append('created_by', this.field.created_by)
-      formData.append('update_at', this.field.update_at)
-      formData.append('udpate_by', this.field.udpate_by)
+      formData.append('updated_at', this.field.updated_at)
+      formData.append('updated_by', this.field.updated_by)
 
       //sending data to server
       await this.$axios
@@ -267,7 +267,7 @@ export default {
 
           //redirect, if success store data
           this.$router.push({
-            name: 'admin-site',
+            name: 'erp_ho-admin-site',
           })
         })
         .catch((error) => {
