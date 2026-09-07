@@ -17,7 +17,7 @@
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <nuxt-link
-                  :to="{ name: 'admin-site-create' }"
+                  :to="{ name: 'erp_ho-admin-site-create' }"
                   class="btn btn-info btn-sm"
                   style="padding-top: 8px"
                   title="Tambah"
@@ -60,7 +60,7 @@
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'admin-site-edit-id',
+                  name: 'erp_ho-admin-site-edit-id',
                   params: { id: row.item.id },
                 }"
                 variant="link"
@@ -77,17 +77,17 @@
                 ><i class="fa fa-trash"></i
               ></b-button>
             </template>
-            <template v-slot:cell(detail)="row">
+            <template v-slot:cell(location)="row">
               <b-button
                 :to="{
-                  name: 'admin-location-id',
+                  name: 'erp_ho-admin-location-id',
                   params: { id: row.item.id },
                 }"
-                variant="link"
-                size=""
-                title="Detail"
+                variant="info"
+                size="sm"
+                title="Kelola Lokasi"
               >
-                <i class="fa fa-file-alt"></i>
+                <i class="fa fa-map-marker-alt"></i> Lokasi
               </b-button>
             </template>
           </b-table>
@@ -131,9 +131,9 @@ export default {
           tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
-          label: 'Detail',
-          key: 'detail',
-          tdClass: 'align-middle text-center',
+          label: 'Lokasi',
+          key: 'location',
+          tdClass: 'align-middle text-center text-nowrap nameOfTheClass',
         },
         {
           label: 'Kode',

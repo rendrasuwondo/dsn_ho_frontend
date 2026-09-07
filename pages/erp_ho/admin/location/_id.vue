@@ -11,7 +11,7 @@
             <table>
               <tr>
                 <td>
-                  <nuxt-link :to="{ name: 'admin-site' }" class="nav-link">
+                  <nuxt-link :to="{ name: 'erp_ho-admin-site' }" class="nav-link">
                     <i class="nav-icon fas fa-map-marker-alt"></i>
                     Site
                   </nuxt-link>
@@ -38,7 +38,7 @@
               <div class="input-group-prepend">
                 <nuxt-link
                   :to="{
-                    name: 'admin-location-create-id',
+                    name: 'erp_ho-admin-location-create-id',
                     params: { id: site_id, r: 1 },
                   }"
                   class="btn btn-info btn-sm"
@@ -59,7 +59,7 @@
                 class="form-control"
                 v-model="search"
                 @keypress.enter="searchData"
-                placeholder="cari berdasarkan nama tag"
+                placeholder="Cari kode atau nama..."
               />
               <div class="input-group-append">
                 <button @click="searchData" class="btn btn-info">
@@ -82,13 +82,10 @@
             :fields="fields"
             show-empty
           >
-            <template v-slot:cell(comments)="row">
-              <i class="fa fa-comments"></i> {{ row.item.comments.length }}
-            </template>
             <template v-slot:cell(actions)="row">
               <b-button
                 :to="{
-                  name: 'admin-location-edit-id',
+                  name: 'erp_ho-admin-location-edit-id',
                   params: { id: row.item.id, r: 1 },
                 }"
                 variant="link"
@@ -105,18 +102,6 @@
                 @click="deletePost(row.item.id)"
                 ><i class="fa fa-trash"></i
               ></b-button>
-            </template>
-            <template v-slot:cell(detail)="row">
-              <b-button
-                :to="{
-                  name: 'admin-location',
-                  params: { id: row.item.id },
-                }"
-                variant=""
-                size="sm"
-              >
-                Detail<i class="fa fa-plus-circle"></i>
-              </b-button>
             </template>
           </b-table>
 
@@ -304,7 +289,7 @@ export default {
       }
 
       this.$axios({
-        url: `/api/admin/location/export`,
+        url: `/api/admin/location/export?site_id=${this.$route.params.id}`,
         method: 'GET',
         responseType: 'blob',
         headers: headers, // important
@@ -313,7 +298,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        var fileName = 'Location.xls'
+        var fileName = 'Location.xlsx'
         link.setAttribute('download', fileName) //or any other extension
         document.body.appendChild(link)
         link.click()

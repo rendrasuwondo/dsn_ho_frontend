@@ -202,15 +202,6 @@ export default {
     this.$refs.code.focus()
 
     this.$axios
-      .get(`/api/admin/master/site/${this.$route.params.id}`)
-
-      .then((response) => {
-        //  console.log(response.data.data.afdeling_id)
-        this.id_site = response.data.data.id
-
-      })
-
-    this.$axios
       .get(`/api/admin/location/${this.$route.params.id}`)
       .then((response) => {
         //data yang diambil
@@ -224,6 +215,13 @@ export default {
         this.field.updated_at = response.data.data.updated_at
         this.field.updated_by = response.data.data.updated_by
 
+        if (this.field.site_id) {
+          this.$axios
+            .get(`/api/admin/master/site/${this.field.site_id}`)
+            .then((res) => {
+              this.id_site = res.data.data.id
+            })
+        }
       })
   },
 
@@ -239,7 +237,7 @@ export default {
 
     back() {
       this.$router.push({
-        name: 'admin-location-id',
+        name: 'erp_ho-admin-location-id',
         params: { id: this.field.site_id, r: 1 },
       })
     },
@@ -250,7 +248,7 @@ export default {
 
       //send data ke Rest API untuk update
       await this.$axios
-        .put(`api/admin/location/${this.$route.params.id}`, {
+        .put(`/api/admin/location/${this.$route.params.id}`, {
           //data yang dikirim
           site_id: this.field.site_id,
           code: this.field.code,

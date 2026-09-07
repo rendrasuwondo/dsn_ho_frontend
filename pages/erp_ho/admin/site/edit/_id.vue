@@ -191,7 +191,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: 'admin-site',
+        name: 'erp_ho-admin-site',
         params: { id: this.$route.params.id, r: 1 },
       })
     },
@@ -224,7 +224,7 @@ export default {
           })
           //redirect ke route "post"
           this.$router.push({
-            name: 'admin-site',
+            name: 'erp_ho-admin-site',
           })
         })
         .catch((error) => {
