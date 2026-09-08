@@ -235,7 +235,11 @@ export default {
         { key: 'npb', label: 'NPB' },
         { key: 'driverName', label: 'Driver' },
         { key: 'transportVehiclePlateNo', label: 'Plat' },
-        { key: 'originWeighOutKg', label: 'Ton' },
+        {
+          key: 'originWeighOutKg',
+          label: 'Ton',
+          tdClass: 'text-right',
+        },
         { key: 'janjang', label: 'Janjang' },
       ],
       dateStart: formatDate(yesterday), // Default to yesterday
@@ -677,6 +681,7 @@ export default {
   display: none;
 }
 .b-table td:nth-child(7),
+.b-table td:nth-child(8),
 .b-table td:nth-child(9),
 .b-table td:nth-child(10),
 .b-table td:nth-child(11),

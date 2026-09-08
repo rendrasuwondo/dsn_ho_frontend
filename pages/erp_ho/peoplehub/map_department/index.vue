@@ -141,13 +141,13 @@ export default {
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'Department Name',
-          key: 'department_name',
+          label: 'RU',
+          key: 'ru',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
-          label: 'RU',
-          key: 'ru',
+          label: 'Department Name',
+          key: 'department_name',
           tdClass: 'align-middle text-left text-nowrap nameOfTheClass',
         },
         {
