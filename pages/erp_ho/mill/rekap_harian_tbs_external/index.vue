@@ -85,6 +85,17 @@
                       ></multiselect>
                     </b-col>
                   </b-row>
+                  <b-row class="mt-2 align-items-center">
+                    <b-col cols="3">Pencarian</b-col>
+                    <b-col cols="9">
+                      <b-form-input
+                        v-model.trim="search"
+                        type="search"
+                        placeholder="Driver, no. bontrip, no. tiket timbang"
+                        @keyup.enter="searchData"
+                      ></b-form-input>
+                    </b-col>
+                  </b-row>
                 </b-col>
               </b-row>
 
@@ -93,7 +104,7 @@
                   <b-button
                     class="btn btn-info px-4"
                     variant="primary"
-                    @click="applyFilters"
+                    @click="searchData"
                   >
                     Apply Filters
                   </b-button>
@@ -422,6 +433,7 @@ export default {
       suppliers: [],
       pks_id: null,
       pks_options: [],
+      search: '',
       posts: [],
       pagination: { current_page: 1, per_page: 100, total: 0 },
       rowcount: 0,
@@ -592,6 +604,10 @@ export default {
           params.pks = this.pks_id.code
         }
 
+        if (this.search) {
+          params.search = this.search
+        }
+
         const response = await this.$axios.$get(
           '/api/admin/rekap_harian_tbs_external',
           { params }
@@ -630,6 +646,10 @@ export default {
         query.pks = this.pks_id.code
       }
 
+      if (this.search) {
+        query.search = this.search
+      }
+
       // 2. Gunakan pendekatan push yang lebih aman tanpa .catch berantai
       const currentQueryStr = JSON.stringify(this.$route.query)
       const newQueryStr = JSON.stringify(query)
@@ -647,6 +667,11 @@ export default {
 
       // 3. Tarik data baru
       await this.fetchData()
+    },
+
+    searchData() {
+      this.pagination.current_page = 1
+      this.applyFilters()
     },
 
     changePage(page) {
@@ -671,6 +696,10 @@ export default {
 
       if (this.pks_id && this.pks_id.code) {
         queryParams.append('pks', this.pks_id.code)
+      }
+
+      if (this.search) {
+        queryParams.append('search', this.search)
       }
 
       const fileName = `Rekap_Harian_Tbs_External_${this.dateStart}_sd_${this.dateEnd}.xlsx`
