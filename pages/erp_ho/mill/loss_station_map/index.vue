@@ -142,6 +142,7 @@
                 label="name"
                 track-by="id"
                 :searchable="true"
+                :loading="isLoadingProductGroup"
                 placeholder="Pilih Product Group"
               ></multiselect>
             </b-form-group>
@@ -206,8 +207,9 @@ export default {
       rowcount: 0,
 
       seqnoOptionsByProduct: {},
-      productGroupOptions: [],
+      productGroupOptionsByProduct: {},
       isLoadingSeqno: false,
+      isLoadingProductGroup: false,
 
       // Modal State
       editMode: false,
@@ -252,6 +254,11 @@ export default {
     seqnoOptions() {
       return this.seqnoOptionsByProduct[this.currentTab.dim_product_id] || []
     },
+    productGroupOptions() {
+      return (
+        this.productGroupOptionsByProduct[this.currentTab.dim_product_id] || []
+      )
+    },
   },
   watch: {
     '$route.query': {
@@ -276,13 +283,23 @@ export default {
       return option.txt ? `${option.SEQNO} - ${option.txt}` : `${option.SEQNO}`
     },
     async loadProductGroups() {
+      const dimProductId = this.currentTab.dim_product_id
+      if (this.productGroupOptionsByProduct[dimProductId]) return
+
+      this.isLoadingProductGroup = true
       try {
         const response = await this.$axios.$get(
-          '/api/admin/loss_station_map/lov_product_groups'
+          `/api/admin/loss_station_map/lov_product_groups?dim_product_id=${dimProductId}`
         )
-        this.productGroupOptions = response.data || []
+        this.$set(
+          this.productGroupOptionsByProduct,
+          dimProductId,
+          response.data || []
+        )
       } catch (error) {
         console.error('Error loading product group dropdown', error)
+      } finally {
+        this.isLoadingProductGroup = false
       }
     },
     async loadSeqno() {
@@ -324,6 +341,7 @@ export default {
     },
 
     changeTab() {
+      this.loadProductGroups()
       this.loadSeqno()
       if (Object.keys(this.$route.query).length > 0) {
         // fetchPosts dipanggil oleh watcher $route.query
