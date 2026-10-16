@@ -58,14 +58,6 @@
             show-empty
             :busy="loading"
           >
-            <template #cell(index)="data">
-              {{
-                data.index +
-                1 +
-                (pagination.current_page - 1) * pagination.per_page
-              }}
-            </template>
-
             <template #cell(actions)="data">
               <button
                 class="btn btn-primary btn-sm mr-1"
@@ -237,12 +229,6 @@ export default {
           tdClass: 'text-center text-nowrap',
         },
         {
-          key: 'index',
-          label: 'No',
-          thClass: 'text-center',
-          tdClass: 'text-center',
-        },
-        {
           key: 'seqno',
           label: 'Code',
           thClass: 'text-center',
@@ -256,7 +242,6 @@ export default {
           thClass: 'text-center',
           tdClass: 'text-center',
         },
-        { key: 'description', label: 'Deskripsi' },
       ],
     }
   },
