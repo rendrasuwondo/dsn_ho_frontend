@@ -30,7 +30,14 @@
                 title="Tambah"
                 @click="showModal(false)"
               >
-                <i class="fa fa-plus-circle"></i> Tambah
+                <i class="fa fa-plus-circle"></i>
+              </button>
+              <button
+                title="Export To Excel"
+                class="btn btn-info"
+                @click="exportData"
+              >
+                <i class="fa fa-file-excel"></i>
               </button>
             </div>
             <input
@@ -237,7 +244,6 @@ export default {
           tdClass: 'text-center',
         },
         { key: 'PRODUCT_NAME', label: 'Name' },
-        { key: 'product_groups_name', label: 'Fossnir Product Group' },
         {
           key: 'is_active_code',
           label: 'Aktif',
@@ -340,6 +346,25 @@ export default {
       }
     },
 
+    exportData() {
+      this.$axios({
+        url: `/api/admin/loss_station_map-export?dim_product_id=${this.currentTab.dim_product_id}&q=${this.search}`,
+        method: 'get',
+        responseType: 'blob',
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute(
+          'download',
+          `Map_Loss_Station_${this.currentTab.title.replace(/ /g, '_')}.xlsx`
+        )
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+      })
+    },
     changeTab() {
       this.loadProductGroups()
       this.loadSeqno()
