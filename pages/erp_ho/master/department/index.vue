@@ -272,6 +272,7 @@
                 track-by="id"
                 label="name"
                 @search-change="searchParent"
+                @open="searchParent('')"
                 :internal-search="false"
                 :clear-on-select="false"
               ></multiselect>
@@ -711,7 +712,9 @@ export default {
             { params: { q: query } }
           )
           this.optParents = res.data
-        } catch (e) {}
+        } catch (e) {
+          console.error('Error loading parent department options', e)
+        }
         this.loadingParent = false
       }, 500)
     },
