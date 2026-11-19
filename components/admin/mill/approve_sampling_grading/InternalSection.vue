@@ -266,6 +266,7 @@
           </div>
           <!-- table -->
           <b-table
+            :class="{ 'sampah-collapsed': !sampahExpanded }"
             :fields="filteredFields"
             :items="posts"
             small
@@ -274,76 +275,119 @@
             bordered
             hover
             :tbody-tr-class="rowClass"
+            thead-tr-class="d-none"
           >
             <!-- Custom grouped header -->
             <template v-slot:thead-top>
               <tr>
-                <!-- <th rowspan="2">No</th> -->
-                <th rowspan="2">
+                <!-- <th rowspan="3">No</th> -->
+                <th rowspan="3">
                   <input
                     type="checkbox"
                     @change="toggleSelectAll"
                     v-model="selectAll"
                   />
                 </th>
-                <th rowspan="2">Actions</th>
-                <th rowspan="2">Status</th>
-                <th rowspan="2">Tanggal</th>
-                <th rowspan="2">OER</th>
-                <th rowspan="2">PT</th>
-                <th rowspan="2">Estate</th>
-                <th rowspan="2">Afd</th>
-                <th rowspan="2">Driver</th>
-                <th rowspan="2">Tonase Timbang</th>
+                <th rowspan="3">Actions</th>
+                <th rowspan="3">Status</th>
+                <th rowspan="3">Tanggal</th>
+                <th rowspan="3">OER</th>
+                <th rowspan="3">PT</th>
+                <th rowspan="3">Estate</th>
+                <th rowspan="3">Afd</th>
+                <th rowspan="3">Driver</th>
+                <th rowspan="3">Tonase Timbang</th>
                 <th colspan="4" class="text-center">Total Janjang</th>
-                <th rowspan="2">BJR</th>
+                <th rowspan="3">BJR</th>
                 <th colspan="10" class="text-center">Kriteria TBS Normal</th>
                 <th v-if="showSickFruit" colspan="6" class="text-center">
                   Kriteria TBS Abnormal
                 </th>
-                <th v-if="showSickFruit" rowspan="2">Tangkai Panjang</th>
+                <th v-if="showSickFruit" rowspan="3">Tangkai Panjang</th>
                 <th colspan="5" class="text-center">Berondolan</th>
-                <th rowspan="2">Hutang Berondol(Kg)</th>
+                <th rowspan="3">Hutang Berondol(Kg)</th>
                 <th colspan="2">Bayar Berondolan</th>
-                <th colspan="2">Sampah</th>
-                <th rowspan="2">Batu(Kg)</th>
-                <th rowspan="2">No. NPB</th>
+                <th
+                  :colspan="sampahExpanded ? 8 : 2"
+                  class="text-center sampah-group-header"
+                >
+                  Sampah
+                  <b-button
+                    size="sm"
+                    variant="primary"
+                    class="ml-1 py-0 px-1 sampah-toggle"
+                    :title="
+                      sampahExpanded
+                        ? 'Sembunyikan detail sampah'
+                        : 'Tampilkan detail sampah (Tangkai, Berondolan, Batu)'
+                    "
+                    @click="sampahExpanded = !sampahExpanded"
+                  >
+                    <i
+                      :class="sampahExpanded ? 'fa fa-minus' : 'fa fa-plus'"
+                    ></i>
+                  </b-button>
+                </th>
+                <th rowspan="3">Foto Sampah</th>
+                <th rowspan="3">No. NPB</th>
               </tr>
               <tr>
-                <th>SPB</th>
-                <th>Aktual</th>
-                <th>Var(Jjg)</th>
-                <th>Var(%)</th>
+                <th rowspan="2">SPB</th>
+                <th rowspan="2">Aktual</th>
+                <th rowspan="2">Var(Jjg)</th>
+                <th rowspan="2">Var(%)</th>
 
-                <th>Unripe</th>
-                <th>%</th>
-                <th>Under</th>
-                <th>%</th>
-                <th>Ripe</th>
-                <th>%</th>
-                <th>Over</th>
-                <th>%</th>
-                <th>Jangkos</th>
-                <th>%</th>
+                <th rowspan="2">Unripe</th>
+                <th rowspan="2">%</th>
+                <th rowspan="2">Under</th>
+                <th rowspan="2">%</th>
+                <th rowspan="2">Ripe</th>
+                <th rowspan="2">%</th>
+                <th rowspan="2">Over</th>
+                <th rowspan="2">%</th>
+                <th rowspan="2">Jangkos</th>
+                <th rowspan="2">%</th>
 
-                <th v-if="showSickFruit">Ptherno</th>
-                <th v-if="showSickFruit">%</th>
-                <th v-if="showSickFruit">Hard B.</th>
-                <th v-if="showSickFruit">%</th>
-                <th v-if="showSickFruit">Unripe Fruit Fall</th>
-                <th v-if="showSickFruit">%</th>
+                <th rowspan="2" v-if="showSickFruit">Ptherno</th>
+                <th rowspan="2" v-if="showSickFruit">%</th>
+                <th rowspan="2" v-if="showSickFruit">Hard B.</th>
+                <th rowspan="2" v-if="showSickFruit">%</th>
+                <th rowspan="2" v-if="showSickFruit">Unripe Fruit Fall</th>
+                <th rowspan="2" v-if="showSickFruit">%</th>
 
-                <th>SPB</th>
-                <th>Aktual</th>
-                <th>Aktual(%)</th>
-                <th>Var(Kg)</th>
-                <th>Var(%)</th>
+                <th rowspan="2">SPB</th>
+                <th rowspan="2">Aktual</th>
+                <th rowspan="2">Aktual(%)</th>
+                <th rowspan="2">Var(Kg)</th>
+                <th rowspan="2">Var(%)</th>
 
-                <th>Bayar</th>
-                <th>Setelah (%)</th>
+                <th rowspan="2">Bayar</th>
+                <th rowspan="2">Setelah (%)</th>
 
-                <th>Kg</th>
-                <th>%</th>
+                <template v-if="sampahExpanded">
+                  <th colspan="2" class="text-center sampah-sub-header">
+                    Tangkai
+                  </th>
+                  <th colspan="2" class="text-center sampah-sub-header">
+                    Berondolan
+                  </th>
+                  <th colspan="2" class="text-center sampah-sub-header">
+                    Batu
+                  </th>
+                </template>
+                <th colspan="2" class="text-center sampah-total-cell">Total</th>
+              </tr>
+              <tr class="sampah-unit-row">
+                <template v-if="sampahExpanded">
+                  <th class="sampah-sub-header">Kg</th>
+                  <th class="sampah-sub-header">%</th>
+                  <th class="sampah-sub-header">Kg</th>
+                  <th class="sampah-sub-header">%</th>
+                  <th class="sampah-sub-header">Kg</th>
+                  <th class="sampah-sub-header">%</th>
+                </template>
+                <th class="sampah-total-cell">Kg</th>
+                <th class="sampah-total-cell">%</th>
               </tr>
             </template>
 
@@ -539,14 +583,65 @@
               </span>
             </template>
             <template #cell(qty_garbage)="row">
-              <span>
+              <a
+                v-if="row.item.img_sampah_kotoran"
+                :href="photoUrl(row.item.img_sampah_kotoran)"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-primary"
+              >
+                {{ formatToTwoDecimals(row.item.qty_garbage) }}
+              </a>
+              <span v-else>
                 {{ formatToTwoDecimals(row.item.qty_garbage) }}
               </span>
             </template>
-            <template #cell(percentage_garbage)="row">
-              <span>
-                {{ formatToTwoDecimals(row.item.percentage_garbage) }}
+            <template #cell(sampah_di_berondolan)="row">
+              <a
+                v-if="row.item.img_sampah_di_berondolan"
+                :href="photoUrl(row.item.img_sampah_di_berondolan)"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-primary"
+              >
+                {{ formatToTwoDecimals(row.item.sampah_di_berondolan) }}
+              </a>
+              <span v-else>
+                {{ formatToTwoDecimals(row.item.sampah_di_berondolan) }}
               </span>
+            </template>
+            <template #cell(rock)="row">
+              <a
+                v-if="row.item.img_rock"
+                :href="photoUrl(row.item.img_rock)"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-primary"
+              >
+                {{ formatToTwoDecimals(row.item.rock) }}
+              </a>
+              <span v-else>
+                {{ formatToTwoDecimals(row.item.rock) }}
+              </span>
+            </template>
+            <template #cell(total_sampah)="row">
+              <b>{{ formatToTwoDecimals(row.item.total_sampah) }}</b>
+            </template>
+            <template #cell(percentage_total_sampah)="row">
+              <b>{{ formatToTwoDecimals(row.item.percentage_total_sampah) }}</b>
+            </template>
+            <template #cell(foto_sampah)="row">
+              <b-button
+                v-if="garbagePhotos(row.item).length > 0"
+                variant="link"
+                size="sm"
+                title="Lihat & Bagikan Foto Sampah"
+                @click="openGarbagePhotos(row.item)"
+              >
+                <i class="fa fa-camera"></i>
+                <i class="fab fa-whatsapp text-success ml-1"></i>
+              </b-button>
+              <span v-else class="text-muted">-</span>
             </template>
 
             <template #cell(npb)="row">
@@ -594,9 +689,76 @@
             >NB : Jika Baris berwarna kuning, Silahkan dicek kembali no NPB,
             atau data WB belum ketarik ke iPlant
           </b-col>
+          <b-col class="text-left text-muted" align-self="center">
+            Total Sampah = Tangkai + Berondolan + Batu. % terhadap Tonase
+            Timbang. Klik
+            <i class="fa fa-plus"></i> pada kolom Sampah untuk melihat detail.
+          </b-col>
         </div>
       </div>
     </section>
+
+    <b-modal
+      id="modal-foto-sampah"
+      title="Foto Sampah"
+      size="lg"
+      hide-footer
+      @hidden="garbageItem = null"
+    >
+      <div v-if="garbageItem">
+        <p class="mb-3">
+          <b>{{ formatDate(garbageItem.transaction_date) }}</b> &middot;
+          {{ garbageItem.company_code_plantation }} /
+          {{ garbageItem.department_code_plantation }} /
+          {{ garbageItem.afdeling_code }} &middot; Driver:
+          {{ garbageItem.driver }} &middot; NPB: {{ garbageItem.npb }}
+        </p>
+        <b-row>
+          <b-col
+            v-for="photo in garbagePhotos(garbageItem)"
+            :key="photo.key"
+            md="4"
+            class="mb-3 text-center"
+          >
+            <div class="font-weight-bold mb-1">
+              {{ photo.label }} ({{ formatToTwoDecimals(photo.qty) }} Kg)
+            </div>
+            <a :href="photo.url" target="_blank" rel="noopener noreferrer">
+              <b-img
+                :src="photo.url"
+                :alt="photo.label"
+                thumbnail
+                fluid
+                class="foto-sampah-thumb"
+              ></b-img>
+            </a>
+            <b-input-group size="sm" class="mt-2">
+              <b-form-input :value="photo.url" readonly></b-form-input>
+              <b-input-group-append>
+                <b-button
+                  variant="outline-secondary"
+                  title="Salin Tautan"
+                  @click="copyText(photo.url)"
+                  ><i class="fa fa-copy"></i
+                ></b-button>
+              </b-input-group-append>
+            </b-input-group>
+          </b-col>
+        </b-row>
+        <div class="text-right">
+          <b-button
+            variant="outline-secondary"
+            class="mr-2"
+            @click="copyText(garbageShareMessage(garbageItem))"
+          >
+            <i class="fa fa-copy mr-1"></i> Salin Pesan
+          </b-button>
+          <b-button variant="success" @click="shareGarbageToWhatsApp">
+            <i class="fab fa-whatsapp mr-1"></i> Bagikan ke WhatsApp
+          </b-button>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -850,23 +1012,51 @@ export default {
           tdClass: 'text-right',
         },
         {
-          key: 'percentage_garbage',
+          key: 'percentage_sampah_tangkai',
           label: '',
           formatter: this.formatToTwoDecimals,
           tdClass: 'text-right',
         },
-
+        {
+          key: 'sampah_di_berondolan',
+          label: '',
+          tdClass: 'text-right',
+        },
+        {
+          key: 'percentage_sampah_berondolan',
+          label: '',
+          formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
+        },
         {
           key: 'rock',
           label: '',
           formatter: this.formatToTwoDecimals,
           tdClass: 'text-right',
         },
+        {
+          key: 'percentage_rock',
+          label: '',
+          formatter: this.formatToTwoDecimals,
+          tdClass: 'text-right',
+        },
+        {
+          key: 'total_sampah',
+          label: '',
+          tdClass: 'text-right sampah-total-cell',
+        },
+        {
+          key: 'percentage_total_sampah',
+          label: '',
+          tdClass: 'text-right sampah-total-cell',
+        },
+        { key: 'foto_sampah', label: '', tdClass: 'text-center' },
         { key: 'npb', label: '' },
       ],
       dateStart: formattedDefault,
       dateEnd: formattedDefault,
       showSickFruit: false,
+      sampahExpanded: false,
       pt_id: [],
       pts: [],
       estate_id: [],
@@ -882,6 +1072,7 @@ export default {
         icon: '',
       },
       show: 1,
+      garbageItem: null,
       isLoadingDropdown: true, // Loading state for dropdowns
       emailLogs: [],
       isLoadingLogs: false,
@@ -929,18 +1120,29 @@ export default {
   // },
   computed: {
     filteredFields() {
-      return this.showSickFruit
-        ? this.fields
-        : this.fields.filter(
-            (field) =>
-              field.key !== 'qty_parthenocarpy' &&
-              field.key !== 'percentage_parthenocarpy' &&
-              field.key !== 'qty_hard_bunch' &&
-              field.key !== 'percentage_hard_bunch' &&
-              field.key !== 'qty_unripe_fruit_fall' &&
-              field.key !== 'percentage_unripe_fruit_fall' &&
-              field.key !== 'qty_long_stalk'
-          )
+      const sickFruitKeys = [
+        'qty_parthenocarpy',
+        'percentage_parthenocarpy',
+        'qty_hard_bunch',
+        'percentage_hard_bunch',
+        'qty_unripe_fruit_fall',
+        'percentage_unripe_fruit_fall',
+        'qty_long_stalk',
+      ]
+      // Detail sampah hanya tampil saat kolom Sampah di-expand; Total selalu tampil.
+      const sampahDetailKeys = [
+        'qty_garbage',
+        'percentage_sampah_tangkai',
+        'sampah_di_berondolan',
+        'percentage_sampah_berondolan',
+        'rock',
+        'percentage_rock',
+      ]
+      return this.fields.filter(
+        (field) =>
+          (this.showSickFruit || !sickFruitKeys.includes(field.key)) &&
+          (this.sampahExpanded || !sampahDetailKeys.includes(field.key))
+      )
     },
   },
 
@@ -1130,6 +1332,97 @@ export default {
     calculatePercentage(looseFruitDebt) {
       const baseValue = 1000 // Adjust this based on actual calculation logic
       return ((looseFruitDebt / baseValue) * 100).toFixed(2)
+    },
+    photoUrl(path) {
+      if (!path) return ''
+      if (/^https?:\/\//i.test(path)) return path
+      const base = (this.$axios.defaults.baseURL || '').replace(/\/+$/, '')
+      return `${base}/${String(path).replace(/^\/+/, '')}`
+    },
+    garbagePhotos(item) {
+      return [
+        {
+          key: 'tangkai',
+          label: 'Sampah Tangkai',
+          qty: item.qty_garbage,
+          path: item.img_sampah_kotoran,
+        },
+        {
+          key: 'berondolan',
+          label: 'Sampah Berondolan',
+          qty: item.sampah_di_berondolan,
+          path: item.img_sampah_di_berondolan,
+        },
+        {
+          key: 'batu',
+          label: 'Sampah Batu',
+          qty: item.rock,
+          path: item.img_rock,
+        },
+      ]
+        .filter((photo) => photo.path)
+        .map((photo) => ({ ...photo, url: this.photoUrl(photo.path) }))
+    },
+    openGarbagePhotos(item) {
+      this.garbageItem = item
+      this.$bvModal.show('modal-foto-sampah')
+    },
+    garbageShareMessage(item) {
+      const lines = [
+        '*Foto Sampah - Sampling Grading*',
+        `Tanggal: ${this.formatDate(item.transaction_date)}`,
+        `PT/Estate/Afd: ${item.company_code_plantation || '-'} / ${
+          item.department_code_plantation || '-'
+        } / ${item.afdeling_code || '-'}`,
+        `Driver: ${item.driver || '-'}`,
+        `No. NPB: ${item.npb || '-'}`,
+      ]
+      this.garbagePhotos(item).forEach((photo) => {
+        lines.push(
+          '',
+          `${photo.label}: ${this.formatToTwoDecimals(photo.qty)} Kg`,
+          photo.url
+        )
+      })
+      return lines.join('\n')
+    },
+    shareGarbageToWhatsApp() {
+      if (!this.garbageItem) return
+      // wa.me without a phone number lets the user pick the target chat/group.
+      const text = encodeURIComponent(
+        this.garbageShareMessage(this.garbageItem)
+      )
+      window.open(`https://wa.me/?text=${text}`, '_blank', 'noopener')
+    },
+    async copyText(text) {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text)
+        } else {
+          // Fallback for plain-http intranet hosts where the Clipboard API is unavailable.
+          const textarea = document.createElement('textarea')
+          textarea.value = text
+          textarea.setAttribute('readonly', '')
+          textarea.style.position = 'fixed'
+          textarea.style.opacity = '0'
+          document.body.appendChild(textarea)
+          textarea.select()
+          document.execCommand('copy')
+          document.body.removeChild(textarea)
+        }
+        this.$bvToast.toast('Tautan berhasil disalin', {
+          title: 'Berhasil',
+          variant: 'success',
+          solid: true,
+          autoHideDelay: 2000,
+        })
+      } catch (error) {
+        this.$bvToast.toast('Gagal menyalin tautan', {
+          title: 'Gagal',
+          variant: 'danger',
+          solid: true,
+        })
+      }
     },
     formatToThousand(value) {
       if (!value) return '0' // Return 0 for empty or null values
@@ -1652,6 +1945,31 @@ export default {
 }
 .b-table thead tr:nth-child(3) {
   display: none;
+}
+
+/* The global `thead tr:nth-child(3)` rule above hides b-table's own field header;
+   this table hides it via thead-tr-class instead and needs its 3rd custom row. */
+.b-table thead tr.sampah-unit-row {
+  display: table-row !important;
+}
+
+.b-table .sampah-sub-header {
+  background-color: #eaf3fc;
+}
+
+.b-table .sampah-total-cell {
+  background-color: #fff3cd !important;
+  font-weight: bold;
+}
+
+/* Saat kolom Sampah ditutup, beri ruang agar judul + tombol tidak berdesakan. */
+.sampah-collapsed .sampah-total-cell {
+  min-width: 90px;
+}
+
+.foto-sampah-thumb {
+  max-height: 200px;
+  object-fit: cover;
 }
 
 .bg-yellow-row {
