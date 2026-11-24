@@ -635,11 +635,18 @@
                 v-if="garbagePhotos(row.item).length > 0"
                 variant="link"
                 size="sm"
-                title="Lihat & Bagikan Foto Sampah"
+                :title="
+                  showWhatsAppShare
+                    ? 'Lihat & Bagikan Foto Sampah'
+                    : 'Lihat Foto Sampah'
+                "
                 @click="openGarbagePhotos(row.item)"
               >
                 <i class="fa fa-camera"></i>
-                <i class="fab fa-whatsapp text-success ml-1"></i>
+                <i
+                  v-if="showWhatsAppShare"
+                  class="fab fa-whatsapp text-success ml-1"
+                ></i>
               </b-button>
               <span v-else class="text-muted">-</span>
             </template>
@@ -747,13 +754,18 @@
         </b-row>
         <div class="text-right">
           <b-button
+            v-if="showWhatsAppShare"
             variant="outline-secondary"
             class="mr-2"
             @click="copyText(garbageShareMessage(garbageItem))"
           >
             <i class="fa fa-copy mr-1"></i> Salin Pesan
           </b-button>
-          <b-button variant="success" @click="shareGarbageToWhatsApp">
+          <b-button
+            v-if="showWhatsAppShare"
+            variant="success"
+            @click="shareGarbageToWhatsApp"
+          >
             <i class="fab fa-whatsapp mr-1"></i> Bagikan ke WhatsApp
           </b-button>
         </div>
@@ -1056,6 +1068,8 @@ export default {
       dateStart: formattedDefault,
       dateEnd: formattedDefault,
       showSickFruit: false,
+      // Tombol Salin Pesan & Bagikan ke WhatsApp disembunyikan sementara; ubah ke true untuk menampilkannya lagi.
+      showWhatsAppShare: false,
       sampahExpanded: false,
       pt_id: [],
       pts: [],
