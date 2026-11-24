@@ -754,6 +754,7 @@
         </b-row>
         <div class="text-right">
           <b-button
+            v-if="showWhatsAppShare"
             variant="outline-secondary"
             class="mr-2"
             @click="copyText(garbageShareMessage(garbageItem))"
@@ -1067,7 +1068,7 @@ export default {
       dateStart: formattedDefault,
       dateEnd: formattedDefault,
       showSickFruit: false,
-      // Tombol Bagikan ke WhatsApp disembunyikan sementara; ubah ke true untuk menampilkannya lagi.
+      // Tombol Salin Pesan & Bagikan ke WhatsApp disembunyikan sementara; ubah ke true untuk menampilkannya lagi.
       showWhatsAppShare: false,
       sampahExpanded: false,
       pt_id: [],
